@@ -1,0 +1,95 @@
+# =========================
+# Visual Studio / Rider
+# =========================
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# =========================
+# .NET / ASP.NET Core
+# =========================
+bin/
+obj/
+[Bb]uild[Ll]og.*
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+artifacts/
+
+# Publish output
+publish/
+Published/
+*.pubxml.user
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+project.lock.json
+project.assets.json
+
+# Local app secrets / overrides
+appsettings.Local.json
+appsettings.*.Local.json
+secrets.json
+
+# =========================
+# React / Vite / Node
+# =========================
+node_modules/
+dist/
+build/
+.vite/
+.cache/
+.parcel-cache/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# TypeScript
+*.tsbuildinfo
+
+# ESLint / tooling cache
+.eslintcache
+
+# Test / frontend coverage
+coverage/
+playwright-report/
+test-results/
+
+# =========================
+# OS junk
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# Optional local DB/files
+# =========================
+*.db
+*.sqlite
+*.sqlite3
+*.mdf
+*.ldf

@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="oddwire.form.client/oddwire.form.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="OddWire.Form.Server/OddWire.Form.Server.csproj" />
+</Solution>
