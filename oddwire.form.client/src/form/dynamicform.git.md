@@ -8,20 +8,20 @@
 
 ## What it is
 
-A form page that renders a fixed set of typed controls into a centered tablet-portrait strip, holds each edited value in local page state, and reports every change by `param`.
+A form page that loads a JSON form definition through a context accessor, renders its control tree by dispatching each control on `type`, holds each edited value in local page state, and reports every change by `param`.
 
 ---
 
 ## Core Loop
 
 ```
-Render hard-coded controls → user edits a control → control emits onChange(value, param) → FormPage patches values[param] → re-render
+getForm(id) → render form.controls via ControlList → ControlItem dispatches by type → user edits → onChange(value, param) → FormPage patches values[param] → re-render
 ```
 
-Inputs: **control props** (param, label, value, type-specific config)
+Inputs: **form definition** (JSON control tree, loaded via `FormContext.getForm`)
 Output: **live values map** — `Record<param, value>` held in `FormPage` state; lost on refresh.
 
-One render tree; no JSON renderer, instance overlay, or context yet (Stages 2–4 unbuilt).
+Config-driven render; instance overlay and real context folder-scan/navigation still unbuilt (Stages 3–4).
 
 ---
 
@@ -29,11 +29,11 @@ One render tree; no JSON renderer, instance overlay, or context yet (Stages 2–
 
 | Value | What drives it | What it does |
 |---|---|---|
-| `param` | Control config | Key a change is written under in the values map |
-| `value` | Initial state + user edits | Current control value |
-| `hidden` | Control config | Skips rendering when true |
-| `stacked` | Control config | Label-above vs label-left layout |
-| `valueType` | ControlTextField config | On-screen keyboard hint (text/int/decimal/email/phone) |
+| `type` | Definition config | Selects the renderer in `ControlItem`; unknown → fallback |
+| `param` | Definition config | Key a change is written under in the values map |
+| `value` | Definition default + user edits | Current control value |
+| `hidden` | Definition config | Skips rendering when true (gated in `ControlItem`) |
+| `valueType` | Text control config | On-screen keyboard hint (text/int/decimal/email/phone) |
 | `controls` | Radio/Dropdown config | Static option list |
 
 ---
@@ -50,6 +50,9 @@ One render tree; no JSON renderer, instance overlay, or context yet (Stages 2–
 
 | Class | Owns |
 |---|---|
-| `FormPage` | Hard-coded control tree, local values state, root onChange |
+| `FormContext` | `getForm(id)` accessor — durable load pathway (stub returns `testform.json`) |
+| `FormPage` | Loads the definition, local values state, root onChange |
+| `ControlList` | Iterates a control scope, resolves each live value — no type knowledge |
+| `ControlItem` | Dispatches one control by `type`; fallback on unknown |
 | `StripLayout` | Headered tablet-portrait page shell |
 | (controls) | Leaf rendering + onChange — see `controls.git.md` |

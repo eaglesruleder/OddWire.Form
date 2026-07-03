@@ -31,6 +31,16 @@
   border-radius: 4px;
 }
 
+/* Fallback for an unknown control type — visible but non-fatal (see ControlItem). */
+.unsupported-control {
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  color: var(--text-accent);
+  background: var(--bg-panel);
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+}
+
 /* When a control row goes vertical, the label drops its fixed column. */
 .flex.column > .control-label {
   flex: none;
