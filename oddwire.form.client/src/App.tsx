@@ -1,4 +1,3 @@
-import './App.css';
 import { FormPage } from './form/FormPage';
 
 // Stage 1: no navigation yet — App is just the strip shell + a single hard-coded FormPage.
