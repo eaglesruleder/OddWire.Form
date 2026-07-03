@@ -1,12 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 
-import { FormContext, InstanceContext, patchControlValue } from '../_context';
-import type { FormDefinition, FormInstance } from '../_context';
+import { FormContext, InstanceContext } from '../_context';
+import type { FormDefinition, FormActiveInstance } from '../_context';
 import { StripLayout } from '../_components/layout';
 import { ControlList } from '../_components/controllist';
 
-// No landing-page selection yet (Stage 4); ids are fixed and the getters ignore them for now.
 const SELECTED_FORM_ID = 'demo-form';
 const SELECTED_INSTANCE_ID = 'demo-instance-1';
 
@@ -16,7 +15,7 @@ export function FormPage()
     const { getInstance } = useContext(InstanceContext);
 
     const [form, setForm] = useState<FormDefinition | null>(null);
-    const [instance, setInstance] = useState<FormInstance | null>(null);
+    const [instance, setInstance] = useState<FormActiveInstance | null>(null);
 
     useEffect(() =>
     {
@@ -38,7 +37,7 @@ export function FormPage()
     }, [getForm, getInstance]);
 
     const handleChange = (value: unknown, param: string) =>
-        setInstance(prev => prev && patchControlValue(prev, param, value));
+        setInstance(prev => prev && prev.patch(param, value));
 
     if (!form || !instance)
         return (
@@ -50,7 +49,7 @@ export function FormPage()
     return (
         <StripLayout title={form.label ?? 'OddWire Forms'}>
             <Form>
-                <ControlList controls={form.controls} instanceControls={instance.controls} onChange={handleChange} />
+                <ControlList controls={form.controls} instance={instance} onChange={handleChange} />
             </Form>
         </StripLayout>
         );

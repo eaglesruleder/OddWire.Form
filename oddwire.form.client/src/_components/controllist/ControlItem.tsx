@@ -7,19 +7,18 @@ import
     ,ControlDropdown
     } from './controls';
 import { ControlBase } from './controls/ControlBase';
-import { resolveControl } from '../../_context';
-import type { ControlInstance } from '../../_context';
+import type { FormActiveInstance } from '../../_context';
 import type { ControlDef } from './controls/controlTypes';
 
 type ControlItemProps = {
     control: ControlDef;
-    instance?: ControlInstance;
+    instance: FormActiveInstance;
     onChange: (value: unknown, param: string) => void;
     };
 
 export function ControlItem({ control, instance, onChange }: ControlItemProps)
 {
-    const resolved = resolveControl(control, instance);
+    const resolved = instance.resolve(control);
 
     switch (resolved.type)
     {
