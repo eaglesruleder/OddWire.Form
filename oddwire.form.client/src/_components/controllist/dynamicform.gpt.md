@@ -30,6 +30,12 @@
 
 ---
 
+## Structure
+
+`FormPage` → `src/form/` · `FormContext` → `src/context/` · `ControlList` + `ControlItem` + `controls/` → `src/_components/controllist/` (this folder). Control leaves + their contracts map is `controls.gpt.md` in `controls/`.
+
+---
+
 ## Implementation
 
 ### FormContext

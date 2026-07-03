@@ -5,8 +5,8 @@ import
     , ControlCheckbox
     , ControlRadio
     , ControlDropdown
-    } from '../_components/controls';
-import type { ControlDef } from '../_components/controls/controlTypes';
+    } from './controls';
+import type { ControlDef } from './controls/controlTypes';
 
 type ControlItemProps = {
     control: ControlDef;

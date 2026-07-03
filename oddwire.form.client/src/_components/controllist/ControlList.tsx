@@ -1,5 +1,5 @@
 import { ControlItem } from './ControlItem';
-import type { ControlDef } from '../_components/controls/controlTypes';
+import type { ControlDef } from './controls/controlTypes';
 
 type ControlListProps = {
     controls: ControlDef[];

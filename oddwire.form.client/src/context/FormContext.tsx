@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react';
 import type { ReactNode } from 'react';
 
-import type { FormDefinition } from '../_components/controls/controlTypes';
+import type { FormDefinition } from '../_components/controllist/controls/controlTypes';
 import testForm from '../data/forms/testform.json';
 
 type FormContextValue = {
