@@ -7,11 +7,11 @@ type ControlDropdownProps = CoreControlProps<string> & {
     controls?: ControlOption[];
     };
 
-export const ControlDropdown = ({ param, label, value, hidden, stacked, onChange, controls = [] }: ControlDropdownProps) =>
-    <ControlBase param={param} label={label} stacked={stacked} hidden={hidden}>
-        <Form.Select id={param} value={value ?? ''} onChange={e => onChange?.(e.target.value, param)}>
+export const ControlDropdown = (props: ControlDropdownProps) =>
+    <ControlBase {...props}>
+        <Form.Select id={props.param} value={props.value ?? ''} onChange={e => props.onChange?.(e.target.value, props.param)}>
             <option value="" disabled>Select…</option>
-            {controls.map(option => (
+            {props.controls.map(option => (
             <option key={option.value} value={option.value}>{option.label}</option>
             ))}
         </Form.Select>

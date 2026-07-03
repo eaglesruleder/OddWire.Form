@@ -1,30 +1,28 @@
 import type { ReactNode } from 'react';
 
-type ControlBaseProps = {
-    param: string;
-    label?: string;
-    stacked?: boolean;
+import type { CoreControlProps } from './controlTypes';
+
+type ControlBaseProps = Pick<CoreControlProps<unknown>, 'param' | 'label' | 'hidden' | 'stacked'> & {
     className?: string;
-    hidden?: boolean;
     children: ReactNode;
     };
 
-export function ControlBase({ param, label, stacked, className, hidden, children }: ControlBaseProps)
+export function ControlBase(props: ControlBaseProps)
 {
-    if (hidden)
+    if (props.hidden)
         return null;
 
     const rowClass =
-        ['flex', stacked ? 'column' : 'items-center', 'gap', 'mb-3', 'stack-sm', className]
+        ['flex', props.stacked ? 'column' : 'items-center', 'gap', 'mb-3', 'stack-sm', props.className]
         .filter(Boolean)
         .join(' ');
 
     return (
         <div className={rowClass}>
-            {label &&
-            <label className="control-label" htmlFor={param}>{label}</label>
+            {props.label &&
+            <label className="control-label" htmlFor={props.param}>{props.label}</label>
             }
-            <div className="fill">{children}</div>
+            <div className="fill">{props.children}</div>
         </div>
-    );
+        );
 }
