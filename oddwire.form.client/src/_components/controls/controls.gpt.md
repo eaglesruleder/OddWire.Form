@@ -18,7 +18,7 @@
 
 **Rules:**
 - Controls are stateless — value comes from props
-- No `id`/`htmlFor` is rendered, so duplicate `param`s are safe
+- Renders `id`/`htmlFor` = `param`; duplicate `param`s would collide in the DOM (accepted — handled later if it becomes a nuisance)
 - `hidden` is handled once in ControlBase (ControlText and ControlCheckbox gate themselves — they don't use ControlBase)
 - ControlTextField stores the raw string — no parse/normalise
 

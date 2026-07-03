@@ -12,6 +12,7 @@ export const ControlRadio = (props: ControlRadioProps) =>
         {(props.controls ?? []).map(option =>
         <Form.Check
             key={option.value}
+            id={`${props.param}-${option.value}`}
             name={props.param}
             type="radio"
             label={option.label}
