@@ -1,4 +1,5 @@
 import { createContext } from 'react';
+import type { ReactNode } from 'react';
 
 import type { ControlDef } from '../_components/controllist';
 import type { FormInstance, ControlInstance } from './types';
@@ -60,3 +61,6 @@ export const instanceContextValue: InstanceContextValue =
     };
 
 export const InstanceContext = createContext<InstanceContextValue>(instanceContextValue);
+
+export const InstanceProvider = ({ children }: { children: ReactNode }) =>
+    <InstanceContext.Provider value={instanceContextValue}>{children}</InstanceContext.Provider>;

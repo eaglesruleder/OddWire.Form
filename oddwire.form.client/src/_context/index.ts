@@ -1,8 +1,9 @@
-export { FormContext, formContextValue } from './FormContext';
+export { FormContext, formContextValue, FormProvider } from './FormContext';
 export type { FormContextValue } from './FormContext';
 export
     {InstanceContext
     ,instanceContextValue
+    ,InstanceProvider
     ,FormActiveInstance
     } from './InstanceContext';
 export type { InstanceContextValue } from './InstanceContext';

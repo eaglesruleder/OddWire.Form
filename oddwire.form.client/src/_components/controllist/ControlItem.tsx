@@ -22,12 +22,12 @@ export function ControlItem({ control, instance, onChange }: ControlItemProps)
 
     switch (resolved.type)
     {
-        case 'label':    return <ControlText {...resolved} />;
+        case 'label':    return <ControlText      {...resolved} />;
         case 'text':     return <ControlTextField {...resolved} onChange={onChange} />;
-        case 'textarea': return <ControlTextArea {...resolved} onChange={onChange} />;
-        case 'checkbox': return <ControlCheckbox {...resolved} onChange={onChange} />;
-        case 'radio':    return <ControlRadio {...resolved} onChange={onChange} />;
-        case 'dropdown': return <ControlDropdown {...resolved} onChange={onChange} />;
+        case 'textarea': return <ControlTextArea  {...resolved} onChange={onChange} />;
+        case 'checkbox': return <ControlCheckbox  {...resolved} onChange={onChange} />;
+        case 'radio':    return <ControlRadio     {...resolved} onChange={onChange} />;
+        case 'dropdown': return <ControlDropdown  {...resolved} onChange={onChange} />;
         default:
         {
             const def = resolved as ControlDef;
