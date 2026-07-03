@@ -9,11 +9,10 @@ type ControlDropdownProps = CoreControlProps<string> & {
 
 export const ControlDropdown = (props: ControlDropdownProps) =>
     <ControlBase {...props}>
-        <Form.Select id={props.param} value={props.value ?? ''} onChange={e => props.onChange?.(e.target.value, props.param)}>
+        <Form.Select value={props.value ?? ''} onChange={e => props.onChange?.(e.target.value, props.param)}>
             <option value="" disabled>Select…</option>
-            {props.controls.map(option => (
+            {(props.controls ?? []).map(option => (
             <option key={option.value} value={option.value}>{option.label}</option>
             ))}
         </Form.Select>
     </ControlBase>;
-

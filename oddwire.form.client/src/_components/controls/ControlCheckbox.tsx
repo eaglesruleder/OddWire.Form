@@ -10,10 +10,9 @@ export function ControlCheckbox(props: CoreControlProps<boolean>)
     return (
         <div className="flex items-center gap mb-3">
             {props.label &&
-            <label className="fill" htmlFor={props.param}>{props.label}</label>
+            <label className="fill">{props.label}</label>
             }
             <Form.Check
-                id={props.param}
                 type="checkbox"
                 checked={props.value ?? false}
                 onChange={e => props.onChange?.(e.target.checked, props.param)}

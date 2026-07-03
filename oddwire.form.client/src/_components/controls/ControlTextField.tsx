@@ -19,10 +19,9 @@ const keyboardForValueType: Record<TextValueType, KeyboardType> =
 export const ControlTextField = (props: ControlTextFieldProps) =>
     <ControlBase {...props}>
         <Form.Control
-            id={props.param}
             type="text"
-            inputMode={props.keyboardType ?? keyboardForValueType[props.valueType ?? 'text']}
             value={props.value ?? ''}
+            inputMode={props.keyboardType ?? keyboardForValueType[props.valueType ?? 'text']}
             onChange={e => props.onChange?.(e.target.value, props.param)}
         />
     </ControlBase>;

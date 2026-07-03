@@ -2,3 +2,7 @@
 .bold      { font-weight: 700; }
 .semibold  { font-weight: 600; }
 .accent    { color: var(--text-accent); }
+
+.text-center { text-align: center; }
+.left        { text-align: left; }
+.right       { text-align: right; }

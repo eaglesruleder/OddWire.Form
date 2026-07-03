@@ -6,8 +6,8 @@ type ControlTextProps = CoreControlProps<string> & {
 
 export function ControlText({ label, value, hidden, className }: ControlTextProps)
 {
-  if (hidden)
-    return null;
+    if (hidden)
+        return null;
 
     const wrapClass =
         ['mb-3', className]

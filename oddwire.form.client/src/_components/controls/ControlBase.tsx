@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import type { CoreControlProps } from './controlTypes';
 
-type ControlBaseProps = Pick<CoreControlProps<unknown>, 'param' | 'label' | 'hidden' | 'stacked'> & {
+type ControlBaseProps = Pick<CoreControlProps<unknown>, 'label' | 'hidden' | 'stacked'> & {
     className?: string;
     children: ReactNode;
     };
@@ -20,7 +20,7 @@ export function ControlBase(props: ControlBaseProps)
     return (
         <div className={rowClass}>
             {props.label &&
-            <label className="control-label" htmlFor={props.param}>{props.label}</label>
+            <label className="control-label">{props.label}</label>
             }
             <div className="fill">{props.children}</div>
         </div>

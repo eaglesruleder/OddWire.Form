@@ -1,4 +1,4 @@
-/* Control-specific styling. Generic flex/spacing come from flex.css + Bootstrap utilities. */
+/* Control-specific styling. Generic flex/spacing come from alignment.css + Bootstrap utilities. */
 
 /* Label column for label-left control rows (ControlBase). Checkbox uses .fill instead. */
 .control-label {
@@ -32,7 +32,7 @@
 }
 
 /* When a control row goes vertical, the label drops its fixed column. */
-.column > .control-label {
+.flex.column > .control-label {
   flex: none;
   min-width: 0;
 }
