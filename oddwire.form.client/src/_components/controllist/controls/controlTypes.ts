@@ -49,9 +49,3 @@ export type ControlDef =
     | CheckboxControlDef
     | RadioControlDef
     | DropdownControlDef;
-
-export type FormDefinition = {
-    formId: string;
-    label?: string;
-    controls: ControlDef[];
-    };

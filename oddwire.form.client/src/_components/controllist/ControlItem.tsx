@@ -1,45 +1,32 @@
 import
-    { ControlText
-    , ControlTextField
-    , ControlTextArea
-    , ControlCheckbox
-    , ControlRadio
-    , ControlDropdown
+    {ControlText
+    ,ControlTextField
+    ,ControlTextArea
+    ,ControlCheckbox
+    ,ControlRadio
+    ,ControlDropdown
     } from './controls';
+import { ControlBase } from './controls/ControlBase';
 import type { ControlDef } from './controls/controlTypes';
 
-type ControlItemProps = {
-    control: ControlDef;
-    value?: unknown;
+type ControlItemProps = ControlDef & {
     onChange: (value: unknown, param: string) => void;
     };
 
-export function ControlItem({ control, value, onChange }: ControlItemProps)
+export function ControlItem(props: ControlItemProps)
 {
-    if (control.hidden)
-        return null;
-
-    switch (control.type)
+    switch (props.type)
     {
-        case 'label':
-            return <ControlText param={control.param} label={control.label} value={value as string} />;
-
-        case 'text':
-            return <ControlTextField param={control.param} label={control.label} value={value as string} valueType={control.valueType} keyboardType={control.keyboardType} onChange={onChange} />;
-
-        case 'textarea':
-            return <ControlTextArea param={control.param} label={control.label} value={value as string} onChange={onChange} />;
-
-        case 'checkbox':
-            return <ControlCheckbox param={control.param} label={control.label} value={value as boolean} onChange={onChange} />;
-
-        case 'radio':
-            return <ControlRadio param={control.param} label={control.label} value={value as string} controls={control.controls} onChange={onChange} />;
-
-        case 'dropdown':
-            return <ControlDropdown param={control.param} label={control.label} value={value as string} controls={control.controls} onChange={onChange} />;
-
+        case 'label':    return <ControlText {...props} />;
+        case 'text':     return <ControlTextField {...props} />;
+        case 'textarea': return <ControlTextArea {...props} />;
+        case 'checkbox': return <ControlCheckbox {...props} />;
+        case 'radio':    return <ControlRadio {...props} />;
+        case 'dropdown': return <ControlDropdown {...props} />;
         default:
-            return <div className="unsupported-control">Unsupported control type: {(control as ControlDef).type}</div>;
+        {
+            const def = props as ControlDef;
+            return <ControlBase param={def.param} label="Error">Unknown type: {def.type}</ControlBase>;
+        }
     }
 }

@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 
-import { StripLayout } from '../_components/layout';
 import { FormContext } from '../_context';
+import type { FormDefinition } from '../_context';
+import { StripLayout } from '../_components/layout';
 import { ControlList } from '../_components/controllist';
-import type { FormDefinition } from '../_components/controllist/controls/controlTypes';
 
 // No landing-page selection yet (Stage 4); the id is fixed and getForm ignores it for now.
 const SELECTED_FORM_ID = 'demo-form';

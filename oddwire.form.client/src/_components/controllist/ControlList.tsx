@@ -7,16 +7,9 @@ type ControlListProps = {
     onChange: (value: unknown, param: string) => void;
     };
 
-// Iterate a control scope; dispatch stays in ControlItem. The transitional values map
-// resolves the live value per param (Stage 3 replaces it with the instance overlay).
-export const ControlList = (props: ControlListProps) =>
-    <>
-        {props.controls.map(control =>
-        <ControlItem
-            key={control.param}
-            control={control}
-            value={props.values[control.param] ?? control.value}
-            onChange={props.onChange}
-        />
-        )}
-    </>;
+// First map is the merge boundary — resolve each live value into a fresh def (never mutate the
+// shared definition), cast once. Second map renders. Stage 3's instance overlay merges in the first.
+export const ControlList = ({ controls, values, onChange }: ControlListProps) =>
+    controls
+        .map(control => ({ ...control, value: values[control.param] ?? control.value }) as unknown as ControlDef)
+        .map(control => <ControlItem key={control.param} {...control} onChange={onChange} />);

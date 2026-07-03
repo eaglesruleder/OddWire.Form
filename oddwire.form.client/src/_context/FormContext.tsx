@@ -1,15 +1,13 @@
 import { createContext } from 'react';
 
-import type { FormDefinition } from '../_components/controllist/controls/controlTypes';
+import type { FormDefinition } from './types';
 import testForm from './data/forms/testform.json';
 
 export type FormContextValue = {
     getForm: (formId: string) => Promise<FormDefinition>;
     };
 
-// Intent: getForm is the durable pathway FormPage codes against. This body is a stub that
-// ignores the id and always returns the test form. Later it scans _context/data/forms and
-// reads from loaded context — only this body changes, not FormPage's async load pathway.
+// Intent: getForm is the future pathway to code against. This body is currently a stub.
 export const formContextValue: FormContextValue =
     {getForm: async () => testForm as unknown as FormDefinition
     };
