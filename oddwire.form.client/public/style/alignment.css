@@ -1,0 +1,10 @@
+/* Flex layout keyword utilities. Every flex rule carries .flex, so the class list always reads
+   as flex-* — class="flex column" is obviously flex-direction:column. Compose freely. */
+.flex { display: flex; }
+.flex.column       { flex-direction: column; }
+.flex.items-center { align-items: center; }
+.flex.gap          { gap: 12px; }
+.fill { flex: 1 1 auto; min-width: 0; } /* take the remaining space, still allowed to shrink */
+
+/* Center everything: flex cross-axis + text. */
+.center { align-items: center; text-align: center; }

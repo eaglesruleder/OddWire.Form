@@ -1,0 +1,63 @@
+# Doc — Form Controls
+
+**Scope:** Subsystem
+**Domain:** oddform
+**Status:** Active
+
+---
+
+## Summary
+
+**Goal:** Stateless leaf controls that lay out a label+field via `ControlBase` and emit `onChange(value, param)`.
+
+**Lifecycle:**
+1. Parent passes props (`value` + `onChange`)
+2. ControlBase gates `hidden`, builds the row class, renders label + field
+3. Leaf renders its react-bootstrap field, spreading `{...props}` into ControlBase
+4. User edits → `onChange(value, param)` back to the parent
+
+**Rules:**
+- Controls are stateless — value comes from props
+- Renders `id`/`htmlFor` = `param`; duplicate `param`s would collide in the DOM (accepted — handled later if it becomes a nuisance)
+- `hidden` is handled once in ControlBase (ControlText and ControlCheckbox gate themselves — they don't use ControlBase)
+- ControlTextField stores the raw string — no parse/normalise
+
+**State:** `Stored: none — value is owned by the parent`
+
+---
+
+## Implementation
+
+### ControlBase
+Label+field row skeleton. Takes the layout slice of `CoreControlProps` (`label`/`hidden`/`stacked`) + `className` + `children`.
+- `hidden` → render nothing
+- `rowClass` = `flex` + (`column` | `items-center`) + `gap` + `mb-3` + `stack-sm` + `className`
+- Renders label (`.control-label`) then field (`.fill`)
+
+### ControlText
+Static, not ControlBase: label → `.separator` heading, value → `.control-static` dump. Own `hidden` gate. `className` opts into a block style (e.g. `.bubble`).
+
+### ControlTextField
+Single-line input via ControlBase. `inputMode` from `keyboardType ?? keyboardForValueType[valueType]`. Stores the raw string.
+
+### ControlTextArea
+Multi-line input; forces `stacked` (spread `{...props}` then `stacked`).
+
+### ControlCheckbox
+Own flex row (not ControlBase): label fills left, box content-width right. Own `hidden` gate.
+
+### ControlRadio
+Maps `controls` to inline radios; `checked` by `value === option.value`; shared `name = param`.
+
+### ControlDropdown
+`Form.Select` over `controls`, with a disabled empty placeholder option.
+
+---
+
+## Styling
+
+Keyword CSS in `public/style/`:
+- `alignment.css` — `.flex`, `.flex.column`, `.flex.items-center`, `.flex.gap`, `.fill`, `.center`
+- `text.css` — `.bold`, `.semibold`, `.accent`, `.text-center`, `.left`, `.right`
+- `controls.css` — `.control-label`, `.control-static`, `.separator`, `.bubble`, `.stack-sm` (responsive stack < 480px)
+- `theme.css` / `layout.css` — palette tokens + page shell

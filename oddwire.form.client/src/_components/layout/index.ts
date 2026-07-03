@@ -1,0 +1,1 @@
+export { StripLayout } from './StripLayout';
