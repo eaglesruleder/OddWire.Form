@@ -7,25 +7,31 @@ import
     ,ControlDropdown
     } from './controls';
 import { ControlBase } from './controls/ControlBase';
+import { resolveControl } from '../../_context';
+import type { ControlInstance } from '../../_context';
 import type { ControlDef } from './controls/controlTypes';
 
-type ControlItemProps = ControlDef & {
+type ControlItemProps = {
+    control: ControlDef;
+    instance?: ControlInstance;
     onChange: (value: unknown, param: string) => void;
     };
 
-export function ControlItem(props: ControlItemProps)
+export function ControlItem({ control, instance, onChange }: ControlItemProps)
 {
-    switch (props.type)
+    const resolved = resolveControl(control, instance);
+
+    switch (resolved.type)
     {
-        case 'label':    return <ControlText {...props} />;
-        case 'text':     return <ControlTextField {...props} />;
-        case 'textarea': return <ControlTextArea {...props} />;
-        case 'checkbox': return <ControlCheckbox {...props} />;
-        case 'radio':    return <ControlRadio {...props} />;
-        case 'dropdown': return <ControlDropdown {...props} />;
+        case 'label':    return <ControlText {...resolved} />;
+        case 'text':     return <ControlTextField {...resolved} onChange={onChange} />;
+        case 'textarea': return <ControlTextArea {...resolved} onChange={onChange} />;
+        case 'checkbox': return <ControlCheckbox {...resolved} onChange={onChange} />;
+        case 'radio':    return <ControlRadio {...resolved} onChange={onChange} />;
+        case 'dropdown': return <ControlDropdown {...resolved} onChange={onChange} />;
         default:
         {
-            const def = props as ControlDef;
+            const def = resolved as ControlDef;
             return <ControlBase param={def.param} label="Error" className="error" labelClassName="bold">Unknown control type: {def.type}</ControlBase>;
         }
     }

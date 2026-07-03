@@ -1,10 +1,12 @@
-import { FormContext, formContextValue } from './_context';
+import { FormContext, formContextValue, InstanceContext, instanceContextValue } from './_context';
 import { FormPage } from './form/FormPage';
 
 function App() {
   return (
     <FormContext.Provider value={formContextValue}>
-      <FormPage />
+      <InstanceContext.Provider value={instanceContextValue}>
+        <FormPage />
+      </InstanceContext.Provider>
     </FormContext.Provider>
   );
 }
