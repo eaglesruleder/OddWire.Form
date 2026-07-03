@@ -72,6 +72,7 @@ export function FormPage() {
       <ControlTextArea
         param="bio"
         label="Short bio"
+        stacked
         value={values.bio as string}
         onChange={handleChange}
       />

@@ -1,4 +1,5 @@
 import Form from 'react-bootstrap/Form';
+import { ControlBase } from './ControlBase';
 import type { ControlOption, CoreControlProps } from './controlTypes';
 
 // Static option select. Options come from `controls` for now (overloaded — revisited after the JSON renderer).
@@ -6,13 +7,12 @@ type ControlRadioProps = CoreControlProps<string> & {
   controls?: ControlOption[];
 };
 
-export function ControlRadio({ param, label, value, hidden, onChange, controls = [] }: ControlRadioProps) {
+export function ControlRadio({ param, label, value, hidden, stacked, onChange, controls = [] }: ControlRadioProps) {
   if (hidden)
     return null;
 
   return (
-    <Form.Group className="mb-3">
-      {label && <Form.Label className="d-block">{label}</Form.Label>}
+    <ControlBase param={param} label={label} stacked={stacked}>
       {controls.map(option => (
         <Form.Check
           key={option.value}
@@ -25,6 +25,6 @@ export function ControlRadio({ param, label, value, hidden, onChange, controls =
           onChange={() => onChange?.(option.value, param)}
         />
       ))}
-    </Form.Group>
+    </ControlBase>
   );
 }

@@ -1,20 +1,21 @@
 import Form from 'react-bootstrap/Form';
+import { ControlBase } from './ControlBase';
 import type { CoreControlProps } from './controlTypes';
 
 // Multi-line input. Same value/onChange shape as ControlText.
-export function ControlTextArea({ param, label, value, hidden, onChange }: CoreControlProps<string>) {
+export function ControlTextArea({ param, label, value, hidden, stacked, onChange }: CoreControlProps<string>) {
   if (hidden)
     return null;
 
   return (
-    <Form.Group className="mb-3" controlId={param}>
-      {label && <Form.Label>{label}</Form.Label>}
+    <ControlBase param={param} label={label} stacked={stacked}>
       <Form.Control
+        id={param}
         as="textarea"
         rows={3}
         value={value ?? ''}
         onChange={e => onChange?.(e.target.value, param)}
       />
-    </Form.Group>
+    </ControlBase>
   );
 }

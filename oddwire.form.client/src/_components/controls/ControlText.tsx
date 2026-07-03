@@ -1,4 +1,5 @@
 import Form from 'react-bootstrap/Form';
+import { ControlBase } from './ControlBase';
 import type { CoreControlProps, KeyboardType, TextValueType } from './controlTypes';
 
 type ControlTextProps = CoreControlProps<string> & {
@@ -16,21 +17,21 @@ const keyboardForValueType: Record<TextValueType, KeyboardType> = {
 };
 
 // Single-line input. MVP stores the raw string — no parse/normalise yet, so typing stays natural.
-export function ControlText({ param, label, value, hidden, onChange, valueType = 'text', keyboardType }: ControlTextProps) {
+export function ControlText({ param, label, value, hidden, stacked, onChange, valueType = 'text', keyboardType }: ControlTextProps) {
   if (hidden)
     return null;
 
   const inputMode = keyboardType ?? keyboardForValueType[valueType];
 
   return (
-    <Form.Group className="mb-3" controlId={param}>
-      {label && <Form.Label>{label}</Form.Label>}
+    <ControlBase param={param} label={label} stacked={stacked}>
       <Form.Control
+        id={param}
         type="text"
         inputMode={inputMode}
         value={value ?? ''}
         onChange={e => onChange?.(e.target.value, param)}
       />
-    </Form.Group>
+    </ControlBase>
   );
 }

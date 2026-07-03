@@ -8,6 +8,7 @@ export type CoreControlProps<TValue> = {
   label?: string;
   value?: TValue;
   hidden?: boolean;
+  stacked?: boolean; // label above field (true) vs label-left / field-right (default)
   onChange?: (value: TValue, param: string) => void;
 };
 

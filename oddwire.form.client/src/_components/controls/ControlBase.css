@@ -1,0 +1,30 @@
+/* Control row skeleton. Default: label-left, field fills the rest. stacked: label above. */
+.control-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.control-row.stacked {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+}
+
+.control-label {
+  flex: 0 0 20%;
+  min-width: 200px;
+  font-weight: 500;
+}
+
+/* Stacked drops the fixed label column — label sits full-width above the field. */
+.control-row.stacked .control-label {
+  flex: none;
+  min-width: 0;
+}
+
+.control-field {
+  flex: 1 1 auto;
+  min-width: 0; /* let inputs shrink inside flex instead of overflowing */
+}
