@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import './FormPage.css';
+import { StripLayout } from '../_components/layout/StripLayout';
 import { ControlLabel } from '../_components/controls/ControlLabel';
 import { ControlText } from '../_components/controls/ControlText';
 import { ControlTextArea } from '../_components/controls/ControlTextArea';
@@ -39,8 +40,9 @@ export function FormPage() {
   ];
 
   return (
-    <Form>
-      <h2 className="section-title">Contact</h2>
+    <StripLayout title="OddWire Forms">
+      <Form>
+        <h2 className="section-title">Contact</h2>
 
       <ControlLabel param="intro" label="Fill in your details below." />
 
@@ -104,6 +106,7 @@ export function FormPage() {
         <h2>Live values</h2>
         <pre>{JSON.stringify(values, null, 2)}</pre>
       </section>
-    </Form>
+      </Form>
+    </StripLayout>
   );
 }

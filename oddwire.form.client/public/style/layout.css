@@ -20,14 +20,14 @@ html body {
   flex-direction: column;
 }
 
-/* Common page shell — navy masthead over a padded main body. */
-.app-header {
+/* StripLayout shell — navy masthead over a padded main body. */
+.strip-header {
   background: var(--bg-header);
   color: #fff;
   padding: 18px 24px;
   border-bottom: 2px solid var(--border);
 }
-.app-header h1 {
+.strip-header h1 {
   margin: 0;
   color: #fff;
   font-size: 26px;
@@ -35,7 +35,7 @@ html body {
   letter-spacing: 0.5px;
 }
 
-.app-main {
+.strip-main {
   flex: 1;
   padding: 24px;
 }
