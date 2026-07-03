@@ -1,0 +1,35 @@
+{
+    "formId": "demo-form",
+    "label": "OddWire Forms",
+    "controls": [
+        { "type": "label", "param": "title", "label": "Contact" },
+        { "type": "text", "param": "fullName", "label": "Full name", "value": "Dillon O’Dwyer" },
+        { "type": "text", "param": "email", "label": "Email", "value": "", "valueType": "email", "keyboardType": "email" },
+        { "type": "text", "param": "age", "label": "Age", "value": "", "valueType": "int", "keyboardType": "numeric" },
+        { "type": "textarea", "param": "bio", "label": "Short bio", "value": "IT Coordinator and Software Developer" },
+        { "type": "text", "param": "secret", "label": "Should never appear", "value": "hidden", "hidden": true },
+        { "type": "checkbox", "param": "subscribed", "label": "Subscribe to updates", "value": true },
+        {
+            "type": "radio",
+            "param": "status",
+            "label": "Status",
+            "value": "open",
+            "controls": [
+                { "value": "open", "label": "Open" },
+                { "value": "closed", "label": "Closed" }
+            ]
+        },
+        {
+            "type": "dropdown",
+            "param": "priority",
+            "label": "Priority",
+            "value": "medium",
+            "controls": [
+                { "value": "low", "label": "Low" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "high", "label": "High" }
+            ]
+        },
+        { "type": "slider", "param": "volume", "label": "Volume (unsupported on purpose)", "value": 5 }
+    ]
+}
