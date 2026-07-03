@@ -5,5 +5,5 @@ export function ControlLabel({ label, value, hidden }: CoreControlProps<string>)
   if (hidden)
     return null;
 
-  return <div className="fw-semibold mb-2">{label ?? value}</div>;
+  return <div className="semibold mb-2">{label ?? value}</div>;
 }

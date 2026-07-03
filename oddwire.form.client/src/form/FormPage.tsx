@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Form from 'react-bootstrap/Form';
+import './FormPage.css';
 import { ControlLabel } from '../_components/controls/ControlLabel';
 import { ControlText } from '../_components/controls/ControlText';
 import { ControlTextArea } from '../_components/controls/ControlTextArea';

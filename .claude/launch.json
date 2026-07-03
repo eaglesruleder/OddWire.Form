@@ -4,8 +4,8 @@
     {
       "name": "client-preview",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["--yes", "http-server", "oddwire.form.client/dist", "-p", "4173", "-a", "127.0.0.1"],
-      "port": 4173
+      "runtimeArgs": ["--yes", "http-server", "oddwire.form.client/dist", "-p", "4188", "-a", "127.0.0.1", "-c-1"],
+      "port": 4188
     }
   ]
 }

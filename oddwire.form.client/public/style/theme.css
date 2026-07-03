@@ -1,0 +1,18 @@
+/* Global design tokens — the resume palette + base type. Not component-specific. */
+:root {
+  --bg-header: #203864;   /* navy masthead */
+  --bg-gutter: #DBDBDB;   /* light grey side gutters (outside the strip) */
+  --bg-panel:  #C9C9C9;   /* mid grey panels (debug/readouts) */
+  --bg-strip:  #ffffff;   /* the form strip itself */
+  --border:    #1F3864;   /* strip + section borders */
+  --text:      #1F3864;   /* primary text */
+  --text-accent: #2F5496; /* secondary / accent text */
+
+  /* Tablet-portrait strip width — keeps a portrait feel, landscape just gets side gutters */
+  --strip-max: 768px;
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+
+  font: 16px/145% var(--sans);
+  color: var(--text);
+}

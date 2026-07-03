@@ -1,0 +1,21 @@
+/* Global page scaffold. The strip lives on #root; the gutters are the body behind it. */
+
+/* html body raises specificity above Bootstrap's `body` background rule so the gutter wins. */
+html body {
+  margin: 0;
+  background: var(--bg-gutter);
+  color: var(--text);
+}
+
+/* Centered tablet-portrait strip */
+#root {
+  width: var(--strip-max);
+  max-width: 100%;
+  margin: 0 auto;
+  min-height: 100svh;
+  background: var(--bg-strip);
+  border-inline: 1px solid var(--border);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
