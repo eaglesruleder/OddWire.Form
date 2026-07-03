@@ -2,8 +2,8 @@ import { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import './FormPage.css';
 import { StripLayout } from '../_components/layout/StripLayout';
-import { ControlLabel } from '../_components/controls/ControlLabel';
 import { ControlText } from '../_components/controls/ControlText';
+import { ControlTextField } from '../_components/controls/ControlTextField';
 import { ControlTextArea } from '../_components/controls/ControlTextArea';
 import { ControlCheckbox } from '../_components/controls/ControlCheckbox';
 import { ControlRadio } from '../_components/controls/ControlRadio';
@@ -42,71 +42,71 @@ export function FormPage() {
   return (
     <StripLayout title="OddWire Forms">
       <Form>
-        <h2 className="section-title">Contact</h2>
+        <ControlText param="section" label="Contact" value="Fill in your details below." />
 
-      <ControlLabel param="intro" label="Fill in your details below." />
+        <ControlTextField
+          param="fullName"
+          label="Full name"
+          value={values.fullName as string}
+          onChange={handleChange}
+        />
 
-      <ControlText
-        param="fullName"
-        label="Full name"
-        value={values.fullName as string}
-        onChange={handleChange}
-      />
+        <ControlTextField
+          param="email"
+          label="Email"
+          valueType="email"
+          value={values.email as string}
+          onChange={handleChange}
+        />
 
-      <ControlText
-        param="email"
-        label="Email"
-        valueType="email"
-        value={values.email as string}
-        onChange={handleChange}
-      />
+        <ControlTextField
+          param="age"
+          label="Age"
+          valueType="int"
+          value={values.age as string}
+          onChange={handleChange}
+        />
 
-      <ControlText
-        param="age"
-        label="Age"
-        valueType="int"
-        value={values.age as string}
-        onChange={handleChange}
-      />
+        <ControlTextArea
+          param="bio"
+          label="Short bio"
+          stacked
+          value={values.bio as string}
+          onChange={handleChange}
+        />
 
-      <ControlTextArea
-        param="bio"
-        label="Short bio"
-        stacked
-        value={values.bio as string}
-        onChange={handleChange}
-      />
+        {/* Hidden control — proves hidden === true renders nothing. */}
+        <ControlTextField param="secret" label="Should never appear" hidden value="hidden" onChange={handleChange} />
 
-      {/* Hidden control — proves hidden === true renders nothing. */}
-      <ControlText param="secret" label="Should never appear" hidden value="hidden" onChange={handleChange} />
+        <ControlCheckbox
+          param="subscribed"
+          label="Subscribe to updates"
+          value={values.subscribed as boolean}
+          onChange={handleChange}
+        />
 
-      <ControlCheckbox
-        param="subscribed"
-        label="Subscribe to updates"
-        value={values.subscribed as boolean}
-        onChange={handleChange}
-      />
+        <ControlRadio
+          param="status"
+          label="Status"
+          controls={statusOptions}
+          value={values.status as string}
+          onChange={handleChange}
+        />
 
-      <ControlRadio
-        param="status"
-        label="Status"
-        controls={statusOptions}
-        value={values.status as string}
-        onChange={handleChange}
-      />
+        <ControlDropdown
+          param="priority"
+          label="Priority"
+          controls={priorityOptions}
+          value={values.priority as string}
+          onChange={handleChange}
+        />
 
-      <ControlDropdown
-        param="priority"
-        label="Priority"
-        controls={priorityOptions}
-        value={values.priority as string}
-        onChange={handleChange}
-      />
-
-      <section className="debug-panel">
-        <h2>Live values</h2>
-        <pre>{JSON.stringify(values, null, 2)}</pre>
-      </section>
+        <ControlText
+          param="debug"
+          label="Live values"
+          value={JSON.stringify(values, null, 2)}
+          className="debug-panel"
+        />
       </Form>
     </StripLayout>
   );
