@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
 
-import { FormProvider } from './FormContext';
-import { InstanceProvider } from './InstanceContext';
+import { FormContext, formContextValue } from './FormContext';
+import { InstanceContext, instanceContextValue } from './InstanceContext';
 
 export const ContextsProvider = ({ children }: { children: ReactNode }) =>
-    <FormProvider>
-        <InstanceProvider>
+    <FormContext.Provider value={formContextValue}>
+        <InstanceContext.Provider value={instanceContextValue}>
             {children}
-        </InstanceProvider>
-    </FormProvider>;
+        </InstanceContext.Provider>
+    </FormContext.Provider>;

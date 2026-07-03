@@ -1,5 +1,4 @@
 import { createContext } from 'react';
-import type { ReactNode } from 'react';
 
 import type { FormDefinition } from './types';
 import testForm from './data/forms/testform.json';
@@ -14,6 +13,3 @@ export const formContextValue: FormContextValue =
     };
 
 export const FormContext = createContext<FormContextValue>(formContextValue);
-
-export const FormProvider = ({ children }: { children: ReactNode }) =>
-    <FormContext.Provider value={formContextValue}>{children}</FormContext.Provider>;
