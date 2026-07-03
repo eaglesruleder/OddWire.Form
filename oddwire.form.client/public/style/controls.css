@@ -1,0 +1,50 @@
+/* Control-specific styling. Generic flex/spacing come from flex.css + Bootstrap utilities. */
+
+/* Label column for label-left control rows (ControlBase). Checkbox uses .fill instead. */
+.control-label {
+  flex: 0 0 15%;
+  min-width: 80px;
+}
+
+/* Read-only / dumped text — full width, left aligned, keeps multi-line shape. */
+.control-static {
+  text-align: left;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ControlText label rendered as a section separator / heading. */
+.separator {
+  color: var(--text-accent);
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0 0 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--bg-panel);
+}
+
+/* Bordered panel any block can opt into via className (e.g. the live-values dump). */
+.bubble {
+  padding: 12px 16px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+/* When a control row goes vertical, the label drops its fixed column. */
+.column > .control-label {
+  flex: none;
+  min-width: 0;
+}
+
+/* Very-slim screens stack rows that opt in via stack-sm — same result as an explicit stack. */
+@media (max-width: 480px) {
+  .stack-sm {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .stack-sm .control-label {
+    flex: none;
+    min-width: 0;
+  }
+}

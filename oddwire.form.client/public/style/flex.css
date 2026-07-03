@@ -1,0 +1,7 @@
+/* Flex layout keyword utilities. Compose freely, e.g. class="flex items-center gap".
+   (.col is Bootstrap's grid class, so the column keyword is .column.) */
+.flex        { display: flex; }
+.column      { flex-direction: column; }
+.items-center { align-items: center; }
+.fill        { flex: 1 1 auto; min-width: 0; } /* take the remaining space, still allowed to shrink */
+.gap         { gap: 12px; }

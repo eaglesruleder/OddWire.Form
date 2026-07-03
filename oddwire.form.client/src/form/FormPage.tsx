@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Form from 'react-bootstrap/Form';
-import './FormPage.css';
 import { StripLayout } from '../_components/layout/StripLayout';
 import { ControlText } from '../_components/controls/ControlText';
 import { ControlTextField } from '../_components/controls/ControlTextField';
@@ -105,7 +104,7 @@ export function FormPage() {
           param="debug"
           label="Live values"
           value={JSON.stringify(values, null, 2)}
-          className="debug-panel"
+          className="bubble"
         />
       </Form>
     </StripLayout>

@@ -1,16 +1,14 @@
 import Form from 'react-bootstrap/Form';
-import './ControlBase.css';
 import type { CoreControlProps } from './controlTypes';
 
-// Checkbox is the one control that doesn't use ControlBase: the label fills the left,
-// and the box sits content-width on the right.
+// Checkbox is its own row via utilities: label fills the left (wraps if long), box sits on the right.
 export function ControlCheckbox({ param, label, value, hidden, onChange }: CoreControlProps<boolean>) {
   if (hidden)
     return null;
 
   return (
-    <div className="control-check">
-      {label && <label className="control-label" htmlFor={param}>{label}</label>}
+    <div className="flex items-center gap mb-3">
+      {label && <label className="fill" htmlFor={param}>{label}</label>}
       <Form.Check
         id={param}
         type="checkbox"

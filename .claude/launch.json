@@ -3,9 +3,10 @@
   "configurations": [
     {
       "name": "client-preview",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["--yes", "http-server", "oddwire.form.client/dist", "-p", "4197", "-a", "127.0.0.1", "-c-1"],
-      "port": 4197
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "4199", "--bind", "127.0.0.1"],
+      "port": 4199,
+      "cwd": "oddwire.form.client/dist"
     }
   ]
 }

@@ -1,19 +1,21 @@
-import { ControlBase } from './ControlBase';
 import type { CoreControlProps } from './controlTypes';
 
 type ControlTextProps = CoreControlProps<string> & {
-  className?: string; // passed to the row, e.g. "debug-panel"
+  className?: string; // block style to opt into, e.g. "bubble"
 };
 
-// Static, read-only text: label in the base's label slot, value shown as read-only text.
-// (The editable single-line input is ControlTextField.)
-export function ControlText({ param, label, value, hidden, stacked, className }: ControlTextProps) {
+// Static text control with its own layout (not ControlBase): the label renders as a separator
+// heading, the value as a full-width text dump. Label-only = a separator; value = a page-wide dump.
+export function ControlText({ label, value, hidden, className }: ControlTextProps) {
   if (hidden)
     return null;
 
+  const wrapClass = ['mb-3', className].filter(Boolean).join(' ');
+
   return (
-    <ControlBase param={param} label={label} stacked={stacked} className={className}>
-      <div className="control-static">{value}</div>
-    </ControlBase>
+    <div className={wrapClass}>
+      {label && <div className="separator">{label}</div>}
+      {value && <div className="control-static">{value}</div>}
+    </div>
   );
 }
