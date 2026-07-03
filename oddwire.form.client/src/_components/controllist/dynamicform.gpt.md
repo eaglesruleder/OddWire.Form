@@ -32,7 +32,7 @@
 
 ## Structure
 
-`FormPage` → `src/form/` · `FormContext` → `src/context/` · `ControlList` + `ControlItem` + `controls/` → `src/_components/controllist/` (this folder). Control leaves + their contracts map is `controls.gpt.md` in `controls/`.
+`FormPage` → `src/form/` · `FormContext` (+ `data/forms/*.json`, barrel) → `src/_context/` · `ControlList` + `ControlItem` + `controls/` → `src/_components/controllist/` (this folder). Control leaves + their contracts map is `controls.gpt.md` in `controls/`.
 
 ---
 

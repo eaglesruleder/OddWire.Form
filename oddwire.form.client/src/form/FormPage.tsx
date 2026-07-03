@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 
 import { StripLayout } from '../_components/layout';
-import { useFormContext } from '../context/FormContext';
+import { FormContext } from '../_context';
 import { ControlList } from '../_components/controllist';
 import type { FormDefinition } from '../_components/controllist/controls/controlTypes';
 
@@ -11,7 +11,7 @@ const SELECTED_FORM_ID = 'demo-form';
 
 export function FormPage()
 {
-    const { getForm } = useFormContext();
+    const { getForm } = useContext(FormContext);
 
     const [form, setForm] = useState<FormDefinition | null>(null);
     const [values, setValues] = useState<Record<string, unknown>>({});
