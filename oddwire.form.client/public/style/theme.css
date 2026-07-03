@@ -7,6 +7,7 @@
   --border:    #1F3864;   /* strip + section borders */
   --text:      #1F3864;   /* primary text */
   --text-accent: #2F5496; /* secondary / accent text */
+  --text-error:  #953734; /* dark red — error text, red counterpart to --text-accent */
 
   /* Tablet-portrait strip width — keeps a portrait feel, landscape just gets side gutters */
   --strip-max: 768px;

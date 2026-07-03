@@ -26,7 +26,7 @@ export function ControlItem(props: ControlItemProps)
         default:
         {
             const def = props as ControlDef;
-            return <ControlBase param={def.param} label="Error">Unknown type: {def.type}</ControlBase>;
+            return <ControlBase param={def.param} label="Error" className="error" labelClassName="bold">Unknown control type: {def.type}</ControlBase>;
         }
     }
 }
