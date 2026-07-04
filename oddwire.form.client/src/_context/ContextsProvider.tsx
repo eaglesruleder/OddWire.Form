@@ -12,8 +12,15 @@ export function ContextsProvider({ children }: { children: ReactNode })
 
     useEffect(() =>
     {
-        persistent.initialise();
-        setInitialised(true);
+        let active = true;
+
+        persistent.initialise().then(() =>
+        {
+            if (active)
+                setInitialised(true);
+        });
+
+        return () => { active = false; };
     }, []);
 
     if (!initialised)
