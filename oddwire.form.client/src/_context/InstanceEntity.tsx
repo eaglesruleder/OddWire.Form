@@ -52,7 +52,7 @@ export class InstanceEntity extends Component<InstanceEntityProps>
         return { ...control, ...this.get(control.param) } as unknown as ControlDef;
     }
 
-    setValue(param: string, key: string, value: unknown): this
+    setValue(param: string, key: string, value: unknown): void
     {
         // Merge the changed key into this param's control (the entity's job, not the repo's).
         const merged: ControlInstance = { ...this.get(param), param, [key]: value };
@@ -63,8 +63,9 @@ export class InstanceEntity extends Component<InstanceEntityProps>
         ?   this.instance.controls.map(control => control.param === param ? merged : control)
         :   [...this.instance.controls, merged];
 
+        // Point the field at a fresh object — don't mutate the repo's instance in place (getInstance
+        // hands back its own reference). The entity mutates; the repo's copy only changes via set.
         this.instance = { ...this.instance, controls };
-        return this;
     }
 
     async componentDidMount()
