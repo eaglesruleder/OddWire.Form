@@ -55,6 +55,21 @@ class PersistentStore
 
     getInstance = async (instanceId: string): Promise<FormActiveInstance> =>
         new FormActiveInstance(this.instances.find(instance => instance.instanceId === instanceId) ?? { controls: [] });
+
+    // Upsert the instance by instanceId and persist the array — the autosave write-back path.
+    set = async (instance: FormInstance): Promise<void> =>
+    {
+        const plain: FormInstance = { ...instance };
+
+        const index = this.instances.findIndex(stored => stored.instanceId === plain.instanceId);
+
+        if (index >= 0)
+            this.instances[index] = plain;
+        else
+            this.instances.push(plain);
+
+        await storage.setItem(INSTANCES_KEY, this.instances);
+    };
 }
 
 export const persistent = new PersistentStore();

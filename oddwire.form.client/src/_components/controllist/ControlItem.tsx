@@ -13,7 +13,7 @@ import type { ControlDef } from './controls/controlTypes';
 type ControlItemProps = {
     control: ControlDef;
     instance: FormActiveInstance;
-    onChange: (value: unknown, param: string) => void;
+    onChange: (value: unknown, param: string, key?: string) => void;
     };
 
 export function ControlItem({ control, instance, onChange }: ControlItemProps)

@@ -5,7 +5,7 @@ import type { FormInstance, ControlInstance } from './types';
 import testInstance from './data/instances/testinstance.json';
 
 // The live instance as a behaviour-carrying object: the sparse overlay plus the
-// operations over it (get / resolve / patch), so consumers hold one thing, not
+// operations over it (get / resolve / setValue), so consumers hold one thing, not
 // an array plus a bag of free helpers.
 export class FormActiveInstance implements FormInstance
 {
@@ -37,14 +37,17 @@ export class FormActiveInstance implements FormInstance
         return { ...control, ...this.get(control.param) } as unknown as ControlDef;
     }
 
-    patch(param: string, value: unknown): FormActiveInstance
+    setValue(param: string, control: Record<string, unknown>): FormActiveInstance
     {
-        // Intent: return a new instance — a mutated one would not re-render.
-        const existing = this.controls.some(control => control.param === param);
+        // Intent: return a new instance — a mutated one would not re-render. `control` is the whole
+        // merged patch for this param (caller spreads get(param) + the changed key), so this just upserts.
+        const merged: ControlInstance = { ...control, param };
+
+        const existing = this.controls.some(existingControl => existingControl.param === param);
 
         const controls = existing
-        ?   this.controls.map(control => control.param === param ? { ...control, value } : control)
-        :   [...this.controls, { param, value }];
+        ?   this.controls.map(existingControl => existingControl.param === param ? merged : existingControl)
+        :   [...this.controls, merged];
 
         return new FormActiveInstance({ ...this, controls });
     }
@@ -52,11 +55,14 @@ export class FormActiveInstance implements FormInstance
 
 export type InstanceContextValue = {
     getInstance: (instanceId: string) => Promise<FormActiveInstance>;
+    set: (instance: FormInstance) => void;
     };
 
-// Intent: getInstance mirrors getForm — the durable pathway to code against; body is a stub for now.
+// Intent: getInstance / set mirror the FormContext API shape — durable pathways to code against.
+// This stub default is only a fallback; ContextsProvider supplies the persistent-store implementation.
 export const instanceContextValue: InstanceContextValue =
     {getInstance: async () => new FormActiveInstance(testInstance as unknown as FormInstance)
+    ,set: () => {}
     };
 
 export const InstanceContext = createContext<InstanceContextValue>(instanceContextValue);

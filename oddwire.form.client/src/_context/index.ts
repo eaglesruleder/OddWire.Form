@@ -1,4 +1,6 @@
 export { ContextsProvider } from './ContextsProvider';
+export { InstanceEntity } from './InstanceEntity';
+export type { InstanceChange } from './InstanceEntity';
 export { FormContext, formContextValue } from './FormContext';
 export type { FormContextValue } from './FormContext';
 export

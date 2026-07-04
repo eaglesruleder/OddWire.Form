@@ -6,7 +6,7 @@ export type CoreControlProps<TValue> = {
     value?: TValue;
     hidden?: boolean;
     stacked?: boolean;
-    onChange?: (value: TValue, param: string) => void;
+    onChange?: (value: TValue, param: string, key?: string) => void;
     };
 
 export type ControlOption = {
