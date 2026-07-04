@@ -43,7 +43,10 @@ export function FormPage()
             return;
 
         instance.setValue(param, key, value);
-        set(instance.instance, instanceId);
+
+        if (instanceId)
+            set(instance.instance, instanceId);
+
         bumpRender();
     };
 
