@@ -1,12 +1,12 @@
-import { FormContext, formContextValue } from './_context';
+import { ContextsProvider } from './_context';
 import { FormPage } from './form/FormPage';
 
 function App() {
-  return (
-    <FormContext.Provider value={formContextValue}>
-      <FormPage />
-    </FormContext.Provider>
-  );
+    return (
+        <ContextsProvider>
+            <FormPage />
+        </ContextsProvider>
+    );
 }
 
 export default App;

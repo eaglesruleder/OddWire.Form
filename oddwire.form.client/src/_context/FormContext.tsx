@@ -4,10 +4,9 @@ import type { FormDefinition } from './types';
 import testForm from './data/forms/testform.json';
 
 export type FormContextValue = {
-    getForm: (formId: string) => Promise<FormDefinition>;
+    getForm: (formId: string) => Promise<FormDefinition | undefined>;
     };
 
-// Intent: getForm is the future pathway to code against. This body is currently a stub.
 export const formContextValue: FormContextValue =
     {getForm: async () => testForm as unknown as FormDefinition
     };

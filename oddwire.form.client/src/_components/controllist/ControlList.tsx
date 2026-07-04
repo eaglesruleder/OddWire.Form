@@ -1,13 +1,18 @@
 import { ControlItem } from './ControlItem';
+import type { InstanceEntity } from '../../_context';
 import type { ControlDef } from './controls/controlTypes';
 
 type ControlListProps = {
     controls: ControlDef[];
-    values: Record<string, unknown>;
-    onChange: (value: unknown, param: string) => void;
+    instance: InstanceEntity;
+    onChange: (value: unknown, param: string, key?: string) => void;
     };
 
-export const ControlList = ({ controls, values, onChange }: ControlListProps) =>
-    controls
-        .map(control => ({ ...control, value: values[control.param] ?? control.value }) as unknown as ControlDef)
-        .map(control => <ControlItem key={control.param} {...control} onChange={onChange} />);
+export const ControlList = ({ controls, instance, onChange }: ControlListProps) =>
+    controls.map(control =>
+        <ControlItem
+            key={control.param}
+            control={control}
+            instance={instance}
+            onChange={onChange}
+        />);

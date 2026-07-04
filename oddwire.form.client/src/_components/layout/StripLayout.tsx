@@ -1,7 +1,5 @@
 import type { ReactNode } from 'react';
 
-// Simple portrait strip with a headered masthead. The strip width/borders live on #root (layout.css);
-// this just supplies the header band + padded body a page drops its content into.
 type StripLayoutProps = {
   title: string;
   children: ReactNode;
