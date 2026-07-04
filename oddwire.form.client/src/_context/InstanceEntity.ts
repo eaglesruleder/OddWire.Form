@@ -1,35 +1,20 @@
-import { Component } from 'react';
-import type { ReactNode } from 'react';
-
-import { InstanceContext } from './InstanceContext';
-import type { InstanceContextValue } from './InstanceContext';
 import type { ControlDef } from '../_components/controllist';
 import type { FormInstance, ControlInstance } from './types';
 
 export type InstanceChange = (value: unknown, param: string, key?: string) => void;
 
-type InstanceEntityProps = {
-    instanceId: string;
-    instance: FormInstance;
-    children: (instance: InstanceEntity, onChange: InstanceChange) => ReactNode;
-    };
-
-export class InstanceEntity extends Component<InstanceEntityProps>
+export class InstanceEntity
 {
-    static contextType = InstanceContext;
-    declare context: InstanceContextValue;
-
     instance: FormInstance;
 
-    constructor(props: InstanceEntityProps)
+    constructor(instance: FormInstance)
     {
-        super(props);
-        this.instance = props.instance;
+        this.instance = instance;
     }
 
     static from(instance: FormInstance): InstanceEntity
     {
-        return new InstanceEntity({ instanceId: instance.instanceId ?? '', instance, children: () => null });
+        return new InstanceEntity(instance);
     }
 
     get(param: string): ControlInstance | undefined
@@ -58,17 +43,5 @@ export class InstanceEntity extends Component<InstanceEntityProps>
         :   [...this.instance.controls, merged];
 
         this.instance = { ...this.instance, controls };
-    }
-
-    onChange: InstanceChange = (value, param, key = 'value') =>
-    {
-        this.setValue(param, key, value);
-        this.context.set(this.instance, this.props.instanceId);
-        this.forceUpdate();
-    };
-
-    render()
-    {
-        return this.props.children(this, this.onChange);
     }
 }
