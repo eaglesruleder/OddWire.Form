@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import { FormContext, InstanceContext, InstanceEntity } from '../_context';
 import type { FormDefinition, InstanceChange } from '../_context';
 import { StripLayout } from '../_components/layout';
-import { ControlList, ControlError } from '../_components/controllist';
+import { ControlList, ControlButton, ControlError } from '../_components/controllist';
 
 const SELECTED_FORM_ID = 'demo-form';
 const SELECTED_INSTANCE_ID = 'demo-instance-1';
@@ -12,10 +12,10 @@ const SELECTED_INSTANCE_ID = 'demo-instance-1';
 export function FormPage()
 {
     const { getForm } = useContext(FormContext);
-    const { getInstance, set } = useContext(InstanceContext);
+    const { getInstance, set, save } = useContext(InstanceContext);
 
     const formId = SELECTED_FORM_ID;
-    const instanceId = SELECTED_INSTANCE_ID;
+    const [instanceId, setInstanceId] = useState(SELECTED_INSTANCE_ID);
 
     const [loading, setLoading] = useState(true);
     const [form, setForm] = useState<FormDefinition | null>(null);
@@ -50,6 +50,14 @@ export function FormPage()
         bumpRender();
     };
 
+    const onSave = () =>
+    {
+        if (!instance)
+            return;
+
+        setInstanceId(save(instance.instance, instanceId || undefined));
+    };
+
     const errorPage = (message: string) =>
         <StripLayout title="OddWire Forms">
             <Form>
@@ -77,6 +85,7 @@ export function FormPage()
         <StripLayout title={form.label ?? 'OddWire Forms'}>
             <Form>
                 <ControlList controls={form.controls} instance={instance} onChange={onChange} />
+                <ControlButton label={instanceId ? 'autosaving' : 'Save'} onClick={onSave} disabled={!!instanceId} />
             </Form>
         </StripLayout>
         );

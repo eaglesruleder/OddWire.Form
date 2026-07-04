@@ -14,6 +14,7 @@ const seedInstances =
 
 const FORMS_KEY = 'forms';
 const INSTANCES_KEY = 'instances';
+const NEW_INSTANCE_KEY = 'new-instance';
 
 const storage = localforage.createInstance({ name: 'oddwire.form' });
 
@@ -79,6 +80,13 @@ class PersistentStore
             this.instances.push(plain);
 
         await storage.setItem(INSTANCES_KEY, this.instances);
+    };
+
+    save = (instance: FormInstance, instanceId?: string): string =>
+    {
+        const id = instanceId || NEW_INSTANCE_KEY;
+        void this.set(instance, id);
+        return id;
     };
 }
 
