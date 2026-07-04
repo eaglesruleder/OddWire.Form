@@ -1,10 +1,10 @@
 import { ControlItem } from './ControlItem';
-import type { FormActiveInstance } from '../../_context';
+import type { InstanceEntity } from '../../_context';
 import type { ControlDef } from './controls/controlTypes';
 
 type ControlListProps = {
     controls: ControlDef[];
-    instance: FormActiveInstance;
+    instance: InstanceEntity;
     onChange: (value: unknown, param: string, key?: string) => void;
     };
 

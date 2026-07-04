@@ -7,12 +7,12 @@ import
     ,ControlDropdown
     } from './controls';
 import { ControlBase } from './controls/ControlBase';
-import type { FormActiveInstance } from '../../_context';
+import type { InstanceEntity } from '../../_context';
 import type { ControlDef } from './controls/controlTypes';
 
 type ControlItemProps = {
     control: ControlDef;
-    instance: FormActiveInstance;
+    instance: InstanceEntity;
     onChange: (value: unknown, param: string, key?: string) => void;
     };
 

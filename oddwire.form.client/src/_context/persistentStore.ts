@@ -1,7 +1,6 @@
 import localforage from 'localforage';
 
 import type { FormDefinition, FormInstance } from './types';
-import { FormActiveInstance } from './InstanceContext';
 import testForm from './data/forms/testform.json';
 import testInstance from './data/instances/testinstance.json';
 
@@ -53,15 +52,15 @@ class PersistentStore
     getForm = async (formId: string): Promise<FormDefinition> =>
         this.forms.find(form => form.formId === formId) as FormDefinition;
 
-    getInstance = async (instanceId: string): Promise<FormActiveInstance> =>
-        new FormActiveInstance(this.instances.find(instance => instance.instanceId === instanceId) ?? { controls: [] });
+    getInstance = async (instanceId: string): Promise<FormInstance> =>
+        this.instances.find(instance => instance.instanceId === instanceId) ?? { controls: [] };
 
-    // Upsert the instance by instanceId and persist the array — the autosave write-back path.
-    set = async (instance: FormInstance): Promise<void> =>
+    // Upsert the instance under the given id and persist the array — the autosave write-back path.
+    set = async (instance: FormInstance, instanceId: string): Promise<void> =>
     {
-        const plain: FormInstance = { ...instance };
+        const plain: FormInstance = { ...instance, instanceId };
 
-        const index = this.instances.findIndex(stored => stored.instanceId === plain.instanceId);
+        const index = this.instances.findIndex(stored => stored.instanceId === instanceId);
 
         if (index >= 0)
             this.instances[index] = plain;
