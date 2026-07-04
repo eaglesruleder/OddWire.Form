@@ -4,7 +4,7 @@ import type { FormInstance } from './types';
 import testInstance from './data/instances/testinstance.json';
 
 export type InstanceContextValue = {
-    getInstance: (instanceId: string) => Promise<FormInstance>;
+    getInstance: (instanceId: string) => Promise<FormInstance | undefined>;
     set: (instance: FormInstance, instanceId: string) => void;
     };
 

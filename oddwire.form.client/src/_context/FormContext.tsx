@@ -4,7 +4,7 @@ import type { FormDefinition } from './types';
 import testForm from './data/forms/testform.json';
 
 export type FormContextValue = {
-    getForm: (formId: string) => Promise<FormDefinition>;
+    getForm: (formId: string) => Promise<FormDefinition | undefined>;
     };
 
 export const formContextValue: FormContextValue =

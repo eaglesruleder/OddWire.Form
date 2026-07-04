@@ -58,11 +58,14 @@ class PersistentStore
         return seed;
     }
 
-    getForm = async (formId: string): Promise<FormDefinition> =>
-        this.forms.find(form => form.formId === formId) as FormDefinition;
+    getForm = async (formId: string): Promise<FormDefinition | undefined> =>
+        this.forms.find(form => form.formId === formId);
 
-    getInstance = async (instanceId: string): Promise<FormInstance> =>
-        compressDuplicates(this.instances.find(instance => instance.instanceId === instanceId) ?? { controls: [] });
+    getInstance = async (instanceId: string): Promise<FormInstance | undefined> =>
+    {
+        const found = this.instances.find(instance => instance.instanceId === instanceId);
+        return found ? compressDuplicates(found) : undefined;
+    };
 
     set = async (instance: FormInstance, instanceId: string): Promise<void> =>
     {
