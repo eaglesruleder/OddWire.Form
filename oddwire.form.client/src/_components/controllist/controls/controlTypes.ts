@@ -18,8 +18,6 @@ export type TextValueType = 'text' | 'int' | 'decimal' | 'email' | 'phone';
 
 export type KeyboardType = HTMLAttributes<HTMLElement>['inputMode'];
 
-// JSON control definitions — the config shape ControlItem dispatches on, distinct from
-// the CoreControlProps a rendered leaf receives. Add a member here per new control type.
 export type ControlDefBase<TType extends string, TValue = unknown> = {
     type: TType;
     param: string;

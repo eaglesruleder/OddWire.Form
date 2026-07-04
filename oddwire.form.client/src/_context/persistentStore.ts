@@ -1,10 +1,9 @@
 import localforage from 'localforage';
 
-import type { FormDefinition, FormInstance } from './types';
+import type { FormDefinition, FormInstance, ControlInstance } from './types';
 import testForm from './data/forms/testform.json';
 import testInstance from './data/instances/testinstance.json';
 
-// Bundled seed JSON — loaded into storage on first run only. The JSON boundary cast lives here, once.
 const seedForms =
     [testForm
     ] as unknown as FormDefinition[];
@@ -16,9 +15,20 @@ const seedInstances =
 const FORMS_KEY = 'forms';
 const INSTANCES_KEY = 'instances';
 
-// IndexedDB-backed store (localforage): survives refresh and stores structured/binary values natively,
-// so PDF/image blobs slot in later without base64 bloat. localStorage is the automatic fallback driver.
 const storage = localforage.createInstance({ name: 'oddwire.form' });
+
+function compressDuplicates(instance: FormInstance): FormInstance
+{
+    const byParam = new Map<string, ControlInstance>();
+
+    for (const control of instance.controls)
+        byParam.set(control.param, control);
+
+    if (byParam.size === instance.controls.length)
+        return instance;
+
+    return { ...instance, controls: [...byParam.values()] };
+}
 
 class PersistentStore
 {
@@ -26,7 +36,6 @@ class PersistentStore
     forms: FormDefinition[] = [];
     instances: FormInstance[] = [];
 
-    // Load persisted state; seed from bundled JSON on first run. Async — this is what the splash waits on.
     async initialise()
     {
         if (this.initialised)
@@ -53,12 +62,11 @@ class PersistentStore
         this.forms.find(form => form.formId === formId) as FormDefinition;
 
     getInstance = async (instanceId: string): Promise<FormInstance> =>
-        this.instances.find(instance => instance.instanceId === instanceId) ?? { controls: [] };
+        compressDuplicates(this.instances.find(instance => instance.instanceId === instanceId) ?? { controls: [] });
 
-    // Upsert the instance under the given id and persist the array — the autosave write-back path.
     set = async (instance: FormInstance, instanceId: string): Promise<void> =>
     {
-        const plain: FormInstance = { ...instance, instanceId };
+        const plain = compressDuplicates({ ...instance, instanceId });
 
         const index = this.instances.findIndex(stored => stored.instanceId === instanceId);
 

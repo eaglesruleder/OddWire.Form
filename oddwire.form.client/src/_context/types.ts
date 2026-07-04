@@ -6,7 +6,6 @@ export type FormDefinition = {
     controls: ControlDef[];
     };
 
-// Live document overlay: a sparse array of param-keyed patches over the form definition.
 export type ControlInstance = {
     param: string;
     [key: string]: unknown;

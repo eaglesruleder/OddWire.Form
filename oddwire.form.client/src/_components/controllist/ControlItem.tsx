@@ -5,8 +5,8 @@ import
     ,ControlCheckbox
     ,ControlRadio
     ,ControlDropdown
+    ,ControlError
     } from './controls';
-import { ControlBase } from './controls/ControlBase';
 import type { InstanceEntity } from '../../_context';
 import type { ControlDef } from './controls/controlTypes';
 
@@ -31,7 +31,7 @@ export function ControlItem({ control, instance, onChange }: ControlItemProps)
         default:
         {
             const def = resolved as ControlDef;
-            return <ControlBase param={def.param} label="Error" className="error" labelClassName="bold">Unknown control type: {def.type}</ControlBase>;
+            return <ControlError param={def.param}>Unknown control type: {def.type}</ControlError>;
         }
     }
 }
