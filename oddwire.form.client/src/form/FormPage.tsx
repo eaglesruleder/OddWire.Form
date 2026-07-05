@@ -3,12 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-import { FormContext, InstanceContext, InstanceEntity } from '../_context';
 import type { FormDefinition, InstanceChange } from '../_context';
+
+import { FormContext, InstanceContext, InstanceEntity } from '../_context';
 import { StripLayout } from '../_components/layout';
 import { ControlList, ControlError } from '../_components/controllist';
-
-const NEW_INSTANCE = 'new';
 
 export function FormPage()
 {
@@ -16,7 +15,7 @@ export function FormPage()
     const { getInstance, save } = useContext(InstanceContext);
     const navigate = useNavigate();
 
-    const { formId = '', instanceId = '' } = useParams();
+    const { formId = '', instanceId } = useParams();
 
     const [loading, setLoading] = useState(true);
     const [form, setForm] = useState<FormDefinition | null>(null);
@@ -35,10 +34,10 @@ export function FormPage()
 
         return () => { active = false; };
 
-        //#region resolve instance — existing by id, or a fresh saved instance for 'new'
+        //#region resolve instance — existing by id, or a fresh saved instance when the id is absent
         async function resolveInstance()
         {
-            if (instanceId === NEW_INSTANCE)
+            if (!instanceId)
             {
                 const fresh = InstanceEntity.from({ formId, controls: [] });
                 await save(fresh.instance);

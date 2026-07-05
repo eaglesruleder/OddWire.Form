@@ -59,7 +59,7 @@ function InstanceList({ formId, instances }: { formId: string; instances: Instan
                 </Link>
                 )}
 
-            <Link to={`/form/${formId}/new`}>+ New instance</Link>
+            <Link to={`/form/${formId}`}>+ New instance</Link>
         </div>
         );
 }
