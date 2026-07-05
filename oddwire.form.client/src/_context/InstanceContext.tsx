@@ -74,6 +74,19 @@ class InstanceStore implements InstanceContextValue
         return instance.instanceId;
     };
 
+    // Intent: called by FormStore when a form's displayParam changes — re-project every affected instance
+    reindexForm = async (formId: string): Promise<void> =>
+    {
+        const affected = this.index.filter(entry => entry.formId === formId);
+
+        for (const entry of affected)
+        {
+            const body = await storage.getItem<FormInstance>(entry.instanceId);
+            if (body)
+                await this.refreshIndex(body);
+        }
+    };
+
     private refreshIndex = async (instance: FormInstance): Promise<void> =>
     {
         const entry: InstanceIndexEntry =

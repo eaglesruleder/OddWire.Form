@@ -1,4 +1,4 @@
-import { useContext, useEffect, useReducer, useState } from 'react';
+import { useContext, useEffect, useReducer, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 
@@ -21,6 +21,10 @@ export function FormPage()
     const [instance, setInstance] = useState<InstanceEntity | null>(null);
     const [autosaving, setAutosaving] = useState(false);
     const [, bumpRender] = useReducer(tick => tick + 1, 0);
+
+    // latest instance, read (not depended on) by the effect to skip reloading one we already hold
+    const instanceRef = useRef<InstanceEntity | null>(null);
+    instanceRef.current = instance;
 
     useEffect(() =>
     {
@@ -45,6 +49,13 @@ export function FormPage()
                     setInstance(InstanceEntity.from({ formId, controls: [] }));
                     setAutosaving(false);
                 }
+                return;
+            }
+
+            // Intent: already holding this instance (just saved + navigated) — keep it, skip the reload
+            if (instanceRef.current?.instanceId === instanceId)
+            {
+                setAutosaving(true);
                 return;
             }
 

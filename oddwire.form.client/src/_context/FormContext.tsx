@@ -2,6 +2,7 @@ import { createContext } from 'react';
 import localforage from 'localforage';
 
 import type { FormDefinition, FormIndexEntry } from './types';
+import { instanceStore } from './InstanceContext';
 import { upsert } from './storeUtils';
 import testForm from './data/forms/testform.json';
 
@@ -12,6 +13,18 @@ const seedForms =
     ] as unknown as FormDefinition[];
 
 const storage = localforage.createInstance({ name: 'oddwire.form', storeName: 'forms' });
+
+// order-sensitive — displayParam order drives the display join
+function sameParams(a?: string[], b?: string[]): boolean
+{
+    if (a === b)
+        return true;
+
+    if (!a || !b || a.length !== b.length)
+        return false;
+
+    return a.every((param, i) => param === b[i]);
+}
 
 export type FormContextValue = {
     getForm: (formId: string) => Promise<FormDefinition | undefined>;
@@ -51,10 +64,18 @@ class FormStore implements FormContextValue
     {
         // Intent: identity lives on the object, not the storage key — key is derived from it
         form.formId ??= crypto.randomUUID();
-        form.dateModified = new Date().toISOString();
+
+        // Intent: forms are published elsewhere — persist dateModified as provided, never stamp it here
+        // Intent: the prior displayParam is already cached in the index — no old-body load needed
+        const prior = this.index.find(entry => entry.formId === form.formId);
+        const displayParamChanged = prior !== undefined && !sameParams(prior.displayParam, form.displayParam);
 
         await storage.setItem(form.formId, form);
         await this.refreshIndex(form);
+
+        // Intent: a changed displayParam invalidates every existing instance's cached display projection
+        if (displayParamChanged && instanceStore.list(form.formId).length > 0)
+            await instanceStore.reindexForm(form.formId);
 
         return form.formId;
     };
