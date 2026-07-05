@@ -1,3 +1,6 @@
+import type { InstanceEntity, InstanceChange } from '../../_context';
+import type { ControlDef } from './controls/controlTypes';
+
 import
     {ControlText
     ,ControlTextField
@@ -7,16 +10,16 @@ import
     ,ControlDropdown
     ,ControlError
     } from './controls';
-import type { InstanceEntity, InstanceChange } from '../../_context';
-import type { ControlDef } from './controls/controlTypes';
+import { ControlCollapsible, ControlPopup, ControlTab } from './controls/layout';
 
 type ControlItemProps = {
     control: ControlDef;
     instance: InstanceEntity;
     onChange: InstanceChange;
+    depth?: number;
     };
 
-export function ControlItem({ control, instance, onChange }: ControlItemProps)
+export function ControlItem({ control, instance, onChange, depth = 0 }: ControlItemProps)
 {
     const resolved = instance.resolve(control);
 
@@ -28,6 +31,9 @@ export function ControlItem({ control, instance, onChange }: ControlItemProps)
         case 'checkbox': return <ControlCheckbox  {...resolved} onChange={onChange} />;
         case 'radio':    return <ControlRadio     {...resolved} onChange={onChange} />;
         case 'dropdown': return <ControlDropdown  {...resolved} onChange={onChange} />;
+        case 'collapsible': return <ControlCollapsible {...resolved} instance={instance} onChange={onChange} depth={depth} />;
+        case 'popup':       return <ControlPopup       {...resolved} instance={instance} onChange={onChange} />;
+        case 'tab':         return <ControlTab sections={[{ param: resolved.param, label: resolved.label ?? resolved.param, controls: resolved.controls }]} instance={instance} onChange={onChange} depth={depth} />;
         default:
         {
             const def = resolved as ControlDef;

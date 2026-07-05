@@ -1,7 +1,8 @@
 import Form from 'react-bootstrap/Form';
 
-import { ControlBase } from './ControlBase';
 import type { CoreControlProps, KeyboardType, TextValueType } from './controlTypes';
+
+import { ControlBase } from './ControlBase';
 
 type ControlTextFieldProps = CoreControlProps<string> & {
     valueType?: TextValueType;

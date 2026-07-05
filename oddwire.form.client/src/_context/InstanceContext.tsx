@@ -2,6 +2,7 @@ import { createContext } from 'react';
 import localforage from 'localforage';
 
 import type { FormInstance, ControlInstance, InstanceIndexEntry } from './types';
+
 import { formStore } from './FormContext';
 import { upsert } from './storeUtils';
 import testInstance from './data/instances/testinstance.json';

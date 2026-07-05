@@ -40,10 +40,23 @@ export type DropdownControlDef = ControlDefBase<'dropdown', string> & {
     controls: ControlOption[];
     };
 
+export type CollapsibleControlDef = ControlDefBase<'collapsible'> & {
+    controls: ControlDef[];
+    };
+export type TabControlDef = ControlDefBase<'tab'> & {
+    controls: ControlDef[];
+    };
+export type PopupControlDef = ControlDefBase<'popup'> & {
+    controls: ControlDef[];
+    };
+
 export type ControlDef =
     | LabelControlDef
     | TextControlDef
     | TextAreaControlDef
     | CheckboxControlDef
     | RadioControlDef
-    | DropdownControlDef;
+    | DropdownControlDef
+    | CollapsibleControlDef
+    | TabControlDef
+    | PopupControlDef;

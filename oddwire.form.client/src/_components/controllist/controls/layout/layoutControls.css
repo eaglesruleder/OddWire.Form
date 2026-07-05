@@ -1,0 +1,95 @@
+.collapsible {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.collapsible-header {
+  position: sticky;
+  top: 60px;
+  z-index: 5;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-panel);
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+.collapsible-chevron { flex: 0 0 auto; }
+.collapsible-body { padding: 12px; }
+
+.tab-bar { display: flex; gap: 4px; }
+.tab {
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 4px 4px 0 0;
+  background: var(--bg-panel);
+  color: var(--text);
+  font-size: 16px;
+  cursor: pointer;
+}
+.tab.active {
+  background: var(--bg-strip);
+  font-weight: 600;
+}
+
+.tab-bar-inline {
+  position: sticky;
+  top: 60px;
+  z-index: 5;
+  flex-wrap: wrap;
+  padding: 6px 0;
+  background: var(--bg-strip);
+  border-bottom: 1px solid var(--border);
+}
+
+.tab-bar-root {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100vw, var(--strip-max));
+  gap: 0;
+  z-index: 10;
+  background: var(--bg-header);
+  border-top: 2px solid var(--border);
+}
+.tab-bar-root .tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--border);
+  border-radius: 0;
+  background: var(--bg-header);
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.tab-bar-root .tab:last-child { border-right: 0; }
+.tab-bar-root .tab.active {
+  background: var(--bg-strip);
+  color: var(--text);
+}
+
+.margin-bot-footer { margin-bottom: var(--footer-height); }
+.height-footer { height: var(--footer-height); }
+
+.popup-dialog {
+  width: calc(min(100vw, var(--strip-max)) - 24px);
+  max-width: none;
+  margin: 0 auto;
+}
+.popup-content {
+  height: calc(100svh - 100px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.popup-content .strip-main { overflow-y: auto; }

@@ -3,10 +3,24 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 
 import type { FormDefinition, InstanceChange } from '../_context';
+import type { ControlDef, TabSection } from '../_components/controllist';
 
 import { FormContext, InstanceContext, InstanceEntity } from '../_context';
 import { StripLayout } from '../_components/layout';
-import { ControlList, ControlError } from '../_components/controllist';
+import { ControlList, ControlTab, ControlError } from '../_components/controllist';
+
+function buildRootTabSections(controls: ControlDef[]): TabSection[]
+{
+    const sections: TabSection[] = controls
+        .filter(control => control.type === 'tab' && !control.hidden)
+        .map(tab => ({ param: tab.param, label: tab.label ?? tab.param, controls: (tab as { controls: ControlDef[] }).controls }));
+
+    const strays = controls.filter(control => control.type !== 'tab' && !control.hidden);
+    if (strays.length > 0)
+        sections.push({ param: '__unexpected', label: '⚠', controls: strays, notice: 'Unexpected controls in tab layout' });
+
+    return sections;
+}
 
 export function FormPage()
 {
@@ -22,7 +36,6 @@ export function FormPage()
     const [autosaving, setAutosaving] = useState(false);
     const [, bumpRender] = useReducer(tick => tick + 1, 0);
 
-    // latest instance, read (not depended on) by the effect to skip reloading one we already hold
     const instanceRef = useRef<InstanceEntity | null>(null);
     instanceRef.current = instance;
 
@@ -38,7 +51,6 @@ export function FormPage()
 
         return () => { active = false; };
 
-        //#region resolve instance — existing by id (autosaves), or an unsaved fresh one when the id is absent
         async function resolveInstance()
         {
             if (!instanceId)
@@ -66,7 +78,6 @@ export function FormPage()
                 setAutosaving(!!loaded);
             }
         }
-        //#endregion
     }, [getForm, getInstance, formId, instanceId]);
 
     const onChange: InstanceChange = (value, key, subkey = 'value') =>
@@ -123,10 +134,15 @@ export function FormPage()
             title={autosaving ? 'Autosaving' : 'Save'}
         >💾</button>;
 
+    const isRootTab = form.controls[0]?.type === 'tab';
+
     return (
         <StripLayout left="←" leftLink="/" right={saveIcon} title={form.label ?? 'OddWire Forms'}>
             <Form>
-                <ControlList controls={form.controls} instance={instance} onChange={onChange} />
+                {isRootTab
+                ?   <ControlTab pageLayout sections={buildRootTabSections(form.controls)} instance={instance} onChange={onChange} />
+                :   <ControlList controls={form.controls} instance={instance} onChange={onChange} />
+                }
             </Form>
         </StripLayout>
         );

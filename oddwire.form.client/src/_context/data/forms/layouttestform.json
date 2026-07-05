@@ -1,0 +1,124 @@
+{
+    "formId": "33333333-3333-4333-8333-333333333333",
+    "label": "Layout Test",
+    "version": "1.0.0",
+    "displayParam": ["treeName"],
+    "controls": [
+        {
+            "type": "tab",
+            "param": "tabTrees",
+            "label": "Trees",
+            "controls": [
+                { "type": "label", "param": "treesHeading", "label": "Nested layout trees" },
+                { "type": "text", "param": "treeName", "label": "Tree name", "value": "" },
+                {
+                    "type": "collapsible",
+                    "param": "colOuter",
+                    "label": "Outer collapsible",
+                    "controls": [
+                        { "type": "text", "param": "o1", "label": "Outer 1", "value": "" },
+                        { "type": "text", "param": "o2", "label": "Outer 2", "value": "" },
+                        {
+                            "type": "tab",
+                            "param": "innerA",
+                            "label": "Inner A",
+                            "controls": [
+                                { "type": "text", "param": "ia1", "label": "Inner A 1", "value": "" },
+                                {
+                                    "type": "collapsible",
+                                    "param": "colDeep",
+                                    "label": "Deep collapsible",
+                                    "controls": [
+                                        { "type": "text", "param": "d1", "label": "Deep 1", "value": "" },
+                                        { "type": "text", "param": "d2", "label": "Deep 2", "value": "" },
+                                        { "type": "text", "param": "d3", "label": "Deep 3", "value": "" },
+                                        { "type": "text", "param": "d4", "label": "Deep 4", "value": "" },
+                                        { "type": "text", "param": "d5", "label": "Deep 5", "value": "" },
+                                        { "type": "text", "param": "d6", "label": "Deep 6", "value": "" },
+                                        { "type": "text", "param": "d7", "label": "Deep 7", "value": "" },
+                                        { "type": "text", "param": "d8", "label": "Deep 8", "value": "" }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "tab",
+                            "param": "innerB",
+                            "label": "Inner B",
+                            "controls": [
+                                { "type": "text", "param": "ib1", "label": "Inner B 1", "value": "" }
+                            ]
+                        },
+                        {
+                            "type": "tab",
+                            "param": "innerHidden",
+                            "label": "Inner Hidden",
+                            "hidden": true,
+                            "controls": [
+                                { "type": "text", "param": "ih1", "label": "Should not appear", "value": "" }
+                            ]
+                        }
+                    ]
+                },
+                { "type": "textarea", "param": "treesNote", "label": "Trailing note", "value": "" }
+            ]
+        },
+        {
+            "type": "tab",
+            "param": "tabList",
+            "label": "Long list",
+            "controls": [
+                { "type": "label", "param": "listHeading", "label": "Long flat list" },
+                { "type": "text", "param": "f01", "label": "Field 01", "value": "" },
+                { "type": "text", "param": "f02", "label": "Field 02", "value": "" },
+                { "type": "text", "param": "f03", "label": "Field 03", "value": "" },
+                { "type": "text", "param": "f04", "label": "Field 04", "value": "" },
+                { "type": "text", "param": "f05", "label": "Field 05", "value": "" },
+                { "type": "text", "param": "f06", "label": "Field 06", "value": "" },
+                { "type": "text", "param": "f07", "label": "Field 07", "value": "" },
+                { "type": "text", "param": "f08", "label": "Field 08", "value": "" },
+                { "type": "text", "param": "f09", "label": "Field 09", "value": "" },
+                { "type": "text", "param": "f10", "label": "Field 10", "value": "" },
+                { "type": "text", "param": "f11", "label": "Field 11", "value": "" },
+                { "type": "text", "param": "f12", "label": "Field 12", "value": "" },
+                { "type": "text", "param": "f13", "label": "Field 13", "value": "" },
+                { "type": "text", "param": "f14", "label": "Field 14", "value": "" },
+                { "type": "text", "param": "f15", "label": "Field 15", "value": "" },
+                { "type": "text", "param": "f16", "label": "Field 16", "value": "" },
+                { "type": "text", "param": "f17", "label": "Field 17", "value": "" },
+                { "type": "text", "param": "f18", "label": "Field 18", "value": "" },
+                { "type": "checkbox", "param": "f19", "label": "Field 19", "value": false },
+                { "type": "checkbox", "param": "f20", "label": "Field 20", "value": true },
+                { "type": "text", "param": "f21", "label": "Field 21", "value": "" },
+                { "type": "text", "param": "f22", "label": "Field 22", "value": "" },
+                { "type": "text", "param": "f23", "label": "Field 23", "value": "" },
+                { "type": "text", "param": "f24", "label": "Field 24", "value": "" }
+            ]
+        },
+        {
+            "type": "tab",
+            "param": "tabValue",
+            "label": "Long value",
+            "controls": [
+                {
+                    "type": "collapsible",
+                    "param": "colLongValue",
+                    "label": "Long value section",
+                    "controls": [
+                        { "type": "label", "param": "longText", "label": "Wall of text", "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt." }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "tab",
+            "param": "tabHidden",
+            "label": "Hidden Tab",
+            "hidden": true,
+            "controls": [
+                { "type": "text", "param": "hz1", "label": "Should not appear", "value": "" }
+            ]
+        },
+        { "type": "label", "param": "hiddenStray", "label": "Hidden stray", "value": "should not appear", "hidden": true }
+    ]
+}

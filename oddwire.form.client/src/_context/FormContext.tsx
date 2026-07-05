@@ -2,19 +2,23 @@ import { createContext } from 'react';
 import localforage from 'localforage';
 
 import type { FormDefinition, FormIndexEntry } from './types';
+
 import { instanceStore } from './InstanceContext';
 import { upsert } from './storeUtils';
 import testForm from './data/forms/testform.json';
+import tabForm from './data/forms/tabform.json';
+import layoutTestForm from './data/forms/layouttestform.json';
 
 const INDEX_KEY = 'index';
 
 const seedForms =
     [testForm
+    ,tabForm
+    ,layoutTestForm
     ] as unknown as FormDefinition[];
 
 const storage = localforage.createInstance({ name: 'oddwire.form', storeName: 'forms' });
 
-// order-sensitive — displayParam order drives the display join
 function sameParams(a?: string[], b?: string[]): boolean
 {
     if (a === b)
