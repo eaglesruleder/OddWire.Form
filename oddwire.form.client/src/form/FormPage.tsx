@@ -140,7 +140,7 @@ export function FormPage()
         <StripLayout left="←" leftLink="/" right={saveIcon} title={form.label ?? 'OddWire Forms'}>
             <Form>
                 {isRootTab
-                ?   <ControlTab variant="root" sections={buildRootTabSections(form.controls)} instance={instance} onChange={onChange} />
+                ?   <ControlTab pageLayout sections={buildRootTabSections(form.controls)} instance={instance} onChange={onChange} />
                 :   <ControlList controls={form.controls} instance={instance} onChange={onChange} />
                 }
             </Form>

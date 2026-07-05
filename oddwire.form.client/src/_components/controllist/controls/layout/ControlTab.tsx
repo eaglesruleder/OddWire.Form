@@ -17,7 +17,7 @@ export type TabSection = {
 
 type ControlTabProps = {
     sections: TabSection[];
-    variant: 'inline' | 'root';
+    pageLayout?: boolean;
     instance: InstanceEntity;
     onChange: InstanceChange;
     depth?: number;
@@ -33,12 +33,13 @@ export function ControlTab(props: ControlTabProps)
         return null;
 
     const depth = props.depth ?? 0;
-    const childDepth = props.variant === 'root' ? 0 : depth + 1;
+    const pageLayout = props.pageLayout ?? false;
+    const childDepth = pageLayout ? 0 : depth + 1;
 
     const bar =
         <div
-            className={`tab-bar tab-bar-${props.variant}`}
-            style={props.variant === 'inline' ? { top: stickyTop(depth) } : undefined}
+            className={pageLayout ? 'tab-bar tab-bar-root height-footer' : 'tab-bar tab-bar-inline'}
+            style={pageLayout ? undefined : { top: stickyTop(depth) }}
         >
             {props.sections.map(section =>
             <button
@@ -51,14 +52,14 @@ export function ControlTab(props: ControlTabProps)
         </div>;
 
     const body =
-        <div className="tab-body">
+        <div className="pt-2">
             {active.notice &&
             <ControlError>{active.notice}</ControlError>
             }
             <ControlList controls={active.controls} instance={props.instance} onChange={props.onChange} depth={childDepth} />
         </div>;
 
-    return props.variant === 'root'
-    ?   <div className="tabset tabset-root">{body}{bar}</div>
+    return pageLayout
+    ?   <div className="tabset tabset-root margin-bot-footer">{body}{bar}</div>
     :   <div className="tabset tabset-inline mb-3">{bar}{body}</div>;
 }

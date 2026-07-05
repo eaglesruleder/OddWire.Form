@@ -35,7 +35,6 @@
   background: var(--bg-strip);
   font-weight: 600;
 }
-.tab-body { padding-top: 8px; }
 
 .tab-bar-inline {
   position: sticky;
@@ -60,7 +59,10 @@
 }
 .tab-bar-root .tab {
   flex: 1;
-  padding: 12px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
   border: 0;
   border-right: 1px solid var(--border);
   border-radius: 0;
@@ -68,14 +70,15 @@
   color: #fff;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 .tab-bar-root .tab:last-child { border-right: 0; }
 .tab-bar-root .tab.active {
   background: var(--bg-strip);
   color: var(--text);
 }
-.tabset-root .tab-body { padding-bottom: 72px; }
+
+.margin-bot-footer { margin-bottom: var(--footer-height); }
+.height-footer { height: var(--footer-height); }
 
 .popup-dialog {
   width: calc(min(100vw, var(--strip-max)) - 24px);

@@ -38,7 +38,7 @@ export function ControlList({ controls, instance, onChange, depth = 0 }: Control
             i++;
         }
         if (sections.length > 0)
-            items.push(<ControlTab key={`tabset-${sections[0].param}`} variant="inline" sections={sections} instance={instance} onChange={onChange} depth={depth} />);
+            items.push(<ControlTab key={`tabset-${sections[0].param}`} sections={sections} instance={instance} onChange={onChange} depth={depth} />);
     }
 
     return items;
