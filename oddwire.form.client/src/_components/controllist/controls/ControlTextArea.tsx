@@ -1,7 +1,8 @@
 import Form from 'react-bootstrap/Form';
 
-import { ControlBase } from './ControlBase';
 import type { CoreControlProps } from './controlTypes';
+
+import { ControlBase } from './ControlBase';
 
 export const ControlTextArea = (props: CoreControlProps<string>) =>
     <ControlBase {...props} stacked>

@@ -1,7 +1,8 @@
 import Form from 'react-bootstrap/Form';
 
-import { ControlBase } from './ControlBase';
 import type { ControlOption, CoreControlProps } from './controlTypes';
+
+import { ControlBase } from './ControlBase';
 
 type ControlDropdownProps = CoreControlProps<string> & {
     controls?: ControlOption[];
