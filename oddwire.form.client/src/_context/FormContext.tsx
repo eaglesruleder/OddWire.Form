@@ -1,14 +1,15 @@
 import { createContext } from 'react';
 
-import type { FormDefinition } from './types';
-import testForm from './data/forms/testform.json';
+import type { FormDefinition, FormIndexEntry } from './types';
 
 export type FormContextValue = {
     getForm: (formId: string) => Promise<FormDefinition | undefined>;
+    list: () => FormIndexEntry[];
     };
 
 export const formContextValue: FormContextValue =
-    {getForm: async () => testForm as unknown as FormDefinition
+    {getForm: async () => undefined
+    ,list: () => []
     };
 
 export const FormContext = createContext<FormContextValue>(formContextValue);

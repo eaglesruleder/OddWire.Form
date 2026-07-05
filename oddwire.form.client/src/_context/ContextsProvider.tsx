@@ -31,8 +31,8 @@ export function ContextsProvider({ children }: { children: ReactNode })
             );
 
     return (
-        <FormContext.Provider value={persistent}>
-            <InstanceContext.Provider value={persistent}>
+        <FormContext.Provider value={{ getForm: persistent.getForm, list: persistent.listForms }}>
+            <InstanceContext.Provider value={{ getInstance: persistent.getInstance, list: persistent.listInstances, save: persistent.saveInstance }}>
                 {children}
             </InstanceContext.Provider>
         </FormContext.Provider>

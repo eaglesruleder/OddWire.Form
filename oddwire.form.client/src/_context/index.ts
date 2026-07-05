@@ -8,4 +8,10 @@ export
     ,instanceContextValue
     } from './InstanceContext';
 export type { InstanceContextValue } from './InstanceContext';
-export type { FormDefinition, FormInstance, ControlInstance } from './types';
+export type
+    {FormDefinition
+    ,FormInstance
+    ,ControlInstance
+    ,FormIndexEntry
+    ,InstanceIndexEntry
+    } from './types';

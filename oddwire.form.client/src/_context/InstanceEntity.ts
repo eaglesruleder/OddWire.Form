@@ -14,7 +14,12 @@ export class InstanceEntity
 
     static from(instance: FormInstance): InstanceEntity
     {
-        return new InstanceEntity(instance);
+        return new InstanceEntity({ ...instance, instanceId: instance.instanceId ?? crypto.randomUUID() });
+    }
+
+    get instanceId(): string
+    {
+        return this.instance.instanceId as string;
     }
 
     get(param: string): ControlInstance | undefined

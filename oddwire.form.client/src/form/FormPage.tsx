@@ -1,21 +1,22 @@
 import { useContext, useEffect, useReducer, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 import { FormContext, InstanceContext, InstanceEntity } from '../_context';
 import type { FormDefinition, InstanceChange } from '../_context';
 import { StripLayout } from '../_components/layout';
-import { ControlList, ControlButton, ControlError } from '../_components/controllist';
+import { ControlList, ControlError } from '../_components/controllist';
 
-const SELECTED_FORM_ID = 'demo-form';
-const SELECTED_INSTANCE_ID = 'demo-instance-1';
+const NEW_INSTANCE = 'new';
 
 export function FormPage()
 {
     const { getForm } = useContext(FormContext);
-    const { getInstance, set, save } = useContext(InstanceContext);
+    const { getInstance, save } = useContext(InstanceContext);
+    const navigate = useNavigate();
 
-    const formId = SELECTED_FORM_ID;
-    const [instanceId, setInstanceId] = useState(SELECTED_INSTANCE_ID);
+    const { formId = '', instanceId = '' } = useParams();
 
     const [loading, setLoading] = useState(true);
     const [form, setForm] = useState<FormDefinition | null>(null);
@@ -26,16 +27,36 @@ export function FormPage()
     {
         let active = true;
 
-        const formPromise = getForm(formId).then(loaded => { if (active && loaded) setForm(loaded); });
+        const formPromise = getForm(formId).then(loaded => { if (active) setForm(loaded ?? null); });
 
-        const instancePromise = instanceId
-        ?   getInstance(instanceId).then(loaded => { if (active && loaded) setInstance(InstanceEntity.from(loaded)); })
-        :   Promise.resolve().then(() => { if (active) setInstance(InstanceEntity.from({ controls: [] })); });
+        const instancePromise = resolveInstance();
 
         Promise.all([formPromise, instancePromise]).then(() => { if (active) setLoading(false); });
 
         return () => { active = false; };
-    }, [getForm, getInstance, formId, instanceId]);
+
+        //#region resolve instance — existing by id, or a fresh saved instance for 'new'
+        async function resolveInstance()
+        {
+            if (instanceId === NEW_INSTANCE)
+            {
+                const fresh = InstanceEntity.from({ formId, controls: [] });
+                await save(fresh.instance);
+
+                if (!active)
+                    return;
+
+                setInstance(fresh);
+                navigate(`/form/${formId}/${fresh.instanceId}`, { replace: true });
+                return;
+            }
+
+            const loaded = await getInstance(instanceId);
+            if (active)
+                setInstance(loaded ? InstanceEntity.from(loaded) : null);
+        }
+        //#endregion
+    }, [getForm, getInstance, save, navigate, formId, instanceId]);
 
     const onChange: InstanceChange = (value, param, key = 'value') =>
     {
@@ -43,25 +64,16 @@ export function FormPage()
             return;
 
         instance.setValue(param, key, value);
-
-        if (instanceId)
-            set(instance.instance, instanceId);
+        void save(instance.instance);
 
         bumpRender();
-    };
-
-    const onSave = () =>
-    {
-        if (!instance)
-            return;
-
-        setInstanceId(save(instance.instance, instanceId || undefined));
     };
 
     const errorPage = (message: string) =>
         <StripLayout title="OddWire Forms">
             <Form>
                 <ControlError>{message}</ControlError>
+                <Button variant="link" onClick={() => navigate('/')}>← Back to forms</Button>
             </Form>
         </StripLayout>;
 
@@ -73,19 +85,19 @@ export function FormPage()
             );
 
     if (!form)
-        return errorPage(formId ? 'Form Not Found' : 'No Form Requested');
-
-    if (!instance && instanceId)
-        return errorPage('Instance Not Found');
+        return errorPage('Form Not Found');
 
     if (!instance)
-        return null;
+        return errorPage('Instance Not Found');
 
     return (
         <StripLayout title={form.label ?? 'OddWire Forms'}>
             <Form>
                 <ControlList controls={form.controls} instance={instance} onChange={onChange} />
-                <ControlButton label={instanceId ? 'autosaving' : 'Save'} onClick={onSave} disabled={!!instanceId} />
+                <div className="flex items-center gap mt-3">
+                    <Button variant="link" onClick={() => navigate('/')}>← Back to forms</Button>
+                    <span className="text-muted">autosaving</span>
+                </div>
             </Form>
         </StripLayout>
         );

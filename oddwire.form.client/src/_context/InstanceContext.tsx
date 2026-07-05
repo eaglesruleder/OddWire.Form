@@ -1,18 +1,17 @@
 import { createContext } from 'react';
 
-import type { FormInstance } from './types';
-import testInstance from './data/instances/testinstance.json';
+import type { FormInstance, InstanceIndexEntry } from './types';
 
 export type InstanceContextValue = {
     getInstance: (instanceId: string) => Promise<FormInstance | undefined>;
-    set: (instance: FormInstance, instanceId: string) => void;
-    save: (instance: FormInstance, instanceId?: string) => string;
+    list: (formId: string) => InstanceIndexEntry[];
+    save: (instance: FormInstance) => Promise<string>;
     };
 
 export const instanceContextValue: InstanceContextValue =
-    {getInstance: async () => testInstance as unknown as FormInstance
-    ,set: () => {}
-    ,save: () => ''
+    {getInstance: async () => undefined
+    ,list: () => []
+    ,save: async () => ''
     };
 
 export const InstanceContext = createContext<InstanceContextValue>(instanceContextValue);
