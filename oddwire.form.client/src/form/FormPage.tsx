@@ -12,10 +12,10 @@ import { ControlList, ControlTab, ControlError } from '../_components/controllis
 function buildRootTabSections(controls: ControlDef[]): TabSection[]
 {
     const sections: TabSection[] = controls
-        .filter(control => control.type === 'tab')
+        .filter(control => control.type === 'tab' && !control.hidden)
         .map(tab => ({ param: tab.param, label: tab.label ?? tab.param, controls: (tab as { controls: ControlDef[] }).controls }));
 
-    const strays = controls.filter(control => control.type !== 'tab');
+    const strays = controls.filter(control => control.type !== 'tab' && !control.hidden);
     if (strays.length > 0)
         sections.push({ param: '__unexpected', label: '⚠', controls: strays, notice: 'Unexpected controls in tab layout' });
 

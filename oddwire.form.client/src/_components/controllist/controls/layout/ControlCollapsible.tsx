@@ -4,6 +4,7 @@ import type { ControlDef } from '../controlTypes';
 import type { InstanceEntity, InstanceChange } from '../../../../_context';
 
 import { ControlList } from '../../ControlList';
+import { stickyTop } from './stickyTop';
 import './layoutControls.css';
 
 type ControlCollapsibleProps = {
@@ -13,6 +14,7 @@ type ControlCollapsibleProps = {
     controls: ControlDef[];
     instance: InstanceEntity;
     onChange: InstanceChange;
+    depth?: number;
     };
 
 export function ControlCollapsible(props: ControlCollapsibleProps)
@@ -22,11 +24,14 @@ export function ControlCollapsible(props: ControlCollapsibleProps)
     if (props.hidden)
         return null;
 
+    const depth = props.depth ?? 0;
+
     return (
         <div className="collapsible mb-3">
             <button
                 type="button"
                 className="collapsible-header flex items-center gap"
+                style={{ top: stickyTop(depth) }}
                 onClick={() => setExpanded(open => !open)}
             >
                 <span className="collapsible-chevron">{expanded ? '▾' : '▸'}</span>
@@ -34,7 +39,7 @@ export function ControlCollapsible(props: ControlCollapsibleProps)
             </button>
             {expanded &&
             <div className="collapsible-body">
-                <ControlList controls={props.controls} instance={props.instance} onChange={props.onChange} />
+                <ControlList controls={props.controls} instance={props.instance} onChange={props.onChange} depth={depth + 1} />
             </div>
             }
         </div>

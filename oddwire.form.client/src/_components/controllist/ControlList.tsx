@@ -10,9 +10,10 @@ type ControlListProps = {
     controls: ControlDef[];
     instance: InstanceEntity;
     onChange: InstanceChange;
+    depth?: number;
     };
 
-export function ControlList({ controls, instance, onChange }: ControlListProps)
+export function ControlList({ controls, instance, onChange, depth = 0 }: ControlListProps)
 {
     const items: ReactNode[] = [];
 
@@ -23,7 +24,7 @@ export function ControlList({ controls, instance, onChange }: ControlListProps)
 
         if (control.type !== 'tab')
         {
-            items.push(<ControlItem key={control.param} control={control} instance={instance} onChange={onChange} />);
+            items.push(<ControlItem key={control.param} control={control} instance={instance} onChange={onChange} depth={depth} />);
             i++;
             continue;
         }
@@ -32,10 +33,12 @@ export function ControlList({ controls, instance, onChange }: ControlListProps)
         while (i < controls.length && controls[i].type === 'tab')
         {
             const tab = controls[i] as ControlDef & { controls: ControlDef[] };
-            sections.push({ param: tab.param, label: tab.label ?? tab.param, controls: tab.controls });
+            if (!tab.hidden)
+                sections.push({ param: tab.param, label: tab.label ?? tab.param, controls: tab.controls });
             i++;
         }
-        items.push(<ControlTab key={`tabset-${sections[0].param}`} variant="inline" sections={sections} instance={instance} onChange={onChange} />);
+        if (sections.length > 0)
+            items.push(<ControlTab key={`tabset-${sections[0].param}`} variant="inline" sections={sections} instance={instance} onChange={onChange} depth={depth} />);
     }
 
     return items;

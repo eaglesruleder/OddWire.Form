@@ -5,6 +5,7 @@ import type { InstanceEntity, InstanceChange } from '../../../../_context';
 
 import { ControlList } from '../../ControlList';
 import { ControlError } from '..';
+import { stickyTop } from './stickyTop';
 import './layoutControls.css';
 
 export type TabSection = {
@@ -19,6 +20,7 @@ type ControlTabProps = {
     variant: 'inline' | 'root';
     instance: InstanceEntity;
     onChange: InstanceChange;
+    depth?: number;
     };
 
 export function ControlTab(props: ControlTabProps)
@@ -30,8 +32,14 @@ export function ControlTab(props: ControlTabProps)
     if (!active)
         return null;
 
+    const depth = props.depth ?? 0;
+    const childDepth = props.variant === 'root' ? 0 : depth + 1;
+
     const bar =
-        <div className={`tab-bar tab-bar-${props.variant}`}>
+        <div
+            className={`tab-bar tab-bar-${props.variant}`}
+            style={props.variant === 'inline' ? { top: stickyTop(depth) } : undefined}
+        >
             {props.sections.map(section =>
             <button
                 key={section.param}
@@ -47,7 +55,7 @@ export function ControlTab(props: ControlTabProps)
             {active.notice &&
             <ControlError>{active.notice}</ControlError>
             }
-            <ControlList controls={active.controls} instance={props.instance} onChange={props.onChange} />
+            <ControlList controls={active.controls} instance={props.instance} onChange={props.onChange} depth={childDepth} />
         </div>;
 
     return props.variant === 'root'
