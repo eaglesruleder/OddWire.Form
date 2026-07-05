@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { ContextsProvider } from './_context';
-import { FormPage } from './form/FormPage';
+import { FormPage } from './form';
 import { LandingPage } from './landing';
 import { SettingsPage } from './settings';
 
