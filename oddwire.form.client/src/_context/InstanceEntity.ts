@@ -1,7 +1,7 @@
 import type { ControlDef } from '../_components/controllist';
 import type { FormInstance, ControlInstance } from './types';
 
-export type InstanceChange = (value: unknown, param: string, key?: string) => void;
+export type InstanceChange = (value: unknown, key: string, subkey?: string) => void;
 
 export class InstanceEntity
 {
@@ -14,7 +14,12 @@ export class InstanceEntity
 
     static from(instance: FormInstance): InstanceEntity
     {
-        return new InstanceEntity(instance);
+        return new InstanceEntity({ ...instance, instanceId: instance.instanceId ?? crypto.randomUUID() });
+    }
+
+    get instanceId(): string
+    {
+        return this.instance.instanceId as string;
     }
 
     get(param: string): ControlInstance | undefined
@@ -32,9 +37,9 @@ export class InstanceEntity
         return { ...control, ...this.get(control.param) } as unknown as ControlDef;
     }
 
-    setValue(param: string, key: string, value: unknown): void
+    setValue(param: string, subkey: string, value: unknown): void
     {
-        const merged: ControlInstance = { ...this.get(param), param, [key]: value };
+        const merged: ControlInstance = { ...this.get(param), param, [subkey]: value };
 
         const exists = this.instance.controls.some(control => control.param === param);
 

@@ -1,65 +1,101 @@
-import { useContext, useEffect, useReducer, useState } from 'react';
+import { useContext, useEffect, useReducer, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 
-import { FormContext, InstanceContext, InstanceEntity } from '../_context';
 import type { FormDefinition, InstanceChange } from '../_context';
-import { StripLayout } from '../_components/layout';
-import { ControlList, ControlButton, ControlError } from '../_components/controllist';
 
-const SELECTED_FORM_ID = 'demo-form';
-const SELECTED_INSTANCE_ID = 'demo-instance-1';
+import { FormContext, InstanceContext, InstanceEntity } from '../_context';
+import { StripLayout } from '../_components/layout';
+import { ControlList, ControlError } from '../_components/controllist';
 
 export function FormPage()
 {
     const { getForm } = useContext(FormContext);
-    const { getInstance, set, save } = useContext(InstanceContext);
+    const { getInstance, save } = useContext(InstanceContext);
+    const navigate = useNavigate();
 
-    const formId = SELECTED_FORM_ID;
-    const [instanceId, setInstanceId] = useState(SELECTED_INSTANCE_ID);
+    const { formId = '', instanceId } = useParams();
 
     const [loading, setLoading] = useState(true);
     const [form, setForm] = useState<FormDefinition | null>(null);
     const [instance, setInstance] = useState<InstanceEntity | null>(null);
+    const [autosaving, setAutosaving] = useState(false);
     const [, bumpRender] = useReducer(tick => tick + 1, 0);
+
+    // latest instance, read (not depended on) by the effect to skip reloading one we already hold
+    const instanceRef = useRef<InstanceEntity | null>(null);
+    instanceRef.current = instance;
 
     useEffect(() =>
     {
         let active = true;
 
-        const formPromise = getForm(formId).then(loaded => { if (active && loaded) setForm(loaded); });
+        const formPromise = getForm(formId).then(loaded => { if (active) setForm(loaded ?? null); });
 
-        const instancePromise = instanceId
-        ?   getInstance(instanceId).then(loaded => { if (active && loaded) setInstance(InstanceEntity.from(loaded)); })
-        :   Promise.resolve().then(() => { if (active) setInstance(InstanceEntity.from({ controls: [] })); });
+        const instancePromise = resolveInstance();
 
         Promise.all([formPromise, instancePromise]).then(() => { if (active) setLoading(false); });
 
         return () => { active = false; };
+
+        //#region resolve instance — existing by id (autosaves), or an unsaved fresh one when the id is absent
+        async function resolveInstance()
+        {
+            if (!instanceId)
+            {
+                // Intent: do not persist on mount — a new instance stays in memory until the first hard save
+                if (active)
+                {
+                    setInstance(InstanceEntity.from({ formId, controls: [] }));
+                    setAutosaving(false);
+                }
+                return;
+            }
+
+            // Intent: already holding this instance (just saved + navigated) — keep it, skip the reload
+            if (instanceRef.current?.instanceId === instanceId)
+            {
+                setAutosaving(true);
+                return;
+            }
+
+            const loaded = await getInstance(instanceId);
+            if (active)
+            {
+                setInstance(loaded ? InstanceEntity.from(loaded) : null);
+                setAutosaving(!!loaded);
+            }
+        }
+        //#endregion
     }, [getForm, getInstance, formId, instanceId]);
 
-    const onChange: InstanceChange = (value, param, key = 'value') =>
+    const onChange: InstanceChange = (value, key, subkey = 'value') =>
     {
         if (!instance)
             return;
 
-        instance.setValue(param, key, value);
+        instance.setValue(key, subkey, value);
 
-        if (instanceId)
-            set(instance.instance, instanceId);
+        if (autosaving)
+            void save(instance.instance);
 
         bumpRender();
     };
 
-    const onSave = () =>
+    const onSave = async () =>
     {
         if (!instance)
             return;
 
-        setInstanceId(save(instance.instance, instanceId || undefined));
+        const id = await save(instance.instance);
+        setAutosaving(true);
+
+        if (!instanceId)
+            navigate(`/form/${formId}/${id}`, { replace: true });
     };
 
     const errorPage = (message: string) =>
-        <StripLayout title="OddWire Forms">
+        <StripLayout left="←" leftLink="/" title="OddWire Forms">
             <Form>
                 <ControlError>{message}</ControlError>
             </Form>
@@ -73,19 +109,24 @@ export function FormPage()
             );
 
     if (!form)
-        return errorPage(formId ? 'Form Not Found' : 'No Form Requested');
-
-    if (!instance && instanceId)
-        return errorPage('Instance Not Found');
+        return errorPage('Form Not Found');
 
     if (!instance)
-        return null;
+        return errorPage('Instance Not Found');
+
+    const saveIcon =
+        <button
+            type="button"
+            className="strip-btn"
+            onClick={onSave}
+            disabled={autosaving}
+            title={autosaving ? 'Autosaving' : 'Save'}
+        >💾</button>;
 
     return (
-        <StripLayout title={form.label ?? 'OddWire Forms'}>
+        <StripLayout left="←" leftLink="/" right={saveIcon} title={form.label ?? 'OddWire Forms'}>
             <Form>
                 <ControlList controls={form.controls} instance={instance} onChange={onChange} />
-                <ControlButton label={instanceId ? 'autosaving' : 'Save'} onClick={onSave} disabled={!!instanceId} />
             </Form>
         </StripLayout>
         );
