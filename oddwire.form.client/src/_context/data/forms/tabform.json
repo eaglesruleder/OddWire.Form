@@ -1,0 +1,44 @@
+{
+    "formId": "22222222-2222-4222-8222-222222222222",
+    "label": "Root Tab Form",
+    "version": "1.0.0",
+    "displayParam": ["applicantName"],
+    "controls": [
+        {
+            "type": "tab",
+            "param": "tabApplicant",
+            "label": "Applicant",
+            "controls": [
+                { "type": "text", "param": "applicantName", "label": "Name", "value": "" },
+                { "type": "text", "param": "applicantEmail", "label": "Email", "value": "", "valueType": "email", "keyboardType": "email" }
+            ]
+        },
+        {
+            "type": "tab",
+            "param": "tabDetails",
+            "label": "Details",
+            "controls": [
+                { "type": "textarea", "param": "summary", "label": "Summary", "value": "" },
+                { "type": "checkbox", "param": "agree", "label": "I agree to the terms", "value": false }
+            ]
+        },
+        {
+            "type": "tab",
+            "param": "tabReview",
+            "label": "Review",
+            "controls": [
+                { "type": "label", "param": "reviewHeading", "label": "Review & submit" },
+                {
+                    "type": "dropdown",
+                    "param": "decision",
+                    "label": "Decision",
+                    "value": "",
+                    "controls": [
+                        { "value": "approve", "label": "Approve" },
+                        { "value": "reject", "label": "Reject" }
+                    ]
+                }
+            ]
+        }
+    ]
+}

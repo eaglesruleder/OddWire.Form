@@ -5,11 +5,13 @@ import type { FormDefinition, FormIndexEntry } from './types';
 import { instanceStore } from './InstanceContext';
 import { upsert } from './storeUtils';
 import testForm from './data/forms/testform.json';
+import tabForm from './data/forms/tabform.json';
 
 const INDEX_KEY = 'index';
 
 const seedForms =
     [testForm
+    ,tabForm
     ] as unknown as FormDefinition[];
 
 const storage = localforage.createInstance({ name: 'oddwire.form', storeName: 'forms' });

@@ -32,6 +32,41 @@
                 { "value": "high", "label": "High" }
             ]
         },
-        { "type": "slider", "param": "volume", "label": "Volume (unsupported on purpose)", "value": 5 }
+        { "type": "slider", "param": "volume", "label": "Volume (unsupported on purpose)", "value": 5 },
+        {
+            "type": "collapsible",
+            "param": "detailsSection",
+            "label": "More details",
+            "controls": [
+                { "type": "text", "param": "company", "label": "Company", "value": "" },
+                { "type": "textarea", "param": "notes", "label": "Notes", "value": "" }
+            ]
+        },
+        {
+            "type": "popup",
+            "param": "evidencePopup",
+            "label": "Add evidence",
+            "controls": [
+                { "type": "text", "param": "evidenceUrl", "label": "Link", "value": "" },
+                { "type": "textarea", "param": "evidenceDesc", "label": "Description", "value": "" }
+            ]
+        },
+        {
+            "type": "tab",
+            "param": "tabContact",
+            "label": "Contact",
+            "controls": [
+                { "type": "text", "param": "phone", "label": "Phone", "value": "", "valueType": "phone", "keyboardType": "tel" }
+            ]
+        },
+        {
+            "type": "tab",
+            "param": "tabAddress",
+            "label": "Address",
+            "controls": [
+                { "type": "text", "param": "street", "label": "Street", "value": "" },
+                { "type": "text", "param": "city", "label": "City", "value": "" }
+            ]
+        }
     ]
 }

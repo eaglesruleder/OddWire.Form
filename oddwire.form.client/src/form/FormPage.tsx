@@ -3,10 +3,26 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 
 import type { FormDefinition, InstanceChange } from '../_context';
+import type { ControlDef, TabSection } from '../_components/controllist';
 
 import { FormContext, InstanceContext, InstanceEntity } from '../_context';
 import { StripLayout } from '../_components/layout';
-import { ControlList, ControlError } from '../_components/controllist';
+import { ControlList, ControlTab, ControlError } from '../_components/controllist';
+
+// A form whose first control is a `tab` becomes a page-level tabset: every control is a tab,
+// non-tab strays fold into a trailing synthetic tab that flags them.
+function buildRootTabSections(controls: ControlDef[]): TabSection[]
+{
+    const sections: TabSection[] = controls
+        .filter(control => control.type === 'tab')
+        .map(tab => ({ param: tab.param, label: tab.label ?? tab.param, controls: (tab as { controls: ControlDef[] }).controls }));
+
+    const strays = controls.filter(control => control.type !== 'tab');
+    if (strays.length > 0)
+        sections.push({ param: '__unexpected', label: '⚠', controls: strays, notice: 'Unexpected controls in tab layout' });
+
+    return sections;
+}
 
 export function FormPage()
 {
@@ -123,10 +139,15 @@ export function FormPage()
             title={autosaving ? 'Autosaving' : 'Save'}
         >💾</button>;
 
+    const isRootTab = form.controls[0]?.type === 'tab';
+
     return (
         <StripLayout left="←" leftLink="/" right={saveIcon} title={form.label ?? 'OddWire Forms'}>
             <Form>
-                <ControlList controls={form.controls} instance={instance} onChange={onChange} />
+                {isRootTab
+                ?   <ControlTab variant="root" sections={buildRootTabSections(form.controls)} instance={instance} onChange={onChange} />
+                :   <ControlList controls={form.controls} instance={instance} onChange={onChange} />
+                }
             </Form>
         </StripLayout>
         );
