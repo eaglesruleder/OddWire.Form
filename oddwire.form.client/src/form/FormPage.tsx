@@ -19,6 +19,7 @@ export function FormPage()
     const [loading, setLoading] = useState(true);
     const [form, setForm] = useState<FormDefinition | null>(null);
     const [instance, setInstance] = useState<InstanceEntity | null>(null);
+    const [autosaving, setAutosaving] = useState(false);
     const [, bumpRender] = useReducer(tick => tick + 1, 0);
 
     useEffect(() =>
@@ -33,28 +34,29 @@ export function FormPage()
 
         return () => { active = false; };
 
-        //#region resolve instance — existing by id, or a fresh saved instance when the id is absent
+        //#region resolve instance — existing by id (autosaves), or an unsaved fresh one when the id is absent
         async function resolveInstance()
         {
             if (!instanceId)
             {
-                const fresh = InstanceEntity.from({ formId, controls: [] });
-                await save(fresh.instance);
-
-                if (!active)
-                    return;
-
-                setInstance(fresh);
-                navigate(`/form/${formId}/${fresh.instanceId}`, { replace: true });
+                // Intent: do not persist on mount — a new instance stays in memory until the first hard save
+                if (active)
+                {
+                    setInstance(InstanceEntity.from({ formId, controls: [] }));
+                    setAutosaving(false);
+                }
                 return;
             }
 
             const loaded = await getInstance(instanceId);
             if (active)
+            {
                 setInstance(loaded ? InstanceEntity.from(loaded) : null);
+                setAutosaving(!!loaded);
+            }
         }
         //#endregion
-    }, [getForm, getInstance, save, navigate, formId, instanceId]);
+    }, [getForm, getInstance, formId, instanceId]);
 
     const onChange: InstanceChange = (value, key, subkey = 'value') =>
     {
@@ -62,9 +64,23 @@ export function FormPage()
             return;
 
         instance.setValue(key, subkey, value);
-        void save(instance.instance);
+
+        if (autosaving)
+            void save(instance.instance);
 
         bumpRender();
+    };
+
+    const onSave = async () =>
+    {
+        if (!instance)
+            return;
+
+        const id = await save(instance.instance);
+        setAutosaving(true);
+
+        if (!instanceId)
+            navigate(`/form/${formId}/${id}`, { replace: true });
     };
 
     const errorPage = (message: string) =>
@@ -87,11 +103,19 @@ export function FormPage()
     if (!instance)
         return errorPage('Instance Not Found');
 
+    const saveIcon =
+        <button
+            type="button"
+            className="strip-btn"
+            onClick={onSave}
+            disabled={autosaving}
+            title={autosaving ? 'Autosaving' : 'Save'}
+        >💾</button>;
+
     return (
-        <StripLayout left="←" leftLink="/" title={form.label ?? 'OddWire Forms'}>
+        <StripLayout left="←" leftLink="/" right={saveIcon} title={form.label ?? 'OddWire Forms'}>
             <Form>
                 <ControlList controls={form.controls} instance={instance} onChange={onChange} />
-                <div className="text-muted mt-3">autosaving</div>
             </Form>
         </StripLayout>
         );

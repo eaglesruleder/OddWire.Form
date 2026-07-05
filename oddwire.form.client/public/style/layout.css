@@ -44,6 +44,19 @@ html body {
   text-decoration: none;
   line-height: 1;
 }
+.strip-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.strip-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
 .strip-title {
   flex: 1;
   min-width: 0;
