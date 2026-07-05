@@ -1,16 +1,15 @@
 import { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 
-import { FormContext, InstanceContext } from '../_context';
 import type { InstanceIndexEntry } from '../_context';
+import { FormContext, InstanceContext } from '../_context';
 import { StripLayout } from '../_components/layout';
 
 export function LandingPage()
 {
     const { list: listForms } = useContext(FormContext);
     const { list: listInstances } = useContext(InstanceContext);
-    const navigate = useNavigate();
 
     const [expandedFormId, setExpandedFormId] = useState<string | null>(null);
 
@@ -20,11 +19,8 @@ export function LandingPage()
         setExpandedFormId(current => current === formId ? null : formId);
 
     return (
-        <StripLayout title="OddWire Forms">
-            <div className="flex items-center gap mb-3">
-                <span className="text-muted fill">Select a form</span>
-                <Button variant="link" onClick={() => navigate('/settings')} title="Settings">⚙</Button>
-            </div>
+        <StripLayout left="⚙" leftLink="/settings" title="OddWire Forms">
+            <div className="text-muted mb-3">Select a form</div>
 
             <div className="flex column gap">
                 {forms.map(form =>

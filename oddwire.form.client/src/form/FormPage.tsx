@@ -1,6 +1,5 @@
 import { useContext, useEffect, useReducer, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 import type { FormDefinition, InstanceChange } from '../_context';
@@ -69,10 +68,9 @@ export function FormPage()
     };
 
     const errorPage = (message: string) =>
-        <StripLayout title="OddWire Forms">
+        <StripLayout left="←" leftLink="/" title="OddWire Forms">
             <Form>
                 <ControlError>{message}</ControlError>
-                <Button variant="link" onClick={() => navigate('/')}>← Back to forms</Button>
             </Form>
         </StripLayout>;
 
@@ -90,13 +88,10 @@ export function FormPage()
         return errorPage('Instance Not Found');
 
     return (
-        <StripLayout title={form.label ?? 'OddWire Forms'}>
+        <StripLayout left="←" leftLink="/" title={form.label ?? 'OddWire Forms'}>
             <Form>
                 <ControlList controls={form.controls} instance={instance} onChange={onChange} />
-                <div className="flex items-center gap mt-3">
-                    <Button variant="link" onClick={() => navigate('/')}>← Back to forms</Button>
-                    <span className="text-muted">autosaving</span>
-                </div>
+                <div className="text-muted mt-3">autosaving</div>
             </Form>
         </StripLayout>
         );
