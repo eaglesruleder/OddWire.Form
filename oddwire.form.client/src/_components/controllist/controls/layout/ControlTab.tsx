@@ -1,14 +1,12 @@
 import { useState } from 'react';
 
-import { ControlList } from '../../ControlList';
-import { ControlError } from '..';
 import type { ControlDef } from '../controlTypes';
 import type { InstanceEntity, InstanceChange } from '../../../../_context';
 
+import { ControlList } from '../../ControlList';
+import { ControlError } from '..';
 import './layoutControls.css';
 
-// Derived section shape — one per `tab` control in a run. `notice` renders a ControlError
-// banner above the body (used by FormPage's synthetic tab for stray non-tab controls).
 export type TabSection = {
     param: string;
     label: string;
@@ -52,7 +50,6 @@ export function ControlTab(props: ControlTabProps)
             <ControlList controls={active.controls} instance={props.instance} onChange={props.onChange} />
         </div>;
 
-    // Intent: root variant pins the bar to the page floor — body first, spacer clears the fixed bar
     return props.variant === 'root'
     ?   <div className="tabset tabset-root">{body}{bar}</div>
     :   <div className="tabset tabset-inline mb-3">{bar}{body}</div>;

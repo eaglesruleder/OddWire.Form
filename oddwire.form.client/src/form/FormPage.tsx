@@ -9,8 +9,6 @@ import { FormContext, InstanceContext, InstanceEntity } from '../_context';
 import { StripLayout } from '../_components/layout';
 import { ControlList, ControlTab, ControlError } from '../_components/controllist';
 
-// A form whose first control is a `tab` becomes a page-level tabset: every control is a tab,
-// non-tab strays fold into a trailing synthetic tab that flags them.
 function buildRootTabSections(controls: ControlDef[]): TabSection[]
 {
     const sections: TabSection[] = controls

@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react';
 
-import { ControlItem } from './ControlItem';
-import { ControlTab } from './controls/layout';
 import type { InstanceEntity, InstanceChange } from '../../_context';
 import type { ControlDef } from './controls/controlTypes';
+
+import { ControlItem } from './ControlItem';
+import { ControlTab } from './controls/layout';
 
 type ControlListProps = {
     controls: ControlDef[];
@@ -11,8 +12,6 @@ type ControlListProps = {
     onChange: InstanceChange;
     };
 
-// Iterate controls, folding each contiguous run of `tab` controls into one inline tabset.
-// Everything else dispatches 1:1 through ControlItem.
 export function ControlList({ controls, instance, onChange }: ControlListProps)
 {
     const items: ReactNode[] = [];
@@ -29,7 +28,6 @@ export function ControlList({ controls, instance, onChange }: ControlListProps)
             continue;
         }
 
-        //#region collect the run of adjacent tabs → one inline tabset
         const sections = [];
         while (i < controls.length && controls[i].type === 'tab')
         {
@@ -38,7 +36,6 @@ export function ControlList({ controls, instance, onChange }: ControlListProps)
             i++;
         }
         items.push(<ControlTab key={`tabset-${sections[0].param}`} variant="inline" sections={sections} instance={instance} onChange={onChange} />);
-        //#endregion
     }
 
     return items;

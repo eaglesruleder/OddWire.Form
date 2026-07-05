@@ -40,8 +40,6 @@ export type DropdownControlDef = ControlDefBase<'dropdown', string> & {
     controls: ControlOption[];
     };
 
-// Layout controls share one shape: `controls` holds child ControlDefs (not options).
-// A run of adjacent `tab` controls forms one tabset (see ControlList / FormPage).
 export type CollapsibleControlDef = ControlDefBase<'collapsible'> & {
     controls: ControlDef[];
     };

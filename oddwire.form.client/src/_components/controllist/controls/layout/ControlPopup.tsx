@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
-import { ControlButton } from '../ControlButton';
-import { StripLayout } from '../../../layout';
-import { ControlList } from '../../ControlList';
 import type { ControlDef } from '../controlTypes';
 import type { InstanceEntity, InstanceChange } from '../../../../_context';
 
+import { ControlButton } from '../ControlButton';
+import { StripLayout } from '../../../layout';
+import { ControlList } from '../../ControlList';
 import './layoutControls.css';
 
 type ControlPopupProps = {

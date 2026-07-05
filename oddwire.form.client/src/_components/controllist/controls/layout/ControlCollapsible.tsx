@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-import { ControlList } from '../../ControlList';
 import type { ControlDef } from '../controlTypes';
 import type { InstanceEntity, InstanceChange } from '../../../../_context';
 
+import { ControlList } from '../../ControlList';
 import './layoutControls.css';
 
 type ControlCollapsibleProps = {

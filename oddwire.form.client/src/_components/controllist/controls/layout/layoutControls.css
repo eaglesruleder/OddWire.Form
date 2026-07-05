@@ -1,13 +1,8 @@
-/* Layout controls — collapsible / tab / popup. Panel-wide structural chrome, distinct from the
-   label-left control rows. Sticky offsets track the 60px StripLayout masthead. */
-
-/* #region Collapsible */
 .collapsible {
   border: 1px solid var(--border);
   border-radius: 4px;
 }
 
-/* Sticky header parks just under the page masthead when a long body scrolls. */
 .collapsible-header {
   position: sticky;
   top: 60px;
@@ -25,9 +20,7 @@
 }
 .collapsible-chevron { flex: 0 0 auto; }
 .collapsible-body { padding: 12px; }
-/* #endregion */
 
-/* #region Tab — shared */
 .tab-bar { display: flex; gap: 4px; }
 .tab {
   padding: 8px 14px;
@@ -43,9 +36,7 @@
   font-weight: 600;
 }
 .tab-body { padding-top: 8px; }
-/* #endregion */
 
-/* #region Tab — inline: bar sticky under masthead, wraps instead of overflowing */
 .tab-bar-inline {
   position: sticky;
   top: 60px;
@@ -55,9 +46,7 @@
   background: var(--bg-strip);
   border-bottom: 1px solid var(--border);
 }
-/* #endregion */
 
-/* #region Tab — root: bar fixed to the page floor, split N even parts, no wrap */
 .tab-bar-root {
   position: fixed;
   bottom: 0;
@@ -86,11 +75,8 @@
   background: var(--bg-strip);
   color: var(--text);
 }
-/* spacer so the last control clears the fixed floor bar */
 .tabset-root .tab-body { padding-bottom: 72px; }
-/* #endregion */
 
-/* #region Popup — dialog sized to the strip, banner reuses StripLayout */
 .popup-dialog {
   width: calc(min(100vw, var(--strip-max)) - 24px);
   max-width: none;
@@ -104,4 +90,3 @@
   border: 1px solid var(--border);
 }
 .popup-content .strip-main { overflow-y: auto; }
-/* #endregion */
