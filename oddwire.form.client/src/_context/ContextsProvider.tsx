@@ -1,24 +1,27 @@
 import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 
-import { FormContext } from './FormContext';
-import { InstanceContext } from './InstanceContext';
-import { persistent } from './persistentStore';
+import { FormContext, formStore } from './FormContext';
+import { InstanceContext, instanceStore } from './InstanceContext';
 import { StripLayout } from '../_components/layout';
 
 export function ContextsProvider({ children }: { children: ReactNode })
 {
-    const [initialised, setInitialised] = useState(persistent.initialised);
+    const [initialised, setInitialised] = useState(formStore.initialised && instanceStore.initialised);
 
     useEffect(() =>
     {
         let active = true;
 
-        persistent.initialise().then(() =>
+        // Intent: forms first — instance display projection reads the form index
+        (async () =>
         {
+            await formStore.initialise();
+            await instanceStore.initialise();
+
             if (active)
                 setInitialised(true);
-        });
+        })();
 
         return () => { active = false; };
     }, []);
@@ -31,8 +34,8 @@ export function ContextsProvider({ children }: { children: ReactNode })
             );
 
     return (
-        <FormContext.Provider value={{ getForm: persistent.getForm, list: persistent.listForms }}>
-            <InstanceContext.Provider value={{ getInstance: persistent.getInstance, list: persistent.listInstances, save: persistent.saveInstance }}>
+        <FormContext.Provider value={formStore}>
+            <InstanceContext.Provider value={instanceStore}>
                 {children}
             </InstanceContext.Provider>
         </FormContext.Provider>
