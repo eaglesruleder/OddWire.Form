@@ -7,13 +7,13 @@ import
     ,ControlDropdown
     ,ControlError
     } from './controls';
-import type { InstanceEntity } from '../../_context';
+import type { InstanceEntity, InstanceChange } from '../../_context';
 import type { ControlDef } from './controls/controlTypes';
 
 type ControlItemProps = {
     control: ControlDef;
     instance: InstanceEntity;
-    onChange: (value: unknown, param: string, key?: string) => void;
+    onChange: InstanceChange;
     };
 
 export function ControlItem({ control, instance, onChange }: ControlItemProps)

@@ -57,12 +57,12 @@ export function FormPage()
         //#endregion
     }, [getForm, getInstance, save, navigate, formId, instanceId]);
 
-    const onChange: InstanceChange = (value, param, key = 'value') =>
+    const onChange: InstanceChange = (value, key, subkey = 'value') =>
     {
         if (!instance)
             return;
 
-        instance.setValue(param, key, value);
+        instance.setValue(key, subkey, value);
         void save(instance.instance);
 
         bumpRender();
