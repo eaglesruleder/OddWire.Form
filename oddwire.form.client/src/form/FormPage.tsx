@@ -36,7 +36,6 @@ export function FormPage()
     const [autosaving, setAutosaving] = useState(false);
     const [, bumpRender] = useReducer(tick => tick + 1, 0);
 
-    // latest instance, read (not depended on) by the effect to skip reloading one we already hold
     const instanceRef = useRef<InstanceEntity | null>(null);
     instanceRef.current = instance;
 
@@ -52,7 +51,6 @@ export function FormPage()
 
         return () => { active = false; };
 
-        //#region resolve instance — existing by id (autosaves), or an unsaved fresh one when the id is absent
         async function resolveInstance()
         {
             if (!instanceId)
@@ -80,7 +78,6 @@ export function FormPage()
                 setAutosaving(!!loaded);
             }
         }
-        //#endregion
     }, [getForm, getInstance, formId, instanceId]);
 
     const onChange: InstanceChange = (value, key, subkey = 'value') =>

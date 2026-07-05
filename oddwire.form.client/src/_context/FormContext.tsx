@@ -16,7 +16,6 @@ const seedForms =
 
 const storage = localforage.createInstance({ name: 'oddwire.form', storeName: 'forms' });
 
-// order-sensitive — displayParam order drives the display join
 function sameParams(a?: string[], b?: string[]): boolean
 {
     if (a === b)

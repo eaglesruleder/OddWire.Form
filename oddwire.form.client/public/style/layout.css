@@ -1,13 +1,9 @@
-/* Global page scaffold. The strip lives on #root; the gutters are the body behind it. */
-
-/* html body raises specificity above Bootstrap's `body` background rule so the gutter wins. */
 html body {
   margin: 0;
   background: var(--bg-gutter);
   color: var(--text);
 }
 
-/* Centered tablet-portrait strip */
 #root {
   width: var(--strip-max);
   max-width: 100%;
@@ -20,8 +16,6 @@ html body {
   flex-direction: column;
 }
 
-/* StripLayout shell — navy masthead over a padded main body.
-   Three cells: fixed left/right icon gutters (< 50px) with a filling centred title. */
 .strip-header {
   position: sticky;
   top: 0;

@@ -1,4 +1,3 @@
-/* Text keyword classes. Compose freely, e.g. class="semibold accent". */
 .bold      { font-weight: 700; }
 .semibold  { font-weight: 600; }
 .accent    { color: var(--text-accent); }
