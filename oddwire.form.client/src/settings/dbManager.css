@@ -1,0 +1,30 @@
+.db-manager {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.db-manager-header {
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-panel);
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+.db-manager-body { padding: 12px; }
+.db-manager .collapsible-chevron { flex: 0 0 auto; }
+
+.db-section-title {
+  font-weight: 600;
+  color: var(--text-accent);
+  margin: 4px 0 8px;
+}
+.db-row-editor {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg-panel);
+}
