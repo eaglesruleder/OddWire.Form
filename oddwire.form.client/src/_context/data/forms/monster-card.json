@@ -10,50 +10,50 @@
             "label": "Core",
             "controls": [
                 { "type": "dropdown", "param": "monster", "label": "Monster", "dbOptions": { "table": "Monster", "valueParam": "monster", "labelParam": "name", "fill": true } },
-                { "type": "text", "param": "name", "label": "Name", "stacked": true, "cellClassName": "sm-col-12 lg-col-8" },
-                { "type": "text", "param": "cr", "label": "Challenge", "stacked": true, "cellClassName": "sm-col-12 lg-col-4" },
-                { "type": "text", "param": "size", "label": "Size", "stacked": true, "cellClassName": "sm-col-12 lg-col-4" },
-                { "type": "text", "param": "type", "label": "Type", "stacked": true, "cellClassName": "sm-col-12 lg-col-4" },
-                { "type": "text", "param": "alignment", "label": "Alignment", "stacked": true, "cellClassName": "sm-col-12 lg-col-4" },
-                { "type": "text", "param": "ac", "label": "Armor Class", "stacked": true, "cellClassName": "sm-col-12 lg-col-4" },
-                { "type": "text", "param": "hp", "label": "Hit Points", "stacked": true, "cellClassName": "sm-col-12 lg-col-4" },
-                { "type": "text", "param": "speed", "label": "Speed", "stacked": true, "cellClassName": "sm-col-12 lg-col-4" },
-                { "type": "text", "param": "passive", "label": "Passive Perception" },
+                { "type": "text", "param": "name", "label": "Name", "stacked": true, "cellClassName": "sm-col-12 lg-col-6" },
+                { "type": "text", "param": "alignment", "label": "Alignment", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                { "type": "text", "param": "cr", "label": "Challenge", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                { "type": "text", "param": "type", "label": "Type", "stacked": true, "cellClassName": "sm-col-12 lg-col-6" },
+                { "type": "text", "param": "size", "label": "Size", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                { "type": "text", "param": "speed", "label": "Speed", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                { "type": "text", "param": "hp", "label": "Hit Points", "stacked": true, "cellClassName": "sm-col-12 lg-col-6" },
+                { "type": "text", "param": "ac", "label": "Armor Class", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                { "type": "text", "param": "passive", "label": "Passive Perception", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                 { "type": "tab", "param": "tabStr", "label": "STR", "controls": [
-                    { "type": "text", "param": "strSave", "label": "Saving Throw" },
-                    { "type": "text", "param": "athletics", "label": "Athletics" }
+                    { "type": "text", "param": "strSave", "label": "Saving Throw", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                    { "type": "text", "param": "athletics", "label": "Athletics", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" }
                 ]},
                 { "type": "tab", "param": "tabDex", "label": "DEX", "controls": [
-                    { "type": "text", "param": "dexSave", "label": "Saving Throw" },
-                    { "type": "text", "param": "acrobatics", "label": "Acrobatics" },
-                    { "type": "text", "param": "sleightOfHand", "label": "Sleight of Hand" },
-                    { "type": "text", "param": "stealth", "label": "Stealth" }
+                    { "type": "text", "param": "dexSave", "label": "Saving Throw", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                    { "type": "text", "param": "acrobatics", "label": "Acrobatics", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                    { "type": "text", "param": "sleightOfHand", "label": "Sleight of Hand", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                    { "type": "text", "param": "stealth", "label": "Stealth", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" }
                 ]},
                 { "type": "tab", "param": "tabCon", "label": "CON", "controls": [
                     { "type": "text", "param": "conSave", "label": "Saving Throw" }
                 ]},
                 { "type": "tab", "param": "tabInt", "label": "INT", "controls": [
-                    { "type": "text", "param": "intSave", "label": "Saving Throw" },
-                    { "type": "text", "param": "arcana", "label": "Arcana" },
-                    { "type": "text", "param": "history", "label": "History" },
-                    { "type": "text", "param": "investigation", "label": "Investigation" },
-                    { "type": "text", "param": "nature", "label": "Nature" },
-                    { "type": "text", "param": "religion", "label": "Religion" }
+                    { "type": "text", "param": "intSave", "label": "Saving Throw", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                    { "type": "text", "param": "arcana", "label": "Arcana", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                    { "type": "text", "param": "history", "label": "History", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                    { "type": "text", "param": "investigation", "label": "Investigation", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                    { "type": "text", "param": "nature", "label": "Nature", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                    { "type": "text", "param": "religion", "label": "Religion", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" }
                 ]},
                 { "type": "tab", "param": "tabWis", "label": "WIS", "controls": [
-                    { "type": "text", "param": "wisSave", "label": "Saving Throw" },
-                    { "type": "text", "param": "animalHandling", "label": "Animal Handling" },
-                    { "type": "text", "param": "insight", "label": "Insight" },
-                    { "type": "text", "param": "medicine", "label": "Medicine" },
-                    { "type": "text", "param": "perception", "label": "Perception" },
-                    { "type": "text", "param": "survival", "label": "Survival" }
+                    { "type": "text", "param": "wisSave", "label": "Saving Throw", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                    { "type": "text", "param": "animalHandling", "label": "Animal Handling", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                    { "type": "text", "param": "insight", "label": "Insight", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                    { "type": "text", "param": "medicine", "label": "Medicine", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                    { "type": "text", "param": "perception", "label": "Perception", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                    { "type": "text", "param": "survival", "label": "Survival", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" }
                 ]},
                 { "type": "tab", "param": "tabCha", "label": "CHA", "controls": [
-                    { "type": "text", "param": "chaSave", "label": "Saving Throw" },
-                    { "type": "text", "param": "deception", "label": "Deception" },
-                    { "type": "text", "param": "intimidation", "label": "Intimidation" },
-                    { "type": "text", "param": "performance", "label": "Performance" },
-                    { "type": "text", "param": "persuasion", "label": "Persuasion" }
+                    { "type": "text", "param": "chaSave", "label": "Saving Throw", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                    { "type": "text", "param": "deception", "label": "Deception", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                    { "type": "text", "param": "intimidation", "label": "Intimidation", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                    { "type": "text", "param": "performance", "label": "Performance", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                    { "type": "text", "param": "persuasion", "label": "Persuasion", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" }
                 ]}
             ]
         },
@@ -62,11 +62,10 @@
             "param": "tabCombat",
             "label": "Combat",
             "controls": [
-                { "type": "textArea", "param": "damageVuln", "label": "Vulnerabilities" },
-                { "type": "textArea", "param": "damageRes", "label": "Resistances" },
-                { "type": "textArea", "param": "damageImm", "label": "Immunities" },
-                { "type": "textArea", "param": "conditionImm", "label": "Cond. Immunities" },
-                { "type": "textArea", "param": "senses", "label": "Senses" }
+                { "type": "textarea", "param": "damageVuln", "label": "Vulnerabilities" },
+                { "type": "textarea", "param": "damageRes", "label": "Resistances" },
+                { "type": "textarea", "param": "conditionImm", "label": "Cond. Immunities" },
+                { "type": "textarea", "param": "senses", "label": "Senses" }
             ]
         },
         {
@@ -74,7 +73,7 @@
             "param": "tabLore",
             "label": "Lore",
             "controls": [
-                { "type": "text", "param": "languages", "label": "Languages" },
+                { "type": "textarea", "param": "languages", "label": "Languages" },
                 { "type": "textarea", "param": "fluff", "label": "Description" },
               {
                 "type": "popup",
