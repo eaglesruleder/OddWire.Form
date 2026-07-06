@@ -1,20 +1,19 @@
-import { useRef, useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import { useRef } from 'react';
 
 type ImportFromFileButtonProps = {
     // Intent: parent owns table naming + scope; this button only parses JSON rows and hands them up
     onImport: (rows: Record<string, unknown>[]) => void;
+    label?: string;
+    className?: string;
+    title?: string;
     };
 
-export function ImportFromFileButton({ onImport }: ImportFromFileButtonProps)
+export function ImportFromFileButton({ onImport, label = 'Import from File', className = 'btn btn-outline-primary btn-sm', title }: ImportFromFileButtonProps)
 {
     const inputRef = useRef<HTMLInputElement>(null);
-    const [error, setError] = useState<string | null>(null);
 
     const onFile = async (file: File | undefined) =>
     {
-        setError(null);
-
         if (!file)
             return;
 
@@ -25,7 +24,8 @@ export function ImportFromFileButton({ onImport }: ImportFromFileButtonProps)
         }
         catch (e)
         {
-            setError(e instanceof Error ? e.message : 'Import failed');
+            // Intent: alert (not inline text) so the trigger works in a tight header slot as well as inline
+            window.alert(e instanceof Error ? e.message : 'Import failed');
         }
         finally
         {
@@ -35,7 +35,7 @@ export function ImportFromFileButton({ onImport }: ImportFromFileButtonProps)
     };
 
     return (
-        <div className="mb-3">
+        <>
             <input
                 ref={inputRef}
                 type="file"
@@ -43,9 +43,8 @@ export function ImportFromFileButton({ onImport }: ImportFromFileButtonProps)
                 style={{ display: 'none' }}
                 onChange={e => onFile(e.target.files?.[0])}
             />
-            <Button size="sm" variant="outline-primary" onClick={() => inputRef.current?.click()}>Import from File</Button>
-            {error && <span className="text-muted"> — {error}</span>}
-        </div>
+            <button type="button" className={className} title={title ?? label} onClick={() => inputRef.current?.click()}>{label}</button>
+        </>
         );
 }
 

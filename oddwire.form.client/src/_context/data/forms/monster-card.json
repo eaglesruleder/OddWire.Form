@@ -1,0 +1,108 @@
+{
+    "formId": "44444444-4444-4444-8444-444444444444",
+    "label": "Monster Reference Card",
+    "version": "0.1.0",
+    "displayParam": ["monster"],
+    "controls": [
+        {
+            "type": "tab",
+            "param": "tabCore",
+            "label": "Core",
+            "controls": [
+                { "type": "dropdown", "param": "monster", "label": "Monster", "dbOptions": { "table": "Monster", "valueParam": "monster", "labelParam": "name" } },
+                { "type": "record", "param": "coreHeader", "table": "Monster", "keyParam": "monster", "fields": [
+                    { "param": "name", "label": "Name" },
+                    { "param": "size", "label": "Size" },
+                    { "param": "type", "label": "Type" },
+                    { "param": "alignment", "label": "Alignment" },
+                    { "param": "ac", "label": "Armor Class" },
+                    { "param": "hp", "label": "Hit Points" },
+                    { "param": "speed", "label": "Speed" },
+                    { "param": "cr", "label": "Challenge" },
+                    { "param": "passive", "label": "Passive Perception" }
+                ]},
+                { "type": "tab", "param": "tabStr", "label": "STR", "controls": [
+                    { "type": "record", "param": "strList", "table": "Monster", "keyParam": "monster", "fields": [
+                        { "param": "strSave", "label": "Saving Throw" },
+                        { "param": "athletics", "label": "Athletics" }
+                    ]}
+                ]},
+                { "type": "tab", "param": "tabDex", "label": "DEX", "controls": [
+                    { "type": "record", "param": "dexList", "table": "Monster", "keyParam": "monster", "fields": [
+                        { "param": "dexSave", "label": "Saving Throw" },
+                        { "param": "acrobatics", "label": "Acrobatics" },
+                        { "param": "sleightOfHand", "label": "Sleight of Hand" },
+                        { "param": "stealth", "label": "Stealth" }
+                    ]}
+                ]},
+                { "type": "tab", "param": "tabCon", "label": "CON", "controls": [
+                    { "type": "record", "param": "conList", "table": "Monster", "keyParam": "monster", "fields": [
+                        { "param": "conSave", "label": "Saving Throw" }
+                    ]}
+                ]},
+                { "type": "tab", "param": "tabInt", "label": "INT", "controls": [
+                    { "type": "record", "param": "intList", "table": "Monster", "keyParam": "monster", "fields": [
+                        { "param": "intSave", "label": "Saving Throw" },
+                        { "param": "arcana", "label": "Arcana" },
+                        { "param": "history", "label": "History" },
+                        { "param": "investigation", "label": "Investigation" },
+                        { "param": "nature", "label": "Nature" },
+                        { "param": "religion", "label": "Religion" }
+                    ]}
+                ]},
+                { "type": "tab", "param": "tabWis", "label": "WIS", "controls": [
+                    { "type": "record", "param": "wisList", "table": "Monster", "keyParam": "monster", "fields": [
+                        { "param": "wisSave", "label": "Saving Throw" },
+                        { "param": "animalHandling", "label": "Animal Handling" },
+                        { "param": "insight", "label": "Insight" },
+                        { "param": "medicine", "label": "Medicine" },
+                        { "param": "perception", "label": "Perception" },
+                        { "param": "survival", "label": "Survival" }
+                    ]}
+                ]},
+                { "type": "tab", "param": "tabCha", "label": "CHA", "controls": [
+                    { "type": "record", "param": "chaList", "table": "Monster", "keyParam": "monster", "fields": [
+                        { "param": "chaSave", "label": "Saving Throw" },
+                        { "param": "deception", "label": "Deception" },
+                        { "param": "intimidation", "label": "Intimidation" },
+                        { "param": "performance", "label": "Performance" },
+                        { "param": "persuasion", "label": "Persuasion" }
+                    ]}
+                ]}
+            ]
+        },
+        {
+            "type": "tab",
+            "param": "tabCombat",
+            "label": "Combat",
+            "controls": [
+                { "type": "record", "param": "combatDefenses", "table": "Monster", "keyParam": "monster", "fields": [
+                    { "param": "damageVuln", "label": "Damage Vulnerabilities" },
+                    { "param": "damageRes", "label": "Damage Resistances" },
+                    { "param": "damageImm", "label": "Damage Immunities" },
+                    { "param": "conditionImm", "label": "Condition Immunities" },
+                    { "param": "senses", "label": "Senses" }
+                ]}
+            ]
+        },
+        {
+            "type": "tab",
+            "param": "tabLore",
+            "label": "Lore",
+            "controls": [
+                { "type": "record", "param": "loreInfo", "table": "Monster", "keyParam": "monster", "fields": [
+                    { "param": "languages", "label": "Languages" },
+                    { "param": "fluff", "label": "Description" }
+                ]}
+            ]
+        },
+        {
+            "type": "tab",
+            "param": "tabImage",
+            "label": "Image",
+            "controls": [
+                { "type": "image", "param": "monsterImage", "table": "Monster", "keyParam": "monster", "field": "image" }
+            ]
+        }
+    ]
+}

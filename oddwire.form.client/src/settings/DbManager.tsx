@@ -7,7 +7,9 @@ import type { LookupTable } from '../_context';
 import { LookupContext, GLOBAL_SCOPE } from '../_context';
 import { ControlTab } from '../_components/controllist';
 import { ControlDropdown } from '../_components/controllist/controls';
+import { ControlPopup } from '../_components/controllist/controls/layout';
 import { ImportFromFileButton } from './ImportFromFileButton';
+import { FormCatalog } from './FormCatalog';
 import { DbSchemaEditor } from './DbSchemaEditor';
 import { DbRowEditor } from './DbRowEditor';
 import './dbManager.css';
@@ -111,7 +113,14 @@ export function DbManager()
 
             {expanded &&
             <div className="db-manager-body">
-                <ImportFromFileButton onImport={onImport} />
+                <ControlPopup
+                    param="importPopup"
+                    label="Import"
+                    triggerVariant="outline-primary"
+                    triggerSize="sm"
+                    right={<ImportFromFileButton onImport={onImport} label="📁" className="strip-btn" title="Import lookup rows from file" />}
+                    content={<FormCatalog />}
+                />
 
                 <div className="flex items-center gap mb-3">
                     <div className="fill">
