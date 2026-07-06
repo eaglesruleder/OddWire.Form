@@ -1,14 +1,18 @@
 import { useContext, useReducer, useState } from 'react';
+import Button from 'react-bootstrap/Button';
 
-import type { ControlDef } from '../_components/controllist';
+import type { ControlDef, TabSection } from '../_components/controllist';
 import type { LookupTable } from '../_context';
 
 import { LookupContext, GLOBAL_SCOPE } from '../_context';
+import { ControlTab } from '../_components/controllist';
+import { ControlDropdown } from '../_components/controllist/controls';
 import { ImportFromFileButton } from './ImportFromFileButton';
-import { DbTableList } from './DbTableList';
 import { DbSchemaEditor } from './DbSchemaEditor';
 import { DbRowEditor } from './DbRowEditor';
 import './dbManager.css';
+
+const ADD_NEW = '__addNew';
 
 // Intent: global scope only this phase — form-local tables are a later layer; the store already merges both
 export function DbManager()
@@ -42,6 +46,10 @@ export function DbManager()
         setSelected(name);
     };
 
+    // Intent: the picker's "Add New" option routes to create; any other value selects that table
+    const onPick = (value: string) =>
+        value === ADD_NEW ? onCreate() : setSelected(value || null);
+
     const onImport = (rows: Record<string, unknown>[]) =>
     {
         const name = window.prompt('Import into table name')?.trim();
@@ -54,15 +62,13 @@ export function DbManager()
         setSelected(name);
     };
 
-    const onDelete = (tableName: string) =>
+    const onDelete = () =>
     {
-        if (!window.confirm(`Delete table "${tableName}"?`))
+        if (!selected || !window.confirm(`Delete table "${selected}"?`))
             return;
 
-        void persist(store.deleteTable(GLOBAL_SCOPE, tableName));
-
-        if (selected === tableName)
-            setSelected(null);
+        void persist(store.deleteTable(GLOBAL_SCOPE, selected));
+        setSelected(null);
     };
 
     const onSchemaChange = (schema: ControlDef[]) =>
@@ -77,6 +83,24 @@ export function DbManager()
             void saveTable({ ...selectedTable, rows });
     };
 
+    const pickerOptions =
+        [...tables.map(table => ({ value: table.tableName, label: table.tableName }))
+        ,{ value: ADD_NEW, label: '+ Add New' }
+        ];
+
+    const editorTabs: TabSection[] =
+        [{param: 'model'
+         ,label: 'Edit Model'
+         ,disabled: !selectedTable
+         ,content: selectedTable && <DbSchemaEditor schema={selectedTable.schema} onChange={onSchemaChange} />
+         }
+        ,{param: 'rows'
+         ,label: 'Edit Rows'
+         ,disabled: !selectedTable
+         ,content: selectedTable && <DbRowEditor schema={selectedTable.schema} rows={selectedTable.rows} onChange={onRowsChange} />
+         }
+        ];
+
     return (
         <div className="db-manager">
             <button type="button" className="db-manager-header flex items-center gap" onClick={() => setExpanded(open => !open)}>
@@ -89,24 +113,23 @@ export function DbManager()
             <div className="db-manager-body">
                 <ImportFromFileButton onImport={onImport} />
 
-                <div className="db-section-title">Tables (global)</div>
-                <DbTableList
-                    tables={tables}
-                    selected={selected}
-                    onSelect={setSelected}
-                    onDelete={onDelete}
-                    onCreate={onCreate}
-                />
+                <div className="flex items-center gap mb-3">
+                    <div className="fill">
+                        <ControlDropdown
+                            param="__table"
+                            label="Table (global)"
+                            placeholder="Select a table…"
+                            value={selected ?? ''}
+                            controls={pickerOptions}
+                            onChange={onPick}
+                        />
+                    </div>
+                    {selected &&
+                    <Button size="sm" variant="outline-danger" onClick={onDelete}>Delete</Button>
+                    }
+                </div>
 
-                {selectedTable &&
-                <>
-                    <div className="db-section-title">Schema — {selectedTable.tableName}</div>
-                    <DbSchemaEditor schema={selectedTable.schema} onChange={onSchemaChange} />
-
-                    <div className="db-section-title">Rows — {selectedTable.tableName}</div>
-                    <DbRowEditor schema={selectedTable.schema} rows={selectedTable.rows} onChange={onRowsChange} />
-                </>
-                }
+                <ControlTab sections={editorTabs} />
             </div>
             }
         </div>
