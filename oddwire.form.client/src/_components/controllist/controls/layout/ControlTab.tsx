@@ -22,6 +22,7 @@ export type TabSection = {
 type ControlTabProps = {
     sections: TabSection[];
     pageLayout?: boolean;
+    defaultParam?: string;
     instance?: InstanceEntity;
     onChange?: InstanceChange;
     depth?: number;
@@ -30,7 +31,7 @@ type ControlTabProps = {
 export function ControlTab(props: ControlTabProps)
 {
     const firstEnabled = props.sections.find(section => !section.disabled) ?? props.sections[0];
-    const [activeParam, setActiveParam] = useState(firstEnabled?.param ?? '');
+    const [activeParam, setActiveParam] = useState(props.defaultParam ?? firstEnabled?.param ?? '');
 
     const requested = props.sections.find(section => section.param === activeParam);
     const active = requested && !requested.disabled ? requested : firstEnabled;

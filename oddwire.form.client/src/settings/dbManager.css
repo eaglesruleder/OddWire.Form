@@ -28,3 +28,13 @@
   border-radius: 4px;
   background: var(--bg-panel);
 }
+
+/* Intent: a freshly added column pins to the top while its fields are filled in */
+.db-new-col {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 6px 0;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+}

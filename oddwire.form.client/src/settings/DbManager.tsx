@@ -129,7 +129,7 @@ export function DbManager()
                     }
                 </div>
 
-                <ControlTab sections={editorTabs} />
+                <ControlTab sections={editorTabs} defaultParam="rows" />
             </div>
             }
         </div>
