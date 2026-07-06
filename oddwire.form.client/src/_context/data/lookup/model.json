@@ -1,0 +1,12 @@
+{
+    "tableName": "Model",
+    "schema": [
+        { "type": "text", "param": "id", "label": "ID", "valueType": "text" },
+        { "type": "text", "param": "name", "label": "Name", "valueType": "text" }
+    ],
+    "rows": [
+        { "id": "ford", "name": "Ford" },
+        { "id": "holden", "name": "Holden" },
+        { "id": "toyota", "name": "Toyota" }
+    ]
+}

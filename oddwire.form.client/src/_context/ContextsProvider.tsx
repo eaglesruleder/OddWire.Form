@@ -3,11 +3,12 @@ import type { ReactNode } from 'react';
 
 import { FormContext, formStore } from './FormContext';
 import { InstanceContext, instanceStore } from './InstanceContext';
+import { LookupContext, lookupStore } from './LookupContext';
 import { StripLayout } from '../_components/layout';
 
 export function ContextsProvider({ children }: { children: ReactNode })
 {
-    const [initialised, setInitialised] = useState(formStore.initialised && instanceStore.initialised);
+    const [initialised, setInitialised] = useState(formStore.initialised && instanceStore.initialised && lookupStore.initialised);
 
     useEffect(() =>
     {
@@ -18,6 +19,7 @@ export function ContextsProvider({ children }: { children: ReactNode })
         {
             await formStore.initialise();
             await instanceStore.initialise();
+            await lookupStore.initialise();
 
             if (active)
                 setInitialised(true);
@@ -36,7 +38,9 @@ export function ContextsProvider({ children }: { children: ReactNode })
     return (
         <FormContext.Provider value={formStore}>
             <InstanceContext.Provider value={instanceStore}>
-                {children}
+                <LookupContext.Provider value={lookupStore}>
+                    {children}
+                </LookupContext.Provider>
             </InstanceContext.Provider>
         </FormContext.Provider>
         );

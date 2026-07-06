@@ -1,0 +1,14 @@
+{
+    "tableName": "OnLot",
+    "schema": [
+        { "type": "text", "param": "stock", "label": "Stock #", "valueType": "text" },
+        { "type": "text", "param": "model", "label": "Model", "valueType": "text" },
+        { "type": "text", "param": "rego", "label": "Rego", "valueType": "text" }
+    ],
+    "rows": [
+        { "stock": "H001", "model": "holden", "rego": "ABC123" },
+        { "stock": "H002", "model": "holden", "rego": "XYZ789" },
+        { "stock": "F001", "model": "ford", "rego": "FRD001" },
+        { "stock": "T001", "model": "toyota", "rego": "TOY444" }
+    ]
+}
