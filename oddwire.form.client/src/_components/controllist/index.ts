@@ -3,4 +3,4 @@ export { ControlError, ControlButton } from './controls';
 export { ControlTab } from './controls/layout';
 export type { TabSection } from './controls/layout';
 export { DbContext } from './lookup';
-export type { ControlDef } from './controls/controlTypes';
+export type { ControlDef, ControlOption } from './controls/controlTypes';

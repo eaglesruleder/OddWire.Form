@@ -1,4 +1,4 @@
-import type { HTMLAttributes } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 
 export type CoreControlProps<TValue> = {
     param: string;
@@ -8,6 +8,9 @@ export type CoreControlProps<TValue> = {
     stacked?: boolean;
     disabled?: boolean;
     placeholder?: string;
+    // Intent: true → render the value as static text; a function → render its own node in place of the control
+    // (param is fixed to the unknown-valued props so readonly stays invariant across TValue and rides the {...props} spread)
+    readonly?: boolean | ((props: CoreControlProps<unknown>) => ReactNode);
     onChange?: (value: TValue, key: string, subkey?: string) => void;
     };
 
