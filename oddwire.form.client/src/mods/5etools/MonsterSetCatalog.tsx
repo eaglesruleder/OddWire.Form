@@ -3,12 +3,13 @@ import Button from 'react-bootstrap/Button';
 
 import { LookupContext, GLOBAL_SCOPE } from '../../_context';
 
-import { mapMonsters, MONSTER_SCHEMA, MONSTER_TABLE } from './monsterMapper';
+import { mapMonsters, MONSTER_KEY, MONSTER_SCHEMA, MONSTER_TABLE } from './monsterMapper';
+import type { MonsterRow } from './monsterMapper';
 import { monsterSets } from './monsterSets';
 import type { MonsterSet } from './monsterSets';
 
-// Intent: the popup body — lists each 5etools set and imports it (mapped) into the global Monster table.
-// Import REPLACES the table's rows, so only one set is live at a time (importRows semantics).
+// Intent: the popup body — lists each 5etools set and MERGES it (mapped) into the global Monster table.
+// Import accumulates across sources; a name already present is overwritten by the newer import (latest wins).
 export function MonsterSetCatalog()
 {
     const store = useContext(LookupContext);
@@ -22,9 +23,12 @@ export function MonsterSetCatalog()
 
         try
         {
-            const rows = mapMonsters(await set.load());
-            await store.importRows(GLOBAL_SCOPE, MONSTER_TABLE, rows, MONSTER_SCHEMA);
-            setStatus(`Imported ${rows.length} into "${MONSTER_TABLE}" — reopen DB Manager to see it`);
+            const incoming = mapMonsters(await set.load());
+            const existing = store.getTable(GLOBAL_SCOPE, MONSTER_TABLE)?.rows as MonsterRow[] | undefined;
+            const rows = mergeByKey(existing ?? [], incoming);
+
+            await store.saveTable(GLOBAL_SCOPE, { tableName: MONSTER_TABLE, schema: MONSTER_SCHEMA, rows });
+            setStatus(`Imported ${incoming.length} from ${set.label} — table now ${rows.length} (reopen DB Manager to see it)`);
         }
         catch (e)
         {
@@ -57,4 +61,18 @@ export function MonsterSetCatalog()
             {status && <span className="text-muted">{status}</span>}
         </div>
         );
+}
+
+// Intent: union existing + incoming rows keyed by name; incoming overwrites a matching key (latest import wins)
+function mergeByKey(existing: MonsterRow[], incoming: MonsterRow[]): MonsterRow[]
+{
+    const byKey = new Map<string, MonsterRow>();
+
+    for (const row of existing)
+        byKey.set(row[MONSTER_KEY], row);
+
+    for (const row of incoming)
+        byKey.set(row[MONSTER_KEY], row);
+
+    return [...byKey.values()];
 }

@@ -3,6 +3,9 @@ import type { ControlDef } from '../../_components/controllist';
 // Intent: the lookup table the monster-card form binds to (dropdown valueParam 'monster', labelParam 'name')
 export const MONSTER_TABLE = 'Monster';
 
+// Intent: the row key — one row per creature name; merges use it, latest import overwrites a matching name
+export const MONSTER_KEY = 'monster';
+
 // Intent: loose view of a 5etools bestiary entry — only the fields this PoC mapper reads, all optional.
 // traits/actions/spellcasting are deliberately NOT read yet — they need the shared entries→text renderer (deferred).
 export type RawMonster =
@@ -42,6 +45,7 @@ export function mapMonster(m: RawMonster): MonsterRow
     return (
         {monster: m.name
         ,name: m.name
+        ,source: m.source ?? ''
         ,cr: crToText(m.cr)
         ,size: sizeToText(m.size)
         ,type: typeToText(m.type)
@@ -256,6 +260,7 @@ const cap = (s: string): string => s ? s[0].toUpperCase() + s.slice(1) : s;
 const MONSTER_COLUMNS: { param: string; label: string }[] =
     [{ param: 'monster', label: 'Key' }
     ,{ param: 'name', label: 'Name' }
+    ,{ param: 'source', label: 'Source' }
     ,{ param: 'cr', label: 'Challenge' }
     ,{ param: 'size', label: 'Size' }
     ,{ param: 'type', label: 'Type' }
