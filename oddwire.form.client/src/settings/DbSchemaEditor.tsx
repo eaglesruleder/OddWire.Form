@@ -67,9 +67,9 @@ export function DbSchemaEditor({ schema, onChange }: DbSchemaEditorProps)
 
     return (
         <div className="flex column gap">
-            <div className="flex">
+            <div className="flex db-add-col">
                 <span className="fill" />
-                <ControlButton label="+ Column" size="sm" variant="outline-primary" onClick={startNew} />
+                <ControlButton label="+ Add" size="sm" variant="outline-primary" onClick={startNew} />
             </div>
 
             {draft?.originalParam === null &&
@@ -116,12 +116,12 @@ function ColumnRow({ idPrefix, editing, values, onField, onPrimary, onSecondary 
     const readonly = !editing;
 
     return (
-        <div className="flex gap items-end stack-sm">
-            <ControlTextField param={`${idPrefix}-param`} label="param" stacked readonly={readonly} value={values.param} onChange={value => onField({ param: value })} />
-            <ControlTextField param={`${idPrefix}-label`} label="label" stacked readonly={readonly} value={values.label} onChange={value => onField({ label: value })} />
-            <ControlDropdown param={`${idPrefix}-type`} label="type" stacked readonly={readonly} value={values.type} controls={TYPE_OPTIONS} onChange={value => onField({ type: value as SimpleType })} />
-            <ControlButton label={editing ? '✓' : '✎'} size="sm" variant={editing ? 'outline-success' : 'outline-primary'} onClick={onPrimary} />
-            <ControlButton label="✕" size="sm" variant="outline-danger" onClick={onSecondary} />
+        <div className="grid items-end">
+            <ControlTextField param={`${idPrefix}-param`} className="col-4" label="param" stacked readonly={readonly} value={values.param} onChange={value => onField({ param: value })} />
+            <ControlTextField param={`${idPrefix}-label`} className="col-4" label="label" stacked readonly={readonly} value={values.label} onChange={value => onField({ label: value })} />
+            <ControlDropdown param={`${idPrefix}-type`} className="col-2" label="type" stacked readonly={readonly} value={values.type} controls={TYPE_OPTIONS} onChange={value => onField({ type: value as SimpleType })} />
+            <ControlButton label={editing ? '✓' : '✎'} className="col-1" size="sm" variant={editing ? 'outline-success' : 'outline-primary'} onClick={onPrimary} />
+            <ControlButton label="✕" className="col-1" size="sm" variant="outline-danger" onClick={onSecondary} />
         </div>
         );
 }

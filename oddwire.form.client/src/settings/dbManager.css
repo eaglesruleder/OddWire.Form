@@ -29,6 +29,14 @@
   background: var(--bg-panel);
 }
 
+/* Intent: lift the + Add button up over the tab separator line — z-index clears the sticky tab bar (z-index:5) */
+.db-add-col {
+  position: relative;
+  z-index: 6;
+  margin-top: -30px;
+  margin-bottom: 6px;
+}
+
 /* Intent: a freshly added column pins to the top while its fields are filled in */
 .db-new-col {
   position: sticky;
