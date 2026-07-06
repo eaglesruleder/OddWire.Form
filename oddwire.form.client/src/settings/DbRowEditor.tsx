@@ -2,10 +2,11 @@ import { useReducer, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 
 import type { ControlDef } from '../_components/controllist';
-import type { InstanceChange } from '../_context';
+import type { FormInstance, ControlInstance, InstanceChange } from '../_context';
 
-import { InstanceEntity } from '../_context';
+import { InstanceEntity, mergeInstances } from '../_context';
 import { ControlList } from '../_components/controllist';
+import { ControlDropdown } from '../_components/controllist/controls';
 
 type DbRowEditorProps = {
     schema: ControlDef[];
@@ -13,103 +14,148 @@ type DbRowEditorProps = {
     onChange: (rows: Record<string, unknown>[]) => void;
     };
 
-// Intent: a row is a plain param→value record; the editor treats it as a form instance and reads values back out on save
+// Intent: a row is a controlform instance — schema is the model, the picked row is the instance, edits write straight to context
 export function DbRowEditor({ schema, rows, onChange }: DbRowEditorProps)
 {
-    const [editingIndex, setEditingIndex] = useState<number | null>(null);
-    const [editor, setEditor] = useState<InstanceEntity | null>(null);
+    const keyParam = schema[0]?.param ?? 'id';
+
+    const [entity, setEntity] = useState<InstanceEntity | null>(null);
+    const [isNew, setIsNew] = useState(false);
+    const [selectedKey, setSelectedKey] = useState<string | null>(null);
+    const [originalKey, setOriginalKey] = useState<string | null>(null);
     const [, bumpRender] = useReducer(tick => tick + 1, 0);
 
-    const beginEdit = (index: number | null) =>
+    const clear = () =>
     {
-        const row = index === null ? {} : rows[index];
-        setEditor(InstanceEntity.from({ controls: rowToControls(schema, row) }));
-        setEditingIndex(index);
+        setEntity(null);
+        setIsNew(false);
+        setSelectedKey(null);
+        setOriginalKey(null);
     };
 
-    const cancel = () =>
+    const pickRow = (key: string) =>
     {
-        setEditor(null);
-        setEditingIndex(null);
+        if (!key)
+            return clear();
+
+        const row = rows.find(r => String(r[keyParam] ?? '') === key) ?? {};
+        setEntity(InstanceEntity.from({ controls: rowToControls(schema, row) }));
+        setIsNew(false);
+        setSelectedKey(key);
+        setOriginalKey(key);
     };
 
-    const commit = () =>
+    const addNew = () =>
     {
-        if (!editor)
+        setEntity(InstanceEntity.from({ controls: rowToControls(schema, {}) }));
+        setIsNew(true);
+        setSelectedKey(null);
+        setOriginalKey(null);
+    };
+
+    const deleteRow = () =>
+    {
+        if (!selectedKey || !window.confirm(`Delete row "${selectedKey}"?`))
             return;
 
-        const row = controlsToRow(schema, editor);
-
-        const next = editingIndex === null
-            ? [...rows, row]
-            : rows.map((existing, i) => i === editingIndex ? row : existing);
-
-        onChange(next);
-        cancel();
+        onChange(rows.filter(r => String(r[keyParam] ?? '') !== selectedKey));
+        clear();
     };
 
-    const remove = (index: number) =>
-        onChange(rows.filter((_, i) => i !== index));
-
-    const onEditorChange: InstanceChange = (value, key, subkey = 'value') =>
+    // Intent: live write-through — each edit persists straight into the table; a key edit (new row) renames rather than duplicates
+    const onContextChange: InstanceChange = (value, param, subkey = 'value') =>
     {
-        if (!editor)
+        if (!entity)
             return;
 
-        editor.setValue(key, subkey, value);
+        entity.setValue(param, subkey, value);
+
+        const row = controlsToRow(schema, entity);
+        const currentKey = String(row[keyParam] ?? '');
+
+        if (currentKey)
+        {
+            onChange(writeRow(rows, keyParam, originalKey, currentKey, row));
+            setOriginalKey(currentKey);
+        }
+
         bumpRender();
     };
 
-    if (editor)
-        return (
-            <div className="db-row-editor mb-3">
-                <ControlList controls={schema} instance={editor} onChange={onEditorChange} />
-                <div className="flex gap">
-                    <Button size="sm" variant="primary" onClick={commit}>Save row</Button>
-                    <Button size="sm" variant="outline-secondary" onClick={cancel}>Cancel</Button>
-                </div>
-            </div>
-            );
+    const rowOptions = rows.map(row =>
+        ({ value: String(row[keyParam] ?? ''), label: rowLabel(schema, keyParam, row) }));
+
+    // Intent: existing row → hide the key (the dropdown above owns it); new row → key is an editable text field
+    const keyOverlay: FormInstance =
+        { controls: [{ param: keyParam, ...(isNew ? { type: 'text' } : { hidden: true }) } as ControlInstance] };
+
+    const viewInstance = entity
+        ? InstanceEntity.from(mergeInstances(entity.instance, keyOverlay))
+        : null;
 
     return (
-        <div className="flex column gap mb-3">
-            {rows.map((row, index) =>
-                <div key={index} className="flex items-center gap">
-                    <span className="fill">{rowSummary(schema, row)}</span>
-                    <Button size="sm" variant="outline-primary" onClick={() => beginEdit(index)}>Edit</Button>
-                    <Button size="sm" variant="outline-danger" onClick={() => remove(index)}>✕</Button>
-                </div>
-                )}
+        <div className="flex column gap">
+            <div><Button size="sm" variant="outline-primary" onClick={addNew}>+ Add New Row</Button></div>
 
-            {rows.length === 0
-            ?   <span className="text-muted">No rows.</span>
-            :   null}
+            <ControlDropdown
+                param="__row"
+                label={schema[0]?.label ?? keyParam}
+                placeholder="Select a row…"
+                value={selectedKey ?? ''}
+                controls={rowOptions}
+                onChange={pickRow}
+            />
 
-            <div><Button size="sm" variant="outline-primary" onClick={() => beginEdit(null)}>+ Add row</Button></div>
+            {viewInstance &&
+            <div className="db-row-editor">
+                <ControlList controls={schema} instance={viewInstance} onChange={onContextChange} />
+                {selectedKey &&
+                <div><Button size="sm" variant="outline-danger" onClick={deleteRow}>Delete Row</Button></div>
+                }
+            </div>
+            }
         </div>
         );
 }
 
-function rowToControls(schema: ControlDef[], row: Record<string, unknown>)
+function rowToControls(schema: ControlDef[], row: Record<string, unknown>): ControlInstance[]
 {
     return schema.map(control => ({ param: control.param, value: row[control.param] }));
 }
 
-function controlsToRow(schema: ControlDef[], editor: InstanceEntity): Record<string, unknown>
+function controlsToRow(schema: ControlDef[], entity: InstanceEntity): Record<string, unknown>
 {
     const row: Record<string, unknown> = {};
 
     for (const control of schema)
-        row[control.param] = editor.get(control.param)?.value;
+        row[control.param] = entity.get(control.param)?.value;
 
     return row;
 }
 
-function rowSummary(schema: ControlDef[], row: Record<string, unknown>): string
+// Intent: same key → replace in place (stable order); rename/new → drop old + colliding keys, append
+function writeRow
+    (rows: Record<string, unknown>[]
+    ,keyParam: string
+    ,originalKey: string | null
+    ,currentKey: string
+    ,row: Record<string, unknown>
+    ): Record<string, unknown>[]
 {
-    const values = schema
-        .map(control => row[control.param])
-        .filter(value => value !== undefined && value !== null && value !== '');
+    const keyOf = (r: Record<string, unknown>) => String(r[keyParam] ?? '');
 
-    return values.length ? values.join(' · ') : '(empty row)';
+    if (originalKey === currentKey && rows.some(r => keyOf(r) === currentKey))
+        return rows.map(r => keyOf(r) === currentKey ? row : r);
+
+    const filtered = rows.filter(r => keyOf(r) !== currentKey && keyOf(r) !== (originalKey ?? ''));
+    return [...filtered, row];
+}
+
+function rowLabel(schema: ControlDef[], keyParam: string, row: Record<string, unknown>): string
+{
+    const key = String(row[keyParam] ?? '');
+    const labelParam = schema[1]?.param;
+    const extra = labelParam ? row[labelParam] : undefined;
+
+    return extra !== undefined && extra !== null && extra !== '' ? `${key} · ${extra}` : (key || '(empty)');
 }

@@ -92,12 +92,12 @@ export function DbManager()
         [{param: 'model'
          ,label: 'Edit Model'
          ,disabled: !selectedTable
-         ,content: selectedTable && <DbSchemaEditor schema={selectedTable.schema} onChange={onSchemaChange} />
+         ,content: selectedTable && <DbSchemaEditor key={selectedTable.tableName} schema={selectedTable.schema} onChange={onSchemaChange} />
          }
         ,{param: 'rows'
          ,label: 'Edit Rows'
          ,disabled: !selectedTable
-         ,content: selectedTable && <DbRowEditor schema={selectedTable.schema} rows={selectedTable.rows} onChange={onRowsChange} />
+         ,content: selectedTable && <DbRowEditor key={selectedTable.tableName} schema={selectedTable.schema} rows={selectedTable.rows} onChange={onRowsChange} />
          }
         ];
 

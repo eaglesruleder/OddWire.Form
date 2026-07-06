@@ -3,6 +3,21 @@ import type { FormInstance, ControlInstance } from './types';
 
 export type InstanceChange = (value: unknown, key: string, subkey?: string) => void;
 
+// Intent: overlay controls onto base by param (overlay fields win per-param); params only in an overlay are added
+export function mergeInstances(base: FormInstance, ...overlays: FormInstance[]): FormInstance
+{
+    const byParam = new Map<string, ControlInstance>();
+
+    for (const control of base.controls)
+        byParam.set(control.param, { ...control });
+
+    for (const overlay of overlays)
+        for (const control of overlay.controls)
+            byParam.set(control.param, { ...byParam.get(control.param), ...control });
+
+    return { ...base, controls: [...byParam.values()] };
+}
+
 export class InstanceEntity
 {
     instance: FormInstance;
