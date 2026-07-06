@@ -10,8 +10,8 @@ type ControlDropdownProps = CoreControlProps<string> & {
 
 export const ControlDropdown = (props: ControlDropdownProps) =>
     <ControlBase {...props}>
-        <Form.Select id={props.param} value={props.value ?? ''} onChange={e => props.onChange?.(e.target.value, props.param)}>
-            <option value="" disabled>Select…</option>
+        <Form.Select id={props.param} value={props.value ?? ''} disabled={props.disabled} onChange={e => props.onChange?.(e.target.value, props.param)}>
+            <option value="" disabled>{props.placeholder ?? 'Select…'}</option>
             {(props.controls ?? []).map(option => (
             <option key={option.value} value={option.value}>{option.label}</option>
             ))}

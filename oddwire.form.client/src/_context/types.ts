@@ -35,3 +35,16 @@ export type InstanceIndexEntry = {
     dateModified?: string;
     display: Record<string, unknown>;
     };
+
+// Intent: '_global' is the reserved scope key holding shared tables; real formIds hold form-local overrides
+export const GLOBAL_SCOPE = '_global';
+
+export type LookupTable = {
+    tableName: string;
+    lastUpdated?: string;
+    schema: ControlDef[];
+    rows: Record<string, unknown>[];
+    };
+
+// Intent: scope → tableName → table; get(formId) merges db[_global] under db[formId]
+export type LookupDatabase = Record<string, Record<string, LookupTable>>;
