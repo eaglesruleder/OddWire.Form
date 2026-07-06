@@ -41,5 +41,6 @@ export function ControlList({ controls, instance, onChange, depth = 0 }: Control
             items.push(<ControlTab key={`tabset-${sections[0].param}`} sections={sections} instance={instance} onChange={onChange} depth={depth} />);
     }
 
-    return items;
+    // Intent: a 12-col grid — items are full-width by default; a control's `cellClassName` (col-N) opts into columns
+    return <div className="control-grid">{items}</div>;
 }

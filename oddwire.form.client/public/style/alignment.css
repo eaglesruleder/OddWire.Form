@@ -11,6 +11,10 @@
 .grid.items-end { align-items: end; }
 .grid > [class*="col-"] { margin-bottom: 0 !important; }   /* fields shed their default row margin inside a grid cell */
 
+/* form control list as a 12-col grid — children are full-width unless a control's cellClassName sets a col-N */
+.control-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 12px; }
+.control-grid > * { grid-column: 1 / -1; }
+
 .col-1  { grid-column: span 1;  }
 .col-2  { grid-column: span 2;  }
 .col-3  { grid-column: span 3;  }

@@ -2,7 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 
 import type { CoreControlProps } from './controlTypes';
 
-type ControlBaseProps = Pick<CoreControlProps<unknown>, 'param' | 'label' | 'hidden' | 'stacked' | 'value' | 'readonly'> & {
+type ControlBaseProps = Pick<CoreControlProps<unknown>, 'param' | 'label' | 'hidden' | 'stacked' | 'value' | 'readonly' | 'cellClassName'> & {
     className?: string;
     labelClassName?: string;
     labelStyle?: CSSProperties;
@@ -15,7 +15,7 @@ export function ControlBase(props: ControlBaseProps)
         return null;
 
     const rowClass =
-        ['flex', props.stacked ? 'column' : 'items-center', 'gap', 'mb-3', 'stack-sm', props.className]
+        ['flex', props.stacked ? 'column' : 'items-center', 'gap', 'mb-3', 'stack-sm', props.className, props.cellClassName]
         .filter(Boolean)
         .join(' ');
 
