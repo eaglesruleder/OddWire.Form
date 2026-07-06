@@ -30,6 +30,7 @@ export type DbOptions = string | {
     labelParam?: string;
     filter?: DbOptionsFilter;
     joinOptions?: boolean;
+    fill?: boolean;   // on select, write every column of the chosen row into its matching param
     };
 
 export type TextValueType = 'text' | 'int' | 'decimal' | 'email' | 'phone';

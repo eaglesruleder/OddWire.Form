@@ -9,7 +9,7 @@
             "param": "tabCore",
             "label": "Core",
             "controls": [
-                { "type": "dropdown", "param": "monster", "label": "Monster", "dbOptions": { "table": "Monster", "valueParam": "monster", "labelParam": "name" } },
+                { "type": "dropdown", "param": "monster", "label": "Monster", "dbOptions": { "table": "Monster", "valueParam": "monster", "labelParam": "name", "fill": true } },
                 { "type": "text", "param": "name", "label": "Name", "stacked": true, "cellClassName": "sm-col-12 lg-col-8" },
                 { "type": "text", "param": "cr", "label": "Challenge", "stacked": true, "cellClassName": "sm-col-12 lg-col-4" },
                 { "type": "text", "param": "size", "label": "Size", "stacked": true, "cellClassName": "sm-col-12 lg-col-4" },

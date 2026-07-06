@@ -2,6 +2,7 @@ import localforage from 'localforage';
 import Button from 'react-bootstrap/Button';
 
 import { StripLayout } from '../_components/layout';
+import { MonsterImportPopup } from '../mods/5etools';
 import { DbManager } from './DbManager';
 
 export function SettingsPage()
@@ -18,8 +19,9 @@ export function SettingsPage()
 
     return (
         <StripLayout left="←" leftLink="/" title="Settings">
-            <div className="mb-3">
+            <div className="flex items-center gap mb-3">
                 <Button variant="danger" onClick={clearCache}>Clear Cache</Button>
+                <MonsterImportPopup />
             </div>
             <DbManager />
         </StripLayout>
