@@ -14,6 +14,7 @@ import
     } from './controls';
 import { ControlCollapsible, ControlPopup, ControlTab } from './controls/layout';
 import { DbContext, resolveDbOptions } from './lookup';
+import { resolveLabel } from './resolveLabel';
 
 type ControlItemProps = {
     control: ControlDef;
@@ -26,6 +27,7 @@ export function ControlItem({ control, instance, onChange, depth = 0 }: ControlI
 {
     const db = useContext(DbContext);
     const resolved = instance.resolve(control);
+    resolved.label = resolveLabel(resolved.label, instance);
 
     switch (resolved.type)
     {

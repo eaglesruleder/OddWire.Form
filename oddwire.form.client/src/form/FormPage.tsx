@@ -7,13 +7,13 @@ import type { ControlDef, TabSection } from '../_components/controllist';
 
 import { FormContext, InstanceContext, LookupContext, InstanceEntity } from '../_context';
 import { StripLayout } from '../_components/layout';
-import { ControlList, ControlTab, ControlError, DbContext } from '../_components/controllist';
+import { ControlList, ControlTab, ControlError, DbContext, resolveLabel } from '../_components/controllist';
 
-function buildRootTabSections(controls: ControlDef[]): TabSection[]
+function buildRootTabSections(controls: ControlDef[], instance: InstanceEntity): TabSection[]
 {
     const sections: TabSection[] = controls
         .filter(control => control.type === 'tab' && !control.hidden)
-        .map(tab => ({ param: tab.param, label: tab.label ?? tab.param, controls: (tab as { controls: ControlDef[] }).controls }));
+        .map(tab => ({ param: tab.param, label: resolveLabel(tab.label, instance) ?? tab.param, controls: (tab as { controls: ControlDef[] }).controls }));
 
     const strays = controls.filter(control => control.type !== 'tab' && !control.hidden);
     if (strays.length > 0)
@@ -142,7 +142,7 @@ export function FormPage()
             <DbContext.Provider value={getDb(formId)}>
                 <Form>
                     {isRootTab
-                    ?   <ControlTab pageLayout sections={buildRootTabSections(form.controls)} instance={instance} onChange={onChange} />
+                    ?   <ControlTab pageLayout sections={buildRootTabSections(form.controls, instance)} instance={instance} onChange={onChange} />
                     :   <ControlList controls={form.controls} instance={instance} onChange={onChange} />
                     }
                 </Form>

@@ -20,20 +20,20 @@
                 { "type": "text", "param": "hp_curr", "label": "HP Current", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                 { "type": "text", "param": "ac", "label": "Armor Class", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                 { "type": "text", "param": "passive", "label": "Passive Perception", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
-                { "type": "tab", "param": "tabStr", "label": "STR", "controls": [
+                { "type": "tab", "param": "tabStr", "label": "STR {strSave}", "controls": [
                     { "type": "text", "param": "strSave", "label": "Saving Throw", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                     { "type": "text", "param": "athletics", "label": "Athletics", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" }
                 ]},
-                { "type": "tab", "param": "tabDex", "label": "DEX", "controls": [
+                { "type": "tab", "param": "tabDex", "label": "DEX {dexSave}", "controls": [
                     { "type": "text", "param": "dexSave", "label": "Saving Throw", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                     { "type": "text", "param": "acrobatics", "label": "Acrobatics", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                     { "type": "text", "param": "sleightOfHand", "label": "Sleight of Hand", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                     { "type": "text", "param": "stealth", "label": "Stealth", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" }
                 ]},
-                { "type": "tab", "param": "tabCon", "label": "CON", "controls": [
+                { "type": "tab", "param": "tabCon", "label": "CON {conSave}", "controls": [
                     { "type": "text", "param": "conSave", "label": "Saving Throw" }
                 ]},
-                { "type": "tab", "param": "tabInt", "label": "INT", "controls": [
+                { "type": "tab", "param": "tabInt", "label": "INT {intSave}", "controls": [
                     { "type": "text", "param": "intSave", "label": "Saving Throw", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                     { "type": "text", "param": "arcana", "label": "Arcana", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                     { "type": "text", "param": "history", "label": "History", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
@@ -41,7 +41,7 @@
                     { "type": "text", "param": "nature", "label": "Nature", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                     { "type": "text", "param": "religion", "label": "Religion", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" }
                 ]},
-                { "type": "tab", "param": "tabWis", "label": "WIS", "controls": [
+                { "type": "tab", "param": "tabWis", "label": "WIS {wisSave}", "controls": [
                     { "type": "text", "param": "wisSave", "label": "Saving Throw", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                     { "type": "text", "param": "animalHandling", "label": "Animal Handling", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                     { "type": "text", "param": "insight", "label": "Insight", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
@@ -49,7 +49,7 @@
                     { "type": "text", "param": "perception", "label": "Perception", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                     { "type": "text", "param": "survival", "label": "Survival", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" }
                 ]},
-                { "type": "tab", "param": "tabCha", "label": "CHA", "controls": [
+                { "type": "tab", "param": "tabCha", "label": "CHA {chaSave}", "controls": [
                     { "type": "text", "param": "chaSave", "label": "Saving Throw", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                     { "type": "text", "param": "deception", "label": "Deception", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                     { "type": "text", "param": "intimidation", "label": "Intimidation", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
