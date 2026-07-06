@@ -16,7 +16,8 @@
                 { "type": "text", "param": "type", "label": "Type", "stacked": true, "cellClassName": "sm-col-12 lg-col-6" },
                 { "type": "text", "param": "size", "label": "Size", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                 { "type": "text", "param": "speed", "label": "Speed", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
-                { "type": "text", "param": "hp", "label": "Hit Points", "stacked": true, "cellClassName": "sm-col-12 lg-col-6" },
+                { "type": "text", "param": "hp", "label": "HP Max", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
+                { "type": "text", "param": "hp_curr", "label": "HP Current", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                 { "type": "text", "param": "ac", "label": "Armor Class", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                 { "type": "text", "param": "passive", "label": "Passive Perception", "stacked": true, "cellClassName": "sm-col-12 lg-col-3" },
                 { "type": "tab", "param": "tabStr", "label": "STR", "controls": [
