@@ -5,9 +5,9 @@ import Form from 'react-bootstrap/Form';
 import type { FormDefinition, InstanceChange } from '../_context';
 import type { ControlDef, TabSection } from '../_components/controllist';
 
-import { FormContext, InstanceContext, InstanceEntity } from '../_context';
+import { FormContext, InstanceContext, LookupContext, InstanceEntity } from '../_context';
 import { StripLayout } from '../_components/layout';
-import { ControlList, ControlTab, ControlError } from '../_components/controllist';
+import { ControlList, ControlTab, ControlError, DbContext } from '../_components/controllist';
 
 function buildRootTabSections(controls: ControlDef[]): TabSection[]
 {
@@ -26,6 +26,7 @@ export function FormPage()
 {
     const { getForm } = useContext(FormContext);
     const { getInstance, save } = useContext(InstanceContext);
+    const { get: getDb } = useContext(LookupContext);
     const navigate = useNavigate();
 
     const { formId = '', instanceId } = useParams();
@@ -138,12 +139,14 @@ export function FormPage()
 
     return (
         <StripLayout left="←" leftLink="/" right={saveIcon} title={form.label ?? 'OddWire Forms'}>
-            <Form>
-                {isRootTab
-                ?   <ControlTab pageLayout sections={buildRootTabSections(form.controls)} instance={instance} onChange={onChange} />
-                :   <ControlList controls={form.controls} instance={instance} onChange={onChange} />
-                }
-            </Form>
+            <DbContext.Provider value={getDb(formId)}>
+                <Form>
+                    {isRootTab
+                    ?   <ControlTab pageLayout sections={buildRootTabSections(form.controls)} instance={instance} onChange={onChange} />
+                    :   <ControlList controls={form.controls} instance={instance} onChange={onChange} />
+                    }
+                </Form>
+            </DbContext.Provider>
         </StripLayout>
         );
 }

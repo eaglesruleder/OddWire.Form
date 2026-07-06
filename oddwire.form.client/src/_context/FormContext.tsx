@@ -8,6 +8,7 @@ import { upsert } from './storeUtils';
 import testForm from './data/forms/testform.json';
 import tabForm from './data/forms/tabform.json';
 import layoutTestForm from './data/forms/layouttestform.json';
+import vehicleForm from './data/forms/vehicleform.json';
 
 const INDEX_KEY = 'index';
 
@@ -15,6 +16,7 @@ const seedForms =
     [testForm
     ,tabForm
     ,layoutTestForm
+    ,vehicleForm
     ] as unknown as FormDefinition[];
 
 const storage = localforage.createInstance({ name: 'oddwire.form', storeName: 'forms' });
