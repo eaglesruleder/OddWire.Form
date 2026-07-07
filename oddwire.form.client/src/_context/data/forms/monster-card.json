@@ -81,7 +81,7 @@
                 "type": "popup",
                 "param": "imgpopup",
                 "label": "Picture",
-                "controls": [{"type": "image", "param": "monsterImage", "table": "Monster", "keyParam": "monster", "field": "image"}]
+                "controls": [{ "type": "image", "param": "image", "label": "Token" }]
               }
             ]
         }

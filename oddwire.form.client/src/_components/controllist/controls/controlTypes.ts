@@ -56,6 +56,7 @@ export type TextControlDef = ControlDefBase<'text', string> & {
     };
 export type TextAreaControlDef = ControlDefBase<'textarea', string>;
 export type CheckboxControlDef = ControlDefBase<'checkbox', boolean>;
+export type ImageControlDef = ControlDefBase<'image', string>;   // value is a URL/URN loaded into <img>; static (capture is future)
 export type RadioControlDef = ControlDefBase<'radio', string> & {
     controls?: ControlOption[];
     dbOptions?: DbOptions;
@@ -80,6 +81,7 @@ export type ControlDef =
     | TextControlDef
     | TextAreaControlDef
     | CheckboxControlDef
+    | ImageControlDef
     | RadioControlDef
     | DropdownControlDef
     | CollapsibleControlDef
