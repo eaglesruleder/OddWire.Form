@@ -11,7 +11,12 @@ import { SettingsPane } from '../SettingsPane';
 import { ImportFromFileButton } from './ImportFromFileButton';
 import { DbSchemaEditor } from './DbSchemaEditor';
 import { DbRowEditor } from './DbRowEditor';
+import { DupResolvePopup } from './DupResolvePopup';
+import type { Collision } from './DupResolvePopup';
+import { keyOf, rowLabel, mergeRows, collisionsOf } from './rowUtils';
 import './dbManager.css';
+
+type PendingImport = { name: string; table: LookupTable; rows: Record<string, unknown>[]; keyParam: string; collisions: Collision[] };
 
 const ADD_NEW = '__addNew';
 
@@ -22,6 +27,7 @@ export function DbManager()
 
     const [expanded, setExpanded] = useState(true);
     const [selected, setSelected] = useState<string | null>(null);
+    const [pendingImport, setPendingImport] = useState<PendingImport | null>(null);
     const [, bumpRender] = useReducer(tick => tick + 1, 0);
 
     const tables = store.listTables(GLOBAL_SCOPE);
@@ -51,6 +57,7 @@ export function DbManager()
     const onPick = (value: string) =>
         value === ADD_NEW ? onCreate() : setSelected(value || null);
 
+    // Intent: new table → infer schema + add all; existing table → upsert, deferring key collisions to the resolve popup
     const onImport = (rows: Record<string, unknown>[]) =>
     {
         const name = window.prompt('Import into table name')?.trim();
@@ -58,9 +65,37 @@ export function DbManager()
         if (!name)
             return;
 
-        // Intent: import replaces rows and keeps an existing schema; a new table infers columns from the rows
-        void persist(store.importRows(GLOBAL_SCOPE, name, rows));
-        setSelected(name);
+        const table = store.getTable(GLOBAL_SCOPE, name);
+
+        if (!table)
+        {
+            void persist(store.importRows(GLOBAL_SCOPE, name, rows));
+            setSelected(name);
+            return;
+        }
+
+        const keyParam = table.schema[0]?.param ?? 'id';
+        const collisions = collisionsOf(table.rows, rows, keyParam);
+
+        if (collisions.length === 0)
+        {
+            void saveTable({ ...table, rows: mergeRows(table.rows, rows, keyParam, new Set()) });
+            setSelected(name);
+            return;
+        }
+
+        setPendingImport({ name, table, rows, keyParam, collisions: collisions.map(row =>
+            ({ key: keyOf(row, keyParam), label: rowLabel(table.schema, keyParam, table.rows.find(existing => keyOf(existing, keyParam) === keyOf(row, keyParam)) ?? row) })) });
+    };
+
+    const onResolveImport = (overwriteKeys: Set<string>) =>
+    {
+        if (!pendingImport)
+            return;
+
+        void saveTable({ ...pendingImport.table, rows: mergeRows(pendingImport.table.rows, pendingImport.rows, pendingImport.keyParam, overwriteKeys) });
+        setSelected(pendingImport.name);
+        setPendingImport(null);
     };
 
     const onDelete = () =>
@@ -121,6 +156,7 @@ export function DbManager()
         </>;
 
     return (
+        <>
         <SettingsPane title="DB Manager" expanded={expanded} onToggle={() => setExpanded(open => !open)} headerActions={headerActions}>
             <div className="flex items-center gap mb-3">
                 <div className="fill">
@@ -140,5 +176,10 @@ export function DbManager()
 
             <ControlTab sections={editorTabs} defaultParam="rows" />
         </SettingsPane>
+
+        {pendingImport &&
+        <DupResolvePopup collisions={pendingImport.collisions} onAccept={onResolveImport} onCancel={() => setPendingImport(null)} />
+        }
+        </>
         );
 }
