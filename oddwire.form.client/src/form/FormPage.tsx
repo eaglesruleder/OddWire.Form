@@ -40,6 +40,13 @@ export function FormPage()
     const instanceRef = useRef<InstanceEntity | null>(null);
     instanceRef.current = instance;
 
+    // Intent: the entity persists itself (debounced) but only once autosaving — read the live flag off a ref, not a stale closure
+    const autosavingRef = useRef(autosaving);
+    autosavingRef.current = autosaving;
+
+    const attachPersist = (entity: InstanceEntity) =>
+        entity.withPersist(body => { if (autosavingRef.current) void save(body); });
+
     useEffect(() =>
     {
         let active = true;
@@ -50,16 +57,17 @@ export function FormPage()
 
         Promise.all([formPromise, instancePromise]).then(() => { if (active) setLoading(false); });
 
-        return () => { active = false; };
+        // Intent: flush any pending debounced persist before this instance is replaced or the page unmounts
+        return () => { active = false; instanceRef.current?.flush(); };
 
         async function resolveInstance()
         {
             if (!instanceId)
             {
-                // Intent: do not persist on mount — a new instance stays in memory until the first hard save
+                // Intent: do not persist on mount — a new instance stays in memory until the first hard save (autosaving gate)
                 if (active)
                 {
-                    setInstance(InstanceEntity.from({ formId, controls: [] }));
+                    setInstance(attachPersist(InstanceEntity.from({ formId, controls: [] })));
                     setAutosaving(false);
                 }
                 return;
@@ -75,22 +83,19 @@ export function FormPage()
             const loaded = await getInstance(instanceId);
             if (active)
             {
-                setInstance(loaded ? InstanceEntity.from(loaded) : null);
+                setInstance(loaded ? attachPersist(InstanceEntity.from(loaded)) : null);
                 setAutosaving(!!loaded);
             }
         }
     }, [getForm, getInstance, formId, instanceId]);
 
+    // Intent: apply + render now; the entity persists itself (debounced) so we don't save the whole instance per keystroke
     const onChange: InstanceChange = (value, key, subkey = 'value') =>
     {
         if (!instance)
             return;
 
         instance.setValue(key, subkey, value);
-
-        if (autosaving)
-            void save(instance.instance);
-
         bumpRender();
     };
 
@@ -99,6 +104,8 @@ export function FormPage()
         if (!instance)
             return;
 
+        // Intent: hard save writes immediately — drop any pending debounced write so it doesn't fire a stale duplicate
+        instance.cancelPersist();
         const id = await save(instance.instance);
         setAutosaving(true);
 

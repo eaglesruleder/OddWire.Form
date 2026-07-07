@@ -37,8 +37,8 @@ export function ControlItem({ control, instance, onChange, depth = 0 }: ControlI
         case 'textarea': return <ControlTextArea  {...resolved} onChange={onChange} />;
         case 'checkbox': return <ControlCheckbox  {...resolved} onChange={onChange} />;
         case 'image':    return <ControlImage     {...resolved} />;
-        case 'radio':    return <ControlRadio     {...resolved} {...optionSource(resolved.dbOptions, resolved.controls, db, instance)} onChange={fillOnChange(resolved.dbOptions, db, onChange)} />;
-        case 'dropdown': return <ControlDropdown  {...resolved} {...optionSource(resolved.dbOptions, resolved.controls, db, instance)} onChange={fillOnChange(resolved.dbOptions, db, onChange)} />;
+        case 'radio':    return <ControlRadio     {...resolved} {...optionSource(resolved.dbOptions, resolved.controls, db, instance)} onChange={fillOnChange(resolved.dbOptions, db, onChange, instance)} />;
+        case 'dropdown': return <ControlDropdown  {...resolved} {...optionSource(resolved.dbOptions, resolved.controls, db, instance)} onChange={fillOnChange(resolved.dbOptions, db, onChange, instance)} />;
         case 'collapsible': return <ControlCollapsible {...resolved} instance={instance} onChange={onChange} depth={depth} />;
         case 'popup':       return <ControlPopup       {...resolved} instance={instance} onChange={onChange} />;
         case 'tab':         return <ControlTab sections={[{ param: resolved.param, label: resolved.label ?? resolved.param, controls: resolved.controls }]} instance={instance} onChange={onChange} depth={depth} />;
@@ -64,8 +64,10 @@ function optionSource
     return resolveDbOptions(dbOptions, db, instance, staticControls ?? []);
 }
 
-// Intent: dbOptions.fill → selecting a row writes the key AND every other column into its matching param (record fill)
-function fillOnChange(dbOptions: DbOptions | undefined, db: Record<string, LookupTable>, onChange: InstanceChange): InstanceChange
+// Intent: dbOptions.fill → selecting a row writes the key AND every other (non-empty) column into its matching param
+// Batches the columns through instance.setValues (one persist) instead of N onChange calls; skips empty columns so a
+// blank source value never clobbers an existing edit (e.g. notes) — key-lossy on the instance drops the rest.
+function fillOnChange(dbOptions: DbOptions | undefined, db: Record<string, LookupTable>, onChange: InstanceChange, instance: InstanceEntity): InstanceChange
 {
     if (!dbOptions || typeof dbOptions === 'string' || !dbOptions.fill)
         return onChange;
@@ -76,14 +78,19 @@ function fillOnChange(dbOptions: DbOptions | undefined, db: Record<string, Looku
 
     return (value, key, subkey) =>
     {
-        onChange(value, key, subkey);
-
         const row = table.rows.find(entry => String(entry[dbOptions.valueParam] ?? '') === value);
-        if (!row)
-            return;
 
-        for (const [column, columnValue] of Object.entries(row))
-            if (column !== dbOptions.valueParam)
-                onChange(columnValue, column);
+        if (row)
+        {
+            const patch: Record<string, unknown> = {};
+
+            for (const [column, columnValue] of Object.entries(row))
+                if (column !== dbOptions.valueParam && columnValue !== '' && columnValue != null)
+                    patch[column] = columnValue;
+
+            instance.setValues(patch);
+        }
+
+        onChange(value, key, subkey);   // the key + the single render
     };
 }
