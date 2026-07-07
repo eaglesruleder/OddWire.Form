@@ -1,29 +1,28 @@
 import localforage from 'localforage';
-import Button from 'react-bootstrap/Button';
 
 import { StripLayout } from '../_components/layout';
-import { MonsterImportPopup } from '../mods/5etools';
-import { DbManager } from './DbManager';
+import { DbManager } from './DBManager';
+import { FormManager } from './FormManager';
 
 export function SettingsPage()
 {
     // Intent: wipe every localforage store (forms/instances/lookup) then reload so the stores re-seed from scratch
-    const clearCache = async () =>
+    const clearAll = async () =>
     {
-        if (!window.confirm('Delete all cached forms, instances, and lookup data?'))
+        if (!window.confirm('Delete ALL cached data (forms, instances, and lookup)?'))
             return;
 
         await localforage.dropInstance({ name: 'oddwire.form' });
         window.location.href = '/';
     };
 
+    const clearAllIcon =
+        <button type="button" className="strip-btn" onClick={clearAll} title="Clear all cached data">⚠</button>;
+
     return (
-        <StripLayout left="←" leftLink="/" title="Settings">
-            <div className="flex items-center gap mb-3">
-                <Button variant="danger" onClick={clearCache}>Clear Cache</Button>
-                <MonsterImportPopup />
-            </div>
+        <StripLayout left="←" leftLink="/" right={clearAllIcon} title="Settings">
             <DbManager />
+            <FormManager />
         </StripLayout>
         );
 }

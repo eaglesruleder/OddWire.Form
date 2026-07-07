@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-import type { ControlDef, ControlOption } from '../_components/controllist';
+import type { ControlDef, ControlOption } from '../../_components/controllist';
 
-import { ControlTextField, ControlDropdown, ControlButton } from '../_components/controllist/controls';
+import { ControlTextField, ControlDropdown, ControlButton } from '../../_components/controllist/controls';
 
 type DbSchemaEditorProps = {
     schema: ControlDef[];

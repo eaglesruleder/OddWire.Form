@@ -1,12 +1,12 @@
 import { useReducer, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 
-import type { ControlDef } from '../_components/controllist';
-import type { FormInstance, ControlInstance, InstanceChange } from '../_context';
+import type { ControlDef } from '../../_components/controllist';
+import type { FormInstance, ControlInstance, InstanceChange } from '../../_context';
 
-import { InstanceEntity, mergeInstances } from '../_context';
-import { ControlList } from '../_components/controllist';
-import { ControlDropdown } from '../_components/controllist/controls';
+import { InstanceEntity, mergeInstances } from '../../_context';
+import { ControlList } from '../../_components/controllist';
+import { ControlDropdown } from '../../_components/controllist/controls';
 
 type DbRowEditorProps = {
     schema: ControlDef[];

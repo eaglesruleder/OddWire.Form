@@ -1,15 +1,14 @@
 import { useContext, useReducer, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 
-import type { ControlDef, TabSection } from '../_components/controllist';
-import type { LookupTable } from '../_context';
+import type { ControlDef, TabSection } from '../../_components/controllist';
+import type { LookupTable } from '../../_context';
 
-import { LookupContext, GLOBAL_SCOPE } from '../_context';
-import { ControlTab } from '../_components/controllist';
-import { ControlDropdown } from '../_components/controllist/controls';
-import { ControlPopup } from '../_components/controllist/controls/layout';
+import { LookupContext, GLOBAL_SCOPE } from '../../_context';
+import { ControlTab } from '../../_components/controllist';
+import { ControlDropdown } from '../../_components/controllist/controls';
+import { SettingsPane } from '../SettingsPane';
 import { ImportFromFileButton } from './ImportFromFileButton';
-import { FormCatalog } from './FormCatalog';
 import { DbSchemaEditor } from './DbSchemaEditor';
 import { DbRowEditor } from './DbRowEditor';
 import './dbManager.css';
@@ -73,6 +72,15 @@ export function DbManager()
         setSelected(null);
     };
 
+    // Intent: Clear resets the selected table's rows (keeps the table + schema); Delete removes the whole table
+    const onClear = () =>
+    {
+        if (!selectedTable || !window.confirm(`Clear all rows from "${selectedTable.tableName}"?`))
+            return;
+
+        void saveTable({ ...selectedTable, rows: [] });
+    };
+
     const onSchemaChange = (schema: ControlDef[]) =>
     {
         if (selectedTable)
@@ -103,44 +111,34 @@ export function DbManager()
          }
         ];
 
-    return (
-        <div className="db-manager">
-            <button type="button" className="db-manager-header flex items-center gap" onClick={() => setExpanded(open => !open)}>
-                <span className="collapsible-chevron">{expanded ? '▾' : '▸'}</span>
-                <span className="fill">DB Manager</span>
-                <span className="text-muted">{tables.length} table{tables.length === 1 ? '' : 's'}</span>
-            </button>
-
+    // Intent: Clear only shows while open (it acts on the open editor's table); Import stays available either way
+    const headerActions =
+        <>
             {expanded &&
-            <div className="db-manager-body">
-                <ControlPopup
-                    param="importPopup"
-                    label="Import"
-                    triggerVariant="outline-primary"
-                    triggerSize="sm"
-                    right={<ImportFromFileButton onImport={onImport} label="📁" className="strip-btn" title="Import lookup rows from file" />}
-                    content={<FormCatalog />}
-                />
-
-                <div className="flex items-center gap mb-3">
-                    <div className="fill">
-                        <ControlDropdown
-                            param="__table"
-                            label="Table (global)"
-                            placeholder="Select a table…"
-                            value={selected ?? ''}
-                            controls={pickerOptions}
-                            onChange={onPick}
-                        />
-                    </div>
-                    {selected &&
-                    <Button size="sm" variant="outline-danger" onClick={onDelete}>Delete</Button>
-                    }
-                </div>
-
-                <ControlTab sections={editorTabs} defaultParam="rows" />
-            </div>
+            <Button variant="danger" disabled={!selectedTable} onClick={onClear}>Clear</Button>
             }
-        </div>
+            <ImportFromFileButton onImport={onImport} label="Import" className="btn btn-outline-primary" />
+        </>;
+
+    return (
+        <SettingsPane title="DB Manager" expanded={expanded} onToggle={() => setExpanded(open => !open)} headerActions={headerActions}>
+            <div className="flex items-center gap mb-3">
+                <div className="fill">
+                    <ControlDropdown
+                        param="__table"
+                        label="Table (global)"
+                        placeholder="Select a table…"
+                        value={selected ?? ''}
+                        controls={pickerOptions}
+                        onChange={onPick}
+                    />
+                </div>
+                {selected &&
+                <Button size="sm" variant="outline-danger" onClick={onDelete}>Delete</Button>
+                }
+            </div>
+
+            <ControlTab sections={editorTabs} defaultParam="rows" />
+        </SettingsPane>
         );
 }
