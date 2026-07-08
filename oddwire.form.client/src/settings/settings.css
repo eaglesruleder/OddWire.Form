@@ -1,0 +1,21 @@
+.settings-pane {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.settings-pane-header {
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-panel);
+}
+.settings-pane-toggle {
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+.settings-pane-toggle .collapsible-chevron { flex: 0 0 auto; }
+.settings-pane-body { padding: 12px; }

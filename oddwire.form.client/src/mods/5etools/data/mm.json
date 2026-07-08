@@ -1,0 +1,920 @@
+[
+ {
+  "name": "Goblin",
+  "source": "MM",
+  "page": 166,
+  "srd": true,
+  "basicRules": true,
+  "referenceSources": [
+   "BGDIA",
+   "BMT",
+   "CRCotN",
+   "DSotDQ",
+   "EFR",
+   "EGW",
+   "ERLW",
+   "GoS",
+   "HftT",
+   "IDRotF",
+   "KKW",
+   "LMoP",
+   "OotA",
+   "OoW",
+   "PaBTSO",
+   "PotA",
+   "RMBRE",
+   "SatO",
+   "SKT",
+   "TCE",
+   "TftYP",
+   "TftYP-TSC",
+   "ToA",
+   "US",
+   "WBtW",
+   "WDH",
+   "WDMM"
+  ],
+  "reprintedAs": [
+   "Goblin Warrior|XMM"
+  ],
+  "size": [
+   "S"
+  ],
+  "type": {
+   "type": "humanoid",
+   "tags": [
+    "goblinoid"
+   ]
+  },
+  "alignment": [
+   "N",
+   "E"
+  ],
+  "ac": [
+   {
+    "ac": 15,
+    "from": [
+     "{@item leather armor|phb}",
+     "{@item shield|phb}"
+    ]
+   }
+  ],
+  "hp": {
+   "average": 7,
+   "formula": "2d6"
+  },
+  "speed": {
+   "walk": 30
+  },
+  "str": 8,
+  "dex": 14,
+  "con": 10,
+  "int": 10,
+  "wis": 8,
+  "cha": 8,
+  "skill": {
+   "stealth": "+6"
+  },
+  "senses": [
+   "darkvision 60 ft."
+  ],
+  "passive": 9,
+  "languages": [
+   "Common",
+   "Goblin"
+  ],
+  "cr": "1/4",
+  "trait": [
+   {
+    "name": "Nimble Escape",
+    "entries": [
+     "The goblin can take the {@action Disengage} or {@action Hide} action as a bonus action on each of its turns."
+    ]
+   }
+  ],
+  "action": [
+   {
+    "name": "Scimitar",
+    "entries": [
+     "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) slashing damage."
+    ]
+   },
+   {
+    "name": "Shortbow",
+    "entries": [
+     "{@atk rw} {@hit 4} to hit, range 80/320 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+    ]
+   }
+  ],
+  "environment": [
+   "underdark",
+   "grassland",
+   "forest",
+   "hill"
+  ],
+  "soundClip": {
+   "type": "internal",
+   "path": "bestiary/goblin.opus"
+  },
+  "altArt": [
+   {
+    "name": "Goblin",
+    "source": "RMBRE"
+   }
+  ],
+  "attachedItems": [
+   "scimitar|phb",
+   "shortbow|phb"
+  ],
+  "senseTags": [
+   "D"
+  ],
+  "languageTags": [
+   "C",
+   "GO"
+  ],
+  "damageTags": [
+   "P",
+   "S"
+  ],
+  "miscTags": [
+   "MLW",
+   "MW",
+   "RNG",
+   "RW"
+  ],
+  "hasToken": true,
+  "hasFluff": true,
+  "hasFluffImages": true
+ },
+ {
+  "name": "Bugbear",
+  "source": "MM",
+  "page": 33,
+  "srd": true,
+  "basicRules": true,
+  "referenceSources": [
+   "CRCotN",
+   "EFR",
+   "EGW",
+   "ERLW",
+   "GoS",
+   "HftT",
+   "IDRotF",
+   "KftGV",
+   "LMoP",
+   "OotA",
+   "OoW",
+   "PaBTSO",
+   "PotA",
+   "QftIS",
+   "RMBRE",
+   "SKT",
+   "TCE",
+   "TftYP",
+   "TftYP-AtG",
+   "TftYP-TSC",
+   "TftYP-WPM",
+   "WBtW",
+   "WDH",
+   "WDMM"
+  ],
+  "reprintedAs": [
+   "Bugbear Warrior|XMM"
+  ],
+  "size": [
+   "M"
+  ],
+  "type": {
+   "type": "humanoid",
+   "tags": [
+    "goblinoid"
+   ]
+  },
+  "alignment": [
+   "C",
+   "E"
+  ],
+  "ac": [
+   {
+    "ac": 16,
+    "from": [
+     "{@item hide armor|phb}",
+     "{@item shield|phb}"
+    ]
+   }
+  ],
+  "hp": {
+   "average": 27,
+   "formula": "5d8 + 5"
+  },
+  "speed": {
+   "walk": 30
+  },
+  "str": 15,
+  "dex": 14,
+  "con": 13,
+  "int": 8,
+  "wis": 11,
+  "cha": 9,
+  "skill": {
+   "stealth": "+6",
+   "survival": "+2"
+  },
+  "senses": [
+   "darkvision 60 ft."
+  ],
+  "passive": 10,
+  "languages": [
+   "Common",
+   "Goblin"
+  ],
+  "cr": "1",
+  "trait": [
+   {
+    "name": "Brute",
+    "entries": [
+     "A melee weapon deals one extra die of its damage when the bugbear hits with it (included in the attack)."
+    ]
+   },
+   {
+    "name": "Surprise Attack",
+    "entries": [
+     "If the bugbear surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 7 ({@damage 2d6}) damage from the attack."
+    ]
+   }
+  ],
+  "action": [
+   {
+    "name": "Morningstar",
+    "entries": [
+     "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}11 ({@damage 2d8 + 2}) piercing damage."
+    ]
+   },
+   {
+    "name": "Javelin",
+    "entries": [
+     "{@atk mw,rw} {@hit 4} to hit, reach 5 ft. or range 30/120 ft., one target. {@h}9 ({@damage 2d6 + 2}) piercing damage in melee or 5 ({@damage 1d6 + 2}) piercing damage at range."
+    ]
+   }
+  ],
+  "environment": [
+   "underdark",
+   "grassland",
+   "forest"
+  ],
+  "soundClip": {
+   "type": "internal",
+   "path": "bestiary/bugbear.opus"
+  },
+  "attachedItems": [
+   "javelin|phb",
+   "morningstar|phb"
+  ],
+  "traitTags": [
+   "Brute"
+  ],
+  "senseTags": [
+   "D"
+  ],
+  "languageTags": [
+   "C",
+   "GO"
+  ],
+  "damageTags": [
+   "P"
+  ],
+  "miscTags": [
+   "MLW",
+   "MW",
+   "RW",
+   "THW"
+  ],
+  "hasToken": true,
+  "hasFluff": true,
+  "hasFluffImages": true
+ },
+ {
+  "name": "Orc",
+  "source": "MM",
+  "page": 246,
+  "srd": true,
+  "basicRules": true,
+  "referenceSources": [
+   "CRCotN",
+   "DIP",
+   "EGW",
+   "ERLW",
+   "GoS",
+   "HftT",
+   "HotDQ",
+   "IDRotF",
+   "LMoP",
+   "OotA",
+   "PaBTSO",
+   "PotA",
+   "RMBRE",
+   "SKT",
+   "TftYP",
+   "TftYP-AtG",
+   "TftYP-DiT",
+   "TftYP-TFoF",
+   "ToA",
+   "US"
+  ],
+  "reprintedAs": [
+   "Tough|XMM"
+  ],
+  "size": [
+   "M"
+  ],
+  "type": {
+   "type": "humanoid",
+   "tags": [
+    "orc"
+   ]
+  },
+  "alignment": [
+   "C",
+   "E"
+  ],
+  "ac": [
+   {
+    "ac": 13,
+    "from": [
+     "{@item hide armor|phb}"
+    ]
+   }
+  ],
+  "hp": {
+   "average": 15,
+   "formula": "2d8 + 6"
+  },
+  "speed": {
+   "walk": 30
+  },
+  "str": 16,
+  "dex": 12,
+  "con": 16,
+  "int": 7,
+  "wis": 11,
+  "cha": 10,
+  "skill": {
+   "intimidation": "+2"
+  },
+  "senses": [
+   "darkvision 60 ft."
+  ],
+  "passive": 10,
+  "languages": [
+   "Common",
+   "Orc"
+  ],
+  "cr": "1/2",
+  "trait": [
+   {
+    "name": "Aggressive",
+    "entries": [
+     "As a bonus action, the orc can move up to its speed toward a hostile creature that it can see."
+    ]
+   }
+  ],
+  "action": [
+   {
+    "name": "Greataxe",
+    "entries": [
+     "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}9 ({@damage 1d12 + 3}) slashing damage."
+    ]
+   },
+   {
+    "name": "Javelin",
+    "entries": [
+     "{@atk mw,rw} {@hit 5} to hit, reach 5 ft. or range 30/120 ft., one target. {@h}6 ({@damage 1d6 + 3}) piercing damage."
+    ]
+   }
+  ],
+  "environment": [
+   "underdark",
+   "mountain",
+   "grassland",
+   "forest",
+   "swamp",
+   "hill",
+   "arctic"
+  ],
+  "soundClip": {
+   "type": "internal",
+   "path": "bestiary/orc.opus"
+  },
+  "altArt": [
+   {
+    "name": "Iceshield Orc",
+    "source": "PotA"
+   }
+  ],
+  "attachedItems": [
+   "greataxe|phb",
+   "javelin|phb"
+  ],
+  "traitTags": [
+   "Aggressive"
+  ],
+  "senseTags": [
+   "D"
+  ],
+  "languageTags": [
+   "C",
+   "O"
+  ],
+  "damageTags": [
+   "P",
+   "S"
+  ],
+  "miscTags": [
+   "MLW",
+   "MW",
+   "RW",
+   "THW"
+  ],
+  "hasToken": true,
+  "hasFluff": true,
+  "hasFluffImages": true
+ },
+ {
+  "name": "Ogre",
+  "source": "MM",
+  "page": 237,
+  "srd": true,
+  "basicRules": true,
+  "referenceSources": [
+   "BGDIA",
+   "CM",
+   "CRCotN",
+   "DIP",
+   "DSotDQ",
+   "EGW",
+   "ERLW",
+   "GoS",
+   "HftT",
+   "HotDQ",
+   "IDRotF",
+   "KftGV",
+   "LMoP",
+   "OotA",
+   "OoW",
+   "PaBTSO",
+   "PotA",
+   "PSZ",
+   "QftIS",
+   "RMBRE",
+   "RoT",
+   "SatO",
+   "SjA",
+   "SKT",
+   "SLW",
+   "TftYP",
+   "TftYP-AtG",
+   "TftYP-TFoF",
+   "TftYP-WPM",
+   "US",
+   "WDH",
+   "WDMM"
+  ],
+  "reprintedAs": [
+   "Ogre|XMM"
+  ],
+  "size": [
+   "L"
+  ],
+  "type": "giant",
+  "alignment": [
+   "C",
+   "E"
+  ],
+  "ac": [
+   {
+    "ac": 11,
+    "from": [
+     "{@item hide armor|phb}"
+    ]
+   }
+  ],
+  "hp": {
+   "average": 59,
+   "formula": "7d10 + 21"
+  },
+  "speed": {
+   "walk": 40
+  },
+  "str": 19,
+  "dex": 8,
+  "con": 16,
+  "int": 5,
+  "wis": 7,
+  "cha": 7,
+  "senses": [
+   "darkvision 60 ft."
+  ],
+  "passive": 8,
+  "languages": [
+   "Common",
+   "Giant"
+  ],
+  "cr": "2",
+  "action": [
+   {
+    "name": "Greatclub",
+    "entries": [
+     "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}13 ({@damage 2d8 + 4}) bludgeoning damage."
+    ]
+   },
+   {
+    "name": "Javelin",
+    "entries": [
+     "{@atk mw,rw} {@hit 6} to hit, reach 5 ft. or range 30/120 ft., one target. {@h}11 ({@damage 2d6 + 4}) piercing damage."
+    ]
+   }
+  ],
+  "environment": [
+   "grassland",
+   "forest",
+   "swamp",
+   "hill",
+   "desert",
+   "coastal",
+   "arctic",
+   "underdark",
+   "mountain"
+  ],
+  "soundClip": {
+   "type": "internal",
+   "path": "bestiary/ogre.opus"
+  },
+  "attachedItems": [
+   "greatclub|phb",
+   "javelin|phb"
+  ],
+  "senseTags": [
+   "D"
+  ],
+  "languageTags": [
+   "C",
+   "GI"
+  ],
+  "damageTags": [
+   "B",
+   "P"
+  ],
+  "miscTags": [
+   "MLW",
+   "MW",
+   "RW",
+   "THW"
+  ],
+  "hasToken": true,
+  "hasFluff": true,
+  "hasFluffImages": true
+ },
+ {
+  "name": "Ghost",
+  "source": "MM",
+  "page": 147,
+  "srd": true,
+  "basicRules": true,
+  "referenceSources": [
+   "AATM",
+   "BGDIA",
+   "BMT",
+   "CM",
+   "CoS",
+   "CRCotN",
+   "DC",
+   "DIP",
+   "DSotDQ",
+   "EGW",
+   "ERLW",
+   "GoS",
+   "IDRotF",
+   "JttRC",
+   "KftGV",
+   "LoX",
+   "OotA",
+   "OoW",
+   "PaBTSO",
+   "PotA",
+   "QftIS",
+   "RoT",
+   "RtG",
+   "SatO",
+   "SDW",
+   "SKT",
+   "SLW",
+   "TCE",
+   "TftYP",
+   "TftYP-DiT",
+   "TftYP-TFoF",
+   "TftYP-ToH",
+   "TftYP-TSC",
+   "ToFW",
+   "TTP",
+   "VEoR",
+   "VNotEE",
+   "WDH",
+   "WDMM"
+  ],
+  "reprintedAs": [
+   "Ghost|XMM"
+  ],
+  "size": [
+   "M"
+  ],
+  "type": "undead",
+  "alignment": [
+   "A"
+  ],
+  "ac": [
+   11
+  ],
+  "hp": {
+   "average": 45,
+   "formula": "10d8"
+  },
+  "speed": {
+   "walk": 0,
+   "fly": {
+    "number": 40,
+    "condition": "(hover)"
+   },
+   "canHover": true
+  },
+  "str": 7,
+  "dex": 13,
+  "con": 10,
+  "int": 10,
+  "wis": 12,
+  "cha": 17,
+  "senses": [
+   "darkvision 60 ft."
+  ],
+  "passive": 11,
+  "resist": [
+   "acid",
+   "fire",
+   "lightning",
+   "thunder",
+   {
+    "resist": [
+     "bludgeoning",
+     "piercing",
+     "slashing"
+    ],
+    "note": "from nonmagical attacks",
+    "cond": true
+   }
+  ],
+  "immune": [
+   "cold",
+   "necrotic",
+   "poison"
+  ],
+  "conditionImmune": [
+   "charmed",
+   "exhaustion",
+   "frightened",
+   "grappled",
+   "paralyzed",
+   "petrified",
+   "poisoned",
+   "prone",
+   "restrained"
+  ],
+  "languages": [
+   "any languages it knew in life"
+  ],
+  "cr": "4",
+  "trait": [
+   {
+    "name": "Ethereal Sight",
+    "entries": [
+     "The ghost can see 60 feet into the Ethereal Plane when it is on the Material Plane, and vice versa."
+    ]
+   },
+   {
+    "name": "Incorporeal Movement",
+    "entries": [
+     "The ghost can move through other creatures and objects as if they were {@quickref difficult terrain||3}. It takes 5 ({@damage 1d10}) force damage if it ends its turn inside an object."
+    ]
+   }
+  ],
+  "action": [
+   {
+    "name": "Withering Touch",
+    "entries": [
+     "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}17 ({@damage 4d6 + 3}) necrotic damage."
+    ]
+   },
+   {
+    "name": "Etherealness",
+    "entries": [
+     "The ghost enters the Ethereal Plane from the Material Plane, or vice versa. It is visible on the Material Plane while it is in the Border Ethereal, and vice versa, yet it can't affect or be affected by anything on the other plane."
+    ]
+   },
+   {
+    "name": "Horrifying Visage",
+    "entries": [
+     "Each non-undead creature within 60 feet of the ghost that can see it must succeed on a {@dc 13} Wisdom saving throw or be {@condition frightened} for 1 minute. If the save fails by 5 or more, the target also ages {@dice 1d4 × 10} years. A {@condition frightened} target can repeat the saving throw at the end of each of its turns, ending the {@condition frightened} condition on itself on a success. If a target's saving throw is successful or the effect ends for it, the target is immune to this ghost's Horrifying Visage for the next 24 hours. The aging effect can be reversed with a {@spell greater restoration} spell, but only within 24 hours of it occurring."
+    ]
+   },
+   {
+    "name": "Possession {@recharge}",
+    "entries": [
+     "One humanoid that the ghost can see within 5 feet of it must succeed on a {@dc 13} Charisma saving throw or be possessed by the ghost; the ghost then disappears, and the target is {@condition incapacitated} and loses control of its body. The ghost now controls the body but doesn't deprive the target of awareness. The ghost can't be targeted by any attack, spell, or other effect, except ones that turn undead, and it retains its alignment, Intelligence, Wisdom, Charisma, and immunity to being {@condition charmed} and {@condition frightened}. It otherwise uses the possessed target's statistics, but doesn't gain access to the target's knowledge, class features, or proficiencies.",
+     "The possession lasts until the body drops to 0 hit points, the ghost ends it as a bonus action, or the ghost is turned or forced out by an effect like the {@spell dispel evil and good} spell. When the possession ends, the ghost reappears in an unoccupied space within 5 feet of the body. The target is immune to this ghost's Possession for 24 hours after succeeding on the saving throw or after the possession ends."
+    ]
+   }
+  ],
+  "environment": [
+   "underdark",
+   "urban"
+  ],
+  "soundClip": {
+   "type": "internal",
+   "path": "bestiary/ghost.opus"
+  },
+  "traitTags": [
+   "Ethereal Sight",
+   "Incorporeal Movement"
+  ],
+  "senseTags": [
+   "D"
+  ],
+  "languageTags": [
+   "LF"
+  ],
+  "damageTags": [
+   "N",
+   "O"
+  ],
+  "miscTags": [
+   "MW"
+  ],
+  "conditionInflict": [
+   "frightened",
+   "incapacitated"
+  ],
+  "savingThrowForced": [
+   "charisma",
+   "wisdom"
+  ],
+  "hasToken": true,
+  "hasFluff": true,
+  "hasFluffImages": true
+ },
+ {
+  "name": "Gargoyle",
+  "source": "MM",
+  "page": 140,
+  "srd": true,
+  "basicRules": true,
+  "referenceSources": [
+   "BGDIA",
+   "BMT",
+   "CM",
+   "CoS",
+   "ERLW",
+   "HotDQ",
+   "IDRotF",
+   "JttRC",
+   "OotA",
+   "OoW",
+   "PotA",
+   "QftIS",
+   "SCC-HfMT",
+   "SKT",
+   "TftYP",
+   "TftYP-DiT",
+   "TftYP-WPM",
+   "ToA",
+   "WDH",
+   "WDMM"
+  ],
+  "reprintedAs": [
+   "Gargoyle|XMM"
+  ],
+  "size": [
+   "M"
+  ],
+  "type": "elemental",
+  "alignment": [
+   "C",
+   "E"
+  ],
+  "ac": [
+   {
+    "ac": 15,
+    "from": [
+     "natural armor"
+    ]
+   }
+  ],
+  "hp": {
+   "average": 52,
+   "formula": "7d8 + 21"
+  },
+  "speed": {
+   "walk": 30,
+   "fly": 60
+  },
+  "str": 15,
+  "dex": 11,
+  "con": 16,
+  "int": 6,
+  "wis": 11,
+  "cha": 7,
+  "senses": [
+   "darkvision 60 ft."
+  ],
+  "passive": 10,
+  "resist": [
+   {
+    "resist": [
+     "bludgeoning",
+     "piercing",
+     "slashing"
+    ],
+    "note": "from nonmagical attacks that aren't adamantine",
+    "cond": true
+   }
+  ],
+  "immune": [
+   "poison"
+  ],
+  "conditionImmune": [
+   "exhaustion",
+   "petrified",
+   "poisoned"
+  ],
+  "languages": [
+   "Terran"
+  ],
+  "cr": "2",
+  "trait": [
+   {
+    "name": "False Appearance",
+    "entries": [
+     "While the gargoyle remains motionless, it is indistinguishable from an inanimate statue."
+    ]
+   }
+  ],
+  "action": [
+   {
+    "name": "Multiattack",
+    "entries": [
+     "The gargoyle makes two attacks: one with its bite and one with its claws."
+    ]
+   },
+   {
+    "name": "Bite",
+    "entries": [
+     "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+    ]
+   },
+   {
+    "name": "Claws",
+    "entries": [
+     "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) slashing damage."
+    ]
+   }
+  ],
+  "environment": [
+   "underdark",
+   "urban"
+  ],
+  "soundClip": {
+   "type": "internal",
+   "path": "bestiary/gargoyle.opus"
+  },
+  "traitTags": [
+   "False Appearance"
+  ],
+  "senseTags": [
+   "D"
+  ],
+  "actionTags": [
+   "Multiattack"
+  ],
+  "languageTags": [
+   "T"
+  ],
+  "damageTags": [
+   "P",
+   "S"
+  ],
+  "miscTags": [
+   "MW"
+  ],
+  "hasToken": true,
+  "hasFluff": true,
+  "hasFluffImages": true
+ }
+]

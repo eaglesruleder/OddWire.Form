@@ -16,6 +16,7 @@ export function ControlCheckbox(props: CoreControlProps<boolean>)
                 id={props.param}
                 type="checkbox"
                 checked={props.value ?? false}
+                disabled={props.disabled}
                 onChange={e => props.onChange?.(e.target.checked, props.param)}
             />
         </div>

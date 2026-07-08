@@ -5,6 +5,7 @@ import type { ControlDef } from './controls/controlTypes';
 
 import { ControlItem } from './ControlItem';
 import { ControlTab } from './controls/layout';
+import { resolveLabel } from './resolveLabel';
 
 type ControlListProps = {
     controls: ControlDef[];
@@ -34,12 +35,13 @@ export function ControlList({ controls, instance, onChange, depth = 0 }: Control
         {
             const tab = controls[i] as ControlDef & { controls: ControlDef[] };
             if (!tab.hidden)
-                sections.push({ param: tab.param, label: tab.label ?? tab.param, controls: tab.controls });
+                sections.push({ param: tab.param, label: resolveLabel(tab.label, instance) ?? tab.param, controls: tab.controls });
             i++;
         }
         if (sections.length > 0)
             items.push(<ControlTab key={`tabset-${sections[0].param}`} sections={sections} instance={instance} onChange={onChange} depth={depth} />);
     }
 
-    return items;
+    // Intent: a 12-col grid — items are full-width by default; a control's `cellClassName` (col-N) opts into columns
+    return <div className="control-grid">{items}</div>;
 }

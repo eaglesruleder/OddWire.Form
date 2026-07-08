@@ -22,7 +22,9 @@ export const ControlTextField = (props: ControlTextFieldProps) =>
         <Form.Control
             id={props.param}
             type="text"
+            placeholder={props.placeholder}
             value={props.value ?? ''}
+            disabled={props.disabled}
             inputMode={props.keyboardType ?? keyboardForValueType[props.valueType ?? 'text']}
             onChange={e => props.onChange?.(e.target.value, props.param)}
         />

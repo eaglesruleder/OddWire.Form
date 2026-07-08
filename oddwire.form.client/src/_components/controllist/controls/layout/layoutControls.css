@@ -35,6 +35,10 @@
   background: var(--bg-strip);
   font-weight: 600;
 }
+.tab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 .tab-bar-inline {
   position: sticky;

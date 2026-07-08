@@ -1,0 +1,43 @@
+{
+    "formId": "22222222-2222-4222-8222-222222222222",
+    "label": "Vehicle Lookup",
+    "version": "1.0.0",
+    "displayParam": ["model", "stock"],
+    "controls": [
+        { "type": "label", "param": "title", "label": "Vehicle" },
+        {
+            "type": "dropdown",
+            "param": "model",
+            "label": "Model",
+            "dbOptions": { "table": "Model", "valueParam": "id", "labelParam": "name" }
+        },
+        {
+            "type": "dropdown",
+            "param": "stock",
+            "label": "On lot",
+            "placeholder": "Pick a model first",
+            "dbOptions": { "table": "OnLot", "valueParam": "stock", "labelParam": "rego", "filter": "model" }
+        },
+        {
+            "type": "radio",
+            "param": "modelRadio",
+            "label": "Model (radio)",
+            "dbOptions": "Model"
+        },
+        {
+            "type": "dropdown",
+            "param": "modelJoined",
+            "label": "Model + Any",
+            "controls": [
+                { "value": "any", "label": "Any model" }
+            ],
+            "dbOptions": { "table": "Model", "valueParam": "id", "labelParam": "name", "joinOptions": true }
+        },
+        {
+            "type": "dropdown",
+            "param": "missing",
+            "label": "Missing table",
+            "dbOptions": { "table": "DoesNotExist", "valueParam": "id" }
+        }
+    ]
+}

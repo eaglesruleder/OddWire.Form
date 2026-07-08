@@ -9,7 +9,9 @@ export const ControlTextArea = (props: CoreControlProps<string>) =>
         <Form.Control
             id={props.param}
             as="textarea"
+            placeholder={props.placeholder}
             value={props.value ?? ''}
+            disabled={props.disabled}
             onChange={e => props.onChange?.(e.target.value, props.param)}
             rows={3}
         />

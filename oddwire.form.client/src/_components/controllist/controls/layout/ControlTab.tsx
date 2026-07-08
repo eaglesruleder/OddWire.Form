@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { ReactNode } from 'react';
 
 import type { ControlDef } from '../controlTypes';
 import type { InstanceEntity, InstanceChange } from '../../../../_context';
@@ -8,26 +9,32 @@ import { ControlError } from '..';
 import { stickyTop } from './stickyTop';
 import './layoutControls.css';
 
+// Intent: JSON tabs carry `controls`; programmatic callers (e.g. DB Manager) may pass rendered `content` + `disabled` instead
 export type TabSection = {
     param: string;
     label: string;
-    controls: ControlDef[];
+    controls?: ControlDef[];
+    content?: ReactNode;
+    disabled?: boolean;
     notice?: string;
     };
 
 type ControlTabProps = {
     sections: TabSection[];
     pageLayout?: boolean;
-    instance: InstanceEntity;
-    onChange: InstanceChange;
+    defaultParam?: string;
+    instance?: InstanceEntity;
+    onChange?: InstanceChange;
     depth?: number;
     };
 
 export function ControlTab(props: ControlTabProps)
 {
-    const [activeParam, setActiveParam] = useState(props.sections[0]?.param ?? '');
+    const firstEnabled = props.sections.find(section => !section.disabled) ?? props.sections[0];
+    const [activeParam, setActiveParam] = useState(props.defaultParam ?? firstEnabled?.param ?? '');
 
-    const active = props.sections.find(section => section.param === activeParam) ?? props.sections[0];
+    const requested = props.sections.find(section => section.param === activeParam);
+    const active = requested && !requested.disabled ? requested : firstEnabled;
 
     if (!active)
         return null;
@@ -46,6 +53,7 @@ export function ControlTab(props: ControlTabProps)
                 key={section.param}
                 type="button"
                 className={['tab', section.param === active.param ? 'active' : ''].filter(Boolean).join(' ')}
+                disabled={section.disabled}
                 onClick={() => setActiveParam(section.param)}
             >{section.label}</button>
             )}
@@ -56,7 +64,9 @@ export function ControlTab(props: ControlTabProps)
             {active.notice &&
             <ControlError>{active.notice}</ControlError>
             }
-            <ControlList controls={active.controls} instance={props.instance} onChange={props.onChange} depth={childDepth} />
+            {active.content ?? (props.instance && props.onChange &&
+            <ControlList controls={active.controls ?? []} instance={props.instance} onChange={props.onChange} depth={childDepth} />
+            )}
         </div>;
 
     return pageLayout
