@@ -1,75 +1,39 @@
-# React + TypeScript + Vite
+# OddWire.Form Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React 19 + TypeScript + Vite client for the OddWire.Form dynamic form runtime.
 
-Currently, two official plugins are available:
+## Runtime Shape
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The client owns the product behaviour:
+- `BrowserRouter` routes `/`, `/form/:formId/:instanceId?`, and `/settings`
+- `ContextsProvider` initialises form, instance, and lookup stores
+- form definitions are JSON control trees
+- instances are sparse `param`-keyed overlays
+- `ControlList` walks a control scope and groups adjacent tabs
+- `ControlItem` resolves a form control with the instance overlay and dispatches by `type`
+- lookup-backed radio/dropdown controls read from the aggregated lookup DB
+- settings manage global lookup tables, bundled form installs, and monster imports
 
-## React Compiler
+All persistence is browser-local through `localforage`. The server does not provide form APIs.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Source Map
 
-## Expanding the ESLint configuration
+- `src/App.tsx` - routes and context provider
+- `src/_context/` - stores, types, seed data
+- `src/form/FormPage.tsx` - load/render/save active form instance
+- `src/landing/` - form and instance picker
+- `src/settings/` - DB Manager and Form Manager
+- `src/_components/layout/` - strip shell
+- `src/_components/controllist/` - renderer, lookup resolver, controls
+- `src/mods/5etools/` - monster data mapper/importer
+- `public/style/` - global keyword CSS
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Commands
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```powershell
+npm run dev
+npm run build
+npm run lint
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+`npm run build` runs `tsc -b` and then `vite build`.
