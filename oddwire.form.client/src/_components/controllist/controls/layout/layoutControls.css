@@ -97,3 +97,17 @@
   border: 1px solid var(--border);
 }
 .popup-content .strip-main { overflow-y: auto; }
+
+.looper-row {
+  margin-bottom: 12px;
+}
+
+.looper-row-title {
+  color: var(--text-accent);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.looper-empty {
+  margin-bottom: 12px;
+}

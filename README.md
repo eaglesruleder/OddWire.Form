@@ -13,7 +13,7 @@ Current behaviour:
 - saved instances survive refresh through a local `instances` store
 - a new instance is memory-only until the first Save, then later edits autosave
 - radio/dropdown controls can resolve options from lookup tables
-- layout controls support collapsibles, inline/root tabs, and popups
+- layout controls support collapsibles, inline/root tabs, popups, and loopers
 - settings include a global DB Manager, form install/refresh list, and 5etools monster import
 
 The ASP.NET Core project hosts the client and keeps the template `WeatherForecast` endpoint; there are no form/instance/lookup server endpoints yet.
@@ -39,7 +39,7 @@ The ASP.NET Core project hosts the client and keeps the template `WeatherForecas
 - **Dynamic Form** - [Brief](oddwire.form.client/src/_components/controllist/.git.md) · [Doc](oddwire.form.client/src/_components/controllist/.gpt.md)  
   Runtime flow, stores, routing, instance overlays, lookup resolution, settings, and import workflows.
 - **Form Controls** - [Brief](oddwire.form.client/src/_components/controllist/controls/.git.md) · [Doc](oddwire.form.client/src/_components/controllist/controls/.gpt.md)  
-  Leaf controls, shared props, layout controls, readonly handling, DB-backed options, and styling.
+  Leaf controls, shared props, layout controls, loopers, readonly handling, DB-backed options, and styling.
 - **Server Host** - scaffold support only.
 
 ---

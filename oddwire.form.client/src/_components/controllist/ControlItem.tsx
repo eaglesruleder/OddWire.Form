@@ -13,7 +13,7 @@ import
     ,ControlDropdown
     ,ControlError
     } from './controls';
-import { ControlCollapsible, ControlPopup, ControlTab } from './controls/layout';
+import { ControlCollapsible, ControlLooper, ControlPopup, ControlTab } from './controls/layout';
 import { DbContext, resolveDbOptions } from './lookup';
 import { resolveLabel } from './resolveLabel';
 
@@ -42,6 +42,7 @@ export function ControlItem({ control, instance, onChange, depth = 0 }: ControlI
         case 'collapsible': return <ControlCollapsible {...resolved} instance={instance} onChange={onChange} depth={depth} />;
         case 'popup':       return <ControlPopup       {...resolved} instance={instance} onChange={onChange} />;
         case 'tab':         return <ControlTab sections={[{ param: resolved.param, label: resolved.label ?? resolved.param, controls: resolved.controls }]} instance={instance} onChange={onChange} depth={depth} />;
+        case 'looper':      return <ControlLooper      {...resolved} onChange={onChange} />;
         default:
         {
             const def = resolved as ControlDef;

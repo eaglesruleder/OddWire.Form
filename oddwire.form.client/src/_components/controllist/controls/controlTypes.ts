@@ -66,6 +66,16 @@ export type DropdownControlDef = ControlDefBase<'dropdown', string> & {
     dbOptions?: DbOptions;
     };
 
+export type LooperRowInstance = {
+    formId?: string;
+    instanceId?: string;
+    dateModified?: string;
+    controls: {
+        param: string;
+        [key: string]: unknown;
+        }[];
+    };
+
 export type CollapsibleControlDef = ControlDefBase<'collapsible'> & {
     controls: ControlDef[];
     };
@@ -74,6 +84,10 @@ export type TabControlDef = ControlDefBase<'tab'> & {
     };
 export type PopupControlDef = ControlDefBase<'popup'> & {
     controls: ControlDef[];
+    };
+export type LooperControlDef = ControlDefBase<'looper', LooperRowInstance[]> & {
+    controls: ControlDef[];
+    addRows?: boolean;
     };
 
 export type ControlDef =
@@ -86,4 +100,5 @@ export type ControlDef =
     | DropdownControlDef
     | CollapsibleControlDef
     | TabControlDef
-    | PopupControlDef;
+    | PopupControlDef
+    | LooperControlDef;
