@@ -10,6 +10,7 @@ export type { LookupContextValue } from './LookupContext';
 export { GLOBAL_SCOPE } from './types';
 export type
     {FormDefinition
+    ,FormExportDefinition
     ,FormInstance
     ,ControlInstance
     ,FormIndexEntry

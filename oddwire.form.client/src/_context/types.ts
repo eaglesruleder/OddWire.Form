@@ -12,12 +12,20 @@ export type FormDefinition = {
     formId: string;
     label?: string;
     version?: string;
+    export?: FormExportDefinition;
     displayParam?: DisplayParam[];
     groupParam?: ParamList;
     filterParam?: string[];
     orderParam?: ParamList;
     dateModified?: string;
     controls: ControlDef[];
+    };
+
+export type FormExportDefinition = {
+    api?: string | boolean | {
+        url?: string;
+        };
+    url?: string;
     };
 
 export type ControlInstance = {

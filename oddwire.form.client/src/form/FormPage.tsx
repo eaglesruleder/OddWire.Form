@@ -1,13 +1,15 @@
 import { useContext, useEffect, useReducer, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
 
 import type { FormDefinition, InstanceChange, ParamList } from '../_context';
 import type { ControlDef, TabSection } from '../_components/controllist';
 
 import { FormContext, InstanceContext, LookupContext, InstanceEntity } from '../_context';
 import { StripLayout } from '../_components/layout';
-import { ControlList, ControlTab, ControlError, DbContext, resolveLabel } from '../_components/controllist';
+import { ControlList, ControlTab, ControlError, ControlButton, DbContext, resolveLabel } from '../_components/controllist';
+import { flattenInstance } from '../export';
 
 function buildRootTabSections(controls: ControlDef[], instance: InstanceEntity): TabSection[]
 {
@@ -38,6 +40,9 @@ export function FormPage()
     const [form, setForm] = useState<FormDefinition | null>(null);
     const [instance, setInstance] = useState<InstanceEntity | null>(null);
     const [autosaving, setAutosaving] = useState(false);
+    const [actionsOpen, setActionsOpen] = useState(false);
+    const [exporting, setExporting] = useState(false);
+    const [exportMessage, setExportMessage] = useState<string>();
     const [, bumpRender] = useReducer(tick => tick + 1, 0);
 
     const instanceRef = useRef<InstanceEntity | null>(null);
@@ -105,7 +110,7 @@ export function FormPage()
     const onSave = async () =>
     {
         if (!instance)
-            return;
+            return undefined;
 
         // Intent: hard save writes immediately — drop any pending debounced write so it doesn't fire a stale duplicate
         instance.cancelPersist();
@@ -114,6 +119,45 @@ export function FormPage()
 
         if (!instanceId)
             navigate(`/form/${formId}/${id}`, { replace: true });
+
+        return id;
+    };
+
+    const onExportApi = async () =>
+    {
+        if (!form || !instance)
+            return;
+
+        const url = exportApiUrl(form);
+        if (!url)
+            return;
+
+        setExporting(true);
+        setExportMessage(undefined);
+
+        try
+        {
+            instance.flush();
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(flattenInstance(form, instance)),
+                });
+
+            if (!response.ok)
+                throw new Error(`Export failed (${response.status})`);
+
+            setExportMessage('Exported');
+        }
+        catch (error)
+        {
+            setExportMessage(error instanceof Error ? error.message : 'Export failed');
+        }
+        finally
+        {
+            setExporting(false);
+        }
     };
 
     const errorPage = (message: string) =>
@@ -138,19 +182,20 @@ export function FormPage()
 
     const backLink = landingBackLink(formId, form.groupParam, instance);
 
-    const saveIcon =
+    const exportUrl = exportApiUrl(form);
+
+    const actionsIcon =
         <button
             type="button"
             className="strip-btn"
-            onClick={onSave}
-            disabled={autosaving}
-            title={autosaving ? 'Autosaving' : 'Save'}
-        >💾</button>;
+            onClick={() => setActionsOpen(true)}
+            title="Export"
+        >...</button>;
 
     const isRootTab = form.controls[0]?.type === 'tab';
 
     return (
-        <StripLayout left="←" leftLink={backLink} right={saveIcon} title={form.label ?? 'OddWire Forms'}>
+        <StripLayout left="←" leftLink={backLink} right={actionsIcon} title={form.label ?? 'OddWire Forms'}>
             <DbContext.Provider value={getDb(formId)}>
                 <Form>
                     {isRootTab
@@ -158,9 +203,44 @@ export function FormPage()
                     :   <ControlList controls={form.controls} instance={instance} onChange={onChange} />
                     }
                 </Form>
+                <Modal show={actionsOpen} onHide={() => setActionsOpen(false)} centered dialogClassName="popup-dialog" contentClassName="popup-content">
+                    <StripLayout
+                        title="Export"
+                        left={<button type="button" className="strip-btn" onClick={() => setActionsOpen(false)}>←</button>}
+                    >
+                        <div className="flex column gap">
+                            {!autosaving
+                            ?   <ControlButton label="Save" onClick={onSave} />
+                            :   <div className="control-static">Autosaving</div>
+                            }
+                            {exportUrl &&
+                                <ControlButton label={exporting ? 'Exporting...' : 'Export API'} onClick={onExportApi} disabled={exporting} />
+                            }
+                            {exportMessage &&
+                                <div className="control-static">{exportMessage}</div>
+                            }
+                        </div>
+                    </StripLayout>
+                </Modal>
             </DbContext.Provider>
         </StripLayout>
         );
+}
+
+function exportApiUrl(form: FormDefinition): string | undefined
+{
+    const config = form.export;
+
+    if (!config)
+        return undefined;
+
+    if (typeof config.api === 'string')
+        return config.api;
+
+    if (typeof config.api === 'object' && config.api.url)
+        return config.api.url;
+
+    return config.url;
 }
 
 function landingBackLink(formId: string, groupParam: ParamList | undefined, instance: InstanceEntity): string
