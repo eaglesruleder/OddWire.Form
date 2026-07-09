@@ -6,7 +6,7 @@
     "displayParam": ["fullName", "email"],
     "controls": [
         { "type": "label", "param": "title", "label": "Contact" },
-        { "type": "text", "param": "fullName", "label": "Full name", "value": "Dillon O’Dwyer" },
+        { "type": "text", "param": "fullName", "label": "Full name", "value": "Dillon O’Dwyer", "pdf": { "0": [{ "x": 10, "y": 10 }] } },
         { "type": "text", "param": "email", "label": "Email", "value": "", "valueType": "email", "keyboardType": "email" },
         { "type": "text", "param": "age", "label": "Age", "value": "", "valueType": "int", "keyboardType": "numeric" },
         { "type": "textarea", "param": "bio", "label": "Short bio", "value": "IT Coordinator and Software Developer" },

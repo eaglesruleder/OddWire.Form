@@ -11,7 +11,7 @@ import type { ControlDef, TabSection } from '../_components/controllist';
 import { FormContext, InstanceContext, LookupContext, InstanceEntity } from '../_context';
 import { StripLayout } from '../_components/layout';
 import { ControlList, ControlTab, ControlError, ControlButton, DbContext, resolveLabel } from '../_components/controllist';
-import { flattenInstance, valuesPdf } from '../export';
+import { flattenInstance, FormPdfExporter } from '../export';
 
 function buildRootTabSections(controls: ControlDef[], instance: InstanceEntity): TabSection[]
 {
@@ -192,7 +192,7 @@ export function FormPage()
         {
             instance.flush();
 
-            downloadBlob(await valuesPdf(flattenInstance(form, instance)), `${form.label ?? 'form'}.pdf`);
+            downloadBlob(await new FormPdfExporter(form, instance).export(), `${form.label ?? 'form'}.pdf`);
             setToastMessage('PDF exported');
         }
         catch (error)

@@ -1,4 +1,4 @@
-import type { ControlDef } from '../_components/controllist';
+import type { ControlDef, ControlPdfBox } from '../_components/controllist';
 import type { FormDefinition } from '../_context';
 
 import { InstanceEntity } from '../_context';
@@ -9,30 +9,39 @@ export type FlattenedInstanceExport = {
     label?: string;
     dateExported: string;
     values: Record<string, unknown>;
+    pdf: FlattenedPdfField[];
+    };
+
+export type FlattenedPdfField = {
+    param: string;
+    value: unknown;
+    pages: Record<string, ControlPdfBox[]>;
     };
 
 export function flattenInstance(form: FormDefinition, instance: InstanceEntity): FlattenedInstanceExport
 {
+    const values: Record<string, unknown> = {};
+    const pdf: FlattenedPdfField[] = [];
+
+    flattenControls(form.controls, instance, values, pdf);
+
     return {
         formId: form.formId,
         instanceId: instance.instance.instanceId,
         label: form.label,
         dateExported: new Date().toISOString(),
-        values: flattenControls(form.controls, instance),
+        values,
+        pdf,
         };
 }
 
-function flattenControls(controls: ControlDef[], instance: InstanceEntity): Record<string, unknown>
+function flattenControls(controls: ControlDef[], instance: InstanceEntity, values: Record<string, unknown>, pdf: FlattenedPdfField[]): void
 {
-    const values: Record<string, unknown> = {};
-
     for (const control of controls)
-        flattenControl(control, instance, values);
-
-    return values;
+        flattenControl(control, instance, values, pdf);
 }
 
-function flattenControl(control: ControlDef, instance: InstanceEntity, values: Record<string, unknown>): void
+function flattenControl(control: ControlDef, instance: InstanceEntity, values: Record<string, unknown>, pdf: FlattenedPdfField[]): void
 {
     const resolved = instance.resolve(control);
 
@@ -41,23 +50,25 @@ function flattenControl(control: ControlDef, instance: InstanceEntity, values: R
         case 'collapsible':
         case 'popup':
         case 'tab':
-            flattenChildren(resolved.controls, instance, values);
+            flattenChildren(resolved.controls, instance, values, pdf);
             return;
 
         case 'looper':
             values[resolved.param] = flattenRows(resolved.controls, resolved.value);
+            addPdfField(resolved, values[resolved.param], pdf);
             return;
 
         default:
             values[resolved.param] = resolved.value ?? null;
+            addPdfField(resolved, values[resolved.param], pdf);
             return;
     }
 }
 
-function flattenChildren(controls: ControlDef[], instance: InstanceEntity, values: Record<string, unknown>): void
+function flattenChildren(controls: ControlDef[], instance: InstanceEntity, values: Record<string, unknown>, pdf: FlattenedPdfField[]): void
 {
     for (const control of controls)
-        flattenControl(control, instance, values);
+        flattenControl(control, instance, values, pdf);
 }
 
 function flattenRows(controls: ControlDef[], rows: unknown): Record<string, unknown>[]
@@ -68,8 +79,22 @@ function flattenRows(controls: ControlDef[], rows: unknown): Record<string, unkn
     return rows.map(row =>
     {
         const rowInstance = new InstanceEntity(isRowInstance(row) ? row : { controls: [] });
-        return flattenControls(controls, rowInstance);
+        const values: Record<string, unknown> = {};
+        flattenControls(controls, rowInstance, values, []);
+        return values;
     });
+}
+
+function addPdfField(control: ControlDef, value: unknown, pdf: FlattenedPdfField[]): void
+{
+    if (!control.pdf)
+        return;
+
+    pdf.push({
+        param: control.param,
+        value,
+        pages: control.pdf,
+        });
 }
 
 function isRowInstance(value: unknown): value is { controls: { param: string; [key: string]: unknown }[] }

@@ -38,6 +38,15 @@ export type TextValueType = 'text' | 'int' | 'decimal' | 'email' | 'phone';
 
 export type KeyboardType = HTMLAttributes<HTMLElement>['inputMode'];
 
+export type ControlPdfBox = {
+    x: number;
+    y: number;
+    w?: number;
+    h?: number;
+    };
+
+export type ControlPdfDef = Record<string, ControlPdfBox[]>;
+
 export type ControlDefBase<TType extends string, TValue = unknown> = {
     type: TType;
     param: string;
@@ -49,6 +58,7 @@ export type ControlDefBase<TType extends string, TValue = unknown> = {
     stacked?: boolean;
     cellClassName?: string;
     rows?: number;
+    pdf?: ControlPdfDef;
     };
 
 export type LabelControlDef = ControlDefBase<'label', string> & {

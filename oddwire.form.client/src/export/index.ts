@@ -1,3 +1,4 @@
 export { flattenInstance } from './flattenInstance';
-export { valuesPdf } from './valuesPdf';
+export { FormPdfExporter } from './FormPdfExporter';
+export { PdfWriter } from './PdfWriter';
 export type { FlattenedInstanceExport } from './flattenInstance';

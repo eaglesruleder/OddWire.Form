@@ -4,4 +4,4 @@ export { ControlTab } from './controls/layout';
 export type { TabSection } from './controls/layout';
 export { DbContext } from './lookup';
 export { resolveLabel } from './resolveLabel';
-export type { ControlDef, ControlOption } from './controls/controlTypes';
+export type { ControlDef, ControlOption, ControlPdfBox, ControlPdfDef } from './controls/controlTypes';
