@@ -13,7 +13,7 @@ import
     ,ControlDropdown
     ,ControlError
     } from './controls';
-import { ControlCollapsible, ControlPopup, ControlTab } from './controls/layout';
+import { ControlCollapsible, ControlLooper, ControlPopup, ControlTab } from './controls/layout';
 import { DbContext, resolveDbOptions } from './lookup';
 import { resolveLabel } from './resolveLabel';
 
@@ -29,10 +29,15 @@ export function ControlItem({ control, instance, onChange, depth = 0 }: ControlI
     const db = useContext(DbContext);
     const resolved = instance.resolve(control);
     resolved.label = resolveLabel(resolved.label, instance);
+    if (resolved.type === 'collapsible')
+    {
+        const subtitle = resolveLabel(resolved.subtitle, instance)?.trim();
+        resolved.subtitle = subtitle || undefined;
+    }
 
     switch (resolved.type)
     {
-        case 'label':    return <ControlText      {...resolved} />;
+        case 'label':    return <ControlText      {...resolved} hidden={resolved.hidden || targetHidden(resolved.labelFor, instance)} />;
         case 'text':     return <ControlTextField {...resolved} onChange={onChange} />;
         case 'textarea': return <ControlTextArea  {...resolved} onChange={onChange} />;
         case 'checkbox': return <ControlCheckbox  {...resolved} onChange={onChange} />;
@@ -42,6 +47,7 @@ export function ControlItem({ control, instance, onChange, depth = 0 }: ControlI
         case 'collapsible': return <ControlCollapsible {...resolved} instance={instance} onChange={onChange} depth={depth} />;
         case 'popup':       return <ControlPopup       {...resolved} instance={instance} onChange={onChange} />;
         case 'tab':         return <ControlTab sections={[{ param: resolved.param, label: resolved.label ?? resolved.param, controls: resolved.controls }]} instance={instance} onChange={onChange} depth={depth} />;
+        case 'looper':      return <ControlLooper      {...resolved} onChange={onChange} />;
         default:
         {
             const def = resolved as ControlDef;
@@ -82,15 +88,40 @@ function fillOnChange(dbOptions: DbOptions | undefined, db: Record<string, Looku
 
         if (row)
         {
-            const patch: Record<string, unknown> = {};
+            const valuePatch: Record<string, unknown> = {};
+            const controlPatch: Record<string, Record<string, unknown>> = {};
 
             for (const [column, columnValue] of Object.entries(row))
-                if (column !== dbOptions.valueParam && columnValue !== '' && columnValue != null)
-                    patch[column] = columnValue;
+            {
+                if (column === dbOptions.valueParam || columnValue === '' || columnValue == null)
+                    continue;
 
-            instance.setValues(patch);
+                if (isControlPatch(columnValue))
+                    controlPatch[column] = columnValue;
+                else
+                    valuePatch[column] = columnValue;
+            }
+
+            if (Object.keys(valuePatch).length > 0)
+                instance.setValues(valuePatch);
+
+            if (Object.keys(controlPatch).length > 0)
+                instance.setControls(controlPatch);
         }
 
         onChange(value, key, subkey);   // the key + the single render
     };
+}
+
+function targetHidden(param: string | undefined, instance: InstanceEntity): boolean
+{
+    return param ? instance.get(param)?.hidden === true : false;
+}
+
+function isControlPatch(value: unknown): value is Record<string, unknown>
+{
+    return typeof value === 'object'
+    &&  value !== null
+    && !Array.isArray(value)
+    &&  Object.keys(value).some(key => ['value', 'hidden', 'disabled', 'placeholder', 'readonly', 'rows'].includes(key));
 }

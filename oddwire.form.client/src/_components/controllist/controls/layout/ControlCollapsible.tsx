@@ -10,6 +10,7 @@ import './layoutControls.css';
 type ControlCollapsibleProps = {
     param: string;
     label?: string;
+    subtitle?: string;
     hidden?: boolean;
     controls: ControlDef[];
     instance: InstanceEntity;
@@ -35,7 +36,10 @@ export function ControlCollapsible(props: ControlCollapsibleProps)
                 onClick={() => setExpanded(open => !open)}
             >
                 <span className="collapsible-chevron">{expanded ? '▾' : '▸'}</span>
-                <span className="fill">{props.label ?? props.param}</span>
+                <span className="collapsible-title fill">
+                    <span>{props.label ?? props.param}</span>
+                </span>
+                {props.subtitle && <span className="collapsible-subtitle">{props.subtitle}</span>}
             </button>
             {expanded &&
             <div className="collapsible-body">

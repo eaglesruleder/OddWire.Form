@@ -81,6 +81,14 @@ export class InstanceEntity
         this.schedulePersist();
     }
 
+    setControls(values: Record<string, Record<string, unknown>>): void
+    {
+        for (const [param, value] of Object.entries(values))
+            this.applyControl(param, value);
+
+        this.schedulePersist();
+    }
+
     // Intent: key-lossy — a null/empty value drops the param entry entirely rather than storing an empty
     private applyValue(param: string, subkey: string, value: unknown): void
     {
@@ -91,6 +99,19 @@ export class InstanceEntity
         }
 
         const merged: ControlInstance = { ...this.get(param), param, [subkey]: value };
+
+        const exists = this.instance.controls.some(control => control.param === param);
+
+        const controls = exists
+        ?   this.instance.controls.map(control => control.param === param ? merged : control)
+        :   [...this.instance.controls, merged];
+
+        this.instance = { ...this.instance, controls };
+    }
+
+    private applyControl(param: string, value: Record<string, unknown>): void
+    {
+        const merged: ControlInstance = { ...this.get(param), param, ...value };
 
         const exists = this.instance.controls.some(control => control.param === param);
 

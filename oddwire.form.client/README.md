@@ -12,6 +12,7 @@ The client owns the product behaviour:
 - `ControlList` walks a control scope and groups adjacent tabs
 - `ControlItem` resolves a form control with the instance overlay and dispatches by `type`
 - lookup-backed radio/dropdown controls read from the aggregated lookup DB
+- looper controls render row-scoped child instances from a template control list
 - settings manage global lookup tables, bundled form installs, and monster imports
 
 All persistence is browser-local through `localforage`. The server does not provide form APIs.

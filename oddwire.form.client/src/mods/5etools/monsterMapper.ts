@@ -28,23 +28,69 @@ export type RawMonster =
     ,resist?: DamageList
     ,immune?: DamageList
     ,conditionImmune?: DamageList
+    ,trait?: NamedEntries[]
+    ,action?: NamedEntries[]
+    ,bonus?: NamedEntries[]
+    ,reaction?: NamedEntries[]
+    ,legendary?: NamedEntries[]
+    ,mythic?: NamedEntries[]
+    ,variant?: VariantEntry[]
+    ,spellcasting?: SpellcastingEntry[]
     ,hasToken?: boolean
+    ,_copy?: MonsterCopy
+    ,_mod?: MonsterModMap
+    };
+
+export type MonsterCopy = {
+    name: string;
+    source?: string;
+    _mod?: MonsterModMap;
+    };
+
+export type MonsterModMap = Record<string, MonsterMod | MonsterMod[]>;
+export type MonsterMod =
+    {mode?: string
+    ,items?: unknown
+    ,replace?: string
+    ,names?: string[]
+    ,index?: number
     };
 
 type DamageEntry = string | { resist?: string[]; immune?: string[]; vulnerable?: string[]; conditionImmune?: string[]; note?: string };
 type DamageList = DamageEntry[];
+type Entries = (string | { name?: string; type?: string; entries?: Entries; items?: Entries; [key: string]: unknown })[];
+type NamedEntries = { name?: string; entries?: Entries };
+type VariantEntry = NamedEntries & { type?: string; source?: string; page?: number; _version?: unknown };
+type SpellcastingEntry =
+    {name?: string
+    ,type?: string
+    ,ability?: string
+    ,headerEntries?: Entries
+    ,will?: string[]
+    ,daily?: Record<string, string[]>
+    ,spells?: Record<string, { slots?: number; spells?: string[] }>
+    };
+type LooperControlPatch = { hidden: true } | { hidden: false; value: LooperRowInstance[] };
+type LooperRowInstance = { controls: { param: string; value: unknown; rows?: number }[] };
+type ControlPatch = { hidden: true } | { hidden: false; value: string; rows?: number };
 
-export type MonsterRow = Record<string, string>;
+export type MonsterRow = Record<string, unknown>;
+export type MonsterImportOptions =
+    {collection?: string
+    ,session?: string
+    };
 
 // #region Mapper
 
 // Intent: THE dedicated mapper — one 5etools bestiary entry → one flat, de-tagged Monster row.
 // Reads top-to-bottom as the row shape; every non-trivial field resolves through a named helper below.
-export function mapMonster(m: RawMonster): MonsterRow
+export function mapMonster(m: RawMonster, options: MonsterImportOptions = {}): MonsterRow
 {
     return (
         {monster: m.name
         ,name: m.name
+        ,collection: options.collection ?? ''
+        ,session: options.session ?? ''
         ,source: m.source ?? ''
         ,cr: crToText(m.cr)
         ,size: sizeToText(m.size)
@@ -54,27 +100,42 @@ export function mapMonster(m: RawMonster): MonsterRow
         ,hp: hpToText(m.hp)
         ,speed: speedToText(m.speed)
         ,passive: m.passive != null ? String(m.passive) : ''
+        ,...abilityModColumns(m)
         ,...saveColumns(m)
         ,...skillColumns(m)
-        ,damageVuln: damageListToText(m.vulnerable)
-        ,damageRes: damageListToText(m.resist)
-        ,damageImm: damageListToText(m.immune)
-        ,conditionImm: damageListToText(m.conditionImmune)
-        ,senses: listToText(m.senses)
-        ,languages: listToText(m.languages)
+        ,damageVuln: hideWhenEmpty(damageListToText(m.vulnerable))
+        ,damageRes: hideWhenEmpty(damageListToText(m.resist))
+        ,damageImm: hideWhenEmpty(damageListToText(m.immune))
+        ,conditionImm: hideWhenEmpty(damageListToText(m.conditionImmune))
+        ,senses: rowsWhenFilled(listToText(m.senses))
+        ,...combatLoopers(m)
+        ,languages: rowsWhenFilled(listToText(m.languages))
         ,fluff: ''
         ,image: tokenUrl(m)
         });
 }
 
-export const mapMonsters = (raw: RawMonster[]): MonsterRow[] =>
-    raw.map(mapMonster);
+export const mapMonsters = (raw: RawMonster[], options: MonsterImportOptions = {}): MonsterRow[] =>
+    raw.map(monster => mapMonster(monster, options));
 
 // #endregion
 
 // #region Abilities → save & skill columns
 
 const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'] as const;
+
+function abilityModColumns(m: RawMonster): MonsterRow
+{
+    const out: MonsterRow = {};
+
+    for (const ability of ABILITIES)
+    {
+        const score = m[ability];
+        out[`${ability}Mod`] = typeof score === 'number' ? fmtMod(abilityMod(score)) : '';
+    }
+
+    return out;
+}
 
 // Intent: proficient save is stored pre-formatted ('+5'); otherwise fall back to the raw ability modifier
 function saveColumns(m: RawMonster): MonsterRow
@@ -240,6 +301,221 @@ function damageListToText(list: DamageList | undefined): string
 const listToText = (list: string[] | undefined): string =>
     (list ?? []).map(deTag).join(', ');
 
+function hideWhenEmpty(value: string): ControlPatch
+{
+    return value
+    ?   { hidden: false, value, rows: lineCount(value) }
+    :   { hidden: true };
+}
+
+function rowsWhenFilled(value: string): string | { value: string; rows: number }
+{
+    return value
+    ?   { value, rows: lineCount(value) }
+    :   value;
+}
+
+function hiddenWhenEmpty(entries: unknown[] | undefined): { hidden: boolean }
+{
+    return { hidden: !entries || entries.length < 1 };
+}
+
+function combatLoopers(m: RawMonster): MonsterRow
+{
+    return (
+        {trait: namedEntriesSection(m.trait)
+        ,spellcasting: spellcastingSection(m.spellcasting)
+        ,tabSpellcasting: hiddenWhenEmpty(m.spellcasting)
+        ,action: actionSection(m.action)
+        ,bonus: namedEntriesSection(m.bonus)
+        ,reaction: namedEntriesSection(m.reaction)
+        ,legendary: namedEntriesSection(m.legendary)
+        ,mythic: namedEntriesSection(m.mythic)
+        ,variant: variantSection(m.variant)
+        });
+}
+
+function namedEntriesSection(entries: NamedEntries[] | undefined): LooperControlPatch
+{
+    return looperSection(entries?.map(entry =>
+        rowInstance(
+            {name: entry.name ?? ''
+            ,entries: entriesToText(entry.entries)
+            })));
+}
+
+function actionSection(entries: NamedEntries[] | undefined): LooperControlPatch
+{
+    return looperSection(entries?.map(entry =>
+    {
+        const attack = parseAttack(entriesToRawText(entry.entries));
+
+        return rowInstance(
+            {name: entry.name ?? ''
+            ,toHit: attack.toHit
+            ,damage: attack.damage
+            ,entries: actionEntriesToText(entry.entries)
+            });
+    }));
+}
+
+function variantSection(entries: VariantEntry[] | undefined): LooperControlPatch
+{
+    return looperSection(entries?.map(entry =>
+        rowInstance(
+            {name: entry.name ?? ''
+            ,source: entry.source ?? ''
+            ,page: entry.page != null ? String(entry.page) : ''
+            ,type: entry.type ?? ''
+            ,entries: entriesToText(entry.entries)
+            })));
+}
+
+function spellcastingSection(entries: SpellcastingEntry[] | undefined): LooperControlPatch
+{
+    return looperSection(entries?.map(entry =>
+        rowInstance(
+            {name: entry.name ?? ''
+            ,ability: entry.ability ?? ''
+            ,type: entry.type ?? ''
+            ,headerEntries: entriesToText(entry.headerEntries)
+            ,will: listToText(entry.will)
+            ,daily: dailySpellsToText(entry.daily)
+            ,spells: slotSpellsToText(entry.spells)
+            })));
+}
+
+function looperSection(rows: LooperRowInstance[] | undefined): LooperControlPatch
+{
+    return rows && rows.length > 0
+    ?   { hidden: false, value: rows }
+    :   { hidden: true };
+}
+
+function rowInstance(values: Record<string, unknown>): LooperRowInstance
+{
+    return (
+        {controls: Object.entries(values)
+            .filter(([, value]) => value !== '' && value != null)
+            .map(([param, value]) => typeof value === 'string'
+                ?   { param, value, rows: lineCount(value) }
+                :   { param, value })
+        });
+}
+
+function lineCount(value: string): number
+{
+    return value.split(/\r\n|\r|\n/).length;
+}
+
+function dailySpellsToText(daily: SpellcastingEntry['daily']): string
+{
+    if (!daily)
+        return '';
+
+    return Object.entries(daily)
+        .map(([frequency, spells]) => `${frequency}: ${listToText(spells)}`)
+        .join('\n');
+}
+
+function slotSpellsToText(spells: SpellcastingEntry['spells']): string
+{
+    if (!spells)
+        return '';
+
+    return Object.entries(spells)
+        .map(([level, slot]) =>
+        {
+            const label = level === '0'
+            ?   'Cantrips'
+            :   `Level ${level}${slot.slots != null ? ` (${slot.slots} slots)` : ''}`;
+
+            return `${label}: ${listToText(slot.spells)}`;
+        })
+        .join('\n');
+}
+
+function entriesToText(entries: Entries | undefined): string
+{
+    if (!Array.isArray(entries))
+        return '';
+
+    return entries
+        .map(entryToText)
+        .filter(Boolean)
+        .join('\n');
+}
+
+function entriesToRawText(entries: Entries | undefined): string
+{
+    if (!Array.isArray(entries))
+        return '';
+
+    return entries
+        .map(entryToRawText)
+        .filter(Boolean)
+        .join('\n');
+}
+
+function entryToText(entry: Entries[number]): string
+{
+    if (typeof entry === 'string')
+        return deTag(entry);
+
+    const heading = entry.name ? `${entry.name}. ` : '';
+    const children = entriesToText(entry.entries ?? entry.items);
+
+    return `${heading}${children}`.trim();
+}
+
+function entryToRawText(entry: Entries[number]): string
+{
+    if (typeof entry === 'string')
+        return entry;
+
+    const heading = entry.name ? `${entry.name}. ` : '';
+    const children = entriesToRawText(entry.entries ?? entry.items);
+
+    return `${heading}${children}`.trim();
+}
+
+function actionEntriesToText(entries: Entries | undefined): string
+{
+    return stripParsedAttackParts(entriesToText(entries));
+}
+
+function stripParsedAttackParts(text: string): string
+{
+    return text
+        .replace(/^(?:[a-z]{1,3}(?:,[a-z]{1,3})?\s+)?[+-]?\d+\s+to hit,?\s*/i, '')
+        .replace(/\s*(?:or\s+|plus\s+)?\d+\s*\([^)]*\)\s+[a-zA-Z]+\s+damage(?:\s+(?:in melee|at range|if used with two hands))?/g, '')
+        .replace(/\.\s*,\s*and\s+/g, '. ')
+        .replace(/\.\s*\./g, '.')
+        .replace(/\. the target/g, '. The target')
+        .replace(/\. if /g, '. If ')
+        .replace(/\s+,/g, ',')
+        .replace(/,\s*\./g, '.')
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+}
+
+function parseAttack(text: string): { toHit: string; damage: string }
+{
+    const hit = text.match(/\{@hit\s*([+-]?\d+)\}/);
+    const damage = text.match(/\{@damage\s*([^}]*)\}\)\s+([a-zA-Z]+)\s+damage/);
+
+    return (
+        {toHit: hit ? `1d20${fmtSigned(Number(hit[1]))}` : ''
+        ,damage: damage ? `${compactFormula(damage[1])}${damage[2][0].toLowerCase()}` : ''
+        });
+}
+
+const fmtSigned = (n: number): string =>
+    n >= 0 ? `+${n}` : `${n}`;
+
+const compactFormula = (formula: string): string =>
+    formula.replace(/\s+/g, '');
+
 // Intent: PoC image source — 5etools' public token path. Likely-correct scheme; verify a couple render before trusting it.
 const tokenUrl = (m: RawMonster): string =>
     m.hasToken && m.source
@@ -260,6 +536,8 @@ const cap = (s: string): string => s ? s[0].toUpperCase() + s.slice(1) : s;
 const MONSTER_COLUMNS: { param: string; label: string }[] =
     [{ param: 'monster', label: 'Key' }
     ,{ param: 'name', label: 'Name' }
+    ,{ param: 'collection', label: 'Collection' }
+    ,{ param: 'session', label: 'Session' }
     ,{ param: 'source', label: 'Source' }
     ,{ param: 'cr', label: 'Challenge' }
     ,{ param: 'size', label: 'Size' }
@@ -269,6 +547,12 @@ const MONSTER_COLUMNS: { param: string; label: string }[] =
     ,{ param: 'hp', label: 'Hit Points' }
     ,{ param: 'speed', label: 'Speed' }
     ,{ param: 'passive', label: 'Passive Perception' }
+    ,{ param: 'strMod', label: 'STR Mod' }
+    ,{ param: 'dexMod', label: 'DEX Mod' }
+    ,{ param: 'conMod', label: 'CON Mod' }
+    ,{ param: 'intMod', label: 'INT Mod' }
+    ,{ param: 'wisMod', label: 'WIS Mod' }
+    ,{ param: 'chaMod', label: 'CHA Mod' }
     ,{ param: 'strSave', label: 'STR Save' }
     ,{ param: 'dexSave', label: 'DEX Save' }
     ,{ param: 'conSave', label: 'CON Save' }
@@ -298,6 +582,15 @@ const MONSTER_COLUMNS: { param: string; label: string }[] =
     ,{ param: 'damageImm', label: 'Damage Immunities' }
     ,{ param: 'conditionImm', label: 'Condition Immunities' }
     ,{ param: 'senses', label: 'Senses' }
+    ,{ param: 'trait', label: 'Traits' }
+    ,{ param: 'spellcasting', label: 'Spellcasting' }
+    ,{ param: 'tabSpellcasting', label: 'Spellcasting Tab' }
+    ,{ param: 'action', label: 'Actions' }
+    ,{ param: 'bonus', label: 'Bonus Actions' }
+    ,{ param: 'reaction', label: 'Reactions' }
+    ,{ param: 'legendary', label: 'Legendary Actions' }
+    ,{ param: 'mythic', label: 'Mythic Actions' }
+    ,{ param: 'variant', label: 'Variants' }
     ,{ param: 'languages', label: 'Languages' }
     ,{ param: 'fluff', label: 'Description' }
     ,{ param: 'image', label: 'Image' }

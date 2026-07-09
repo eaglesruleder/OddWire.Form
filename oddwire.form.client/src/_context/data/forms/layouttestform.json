@@ -12,6 +12,16 @@
                 { "type": "label", "param": "treesHeading", "label": "Nested layout trees" },
                 { "type": "text", "param": "treeName", "label": "Tree name", "value": "" },
                 {
+                    "type": "looper",
+                    "param": "branches",
+                    "label": "Branches",
+                    "addRows": true,
+                    "controls": [
+                        { "type": "text", "param": "branchName", "label": "Branch name", "value": "" },
+                        { "type": "textarea", "param": "branchNote", "label": "Branch note", "value": "" }
+                    ]
+                },
+                {
                     "type": "collapsible",
                     "param": "colOuter",
                     "label": "Outer collapsible",

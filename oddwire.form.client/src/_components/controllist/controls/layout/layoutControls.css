@@ -19,6 +19,24 @@
   cursor: pointer;
 }
 .collapsible-chevron { flex: 0 0 auto; }
+.collapsible-title {
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.collapsible-subtitle {
+  flex: 0 1 auto;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 400;
+  opacity: 0.72;
+  overflow: hidden;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .collapsible-body { padding: 12px; }
 
 .tab-bar { display: flex; gap: 4px; }

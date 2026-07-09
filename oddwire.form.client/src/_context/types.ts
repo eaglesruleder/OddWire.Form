@@ -1,10 +1,21 @@
 import type { ControlDef } from '../_components/controllist';
 
+export type ParamList = string | string[];
+export type DisplayParam = string | null;
+export type ProjectionValue = {
+    label: string;
+    value: unknown;
+    };
+export type ProjectionRecord = Record<string, ProjectionValue | unknown>;
+
 export type FormDefinition = {
     formId: string;
     label?: string;
     version?: string;
-    displayParam?: string[];
+    displayParam?: DisplayParam[];
+    groupParam?: ParamList;
+    filterParam?: string[];
+    orderParam?: ParamList;
     dateModified?: string;
     controls: ControlDef[];
     };
@@ -25,7 +36,11 @@ export type FormIndexEntry = {
     formId: string;
     label?: string;
     version?: string;
-    displayParam?: string[];
+    displayParam?: DisplayParam[];
+    groupParam?: ParamList;
+    filterParam?: string[];
+    orderParam?: ParamList;
+    projectionLabels?: Record<string, string>;
     dateModified?: string;
     };
 
@@ -33,7 +48,10 @@ export type InstanceIndexEntry = {
     instanceId: string;
     formId?: string;
     dateModified?: string;
-    display: Record<string, unknown>;
+    display: ProjectionRecord;
+    group?: ProjectionRecord;
+    filter?: ProjectionRecord;
+    order?: ProjectionRecord;
     };
 
 // Intent: '_global' is the reserved scope key holding shared tables; real formIds hold form-local overrides

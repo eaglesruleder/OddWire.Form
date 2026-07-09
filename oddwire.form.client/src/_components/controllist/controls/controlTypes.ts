@@ -10,6 +10,7 @@ export type CoreControlProps<TValue> = {
     placeholder?: string;
     className?: string;
     cellClassName?: string;   // grid-cell class on the ControlBase row (e.g. col-N spans in a control-grid)
+    rows?: number;
     // Intent: true → render the value as static text; a function → render its own node in place of the control
     // (param is fixed to the unknown-valued props so readonly stays invariant across TValue and rides the {...props} spread)
     readonly?: boolean | ((props: CoreControlProps<unknown>) => ReactNode);
@@ -47,14 +48,19 @@ export type ControlDefBase<TType extends string, TValue = unknown> = {
     placeholder?: string;
     stacked?: boolean;
     cellClassName?: string;
+    rows?: number;
     };
 
-export type LabelControlDef = ControlDefBase<'label', string>;
+export type LabelControlDef = ControlDefBase<'label', string> & {
+    labelFor?: string;
+    };
 export type TextControlDef = ControlDefBase<'text', string> & {
     valueType?: TextValueType;
     keyboardType?: KeyboardType;
     };
-export type TextAreaControlDef = ControlDefBase<'textarea', string>;
+export type TextAreaControlDef = ControlDefBase<'textarea', string> & {
+    rows?: number;
+    };
 export type CheckboxControlDef = ControlDefBase<'checkbox', boolean>;
 export type ImageControlDef = ControlDefBase<'image', string>;   // value is a URL/URN loaded into <img>; static (capture is future)
 export type RadioControlDef = ControlDefBase<'radio', string> & {
@@ -66,14 +72,29 @@ export type DropdownControlDef = ControlDefBase<'dropdown', string> & {
     dbOptions?: DbOptions;
     };
 
+export type LooperRowInstance = {
+    formId?: string;
+    instanceId?: string;
+    dateModified?: string;
+    controls: {
+        param: string;
+        [key: string]: unknown;
+        }[];
+    };
+
 export type CollapsibleControlDef = ControlDefBase<'collapsible'> & {
     controls: ControlDef[];
+    subtitle?: string;
     };
 export type TabControlDef = ControlDefBase<'tab'> & {
     controls: ControlDef[];
     };
 export type PopupControlDef = ControlDefBase<'popup'> & {
     controls: ControlDef[];
+    };
+export type LooperControlDef = ControlDefBase<'looper', LooperRowInstance[]> & {
+    controls: ControlDef[];
+    addRows?: boolean;
     };
 
 export type ControlDef =
@@ -86,4 +107,5 @@ export type ControlDef =
     | DropdownControlDef
     | CollapsibleControlDef
     | TabControlDef
-    | PopupControlDef;
+    | PopupControlDef
+    | LooperControlDef;

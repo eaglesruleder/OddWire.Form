@@ -14,6 +14,10 @@ export type
     ,ControlInstance
     ,FormIndexEntry
     ,InstanceIndexEntry
+    ,DisplayParam
+    ,ParamList
+    ,ProjectionRecord
+    ,ProjectionValue
     ,LookupDatabase
     ,LookupTable
     } from './types';

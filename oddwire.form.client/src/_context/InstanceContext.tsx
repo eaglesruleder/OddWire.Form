@@ -1,9 +1,9 @@
 import { createContext } from 'react';
 import localforage from 'localforage';
 
-import type { FormInstance, ControlInstance, InstanceIndexEntry } from './types';
+import type { FormInstance, ControlInstance, InstanceIndexEntry, ProjectionRecord } from './types';
 
-import { formStore } from './FormContext';
+import { formStore, paramList } from './FormContext';
 import { upsert } from './storeUtils';
 import testInstance from './data/instances/testinstance.json';
 
@@ -94,7 +94,7 @@ class InstanceStore implements InstanceContextValue
             {instanceId: instance.instanceId as string
             ,formId: instance.formId
             ,dateModified: instance.dateModified
-            ,display: this.projectDisplay(instance)
+            ,...this.projectListFields(instance)
             };
 
         this.index = upsert(this.index, entry, e => e.instanceId === instance.instanceId);
@@ -102,15 +102,29 @@ class InstanceStore implements InstanceContextValue
     };
 
     // Intent: display is a form concern — read displayParam off the form store (FK-style navigation)
-    private projectDisplay = (instance: FormInstance): Record<string, unknown> =>
+    private projectListFields = (instance: FormInstance): Pick<InstanceIndexEntry, 'display' | 'group' | 'filter' | 'order'> =>
     {
-        const displayParam = formStore.getDisplayParam(instance.formId ?? '');
+        const params = formStore.getProjectionParams(instance.formId ?? '');
 
-        const display: Record<string, unknown> = {};
-        for (const param of displayParam)
-            display[param] = instance.controls.find(control => control.param === param)?.value;
+        return {
+            display: this.projectParams(instance, (params.displayParam ?? []).filter((param): param is string => typeof param === 'string'), params.projectionLabels),
+            group: this.projectParams(instance, paramList(params.groupParam), params.projectionLabels),
+            filter: this.projectParams(instance, params.filterParam ?? [], params.projectionLabels),
+            order: this.projectParams(instance, paramList(params.orderParam), params.projectionLabels)
+        };
+    };
 
-        return display;
+    private projectParams = (instance: FormInstance, params: string[], labels: Record<string, string> | undefined): ProjectionRecord =>
+    {
+        const values: ProjectionRecord = {};
+
+        for (const param of params)
+            values[param] =
+                {label: labels?.[param] ?? param
+                ,value: instance.controls.find(control => control.param === param)?.value
+                };
+
+        return values;
     };
 }
 
