@@ -25,6 +25,9 @@ export type FormExportDefinition = {
     api?: string | boolean | {
         url?: string;
         };
+    pdf?: boolean | {
+        enabled?: boolean;
+        };
     url?: string;
     };
 

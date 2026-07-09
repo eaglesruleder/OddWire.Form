@@ -11,7 +11,7 @@ import type { ControlDef, TabSection } from '../_components/controllist';
 import { FormContext, InstanceContext, LookupContext, InstanceEntity } from '../_context';
 import { StripLayout } from '../_components/layout';
 import { ControlList, ControlTab, ControlError, ControlButton, DbContext, resolveLabel } from '../_components/controllist';
-import { flattenInstance } from '../export';
+import { flattenInstance, valuesPdf } from '../export';
 
 function buildRootTabSections(controls: ControlDef[], instance: InstanceEntity): TabSection[]
 {
@@ -178,6 +178,33 @@ export function FormPage()
         }
     };
 
+    const onExportPdf = async () =>
+    {
+        if (!form || !instance)
+            return;
+
+        if (!exportPdfEnabled(form))
+            return;
+
+        setExporting(true);
+
+        try
+        {
+            instance.flush();
+
+            downloadBlob(await valuesPdf(flattenInstance(form, instance)), `${form.label ?? 'form'}.pdf`);
+            setToastMessage('PDF exported');
+        }
+        catch (error)
+        {
+            setToastMessage(error instanceof Error ? error.message : 'PDF export failed');
+        }
+        finally
+        {
+            setExporting(false);
+        }
+    };
+
     const errorPage = (message: string) =>
         <StripLayout left="←" leftLink="/" title="OddWire Forms">
             <Form>
@@ -201,6 +228,7 @@ export function FormPage()
     const backLink = landingBackLink(formId, form.groupParam, instance);
 
     const exportUrl = exportApiUrl(form);
+    const hasPdfExport = exportPdfEnabled(form);
     const hasExport = !!form.export;
 
     const actionsIcon =
@@ -236,6 +264,9 @@ export function FormPage()
                                 {exportUrl &&
                                     <ControlButton label={exporting ? 'Exporting...' : 'Export API'} onClick={onExportApi} disabled={exporting} />
                                 }
+                                {hasPdfExport &&
+                                    <ControlButton label={exporting ? 'Exporting...' : 'Export PDF'} onClick={onExportPdf} disabled={exporting} />
+                                }
                             </div>
                         </StripLayout>
                     </Modal>
@@ -252,18 +283,44 @@ export function FormPage()
 
 function exportApiUrl(form: FormDefinition): string | undefined
 {
-    const config = form.export;
+    return exportUrl(form, 'api');
+}
 
+function exportPdfEnabled(form: FormDefinition): boolean
+{
+    const value = form.export?.pdf;
+    return value === true || (typeof value === 'object' && value.enabled !== false);
+}
+
+function exportUrl(form: FormDefinition, key: 'api'): string | undefined
+{
+    const config = form.export;
     if (!config)
         return undefined;
 
-    if (typeof config.api === 'string')
-        return config.api;
+    const value = config[key];
 
-    if (typeof config.api === 'object' && config.api.url)
-        return config.api.url;
+    if (typeof value === 'string')
+        return value;
 
-    return config.url;
+    if (typeof value === 'object' && value.url)
+        return value.url;
+
+    return key === 'api' ? config.url : undefined;
+}
+
+function downloadBlob(blob: Blob, fileName: string): void
+{
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    URL.revokeObjectURL(url);
 }
 
 function landingBackLink(formId: string, groupParam: ParamList | undefined, instance: InstanceEntity): string
