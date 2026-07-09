@@ -2,6 +2,8 @@ import { useContext, useEffect, useReducer, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+import Toast from 'react-bootstrap/Toast';
+import ToastContainer from 'react-bootstrap/ToastContainer';
 
 import type { FormDefinition, InstanceChange, ParamList } from '../_context';
 import type { ControlDef, TabSection } from '../_components/controllist';
@@ -42,7 +44,7 @@ export function FormPage()
     const [autosaving, setAutosaving] = useState(false);
     const [actionsOpen, setActionsOpen] = useState(false);
     const [exporting, setExporting] = useState(false);
-    const [exportMessage, setExportMessage] = useState<string>();
+    const [toastMessage, setToastMessage] = useState<string>();
     const [, bumpRender] = useReducer(tick => tick + 1, 0);
 
     const instanceRef = useRef<InstanceEntity | null>(null);
@@ -123,6 +125,23 @@ export function FormPage()
         return id;
     };
 
+    const onHeaderAction = () =>
+    {
+        if (form?.export)
+        {
+            setActionsOpen(true);
+            return;
+        }
+
+        if (autosaving)
+        {
+            setToastMessage('Autosaving enabled');
+            return;
+        }
+
+        void onSave();
+    };
+
     const onExportApi = async () =>
     {
         if (!form || !instance)
@@ -133,7 +152,6 @@ export function FormPage()
             return;
 
         setExporting(true);
-        setExportMessage(undefined);
 
         try
         {
@@ -148,11 +166,11 @@ export function FormPage()
             if (!response.ok)
                 throw new Error(`Export failed (${response.status})`);
 
-            setExportMessage('Exported');
+            setToastMessage('Exported');
         }
         catch (error)
         {
-            setExportMessage(error instanceof Error ? error.message : 'Export failed');
+            setToastMessage(error instanceof Error ? error.message : 'Export failed');
         }
         finally
         {
@@ -183,14 +201,15 @@ export function FormPage()
     const backLink = landingBackLink(formId, form.groupParam, instance);
 
     const exportUrl = exportApiUrl(form);
+    const hasExport = !!form.export;
 
     const actionsIcon =
         <button
             type="button"
             className="strip-btn"
-            onClick={() => setActionsOpen(true)}
-            title="Export"
-        >...</button>;
+            onClick={onHeaderAction}
+            title={hasExport ? 'Export' : autosaving ? 'Autosaving' : 'Save'}
+        >{hasExport ? '...' : '💾'}</button>;
 
     const isRootTab = form.controls[0]?.type === 'tab';
 
@@ -203,25 +222,29 @@ export function FormPage()
                     :   <ControlList controls={form.controls} instance={instance} onChange={onChange} />
                     }
                 </Form>
-                <Modal show={actionsOpen} onHide={() => setActionsOpen(false)} centered dialogClassName="popup-dialog" contentClassName="popup-content">
-                    <StripLayout
-                        title="Export"
-                        left={<button type="button" className="strip-btn" onClick={() => setActionsOpen(false)}>←</button>}
-                    >
-                        <div className="flex column gap">
-                            {!autosaving
-                            ?   <ControlButton label="Save" onClick={onSave} />
-                            :   <div className="control-static">Autosaving</div>
-                            }
-                            {exportUrl &&
-                                <ControlButton label={exporting ? 'Exporting...' : 'Export API'} onClick={onExportApi} disabled={exporting} />
-                            }
-                            {exportMessage &&
-                                <div className="control-static">{exportMessage}</div>
-                            }
-                        </div>
-                    </StripLayout>
-                </Modal>
+                {hasExport &&
+                    <Modal show={actionsOpen} onHide={() => setActionsOpen(false)} centered dialogClassName="popup-dialog" contentClassName="popup-content">
+                        <StripLayout
+                            title="Export"
+                            left={<button type="button" className="strip-btn" onClick={() => setActionsOpen(false)}>←</button>}
+                        >
+                            <div className="flex column gap">
+                                {!autosaving
+                                ?   <ControlButton label="Save" onClick={onSave} />
+                                :   <div className="control-static">Autosaving</div>
+                                }
+                                {exportUrl &&
+                                    <ControlButton label={exporting ? 'Exporting...' : 'Export API'} onClick={onExportApi} disabled={exporting} />
+                                }
+                            </div>
+                        </StripLayout>
+                    </Modal>
+                }
+                <ToastContainer position="bottom-center" className="p-3">
+                    <Toast show={!!toastMessage} onClose={() => setToastMessage(undefined)} delay={1600} autohide>
+                        <Toast.Body>{toastMessage}</Toast.Body>
+                    </Toast>
+                </ToastContainer>
             </DbContext.Provider>
         </StripLayout>
         );
