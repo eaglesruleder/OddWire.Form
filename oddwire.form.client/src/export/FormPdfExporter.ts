@@ -5,10 +5,6 @@ import { flattenInstance } from './flattenInstance';
 import type { FlattenedInstanceExport } from './flattenInstance';
 import { PdfWriter } from './PdfWriter';
 
-const MARGIN = 48;
-const LINE_H = 16;
-const FALLBACK_TOP = 792 - MARGIN;
-
 export class FormPdfExporter
 {
     private readonly form: FormDefinition;
@@ -25,10 +21,7 @@ export class FormPdfExporter
         const flattened = flattenInstance(this.form, this.instance);
         const writer = await PdfWriter.create();
 
-        if (flattened.pdf.length > 0)
-            this.writePlacedValues(writer, flattened);
-        else
-            this.writeValueList(writer, flattened);
+        this.writePlacedValues(writer, flattened);
 
         return writer.toBlob();
     }
@@ -40,38 +33,6 @@ export class FormPdfExporter
                 for (const box of boxes)
                     writer.writeText(pageIndex(pageKey), String(field.value ?? ''), box);
     }
-
-    private writeValueList(writer: PdfWriter, flattened: FlattenedInstanceExport): void
-    {
-        writer.writeLines(valueLines(flattened), {
-            x: MARGIN,
-            y: FALLBACK_TOP,
-            lineHeight: LINE_H,
-            marginBottom: MARGIN,
-            });
-    }
-}
-
-function valueLines(flattened: FlattenedInstanceExport): string[]
-{
-    return [
-        flattened.label ?? 'Form Export',
-        `Form ID: ${flattened.formId}`,
-        `Instance ID: ${flattened.instanceId ?? ''}`,
-        '',
-        ...Object.entries(flattened.values).flatMap(([key, value]) => formatValue(key, value)),
-        ];
-}
-
-function formatValue(key: string, value: unknown): string[]
-{
-    if (Array.isArray(value))
-        return [`${key}:`, ...value.flatMap((entry, index) => formatValue(`  ${index + 1}`, entry))];
-
-    if (typeof value === 'object' && value !== null)
-        return [`${key}:`, ...Object.entries(value).flatMap(([childKey, childValue]) => formatValue(`  ${childKey}`, childValue))];
-
-    return [`${key}: ${String(value ?? '')}`];
 }
 
 function pageIndex(page: string): number
