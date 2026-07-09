@@ -1,26 +1,125 @@
 {
     "formId": "11111111-1111-4111-8111-111111111111",
     "label": "Contact Form",
-    "version": "1.0.1",
-    "export": { "api": "/api/form/contact", "pdf": true },
-    "displayParam": ["fullName", "email"],
+    "version": "1.0.2",
+    "export": {
+        "api": "/api/form/contact",
+        "pdf": true
+    },
+    "displayParam": [
+        "fullName",
+        "email"
+    ],
     "controls": [
-        { "type": "label", "param": "title", "label": "Contact" },
-        { "type": "text", "param": "fullName", "label": "Full name", "value": "Dillon O’Dwyer", "pdf": { "0": [{ "x": 10, "y": 10 }] } },
-        { "type": "text", "param": "email", "label": "Email", "value": "", "valueType": "email", "keyboardType": "email" },
-        { "type": "text", "param": "age", "label": "Age", "value": "", "valueType": "int", "keyboardType": "numeric" },
-        { "type": "textarea", "param": "bio", "label": "Short bio", "value": "IT Coordinator and Software Developer" },
-        { "type": "text", "param": "secret", "label": "Should never appear", "value": "hidden", "hidden": true },
-        { "type": "checkbox", "param": "subscribed", "label": "Subscribe to updates", "value": true },
+        {
+            "type": "label",
+            "param": "title",
+            "label": "Contact"
+        },
+        {
+            "type": "text",
+            "param": "fullName",
+            "label": "Full name",
+            "value": "Dillon O’Dwyer",
+            "pdf": {
+                "0": [
+                    {
+                        "x": 150,
+                        "y": 705
+                    }
+                ]
+            }
+        },
+        {
+            "type": "text",
+            "param": "email",
+            "label": "Email",
+            "value": "",
+            "valueType": "email",
+            "keyboardType": "email",
+            "pdf": {
+                "0": [
+                    {
+                        "x": 150,
+                        "y": 668
+                    }
+                ]
+            }
+        },
+        {
+            "type": "text",
+            "param": "age",
+            "label": "Age",
+            "value": "",
+            "valueType": "int",
+            "keyboardType": "numeric",
+            "pdf": {
+                "0": [
+                    {
+                        "x": 150,
+                        "y": 631
+                    }
+                ]
+            }
+        },
+        {
+            "type": "textarea",
+            "param": "bio",
+            "label": "Short bio",
+            "value": "IT Coordinator and Software Developer",
+            "pdf": {
+                "0": [
+                    {
+                        "x": 150,
+                        "y": 594
+                    }
+                ]
+            }
+        },
+        {
+            "type": "text",
+            "param": "secret",
+            "label": "Should never appear",
+            "value": "hidden",
+            "hidden": true
+        },
+        {
+            "type": "checkbox",
+            "param": "subscribed",
+            "label": "Subscribe to updates",
+            "value": true,
+            "pdf": {
+                "0": [
+                    {
+                        "x": 150,
+                        "y": 557
+                    }
+                ]
+            }
+        },
         {
             "type": "radio",
             "param": "status",
             "label": "Status",
             "value": "open",
             "controls": [
-                { "value": "open", "label": "Open" },
-                { "value": "closed", "label": "Closed" }
-            ]
+                {
+                    "value": "open",
+                    "label": "Open"
+                },
+                {
+                    "value": "closed",
+                    "label": "Closed"
+                }
+            ],
+            "pdf": {
+                "0": [
+                    {
+                        "x": 150,
+                        "y": 520
+                    }
+                ]
+            }
         },
         {
             "type": "dropdown",
@@ -28,19 +127,67 @@
             "label": "Priority",
             "value": "medium",
             "controls": [
-                { "value": "low", "label": "Low" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "high", "label": "High" }
-            ]
+                {
+                    "value": "low",
+                    "label": "Low"
+                },
+                {
+                    "value": "medium",
+                    "label": "Medium"
+                },
+                {
+                    "value": "high",
+                    "label": "High"
+                }
+            ],
+            "pdf": {
+                "0": [
+                    {
+                        "x": 150,
+                        "y": 483
+                    }
+                ]
+            }
         },
-        { "type": "slider", "param": "volume", "label": "Volume (unsupported on purpose)", "value": 5 },
+        {
+            "type": "slider",
+            "param": "volume",
+            "label": "Volume (unsupported on purpose)",
+            "value": 5
+        },
         {
             "type": "collapsible",
             "param": "detailsSection",
             "label": "More details",
             "controls": [
-                { "type": "text", "param": "company", "label": "Company", "value": "" },
-                { "type": "textarea", "param": "notes", "label": "Notes", "value": "" }
+                {
+                    "type": "text",
+                    "param": "company",
+                    "label": "Company",
+                    "value": "",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 150,
+                                "y": 446
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "textarea",
+                    "param": "notes",
+                    "label": "Notes",
+                    "value": "",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 150,
+                                "y": 409
+                            }
+                        ]
+                    }
+                }
             ]
         },
         {
@@ -48,8 +195,18 @@
             "param": "evidencePopup",
             "label": "Add evidence",
             "controls": [
-                { "type": "text", "param": "evidenceUrl", "label": "Link", "value": "" },
-                { "type": "textarea", "param": "evidenceDesc", "label": "Description", "value": "" }
+                {
+                    "type": "text",
+                    "param": "evidenceUrl",
+                    "label": "Link",
+                    "value": ""
+                },
+                {
+                    "type": "textarea",
+                    "param": "evidenceDesc",
+                    "label": "Description",
+                    "value": ""
+                }
             ]
         },
         {
@@ -57,7 +214,22 @@
             "param": "tabContact",
             "label": "Contact",
             "controls": [
-                { "type": "text", "param": "phone", "label": "Phone", "value": "", "valueType": "phone", "keyboardType": "tel" }
+                {
+                    "type": "text",
+                    "param": "phone",
+                    "label": "Phone",
+                    "value": "",
+                    "valueType": "phone",
+                    "keyboardType": "tel",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 150,
+                                "y": 372
+                            }
+                        ]
+                    }
+                }
             ]
         },
         {
@@ -65,8 +237,34 @@
             "param": "tabAddress",
             "label": "Address",
             "controls": [
-                { "type": "text", "param": "street", "label": "Street", "value": "" },
-                { "type": "text", "param": "city", "label": "City", "value": "" }
+                {
+                    "type": "text",
+                    "param": "street",
+                    "label": "Street",
+                    "value": "",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 150,
+                                "y": 335
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "text",
+                    "param": "city",
+                    "label": "City",
+                    "value": "",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 150,
+                                "y": 298
+                            }
+                        ]
+                    }
+                }
             ]
         }
     ]

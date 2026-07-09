@@ -2,6 +2,7 @@ import type { PDFFont, PDFPage } from 'pdf-lib';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 
 import type { ControlPdfBox } from '../_components/controllist';
+import type { PdfTemplateRecord } from '../_context';
 
 const PAGE_SIZE: [number, number] = [612, 792];
 const DEFAULT_FONT_SIZE = 11;
@@ -18,9 +19,9 @@ export class PdfWriter
         this.font = font;
     }
 
-    static async create(): Promise<PdfWriter>
+    static async create(template?: PdfTemplateRecord): Promise<PdfWriter>
     {
-        const pdf = await PDFDocument.create();
+        const pdf = template ? await createFromTemplate(template) : await PDFDocument.create();
         const font = await pdf.embedFont(StandardFonts.Helvetica);
 
         return new PdfWriter(pdf, font);
@@ -73,4 +74,34 @@ export class PdfWriter
 
         return this.pdf.getPage(index);
     }
+}
+
+async function createFromTemplate(template: PdfTemplateRecord): Promise<PDFDocument>
+{
+    const bytes = await template.blob.arrayBuffer();
+
+    if (isPdf(template))
+        return PDFDocument.load(bytes);
+
+    const pdf = await PDFDocument.create();
+    const image = isPng(template)
+        ? await pdf.embedPng(bytes)
+        : await pdf.embedJpg(bytes);
+
+    const page = pdf.addPage([image.width, image.height]);
+    page.drawImage(image, { x: 0, y: 0, width: image.width, height: image.height });
+
+    return pdf;
+}
+
+function isPdf(template: PdfTemplateRecord): boolean
+{
+    return template.type === 'application/pdf'
+    ||  template.fileName.toLowerCase().endsWith('.pdf');
+}
+
+function isPng(template: PdfTemplateRecord): boolean
+{
+    return template.type === 'image/png'
+    ||  template.fileName.toLowerCase().endsWith('.png');
 }

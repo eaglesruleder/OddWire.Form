@@ -4,11 +4,12 @@ import type { ReactNode } from 'react';
 import { FormContext, formStore } from './FormContext';
 import { InstanceContext, instanceStore } from './InstanceContext';
 import { LookupContext, lookupStore } from './LookupContext';
+import { PdfTemplateContext, pdfTemplateStore } from './PdfTemplateContext';
 import { StripLayout } from '../_components/layout';
 
 export function ContextsProvider({ children }: { children: ReactNode })
 {
-    const [initialised, setInitialised] = useState(formStore.initialised && instanceStore.initialised && lookupStore.initialised);
+    const [initialised, setInitialised] = useState(formStore.initialised && instanceStore.initialised && lookupStore.initialised && pdfTemplateStore.initialised);
 
     useEffect(() =>
     {
@@ -20,6 +21,7 @@ export function ContextsProvider({ children }: { children: ReactNode })
             await formStore.initialise();
             await instanceStore.initialise();
             await lookupStore.initialise();
+            await pdfTemplateStore.initialise();
 
             if (active)
                 setInitialised(true);
@@ -39,7 +41,9 @@ export function ContextsProvider({ children }: { children: ReactNode })
         <FormContext.Provider value={formStore}>
             <InstanceContext.Provider value={instanceStore}>
                 <LookupContext.Provider value={lookupStore}>
-                    {children}
+                    <PdfTemplateContext.Provider value={pdfTemplateStore}>
+                        {children}
+                    </PdfTemplateContext.Provider>
                 </LookupContext.Provider>
             </InstanceContext.Provider>
         </FormContext.Provider>

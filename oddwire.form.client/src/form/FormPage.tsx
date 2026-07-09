@@ -8,7 +8,7 @@ import ToastContainer from 'react-bootstrap/ToastContainer';
 import type { FormDefinition, InstanceChange, ParamList } from '../_context';
 import type { ControlDef, TabSection } from '../_components/controllist';
 
-import { FormContext, InstanceContext, LookupContext, InstanceEntity } from '../_context';
+import { FormContext, InstanceContext, LookupContext, PdfTemplateContext, InstanceEntity } from '../_context';
 import { StripLayout } from '../_components/layout';
 import { ControlList, ControlTab, ControlError, ControlButton, DbContext, resolveLabel } from '../_components/controllist';
 import { flattenInstance, FormPdfExporter } from '../export';
@@ -34,6 +34,7 @@ export function FormPage()
     const { getForm } = useContext(FormContext);
     const { getInstance, save } = useContext(InstanceContext);
     const { get: getDb } = useContext(LookupContext);
+    const { getTemplate } = useContext(PdfTemplateContext);
     const navigate = useNavigate();
 
     const { formId = '', instanceId } = useParams();
@@ -192,7 +193,8 @@ export function FormPage()
         {
             instance.flush();
 
-            downloadBlob(await new FormPdfExporter(form, instance).export(), `${form.label ?? 'form'}.pdf`);
+            const template = await getTemplate(form.formId);
+            downloadBlob(await new FormPdfExporter(form, instance, template).export(), `${form.label ?? 'form'}.pdf`);
             setToastMessage('PDF exported');
         }
         catch (error)

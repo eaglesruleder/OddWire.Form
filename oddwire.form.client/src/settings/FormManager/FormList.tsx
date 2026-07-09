@@ -1,27 +1,53 @@
-import { useContext, useReducer } from 'react';
+import { useContext, useEffect, useReducer, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import type { ButtonProps } from 'react-bootstrap/Button';
 
 import type { FormDefinition } from '../../_context';
-import { FormContext } from '../../_context';
+import { FormContext, PdfTemplateContext } from '../../_context';
 
-// Intent: the install catalogue is every JSON in data/forms — dropping a file in makes it installable, no manual list
+import { loadFormPackage } from './formPackages';
+import type { BundledFormPackage } from './formPackages';
+
+// Intent: the install catalogue is every loose JSON form plus every zip package in data/forms — no manual list
 const bundledForms = Object.values(import.meta.glob('../../_context/data/forms/*.json', { eager: true }))
-    .map(module => (module as { default: FormDefinition }).default)
-    .sort((a, b) => (a.label ?? a.formId).localeCompare(b.label ?? b.formId));
+    .map(module => ({ form: (module as { default: FormDefinition }).default }));
+
+const bundledPackageUrls = Object.values(import.meta.glob('../../_context/data/forms/*.zip', { eager: true, query: '?url', import: 'default' }))
+    .map(url => String(url));
 
 type FormAction = { label: string; variant: ButtonProps['variant'] };
 
 export function FormList()
 {
     const { list, saveForm } = useContext(FormContext);
+    const { saveTemplate } = useContext(PdfTemplateContext);
+    const [packages, setPackages] = useState<BundledFormPackage[]>(bundledForms);
     const [, bumpRender] = useReducer(tick => tick + 1, 0);
+
+    useEffect(() =>
+    {
+        let active = true;
+
+        (async () =>
+        {
+            const loaded = await Promise.all(bundledPackageUrls.map(loadFormPackage));
+
+            if (active)
+                setPackages(mergePackages([...bundledForms, ...loaded]));
+        })();
+
+        return () => { active = false; };
+    }, []);
 
     const installed = new Map(list().map(entry => [entry.formId, entry.version]));
 
-    const install = async (form: FormDefinition) =>
+    const install = async (pkg: BundledFormPackage) =>
     {
-        await saveForm(form);
+        const formId = await saveForm(pkg.form);
+
+        if (pkg.template)
+            await saveTemplate(formId, pkg.template.fileName, pkg.template.type, pkg.template.blob);
+
         bumpRender();
     };
 
@@ -38,8 +64,9 @@ export function FormList()
 
     return (
         <div className="flex column gap">
-            {bundledForms.map(form =>
+            {packages.map(pkg =>
             {
+                const form = pkg.form;
                 const action = actionFor(form);
 
                 return (
@@ -48,12 +75,23 @@ export function FormList()
                             {form.label ?? form.formId}
                             {form.version ? <span className="text-muted"> v{form.version}</span> : null}
                         </span>
-                        <Button size="sm" variant={action.variant} onClick={() => install(form)}>{action.label}</Button>
+                        <Button size="sm" variant={action.variant} onClick={() => install(pkg)}>{action.label}</Button>
                     </div>
                     );
             })}
         </div>
         );
+}
+
+function mergePackages(packages: BundledFormPackage[]): BundledFormPackage[]
+{
+    const byFormId = new Map<string, BundledFormPackage>();
+
+    for (const pkg of packages)
+        byFormId.set(pkg.form.formId, pkg);
+
+    return [...byFormId.values()]
+        .sort((a, b) => (a.form.label ?? a.form.formId).localeCompare(b.form.label ?? b.form.formId));
 }
 
 // Intent: numeric dotted-segment compare — returns >0 when a is newer than b

@@ -1,5 +1,6 @@
 import type { FormDefinition } from '../_context';
 import { InstanceEntity } from '../_context';
+import type { PdfTemplateRecord } from '../_context';
 
 import { flattenInstance } from './flattenInstance';
 import type { FlattenedInstanceExport } from './flattenInstance';
@@ -9,17 +10,19 @@ export class FormPdfExporter
 {
     private readonly form: FormDefinition;
     private readonly instance: InstanceEntity;
+    private readonly template?: PdfTemplateRecord;
 
-    constructor(form: FormDefinition, instance: InstanceEntity)
+    constructor(form: FormDefinition, instance: InstanceEntity, template?: PdfTemplateRecord)
     {
         this.form = form;
         this.instance = instance;
+        this.template = template;
     }
 
     async export(): Promise<Blob>
     {
         const flattened = flattenInstance(this.form, this.instance);
-        const writer = await PdfWriter.create();
+        const writer = await PdfWriter.create(this.template);
 
         this.writePlacedValues(writer, flattened);
 
