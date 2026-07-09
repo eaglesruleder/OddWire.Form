@@ -7,6 +7,7 @@ import type { LookupTable } from '../../_context';
 import { LookupContext, GLOBAL_SCOPE } from '../../_context';
 import { ControlTab } from '../../_components/controllist';
 import { ControlDropdown } from '../../_components/controllist/controls';
+import { MonsterImportPopup } from '../../mods/5etools';
 import { SettingsPane } from '../SettingsPane';
 import { ImportFromFileButton } from './ImportFromFileButton';
 import { DbSchemaEditor } from './DbSchemaEditor';
@@ -153,6 +154,7 @@ export function DbManager()
             <Button variant="danger" disabled={!selectedTable} onClick={onClear}>Clear</Button>
             }
             <ImportFromFileButton onImport={onImport} label="Import" className="btn btn-outline-primary" />
+            <MonsterImportPopup />
         </>;
 
     return (

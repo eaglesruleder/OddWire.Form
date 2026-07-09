@@ -14,6 +14,7 @@ export type
     ,ControlInstance
     ,FormIndexEntry
     ,InstanceIndexEntry
+    ,ParamList
     ,LookupDatabase
     ,LookupTable
     } from './types';

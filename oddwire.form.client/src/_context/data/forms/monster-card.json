@@ -1,15 +1,19 @@
 {
     "formId": "44444444-4444-4444-8444-444444444444",
     "label": "Monster Reference Card",
-    "version": "0.1.0",
+    "version": "0.3.0",
   "displayParam": [ "name", "alignment", "type", "cr" ],
+  "groupParam": "collection",
+  "filterParam": [ "session" ],
+  "orderParam": [ "name", "cr" ],
     "controls": [
         {
             "type": "tab",
             "param": "tabCore",
             "label": "Core",
             "controls": [
-                { "type": "dropdown", "param": "monster", "label": "Monster", "dbOptions": { "table": "Monster", "valueParam": "monster", "labelParam": "name", "fill": true } },
+                { "type": "dropdown", "param": "monster", "label": "Monster", "cellClassName": "sm-col-12 lg-col-9", "dbOptions": { "table": "Monster", "valueParam": "monster", "labelParam": "name", "fill": true } },
+                { "type": "image", "param": "image", "label": "Token", "cellClassName": "sm-col-12 lg-col-3" },
                 { "type": "text", "param": "name", "label": "Name", "stacked": true, "cellClassName": "sm-col-12 lg-col-6" },
                 { "type": "text", "param": "alignment", "label": "Alignment", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
                 { "type": "text", "param": "cr", "label": "Challenge", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
@@ -63,10 +67,195 @@
             "param": "tabCombat",
             "label": "Combat",
             "controls": [
-                { "type": "textarea", "param": "damageVuln", "label": "Vulnerabilities" },
-                { "type": "textarea", "param": "damageRes", "label": "Resistances" },
-                { "type": "textarea", "param": "conditionImm", "label": "Cond. Immunities" },
-                { "type": "textarea", "param": "senses", "label": "Senses" }
+                {
+                    "type": "tab",
+                    "param": "tabInitiative",
+                    "label": "Initiative",
+                    "controls": [
+                        { "type": "textarea", "param": "damageVuln", "label": "Vulnerabilities", "cellClassName": "sm-col-6 lg-col-3" },
+                        { "type": "textarea", "param": "damageRes", "label": "Resistances", "cellClassName": "sm-col-6 lg-col-3" },
+                        { "type": "textarea", "param": "damageImm", "label": "Damage Immunities", "cellClassName": "sm-col-6 lg-col-3" },
+                        { "type": "textarea", "param": "conditionImm", "label": "Cond. Immunities", "cellClassName": "sm-col-6 lg-col-3" },
+                        { "type": "label", "param": "actionSectionTitle", "label": "Actions", "labelFor": "action" },
+                        {
+                            "type": "looper",
+                            "param": "action",
+                            "label": "Actions",
+                            "addRows": true,
+                            "value": [{}],
+                            "controls": [
+                                {
+                                    "type": "collapsible",
+                                    "param": "actionItem",
+                                    "label": "{name}",
+                                    "subtitle": "{toHit} {damage}",
+                                    "controls": [
+                                        { "type": "text", "param": "name", "label": "Name", "stacked": true, "cellClassName": "sm-col-12 lg-col-6" },
+                                        { "type": "text", "param": "toHit", "label": "To Hit", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
+                                        { "type": "text", "param": "damage", "label": "Damage", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
+                                        { "type": "textarea", "param": "entries", "label": "Entries" }
+                                    ]
+                                }
+                            ]
+                        },
+                        { "type": "label", "param": "bonusSectionTitle", "label": "Bonus Actions", "labelFor": "bonus" },
+                        {
+                            "type": "looper",
+                            "param": "bonus",
+                            "label": "Bonus Actions",
+                            "addRows": true,
+                            "value": [{}],
+                            "controls": [
+                                {
+                                    "type": "collapsible",
+                                    "param": "bonusItem",
+                                    "label": "{name}",
+                                    "controls": [
+                                        { "type": "text", "param": "name", "label": "Name", "stacked": true },
+                                        { "type": "textarea", "param": "entries", "label": "Entries" }
+                                    ]
+                                }
+                            ]
+                        },
+                        { "type": "label", "param": "reactionSectionTitle", "label": "Reactions", "labelFor": "reaction" },
+                        {
+                            "type": "looper",
+                            "param": "reaction",
+                            "label": "Reactions",
+                            "addRows": true,
+                            "value": [{}],
+                            "controls": [
+                                {
+                                    "type": "collapsible",
+                                    "param": "reactionItem",
+                                    "label": "{name}",
+                                    "controls": [
+                                        { "type": "text", "param": "name", "label": "Name", "stacked": true },
+                                        { "type": "textarea", "param": "entries", "label": "Entries" }
+                                    ]
+                                }
+                            ]
+                        },
+                        { "type": "label", "param": "legendarySectionTitle", "label": "Legendary Actions", "labelFor": "legendary" },
+                        {
+                            "type": "looper",
+                            "param": "legendary",
+                            "label": "Legendary Actions",
+                            "addRows": true,
+                            "value": [{}],
+                            "controls": [
+                                {
+                                    "type": "collapsible",
+                                    "param": "legendaryItem",
+                                    "label": "{name}",
+                                    "controls": [
+                                        { "type": "text", "param": "name", "label": "Name", "stacked": true },
+                                        { "type": "textarea", "param": "entries", "label": "Entries" }
+                                    ]
+                                }
+                            ]
+                        },
+                        { "type": "label", "param": "mythicSectionTitle", "label": "Mythic Actions", "labelFor": "mythic" },
+                        {
+                            "type": "looper",
+                            "param": "mythic",
+                            "label": "Mythic Actions",
+                            "addRows": true,
+                            "value": [{}],
+                            "controls": [
+                                {
+                                    "type": "collapsible",
+                                    "param": "mythicItem",
+                                    "label": "{name}",
+                                    "controls": [
+                                        { "type": "text", "param": "name", "label": "Name", "stacked": true },
+                                        { "type": "textarea", "param": "entries", "label": "Entries" }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "tab",
+                    "param": "tabSpellcasting",
+                    "label": "Spellcasting",
+                    "controls": [
+                        { "type": "label", "param": "spellcastingSectionTitle", "label": "Spellcasting", "labelFor": "spellcasting" },
+                        {
+                            "type": "looper",
+                            "param": "spellcasting",
+                            "label": "Spellcasting",
+                            "addRows": true,
+                            "value": [{}],
+                            "controls": [
+                                {
+                                    "type": "collapsible",
+                                    "param": "spellcastingItem",
+                                    "label": "{name}",
+                                    "controls": [
+                                        { "type": "text", "param": "name", "label": "Name", "stacked": true, "cellClassName": "sm-col-12 lg-col-6" },
+                                        { "type": "text", "param": "ability", "label": "Ability", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
+                                        { "type": "text", "param": "type", "label": "Type", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
+                                        { "type": "textarea", "param": "headerEntries", "label": "Header" },
+                                        { "type": "textarea", "param": "will", "label": "At Will" },
+                                        { "type": "textarea", "param": "daily", "label": "Daily" },
+                                        { "type": "textarea", "param": "spells", "label": "Spell Slots" }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "tab",
+                    "param": "tabTraits",
+                    "label": "Traits",
+                    "controls": [
+                        { "type": "textarea", "param": "senses", "label": "Senses" },
+                        { "type": "label", "param": "traitSectionTitle", "label": "Traits", "labelFor": "trait" },
+                        {
+                            "type": "looper",
+                            "param": "trait",
+                            "label": "Traits",
+                            "addRows": true,
+                            "value": [{}],
+                            "controls": [
+                                {
+                                    "type": "collapsible",
+                                    "param": "traitItem",
+                                    "label": "{name}",
+                                    "controls": [
+                                        { "type": "text", "param": "name", "label": "Name", "stacked": true },
+                                        { "type": "textarea", "param": "entries", "label": "Entries" }
+                                    ]
+                                }
+                            ]
+                        },
+                        { "type": "label", "param": "variantSectionTitle", "label": "Variants", "labelFor": "variant" },
+                        {
+                            "type": "looper",
+                            "param": "variant",
+                            "label": "Variants",
+                            "addRows": true,
+                            "value": [{}],
+                            "controls": [
+                                {
+                                    "type": "collapsible",
+                                    "param": "variantItem",
+                                    "label": "{name}",
+                                    "controls": [
+                                        { "type": "text", "param": "name", "label": "Name", "stacked": true, "cellClassName": "sm-col-12 lg-col-6" },
+                                        { "type": "text", "param": "source", "label": "Source", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
+                                        { "type": "text", "param": "page", "label": "Page", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
+                                        { "type": "text", "param": "type", "label": "Type", "stacked": true },
+                                        { "type": "textarea", "param": "entries", "label": "Entries" }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
             ]
         },
         {
@@ -74,14 +263,19 @@
             "param": "tabLore",
             "label": "Lore",
             "controls": [
-                { "type": "text", "param": "source", "label": "Source", "stacked": true },
+                { "type": "text", "param": "collection", "label": "Collection", "stacked": true, "cellClassName": "sm-col-12 lg-col-4" },
+                { "type": "text", "param": "session", "label": "Session", "stacked": true, "cellClassName": "sm-col-12 lg-col-4" },
+                { "type": "text", "param": "source", "label": "Source", "stacked": true, "cellClassName": "sm-col-12 lg-col-4" },
                 { "type": "textarea", "param": "languages", "label": "Languages" },
                 { "type": "textarea", "param": "fluff", "label": "Description" },
               {
                 "type": "popup",
                 "param": "imgpopup",
                 "label": "Picture",
-                "controls": [{ "type": "image", "param": "image", "label": "Token" }]
+                "controls": [
+                    { "type": "image", "param": "image", "label": "Token" },
+                    { "type": "image", "param": "image", "label": "Token", "cellClassName": "sm-col-12 lg-col-3" }
+                ]
               }
             ]
         }

@@ -4,7 +4,6 @@ import { InstanceEntity } from '../../../../_context';
 import { ControlButton } from '../ControlButton';
 import type { ControlDef, LooperRowInstance } from '../controlTypes';
 import { ControlList } from '../../ControlList';
-import './layoutControls.css';
 
 type ControlLooperProps = {
     param: string;
@@ -28,16 +27,7 @@ export function ControlLooper(props: ControlLooperProps)
         props.onChange?.([...rows, { controls: [] }], props.param);
 
     return (
-        <div className="looper mb-3">
-            <div className="flex items-center gap mb-3">
-                <div className="separator fill">{props.label ?? props.param}</div>
-                {addRows &&
-                <ControlButton label="+ Add Row" size="sm" variant="outline-primary" onClick={addRow} />
-                }
-            </div>
-            {rows.length < 1 &&
-            <div className="control-static looper-empty">No rows</div>
-            }
+        <div>
             {rows.map((row, rowIndex) =>
             {
                 const rowEntity = new InstanceEntity(row as FormInstance);
@@ -48,12 +38,14 @@ export function ControlLooper(props: ControlLooperProps)
                 };
 
                 return (
-                    <div key={row.instanceId ?? rowIndex} className="looper-row bubble">
-                        <div className="looper-row-title">Row {rowIndex + 1}</div>
+                    <div key={row.instanceId ?? rowIndex}>
                         <ControlList controls={props.controls} instance={rowEntity} onChange={onRowChange} />
                     </div>
                     );
             })}
+            {addRows &&
+            <ControlButton label="+ Add Row" size="sm" variant="outline-primary" onClick={addRow} />
+            }
         </div>
         );
 }

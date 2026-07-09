@@ -33,7 +33,7 @@ export function ControlList({ controls, instance, onChange, depth = 0 }: Control
         const sections = [];
         while (i < controls.length && controls[i].type === 'tab')
         {
-            const tab = controls[i] as ControlDef & { controls: ControlDef[] };
+            const tab = instance.resolve(controls[i]) as ControlDef & { controls: ControlDef[] };
             if (!tab.hidden)
                 sections.push({ param: tab.param, label: resolveLabel(tab.label, instance) ?? tab.param, controls: tab.controls });
             i++;

@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 import localforage from 'localforage';
 
-import type { FormDefinition, FormIndexEntry } from './types';
+import type { FormDefinition, FormIndexEntry, ParamList } from './types';
 
 import { instanceStore } from './InstanceContext';
 import { upsert } from './storeUtils';
@@ -30,6 +30,24 @@ function sameParams(a?: string[], b?: string[]): boolean
         return false;
 
     return a.every((param, i) => param === b[i]);
+}
+
+export function paramList(value: ParamList | undefined): string[]
+{
+    if (!value)
+        return [];
+
+    return Array.isArray(value) ? value : [value];
+}
+
+function projectionParams(form: Pick<FormIndexEntry, 'displayParam' | 'groupParam' | 'filterParam' | 'orderParam'>): string[]
+{
+    return [
+        ...(form.displayParam ?? []),
+        ...paramList(form.groupParam),
+        ...(form.filterParam ?? []),
+        ...paramList(form.orderParam)
+    ];
 }
 
 export type FormContextValue = {
@@ -66,6 +84,17 @@ class FormStore implements FormContextValue
     getDisplayParam = (formId: string): string[] =>
         this.index.find(entry => entry.formId === formId)?.displayParam ?? [];
 
+    getProjectionParams = (formId: string): Pick<FormIndexEntry, 'displayParam' | 'groupParam' | 'filterParam' | 'orderParam'> =>
+    {
+        const entry = this.index.find(entry => entry.formId === formId);
+        return {
+            displayParam: entry?.displayParam,
+            groupParam: entry?.groupParam,
+            filterParam: entry?.filterParam,
+            orderParam: entry?.orderParam
+        };
+    };
+
     saveForm = async (form: FormDefinition): Promise<string> =>
     {
         // Intent: identity lives on the object, not the storage key — key is derived from it
@@ -74,13 +103,13 @@ class FormStore implements FormContextValue
         // Intent: forms are published elsewhere — persist dateModified as provided, never stamp it here
         // Intent: the prior displayParam is already cached in the index — no old-body load needed
         const prior = this.index.find(entry => entry.formId === form.formId);
-        const displayParamChanged = prior !== undefined && !sameParams(prior.displayParam, form.displayParam);
+        const projectionParamChanged = prior !== undefined && !sameParams(projectionParams(prior), projectionParams(form));
 
         await storage.setItem(form.formId, form);
         await this.refreshIndex(form);
 
         // Intent: a changed displayParam invalidates every existing instance's cached display projection
-        if (displayParamChanged && instanceStore.list(form.formId).length > 0)
+        if (projectionParamChanged && instanceStore.list(form.formId).length > 0)
             await instanceStore.reindexForm(form.formId);
 
         return form.formId;
@@ -93,6 +122,9 @@ class FormStore implements FormContextValue
             ,label: form.label
             ,version: form.version
             ,displayParam: form.displayParam
+            ,groupParam: form.groupParam
+            ,filterParam: form.filterParam
+            ,orderParam: form.orderParam
             ,dateModified: form.dateModified
             };
 

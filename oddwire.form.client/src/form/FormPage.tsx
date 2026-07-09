@@ -12,10 +12,13 @@ import { ControlList, ControlTab, ControlError, DbContext, resolveLabel } from '
 function buildRootTabSections(controls: ControlDef[], instance: InstanceEntity): TabSection[]
 {
     const sections: TabSection[] = controls
+        .map(control => instance.resolve(control))
         .filter(control => control.type === 'tab' && !control.hidden)
         .map(tab => ({ param: tab.param, label: resolveLabel(tab.label, instance) ?? tab.param, controls: (tab as { controls: ControlDef[] }).controls }));
 
-    const strays = controls.filter(control => control.type !== 'tab' && !control.hidden);
+    const strays = controls
+        .map(control => instance.resolve(control))
+        .filter(control => control.type !== 'tab' && !control.hidden);
     if (strays.length > 0)
         sections.push({ param: '__unexpected', label: '⚠', controls: strays, notice: 'Unexpected controls in tab layout' });
 

@@ -49,7 +49,9 @@ export type ControlDefBase<TType extends string, TValue = unknown> = {
     cellClassName?: string;
     };
 
-export type LabelControlDef = ControlDefBase<'label', string>;
+export type LabelControlDef = ControlDefBase<'label', string> & {
+    labelFor?: string;
+    };
 export type TextControlDef = ControlDefBase<'text', string> & {
     valueType?: TextValueType;
     keyboardType?: KeyboardType;
@@ -78,6 +80,7 @@ export type LooperRowInstance = {
 
 export type CollapsibleControlDef = ControlDefBase<'collapsible'> & {
     controls: ControlDef[];
+    subtitle?: string;
     };
 export type TabControlDef = ControlDefBase<'tab'> & {
     controls: ControlDef[];
