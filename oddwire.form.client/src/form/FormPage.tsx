@@ -2,7 +2,7 @@ import { useContext, useEffect, useReducer, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 
-import type { FormDefinition, InstanceChange } from '../_context';
+import type { FormDefinition, InstanceChange, ParamList } from '../_context';
 import type { ControlDef, TabSection } from '../_components/controllist';
 
 import { FormContext, InstanceContext, LookupContext, InstanceEntity } from '../_context';
@@ -136,6 +136,8 @@ export function FormPage()
     if (!instance)
         return errorPage('Instance Not Found');
 
+    const backLink = landingBackLink(formId, form.groupParam, instance);
+
     const saveIcon =
         <button
             type="button"
@@ -148,7 +150,7 @@ export function FormPage()
     const isRootTab = form.controls[0]?.type === 'tab';
 
     return (
-        <StripLayout left="←" leftLink="/" right={saveIcon} title={form.label ?? 'OddWire Forms'}>
+        <StripLayout left="←" leftLink={backLink} right={saveIcon} title={form.label ?? 'OddWire Forms'}>
             <DbContext.Provider value={getDb(formId)}>
                 <Form>
                     {isRootTab
@@ -159,4 +161,27 @@ export function FormPage()
             </DbContext.Provider>
         </StripLayout>
         );
+}
+
+function landingBackLink(formId: string, groupParam: ParamList | undefined, instance: InstanceEntity): string
+{
+    const params = new URLSearchParams({ FormID: formId });
+
+    for (const param of paramList(groupParam))
+    {
+        const value = instance.get(param)?.value;
+
+        if (value != null && value !== '')
+            params.set(param, String(value));
+    }
+
+    return `/?${params.toString()}`;
+}
+
+function paramList(value: ParamList | undefined): string[]
+{
+    if (!value)
+        return [];
+
+    return Array.isArray(value) ? value : [value];
 }

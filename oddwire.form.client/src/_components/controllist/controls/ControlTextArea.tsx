@@ -13,6 +13,6 @@ export const ControlTextArea = (props: CoreControlProps<string>) =>
             value={props.value ?? ''}
             disabled={props.disabled}
             onChange={e => props.onChange?.(e.target.value, props.param)}
-            rows={3}
+            rows={props.rows ?? 3}
         />
     </ControlBase>;

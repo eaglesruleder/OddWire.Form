@@ -37,6 +37,23 @@ export type RawMonster =
     ,variant?: VariantEntry[]
     ,spellcasting?: SpellcastingEntry[]
     ,hasToken?: boolean
+    ,_copy?: MonsterCopy
+    ,_mod?: MonsterModMap
+    };
+
+export type MonsterCopy = {
+    name: string;
+    source?: string;
+    _mod?: MonsterModMap;
+    };
+
+export type MonsterModMap = Record<string, MonsterMod | MonsterMod[]>;
+export type MonsterMod =
+    {mode?: string
+    ,items?: unknown
+    ,replace?: string
+    ,names?: string[]
+    ,index?: number
     };
 
 type DamageEntry = string | { resist?: string[]; immune?: string[]; vulnerable?: string[]; conditionImmune?: string[]; note?: string };
@@ -54,22 +71,26 @@ type SpellcastingEntry =
     ,spells?: Record<string, { slots?: number; spells?: string[] }>
     };
 type LooperControlPatch = { hidden: true } | { hidden: false; value: LooperRowInstance[] };
-type LooperRowInstance = { controls: { param: string; value: unknown }[] };
-type ControlPatch = { hidden: true } | { hidden: false; value: string };
+type LooperRowInstance = { controls: { param: string; value: unknown; rows?: number }[] };
+type ControlPatch = { hidden: true } | { hidden: false; value: string; rows?: number };
 
 export type MonsterRow = Record<string, unknown>;
+export type MonsterImportOptions =
+    {collection?: string
+    ,session?: string
+    };
 
 // #region Mapper
 
 // Intent: THE dedicated mapper — one 5etools bestiary entry → one flat, de-tagged Monster row.
 // Reads top-to-bottom as the row shape; every non-trivial field resolves through a named helper below.
-export function mapMonster(m: RawMonster): MonsterRow
+export function mapMonster(m: RawMonster, options: MonsterImportOptions = {}): MonsterRow
 {
     return (
         {monster: m.name
         ,name: m.name
-        ,collection: 'NPCs'
-        ,session: 'Session 1'
+        ,collection: options.collection ?? ''
+        ,session: options.session ?? ''
         ,source: m.source ?? ''
         ,cr: crToText(m.cr)
         ,size: sizeToText(m.size)
@@ -79,28 +100,42 @@ export function mapMonster(m: RawMonster): MonsterRow
         ,hp: hpToText(m.hp)
         ,speed: speedToText(m.speed)
         ,passive: m.passive != null ? String(m.passive) : ''
+        ,...abilityModColumns(m)
         ,...saveColumns(m)
         ,...skillColumns(m)
         ,damageVuln: hideWhenEmpty(damageListToText(m.vulnerable))
         ,damageRes: hideWhenEmpty(damageListToText(m.resist))
         ,damageImm: hideWhenEmpty(damageListToText(m.immune))
         ,conditionImm: hideWhenEmpty(damageListToText(m.conditionImmune))
-        ,senses: listToText(m.senses)
+        ,senses: rowsWhenFilled(listToText(m.senses))
         ,...combatLoopers(m)
-        ,languages: listToText(m.languages)
+        ,languages: rowsWhenFilled(listToText(m.languages))
         ,fluff: ''
         ,image: tokenUrl(m)
         });
 }
 
-export const mapMonsters = (raw: RawMonster[]): MonsterRow[] =>
-    raw.map(mapMonster);
+export const mapMonsters = (raw: RawMonster[], options: MonsterImportOptions = {}): MonsterRow[] =>
+    raw.map(monster => mapMonster(monster, options));
 
 // #endregion
 
 // #region Abilities → save & skill columns
 
 const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'] as const;
+
+function abilityModColumns(m: RawMonster): MonsterRow
+{
+    const out: MonsterRow = {};
+
+    for (const ability of ABILITIES)
+    {
+        const score = m[ability];
+        out[`${ability}Mod`] = typeof score === 'number' ? fmtMod(abilityMod(score)) : '';
+    }
+
+    return out;
+}
 
 // Intent: proficient save is stored pre-formatted ('+5'); otherwise fall back to the raw ability modifier
 function saveColumns(m: RawMonster): MonsterRow
@@ -269,8 +304,15 @@ const listToText = (list: string[] | undefined): string =>
 function hideWhenEmpty(value: string): ControlPatch
 {
     return value
-    ?   { hidden: false, value }
+    ?   { hidden: false, value, rows: lineCount(value) }
     :   { hidden: true };
+}
+
+function rowsWhenFilled(value: string): string | { value: string; rows: number }
+{
+    return value
+    ?   { value, rows: lineCount(value) }
+    :   value;
 }
 
 function hiddenWhenEmpty(entries: unknown[] | undefined): { hidden: boolean }
@@ -355,8 +397,15 @@ function rowInstance(values: Record<string, unknown>): LooperRowInstance
     return (
         {controls: Object.entries(values)
             .filter(([, value]) => value !== '' && value != null)
-            .map(([param, value]) => ({ param, value }))
+            .map(([param, value]) => typeof value === 'string'
+                ?   { param, value, rows: lineCount(value) }
+                :   { param, value })
         });
+}
+
+function lineCount(value: string): number
+{
+    return value.split(/\r\n|\r|\n/).length;
 }
 
 function dailySpellsToText(daily: SpellcastingEntry['daily']): string
@@ -498,6 +547,12 @@ const MONSTER_COLUMNS: { param: string; label: string }[] =
     ,{ param: 'hp', label: 'Hit Points' }
     ,{ param: 'speed', label: 'Speed' }
     ,{ param: 'passive', label: 'Passive Perception' }
+    ,{ param: 'strMod', label: 'STR Mod' }
+    ,{ param: 'dexMod', label: 'DEX Mod' }
+    ,{ param: 'conMod', label: 'CON Mod' }
+    ,{ param: 'intMod', label: 'INT Mod' }
+    ,{ param: 'wisMod', label: 'WIS Mod' }
+    ,{ param: 'chaMod', label: 'CHA Mod' }
     ,{ param: 'strSave', label: 'STR Save' }
     ,{ param: 'dexSave', label: 'DEX Save' }
     ,{ param: 'conSave', label: 'CON Save' }

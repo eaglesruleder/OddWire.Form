@@ -1,7 +1,8 @@
 import { createContext } from 'react';
 import localforage from 'localforage';
 
-import type { FormDefinition, FormIndexEntry, ParamList } from './types';
+import type { ControlDef } from '../_components/controllist';
+import type { DisplayParam, FormDefinition, FormIndexEntry, ParamList } from './types';
 
 import { instanceStore } from './InstanceContext';
 import { upsert } from './storeUtils';
@@ -43,11 +44,21 @@ export function paramList(value: ParamList | undefined): string[]
 function projectionParams(form: Pick<FormIndexEntry, 'displayParam' | 'groupParam' | 'filterParam' | 'orderParam'>): string[]
 {
     return [
-        ...(form.displayParam ?? []),
+        ...displayParams(form.displayParam),
         ...paramList(form.groupParam),
         ...(form.filterParam ?? []),
         ...paramList(form.orderParam)
     ];
+}
+
+function displayParams(value: DisplayParam[] | undefined): string[]
+{
+    return (value ?? []).filter((param): param is string => typeof param === 'string');
+}
+
+function sameLabels(a: Record<string, string> | undefined, b: Record<string, string>, params: string[]): boolean
+{
+    return params.every(param => a?.[param] === b[param]);
 }
 
 export type FormContextValue = {
@@ -81,17 +92,18 @@ class FormStore implements FormContextValue
     list = (): FormIndexEntry[] =>
         this.index;
 
-    getDisplayParam = (formId: string): string[] =>
+    getDisplayParam = (formId: string): DisplayParam[] =>
         this.index.find(entry => entry.formId === formId)?.displayParam ?? [];
 
-    getProjectionParams = (formId: string): Pick<FormIndexEntry, 'displayParam' | 'groupParam' | 'filterParam' | 'orderParam'> =>
+    getProjectionParams = (formId: string): Pick<FormIndexEntry, 'displayParam' | 'groupParam' | 'filterParam' | 'orderParam' | 'projectionLabels'> =>
     {
         const entry = this.index.find(entry => entry.formId === formId);
         return {
             displayParam: entry?.displayParam,
             groupParam: entry?.groupParam,
             filterParam: entry?.filterParam,
-            orderParam: entry?.orderParam
+            orderParam: entry?.orderParam,
+            projectionLabels: entry?.projectionLabels
         };
     };
 
@@ -103,10 +115,13 @@ class FormStore implements FormContextValue
         // Intent: forms are published elsewhere — persist dateModified as provided, never stamp it here
         // Intent: the prior displayParam is already cached in the index — no old-body load needed
         const prior = this.index.find(entry => entry.formId === form.formId);
-        const projectionParamChanged = prior !== undefined && !sameParams(projectionParams(prior), projectionParams(form));
+        const projectedParams = projectionParams(form);
+        const labels = controlLabels(form.controls);
+        const projectionParamChanged = prior !== undefined
+            && (!sameParams(projectionParams(prior), projectedParams) || !sameLabels(prior.projectionLabels, labels, projectedParams));
 
         await storage.setItem(form.formId, form);
-        await this.refreshIndex(form);
+        await this.refreshIndex(form, labels);
 
         // Intent: a changed displayParam invalidates every existing instance's cached display projection
         if (projectionParamChanged && instanceStore.list(form.formId).length > 0)
@@ -115,7 +130,7 @@ class FormStore implements FormContextValue
         return form.formId;
     };
 
-    private refreshIndex = async (form: FormDefinition): Promise<void> =>
+    private refreshIndex = async (form: FormDefinition, labels = controlLabels(form.controls)): Promise<void> =>
     {
         const entry: FormIndexEntry =
             {formId: form.formId
@@ -125,12 +140,35 @@ class FormStore implements FormContextValue
             ,groupParam: form.groupParam
             ,filterParam: form.filterParam
             ,orderParam: form.orderParam
+            ,projectionLabels: labels
             ,dateModified: form.dateModified
             };
 
         this.index = upsert(this.index, entry, e => e.formId === form.formId);
         await storage.setItem(INDEX_KEY, this.index);
     };
+}
+
+function controlLabels(controls: ControlDef[], labels: Record<string, string> = {}): Record<string, string>
+{
+    for (const control of controls)
+    {
+        labels[control.param] = control.label ?? labels[control.param] ?? control.param;
+
+        if ('controls' in control && Array.isArray(control.controls) && isControlDefs(control.controls))
+            controlLabels(control.controls, labels);
+    }
+
+    return labels;
+}
+
+function isControlDefs(controls: unknown[]): controls is ControlDef[]
+{
+    return controls.every(control =>
+        typeof control === 'object'
+        && control !== null
+        && 'type' in control
+        && 'param' in control);
 }
 
 export const formStore = new FormStore();

@@ -123,5 +123,5 @@ function isControlPatch(value: unknown): value is Record<string, unknown>
     return typeof value === 'object'
     &&  value !== null
     && !Array.isArray(value)
-    &&  Object.keys(value).some(key => ['value', 'hidden', 'disabled', 'placeholder', 'readonly'].includes(key));
+    &&  Object.keys(value).some(key => ['value', 'hidden', 'disabled', 'placeholder', 'readonly', 'rows'].includes(key));
 }

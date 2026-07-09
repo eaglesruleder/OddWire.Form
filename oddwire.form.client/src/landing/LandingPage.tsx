@@ -1,20 +1,30 @@
-import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 
-import type { FormIndexEntry, InstanceIndexEntry, ParamList } from '../_context';
+import type { DisplayParam, FormIndexEntry, InstanceIndexEntry, ParamList } from '../_context';
 
 import { FormContext, InstanceContext } from '../_context';
 import { StripLayout } from '../_components/layout';
+import { ControlDropdown } from '../_components/controllist/controls';
+import './landing.css';
 
 export function LandingPage()
 {
     const { list: listForms } = useContext(FormContext);
     const { list: listInstances } = useContext(InstanceContext);
+    const [searchParams] = useSearchParams();
 
-    const [expandedFormId, setExpandedFormId] = useState<string | null>(null);
+    const [expandedFormId, setExpandedFormId] = useState<string | null>(() => searchParams.get('FormID') ?? searchParams.get('formId'));
 
     const forms = listForms();
+    const requestedForm = requestedFormId(forms, searchParams);
+
+    useEffect(() =>
+    {
+        if (requestedForm)
+            setExpandedFormId(requestedForm.formId);
+    }, [requestedForm?.formId]);
 
     const toggle = (formId: string) =>
         setExpandedFormId(current => current === formId ? null : formId);
@@ -32,7 +42,7 @@ export function LandingPage()
                         </Button>
 
                         {expandedFormId === form.formId
-                        ?   <InstanceList form={form} instances={listInstances(form.formId)} />
+                        ?   <InstanceList form={form} instances={listInstances(form.formId)} searchParams={searchParams} />
                         :   null}
                     </div>
                     )}
@@ -45,13 +55,24 @@ export function LandingPage()
         );
 }
 
-function InstanceList({ form, instances }: { form: FormIndexEntry; instances: InstanceIndexEntry[] })
+function requestedFormId(forms: FormIndexEntry[], searchParams: URLSearchParams): FormIndexEntry | undefined
+{
+    const requested = searchParams.get('FormID') ?? searchParams.get('formId');
+
+    if (!requested)
+        return undefined;
+
+    return forms.find(form => form.formId === requested || form.label === requested);
+}
+
+function InstanceList({ form, instances, searchParams }: { form: FormIndexEntry; instances: InstanceIndexEntry[]; searchParams: URLSearchParams })
 {
     const filterParams = form.filterParam ?? [];
     const orderParams = paramList(form.orderParam);
     const groupParams = paramList(form.groupParam);
+    const routeGroupFilters = routeFilters(groupParams, searchParams);
 
-    const [filters, setFilters] = useState<Record<string, string>>({});
+    const [filters, setFilters] = useState<Record<string, string>>(() => routeFilters(filterParams, searchParams));
     const [orderStep, setOrderStep] = useState(0);
     const [groupOpen, setGroupOpen] = useState<Record<string, boolean>>({});
 
@@ -64,30 +85,29 @@ function InstanceList({ form, instances }: { form: FormIndexEntry; instances: In
         setOrderStep(step => (step + 1) % (orderParams.length * 2 + 1));
 
     const toggleGroup = (label: string) =>
-        setGroupOpen(value => ({ ...value, [label]: !(value[label] ?? true) }));
+        setGroupOpen(value => ({ ...value, [label]: !isGroupOpen(label, value, routeGroupFilters) }));
 
     return (
         <div className="d-flex flex-column gap-2 ms-3 mb-3">
             {(filterParams.length > 0 || orderParams.length > 0) &&
             <div className="d-flex justify-content-end flex-wrap gap-2">
                 {filterParams.map(param =>
-                    <select
+                    <ControlDropdown
                         key={param}
-                        className="form-select form-select-sm w-auto"
+                        param={param}
                         value={filters[param] ?? ''}
-                        aria-label={paramLabel(param)}
-                        onChange={event => setFilters(value => ({ ...value, [param]: event.target.value }))}
-                    >
-                        {filterOptions(instances, param).map(option =>
-                            <option key={option} value={option}>
-                                {option || `${paramLabel(param)}: All`}
-                            </option>
-                            )}
-                    </select>
+                        stacked
+                        label=""
+                        placeholder={`${paramLabel(param)}: All`}
+                        className="mb-0"
+                        controls={filterOptions(instances, param).map(option =>
+                            ({ value: option, label: option || `${paramLabel(param)}: All` }))}
+                        onChange={value => setFilters(filters => ({ ...filters, [param]: String(value) }))}
+                    />
                     )}
 
                 {orderParams.length > 0 &&
-                <Button size="sm" variant={orderStep ? 'primary' : 'outline-primary'} onClick={cycleOrder}>
+                <Button size="sm" className="instance-order-button" variant={orderStep ? 'primary' : 'outline-primary'} onClick={cycleOrder}>
                     Order: {orderLabel(orderParams, orderStep)}
                 </Button>
                 }
@@ -103,15 +123,15 @@ function InstanceList({ form, instances }: { form: FormIndexEntry; instances: In
                             className="d-flex justify-content-between align-items-center"
                             onClick={() => toggleGroup(group.label)}
                         >
-                            <span>{groupOpen[group.label] ?? true ? '▾' : '▸'} {group.label}</span>
+                            <span>{isGroupOpen(group.label, groupOpen, routeGroupFilters) ? '▾' : '▸'} {group.label}</span>
                             <span className="text-muted">{group.instances.length}</span>
                         </Button>
 
-                        {(groupOpen[group.label] ?? true) &&
-                        <InstanceLinks formId={form.formId} instances={group.instances} />
+                        {(isGroupOpen(group.label, groupOpen, routeGroupFilters)) &&
+                        <InstanceLinks form={form} instances={group.instances} />
                         }
                     </div>
-                :   <InstanceLinks key={group.label} formId={form.formId} instances={group.instances} />
+                :   <InstanceLinks key={group.label} form={form} instances={group.instances} />
                 )}
 
             {ordered.length === 0 && instances.length > 0
@@ -123,21 +143,116 @@ function InstanceList({ form, instances }: { form: FormIndexEntry; instances: In
         );
 }
 
-function InstanceLinks({ formId, instances }: { formId: string; instances: InstanceIndexEntry[] })
+function routeFilters(params: string[], searchParams: URLSearchParams): Record<string, string>
+{
+    const values: Record<string, string> = {};
+
+    for (const param of params)
+    {
+        const value = searchParams.get(param);
+
+        if (value)
+            values[param] = value;
+    }
+
+    return values;
+}
+
+function isGroupOpen(label: string, groupOpen: Record<string, boolean>, routeGroupFilters: Record<string, string>): boolean
+{
+    if (label in groupOpen)
+        return groupOpen[label];
+
+    const routeLabel = Object.values(routeGroupFilters).filter(Boolean).join(' / ');
+    return routeLabel !== '' && normaliseRouteValue(label) === normaliseRouteValue(routeLabel);
+}
+
+function InstanceLinks({ form, instances }: { form: FormIndexEntry; instances: InstanceIndexEntry[] })
 {
     return (
-        <div className="d-flex flex-column gap-1 ms-3">
+        <div className="instance-list">
             {instances.map(instance =>
-                <Link key={instance.instanceId} to={`/form/${formId}/${instance.instanceId}`}>
-                    {displayLabel(instance.display)}
-                    {instance.dateModified ? <span className="text-muted"> - {formatDate(instance.dateModified)}</span> : null}
+                <Link key={instance.instanceId} className="instance-row" to={`/form/${form.formId}/${instance.instanceId}`}>
+                    <span className="instance-row-main">
+                        <span className="instance-row-title">{displayTitle(instance, form.displayParam)}</span>
+                        {instance.dateModified ? <span className="instance-row-subtitle">Edited {formatDate(instance.dateModified)}</span> : null}
+                    </span>
+                    <span className="instance-row-details">
+                        {displayDetails(instance, form.displayParam).map(detail =>
+                            detail.kind === 'break'
+                            ?   <span key={detail.key} className="instance-row-break" />
+                            :   <span key={detail.param} className="instance-row-detail">
+                                    <span className="instance-row-detail-label">{detail.label}</span>
+                                    <span>{detail.value}</span>
+                                </span>
+                            )}
+                    </span>
                 </Link>
                 )}
         </div>
         );
 }
 
-function displayLabel(display: Record<string, unknown>): string
+type DisplayDetail =
+    | { kind: 'break'; key: string }
+    | { kind: 'field'; param: string; label: string; value: string };
+
+function displayTitle(instance: InstanceIndexEntry, params: DisplayParam[] | undefined): string
+{
+    const orderedParams = displayParams(instance, params);
+    const firstParam = orderedParams.find((param): param is string => typeof param === 'string');
+    const firstValue = firstParam ? valueText(instance.display[firstParam]) : '';
+
+    return firstValue || 'Untitled instance';
+}
+
+function displayDetails(instance: InstanceIndexEntry, params: DisplayParam[] | undefined): DisplayDetail[]
+{
+    const out: DisplayDetail[] = [];
+    let skippedTitle = false;
+
+    for (const param of displayParams(instance, params))
+    {
+        if (param === null)
+        {
+            if (skippedTitle)
+                out.push({ kind: 'break', key: `break-${out.length}` });
+            continue;
+        }
+
+        if (!skippedTitle)
+        {
+            skippedTitle = true;
+            continue;
+        }
+
+        const field = instance.display[param];
+        const value = valueText(field);
+
+        if (value)
+            out.push({ kind: 'field', param, label: projectionLabel(field) ?? paramLabel(param), value });
+    }
+
+    return trimBreaks(out);
+}
+
+function displayParams(instance: InstanceIndexEntry, params: DisplayParam[] | undefined): DisplayParam[]
+{
+    return params && params.length > 0 ? params : Object.keys(instance.display);
+}
+
+function trimBreaks(details: DisplayDetail[]): DisplayDetail[]
+{
+    while (details[0]?.kind === 'break')
+        details.shift();
+
+    while (details[details.length - 1]?.kind === 'break')
+        details.pop();
+
+    return details;
+}
+
+export function displayLabel(display: Record<string, unknown>): string
 {
     const values = Object.values(display).filter(value => value !== undefined && value !== null && value !== '');
     return values.length ? values.join(' · ') : 'Untitled instance';
@@ -158,7 +273,28 @@ function paramList(value: ParamList | undefined): string[]
 
 function valueText(value: unknown): string
 {
-    return value == null ? '' : String(value);
+    const unwrapped = projectionValue(value);
+    return unwrapped == null ? '' : String(unwrapped);
+}
+
+function normaliseRouteValue(value: string): string
+{
+    return value.trim().toLowerCase();
+}
+
+function projectionValue(value: unknown): unknown
+{
+    return isProjectionObject(value) ? value.value : value;
+}
+
+function projectionLabel(value: unknown): string | undefined
+{
+    return isProjectionObject(value) ? value.label : undefined;
+}
+
+function isProjectionObject(value: unknown): value is { label?: string; value?: unknown }
+{
+    return typeof value === 'object' && value !== null && 'value' in value && 'label' in value;
 }
 
 function paramLabel(param: string): string

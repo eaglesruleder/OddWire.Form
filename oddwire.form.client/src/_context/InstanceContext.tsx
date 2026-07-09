@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 import localforage from 'localforage';
 
-import type { FormInstance, ControlInstance, InstanceIndexEntry } from './types';
+import type { FormInstance, ControlInstance, InstanceIndexEntry, ProjectionRecord } from './types';
 
 import { formStore, paramList } from './FormContext';
 import { upsert } from './storeUtils';
@@ -107,19 +107,22 @@ class InstanceStore implements InstanceContextValue
         const params = formStore.getProjectionParams(instance.formId ?? '');
 
         return {
-            display: this.projectParams(instance, params.displayParam ?? []),
-            group: this.projectParams(instance, paramList(params.groupParam)),
-            filter: this.projectParams(instance, params.filterParam ?? []),
-            order: this.projectParams(instance, paramList(params.orderParam))
+            display: this.projectParams(instance, (params.displayParam ?? []).filter((param): param is string => typeof param === 'string'), params.projectionLabels),
+            group: this.projectParams(instance, paramList(params.groupParam), params.projectionLabels),
+            filter: this.projectParams(instance, params.filterParam ?? [], params.projectionLabels),
+            order: this.projectParams(instance, paramList(params.orderParam), params.projectionLabels)
         };
     };
 
-    private projectParams = (instance: FormInstance, params: string[]): Record<string, unknown> =>
+    private projectParams = (instance: FormInstance, params: string[], labels: Record<string, string> | undefined): ProjectionRecord =>
     {
-        const values: Record<string, unknown> = {};
+        const values: ProjectionRecord = {};
 
         for (const param of params)
-            values[param] = instance.controls.find(control => control.param === param)?.value;
+            values[param] =
+                {label: labels?.[param] ?? param
+                ,value: instance.controls.find(control => control.param === param)?.value
+                };
 
         return values;
     };

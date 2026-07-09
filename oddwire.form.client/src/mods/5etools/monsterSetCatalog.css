@@ -1,0 +1,92 @@
+.monster-import-review {
+  display: flex;
+  flex-direction: column;
+}
+
+.monster-import-tools {
+  position: sticky;
+  top: -24px;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.5rem 0;
+  background: var(--bg-strip);
+}
+
+.monster-import-filter {
+  grid-column: 1 / -1;
+}
+
+.monster-import-select-all {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+.monster-import-meta-field {
+  grid-column: span 6;
+}
+
+.monster-import-meta-field .form-label {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.monster-import-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+}
+
+.monster-import-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.monster-import-row.conflict {
+  order: -1;
+}
+
+.monster-import-name {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.monster-import-check {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex: 0 0 auto;
+}
+
+.monster-import-warning {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  background: #ffc107;
+  color: #111;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+@media (min-width: 992px) {
+  .monster-import-filter {
+    grid-column: span 9;
+  }
+
+  .monster-import-select-all {
+    grid-column: span 3;
+  }
+
+  .monster-import-meta-field {
+    grid-column: span 6;
+  }
+}
