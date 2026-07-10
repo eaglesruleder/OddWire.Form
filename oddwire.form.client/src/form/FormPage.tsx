@@ -8,10 +8,10 @@ import ToastContainer from 'react-bootstrap/ToastContainer';
 import type { FormDefinition, InstanceChange, ParamList } from '../_context';
 import type { ControlDef, TabSection } from '../_components/controllist';
 
-import { FormContext, InstanceContext, LookupContext, PdfTemplateContext, InstanceEntity } from '../_context';
+import { FormContext, InstanceContext, LookupContext, InstanceEntity } from '../_context';
 import { StripLayout } from '../_components/layout';
 import { ControlList, ControlTab, ControlError, ControlButton, DbContext, resolveLabel } from '../_components/controllist';
-import { flattenInstance, FormPdfExporter } from '../export';
+import { flattenInstance } from '../export';
 
 function buildRootTabSections(controls: ControlDef[], instance: InstanceEntity): TabSection[]
 {
@@ -34,7 +34,6 @@ export function FormPage()
     const { getForm } = useContext(FormContext);
     const { getInstance, save } = useContext(InstanceContext);
     const { get: getDb } = useContext(LookupContext);
-    const { getTemplate } = useContext(PdfTemplateContext);
     const navigate = useNavigate();
 
     const { formId = '', instanceId } = useParams();
@@ -191,11 +190,11 @@ export function FormPage()
 
         try
         {
-            instance.flush();
-
-            const template = await getTemplate(form.formId);
-            downloadBlob(await new FormPdfExporter(form, instance, template).export(), `${form.label ?? 'form'}.pdf`);
-            setToastMessage('PDF exported');
+            instance.cancelPersist();
+            const id = await save(instance.instance);
+            setAutosaving(true);
+            setActionsOpen(false);
+            navigate(`/export-pdf/${formId}/${id}`);
         }
         catch (error)
         {
@@ -309,20 +308,6 @@ function exportUrl(form: FormDefinition, key: 'api'): string | undefined
         return value.url;
 
     return key === 'api' ? config.url : undefined;
-}
-
-function downloadBlob(blob: Blob, fileName: string): void
-{
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-
-    link.href = url;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    URL.revokeObjectURL(url);
 }
 
 function landingBackLink(formId: string, groupParam: ParamList | undefined, instance: InstanceEntity): string
