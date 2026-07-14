@@ -1,95 +1,825 @@
 {
     "formId": "44444444-4444-4444-8444-444444444444",
     "label": "Monster Reference Card",
-    "version": "0.3.0",
-  "displayParam": [ "name", "hp", "ac", "passive", null, "strMod", "dexMod", "conMod", "intMod", "wisMod", "chaMod" ],
-  "groupParam": "collection",
-  "filterParam": [ "session" ],
-  "orderParam": [ "name", "cr" ],
+    "version": "0.3.3",
+    "displayParam": [
+        "name",
+        "hp",
+        "ac",
+        "passive",
+        null,
+        "strMod",
+        "dexMod",
+        "conMod",
+        "intMod",
+        "wisMod",
+        "chaMod"
+    ],
+    "groupParam": "collection",
+    "filterParam": [
+        "session"
+    ],
+    "orderParam": [
+        "name",
+        "cr"
+    ],
     "controls": [
         {
             "type": "tab",
             "param": "tabCore",
             "label": "Core",
             "controls": [
-                { "type": "dropdown", "param": "monster", "label": "Monster", "cellClassName": "sm-col-12 lg-col-9", "dbOptions": { "table": "Monster", "valueParam": "monster", "labelParam": "name", "fill": true } },
-                { "type": "image", "param": "image", "label": "Token", "cellClassName": "sm-col-12 lg-col-3" },
-                { "type": "text", "param": "name", "label": "Name", "stacked": true, "cellClassName": "sm-col-12 lg-col-6" },
-                { "type": "text", "param": "alignment", "label": "Alignment", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                { "type": "text", "param": "cr", "label": "Challenge", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                { "type": "text", "param": "type", "label": "Type", "stacked": true, "cellClassName": "sm-col-12 lg-col-6" },
-                { "type": "text", "param": "size", "label": "Size", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                { "type": "text", "param": "speed", "label": "Speed", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                { "type": "text", "param": "hp", "label": "HP Max", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                { "type": "text", "param": "hp_curr", "label": "HP Current", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                { "type": "text", "param": "ac", "label": "Armor Class", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                { "type": "text", "param": "passive", "label": "Passive Perception", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                { "type": "textarea", "param": "senses", "label": "Senses" },
-                { "type": "textarea", "param": "damageVuln", "label": "Vulnerabilities", "cellClassName": "sm-col-6 lg-col-3" },
-                { "type": "textarea", "param": "damageRes", "label": "Resistances", "cellClassName": "sm-col-6 lg-col-3" },
-                { "type": "textarea", "param": "damageImm", "label": "Damage Immunities", "cellClassName": "sm-col-6 lg-col-3" },
-                { "type": "textarea", "param": "conditionImm", "label": "Cond. Immunities", "cellClassName": "sm-col-6 lg-col-3" },
-                { "type": "label", "param": "traitSectionTitle", "label": "Traits", "labelFor": "trait" },
+                {
+                    "type": "dropdown",
+                    "param": "monster",
+                    "label": "Monster",
+                    "cellClassName": "sm-col-12 lg-col-9",
+                    "dbOptions": {
+                        "table": "Monster",
+                        "valueParam": "monster",
+                        "labelParam": "name",
+                        "fill": true
+                    }
+                },
+                {
+                    "type": "image",
+                    "param": "image",
+                    "label": "Token",
+                    "cellClassName": "sm-col-12 lg-col-3"
+                },
+                {
+                    "type": "text",
+                    "param": "name",
+                    "label": "Name",
+                    "stacked": true,
+                    "cellClassName": "sm-col-12 lg-col-6",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 355,
+                                "y": 1362
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "text",
+                    "param": "alignment",
+                    "label": "Alignment",
+                    "stacked": true,
+                    "cellClassName": "sm-col-6 lg-col-3",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 118,
+                                "y": 1320
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "text",
+                    "param": "cr",
+                    "label": "Challenge",
+                    "stacked": true,
+                    "cellClassName": "sm-col-6 lg-col-3",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 118,
+                                "y": 1400
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "text",
+                    "param": "type",
+                    "label": "Type",
+                    "stacked": true,
+                    "cellClassName": "sm-col-12 lg-col-6",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 250,
+                                "y": 1360
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "text",
+                    "param": "size",
+                    "label": "Size",
+                    "stacked": true,
+                    "cellClassName": "sm-col-6 lg-col-3",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 118,
+                                "y": 1360
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "text",
+                    "param": "speed",
+                    "label": "Speed",
+                    "stacked": true,
+                    "cellClassName": "sm-col-6 lg-col-3",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 270,
+                                "y": 846
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "text",
+                    "param": "hp",
+                    "label": "HP Max",
+                    "stacked": true,
+                    "cellClassName": "sm-col-6 lg-col-3",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 382,
+                                "y": 820
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "text",
+                    "param": "hp_curr",
+                    "label": "HP Current",
+                    "stacked": true,
+                    "cellClassName": "sm-col-6 lg-col-3",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 498,
+                                "y": 820
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "text",
+                    "param": "ac",
+                    "label": "Armor Class",
+                    "stacked": true,
+                    "cellClassName": "sm-col-6 lg-col-3",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 88,
+                                "y": 852
+                            }
+                        ]
+                    },
+                    "export": {
+                        "pdf": {
+                            "fontSize": 46
+                        }
+                    }
+                },
+                {
+                    "type": "text",
+                    "param": "passive",
+                    "label": "Passive Perception",
+                    "stacked": true,
+                    "cellClassName": "sm-col-6 lg-col-3",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 712,
+                                "y": 850
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "textarea",
+                    "param": "senses",
+                    "label": "Senses",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 752,
+                                "y": 700
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "textarea",
+                    "param": "damageVuln",
+                    "label": "Vulnerabilities",
+                    "cellClassName": "sm-col-6 lg-col-3",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 368,
+                                "y": 722
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "textarea",
+                    "param": "damageRes",
+                    "label": "Resistances",
+                    "cellClassName": "sm-col-6 lg-col-3",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 368,
+                                "y": 690
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "textarea",
+                    "param": "damageImm",
+                    "label": "Damage Immunities",
+                    "cellClassName": "sm-col-6 lg-col-3",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 368,
+                                "y": 658
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "textarea",
+                    "param": "conditionImm",
+                    "label": "Cond. Immunities",
+                    "cellClassName": "sm-col-6 lg-col-3",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 368,
+                                "y": 626
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "label",
+                    "param": "traitSectionTitle",
+                    "label": "Traits",
+                    "labelFor": "trait"
+                },
                 {
                     "type": "looper",
                     "param": "trait",
                     "label": "Traits",
                     "addRows": true,
-                    "value": [{}],
+                    "value": [
+                        {}
+                    ],
                     "controls": [
                         {
                             "type": "collapsible",
                             "param": "traitItem",
                             "label": "{name}",
                             "controls": [
-                                { "type": "text", "param": "name", "label": "Name", "stacked": true },
-                                { "type": "textarea", "param": "entries", "label": "Entries" }
+                                {
+                                    "type": "text",
+                                    "param": "name",
+                                    "label": "Name",
+                                    "stacked": true
+                                },
+                                {
+                                    "type": "textarea",
+                                    "param": "entries",
+                                    "label": "Entries"
+                                }
                             ]
                         }
                     ]
                 },
-                { "type": "text", "param": "strMod", "label": "STR Mod", "hidden": true },
-                { "type": "text", "param": "dexMod", "label": "DEX Mod", "hidden": true },
-                { "type": "text", "param": "conMod", "label": "CON Mod", "hidden": true },
-                { "type": "text", "param": "intMod", "label": "INT Mod", "hidden": true },
-                { "type": "text", "param": "wisMod", "label": "WIS Mod", "hidden": true },
-                { "type": "text", "param": "chaMod", "label": "CHA Mod", "hidden": true },
-                { "type": "tab", "param": "tabStr", "label": "STR {strMod}", "controls": [
-                    { "type": "text", "param": "strSave", "label": "Saving Throw", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                    { "type": "text", "param": "athletics", "label": "Athletics", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" }
-                ]},
-                { "type": "tab", "param": "tabDex", "label": "DEX {dexMod}", "controls": [
-                    { "type": "text", "param": "dexSave", "label": "Saving Throw", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                    { "type": "text", "param": "acrobatics", "label": "Acrobatics", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                    { "type": "text", "param": "sleightOfHand", "label": "Sleight of Hand", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                    { "type": "text", "param": "stealth", "label": "Stealth", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" }
-                ]},
-                { "type": "tab", "param": "tabCon", "label": "CON {conMod}", "controls": [
-                    { "type": "text", "param": "conSave", "label": "Saving Throw" }
-                ]},
-                { "type": "tab", "param": "tabInt", "label": "INT {intMod}", "controls": [
-                    { "type": "text", "param": "intSave", "label": "Saving Throw", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                    { "type": "text", "param": "arcana", "label": "Arcana", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                    { "type": "text", "param": "history", "label": "History", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                    { "type": "text", "param": "investigation", "label": "Investigation", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                    { "type": "text", "param": "nature", "label": "Nature", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                    { "type": "text", "param": "religion", "label": "Religion", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" }
-                ]},
-                { "type": "tab", "param": "tabWis", "label": "WIS {wisMod}", "controls": [
-                    { "type": "text", "param": "wisSave", "label": "Saving Throw", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                    { "type": "text", "param": "animalHandling", "label": "Animal Handling", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                    { "type": "text", "param": "insight", "label": "Insight", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                    { "type": "text", "param": "medicine", "label": "Medicine", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                    { "type": "text", "param": "perception", "label": "Perception", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                    { "type": "text", "param": "survival", "label": "Survival", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" }
-                ]},
-                { "type": "tab", "param": "tabCha", "label": "CHA {chaMod}", "controls": [
-                    { "type": "text", "param": "chaSave", "label": "Saving Throw", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                    { "type": "text", "param": "deception", "label": "Deception", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                    { "type": "text", "param": "intimidation", "label": "Intimidation", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                    { "type": "text", "param": "performance", "label": "Performance", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                    { "type": "text", "param": "persuasion", "label": "Persuasion", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" }
-                ]}
+                {
+                    "type": "text",
+                    "param": "strMod",
+                    "label": "STR Mod",
+                    "hidden": true,
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 74,
+                                "y": 1162
+                            }
+                        ]
+                    },
+                    "export": {
+                        "pdf": {
+                            "fontSize": 40
+                        }
+                    }
+                },
+                {
+                    "type": "text",
+                    "param": "dexMod",
+                    "label": "DEX Mod",
+                    "hidden": true,
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 240,
+                                "y": 1162
+                            }
+                        ]
+                    },
+                    "export": {
+                        "pdf": {
+                            "fontSize": 40
+                        }
+                    }
+                },
+                {
+                    "type": "text",
+                    "param": "conMod",
+                    "label": "CON Mod",
+                    "hidden": true,
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 404,
+                                "y": 1162
+                            }
+                        ]
+                    },
+                    "export": {
+                        "pdf": {
+                            "fontSize": 40
+                        }
+                    }
+                },
+                {
+                    "type": "text",
+                    "param": "intMod",
+                    "label": "INT Mod",
+                    "hidden": true,
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 564,
+                                "y": 1162
+                            }
+                        ]
+                    },
+                    "export": {
+                        "pdf": {
+                            "fontSize": 40
+                        }
+                    }
+                },
+                {
+                    "type": "text",
+                    "param": "wisMod",
+                    "label": "WIS Mod",
+                    "hidden": true,
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 732,
+                                "y": 1162
+                            }
+                        ]
+                    },
+                    "export": {
+                        "pdf": {
+                            "fontSize": 40
+                        }
+                    }
+                },
+                {
+                    "type": "text",
+                    "param": "chaMod",
+                    "label": "CHA Mod",
+                    "hidden": true,
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 896,
+                                "y": 1162
+                            }
+                        ]
+                    },
+                    "export": {
+                        "pdf": {
+                            "fontSize": 40
+                        }
+                    }
+                },
+                {
+                    "type": "tab",
+                    "param": "tabStr",
+                    "label": "STR {strMod}",
+                    "controls": [
+                        {
+                            "type": "text",
+                            "param": "strSave",
+                            "label": "Saving Throw",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 84,
+                                        "y": 1086
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "athletics",
+                            "label": "Athletics",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 78,
+                                        "y": 1042
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "tab",
+                    "param": "tabDex",
+                    "label": "DEX {dexMod}",
+                    "controls": [
+                        {
+                            "type": "text",
+                            "param": "dexSave",
+                            "label": "Saving Throw",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 248,
+                                        "y": 1086
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "acrobatics",
+                            "label": "Acrobatics",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 196,
+                                        "y": 1050
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "sleightOfHand",
+                            "label": "Sleight of Hand",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 196,
+                                        "y": 980
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "stealth",
+                            "label": "Stealth",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 196,
+                                        "y": 1014
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "tab",
+                    "param": "tabCon",
+                    "label": "CON {conMod}",
+                    "controls": [
+                        {
+                            "type": "text",
+                            "param": "conSave",
+                            "label": "Saving Throw",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 412,
+                                        "y": 1086
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "tab",
+                    "param": "tabInt",
+                    "label": "INT {intMod}",
+                    "controls": [
+                        {
+                            "type": "text",
+                            "param": "intSave",
+                            "label": "Saving Throw",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 574,
+                                        "y": 1086
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "arcana",
+                            "label": "Arcana",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 536,
+                                        "y": 1032
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "history",
+                            "label": "History",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 536,
+                                        "y": 998
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "investigation",
+                            "label": "Investigation",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 536,
+                                        "y": 900
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "nature",
+                            "label": "Nature",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 536,
+                                        "y": 966
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "religion",
+                            "label": "Religion",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 536,
+                                        "y": 932
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "tab",
+                    "param": "tabWis",
+                    "label": "WIS {wisMod}",
+                    "controls": [
+                        {
+                            "type": "text",
+                            "param": "wisSave",
+                            "label": "Saving Throw",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 740,
+                                        "y": 1086
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "animalHandling",
+                            "label": "Animal Handling",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 692,
+                                        "y": 982
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "insight",
+                            "label": "Insight",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 692,
+                                        "y": 1046
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "medicine",
+                            "label": "Medicine",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 692,
+                                        "y": 950
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "perception",
+                            "label": "Perception",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 692,
+                                        "y": 1014
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "survival",
+                            "label": "Survival",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 692,
+                                        "y": 916
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "tab",
+                    "param": "tabCha",
+                    "label": "CHA {chaMod}",
+                    "controls": [
+                        {
+                            "type": "text",
+                            "param": "chaSave",
+                            "label": "Saving Throw",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 902,
+                                        "y": 1086
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "deception",
+                            "label": "Deception",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 850,
+                                        "y": 1012
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "intimidation",
+                            "label": "Intimidation",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 850,
+                                        "y": 1044
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "performance",
+                            "label": "Performance",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 850,
+                                        "y": 956
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "persuasion",
+                            "label": "Persuasion",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 850,
+                                        "y": 984
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
             ]
         },
         {
@@ -102,13 +832,20 @@
                     "param": "tabInitiative",
                     "label": "Initiative",
                     "controls": [
-                        { "type": "label", "param": "actionSectionTitle", "label": "Actions", "labelFor": "action" },
+                        {
+                            "type": "label",
+                            "param": "actionSectionTitle",
+                            "label": "Actions",
+                            "labelFor": "action"
+                        },
                         {
                             "type": "looper",
                             "param": "action",
                             "label": "Actions",
                             "addRows": true,
-                            "value": [{}],
+                            "value": [
+                                {}
+                            ],
                             "controls": [
                                 {
                                     "type": "collapsible",
@@ -116,86 +853,172 @@
                                     "label": "{name}",
                                     "subtitle": "{toHit} {damage}",
                                     "controls": [
-                                        { "type": "text", "param": "name", "label": "Name", "stacked": true, "cellClassName": "sm-col-12 lg-col-6" },
-                                        { "type": "text", "param": "toHit", "label": "To Hit", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                                        { "type": "text", "param": "damage", "label": "Damage", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                                        { "type": "textarea", "param": "entries", "label": "Entries" }
+                                        {
+                                            "type": "text",
+                                            "param": "name",
+                                            "label": "Name",
+                                            "stacked": true,
+                                            "cellClassName": "sm-col-12 lg-col-6"
+                                        },
+                                        {
+                                            "type": "text",
+                                            "param": "toHit",
+                                            "label": "To Hit",
+                                            "stacked": true,
+                                            "cellClassName": "sm-col-6 lg-col-3"
+                                        },
+                                        {
+                                            "type": "text",
+                                            "param": "damage",
+                                            "label": "Damage",
+                                            "stacked": true,
+                                            "cellClassName": "sm-col-6 lg-col-3"
+                                        },
+                                        {
+                                            "type": "textarea",
+                                            "param": "entries",
+                                            "label": "Entries"
+                                        }
                                     ]
                                 }
                             ]
                         },
-                        { "type": "label", "param": "bonusSectionTitle", "label": "Bonus Actions", "labelFor": "bonus" },
+                        {
+                            "type": "label",
+                            "param": "bonusSectionTitle",
+                            "label": "Bonus Actions",
+                            "labelFor": "bonus"
+                        },
                         {
                             "type": "looper",
                             "param": "bonus",
                             "label": "Bonus Actions",
                             "addRows": true,
-                            "value": [{}],
+                            "value": [
+                                {}
+                            ],
                             "controls": [
                                 {
                                     "type": "collapsible",
                                     "param": "bonusItem",
                                     "label": "{name}",
                                     "controls": [
-                                        { "type": "text", "param": "name", "label": "Name", "stacked": true },
-                                        { "type": "textarea", "param": "entries", "label": "Entries" }
+                                        {
+                                            "type": "text",
+                                            "param": "name",
+                                            "label": "Name",
+                                            "stacked": true
+                                        },
+                                        {
+                                            "type": "textarea",
+                                            "param": "entries",
+                                            "label": "Entries"
+                                        }
                                     ]
                                 }
                             ]
                         },
-                        { "type": "label", "param": "reactionSectionTitle", "label": "Reactions", "labelFor": "reaction" },
+                        {
+                            "type": "label",
+                            "param": "reactionSectionTitle",
+                            "label": "Reactions",
+                            "labelFor": "reaction"
+                        },
                         {
                             "type": "looper",
                             "param": "reaction",
                             "label": "Reactions",
                             "addRows": true,
-                            "value": [{}],
+                            "value": [
+                                {}
+                            ],
                             "controls": [
                                 {
                                     "type": "collapsible",
                                     "param": "reactionItem",
                                     "label": "{name}",
                                     "controls": [
-                                        { "type": "text", "param": "name", "label": "Name", "stacked": true },
-                                        { "type": "textarea", "param": "entries", "label": "Entries" }
+                                        {
+                                            "type": "text",
+                                            "param": "name",
+                                            "label": "Name",
+                                            "stacked": true
+                                        },
+                                        {
+                                            "type": "textarea",
+                                            "param": "entries",
+                                            "label": "Entries"
+                                        }
                                     ]
                                 }
                             ]
                         },
-                        { "type": "label", "param": "legendarySectionTitle", "label": "Legendary Actions", "labelFor": "legendary" },
+                        {
+                            "type": "label",
+                            "param": "legendarySectionTitle",
+                            "label": "Legendary Actions",
+                            "labelFor": "legendary"
+                        },
                         {
                             "type": "looper",
                             "param": "legendary",
                             "label": "Legendary Actions",
                             "addRows": true,
-                            "value": [{}],
+                            "value": [
+                                {}
+                            ],
                             "controls": [
                                 {
                                     "type": "collapsible",
                                     "param": "legendaryItem",
                                     "label": "{name}",
                                     "controls": [
-                                        { "type": "text", "param": "name", "label": "Name", "stacked": true },
-                                        { "type": "textarea", "param": "entries", "label": "Entries" }
+                                        {
+                                            "type": "text",
+                                            "param": "name",
+                                            "label": "Name",
+                                            "stacked": true
+                                        },
+                                        {
+                                            "type": "textarea",
+                                            "param": "entries",
+                                            "label": "Entries"
+                                        }
                                     ]
                                 }
                             ]
                         },
-                        { "type": "label", "param": "mythicSectionTitle", "label": "Mythic Actions", "labelFor": "mythic" },
+                        {
+                            "type": "label",
+                            "param": "mythicSectionTitle",
+                            "label": "Mythic Actions",
+                            "labelFor": "mythic"
+                        },
                         {
                             "type": "looper",
                             "param": "mythic",
                             "label": "Mythic Actions",
                             "addRows": true,
-                            "value": [{}],
+                            "value": [
+                                {}
+                            ],
                             "controls": [
                                 {
                                     "type": "collapsible",
                                     "param": "mythicItem",
                                     "label": "{name}",
                                     "controls": [
-                                        { "type": "text", "param": "name", "label": "Name", "stacked": true },
-                                        { "type": "textarea", "param": "entries", "label": "Entries" }
+                                        {
+                                            "type": "text",
+                                            "param": "name",
+                                            "label": "Name",
+                                            "stacked": true
+                                        },
+                                        {
+                                            "type": "textarea",
+                                            "param": "entries",
+                                            "label": "Entries"
+                                        }
                                     ]
                                 }
                             ]
@@ -207,26 +1030,67 @@
                     "param": "tabSpellcasting",
                     "label": "Spellcasting",
                     "controls": [
-                        { "type": "label", "param": "spellcastingSectionTitle", "label": "Spellcasting", "labelFor": "spellcasting" },
+                        {
+                            "type": "label",
+                            "param": "spellcastingSectionTitle",
+                            "label": "Spellcasting",
+                            "labelFor": "spellcasting"
+                        },
                         {
                             "type": "looper",
                             "param": "spellcasting",
                             "label": "Spellcasting",
                             "addRows": true,
-                            "value": [{}],
+                            "value": [
+                                {}
+                            ],
                             "controls": [
                                 {
                                     "type": "collapsible",
                                     "param": "spellcastingItem",
                                     "label": "{name}",
                                     "controls": [
-                                        { "type": "text", "param": "name", "label": "Name", "stacked": true, "cellClassName": "sm-col-12 lg-col-6" },
-                                        { "type": "text", "param": "ability", "label": "Ability", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                                        { "type": "text", "param": "type", "label": "Type", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                                        { "type": "textarea", "param": "headerEntries", "label": "Header" },
-                                        { "type": "textarea", "param": "will", "label": "At Will" },
-                                        { "type": "textarea", "param": "daily", "label": "Daily" },
-                                        { "type": "textarea", "param": "spells", "label": "Spell Slots" }
+                                        {
+                                            "type": "text",
+                                            "param": "name",
+                                            "label": "Name",
+                                            "stacked": true,
+                                            "cellClassName": "sm-col-12 lg-col-6"
+                                        },
+                                        {
+                                            "type": "text",
+                                            "param": "ability",
+                                            "label": "Ability",
+                                            "stacked": true,
+                                            "cellClassName": "sm-col-6 lg-col-3"
+                                        },
+                                        {
+                                            "type": "text",
+                                            "param": "type",
+                                            "label": "Type",
+                                            "stacked": true,
+                                            "cellClassName": "sm-col-6 lg-col-3"
+                                        },
+                                        {
+                                            "type": "textarea",
+                                            "param": "headerEntries",
+                                            "label": "Header"
+                                        },
+                                        {
+                                            "type": "textarea",
+                                            "param": "will",
+                                            "label": "At Will"
+                                        },
+                                        {
+                                            "type": "textarea",
+                                            "param": "daily",
+                                            "label": "Daily"
+                                        },
+                                        {
+                                            "type": "textarea",
+                                            "param": "spells",
+                                            "label": "Spell Slots"
+                                        }
                                     ]
                                 }
                             ]
@@ -240,43 +1104,131 @@
             "param": "tabLore",
             "label": "Lore",
             "controls": [
-                { "type": "text", "param": "collection", "label": "Collection", "stacked": true, "cellClassName": "sm-col-12 lg-col-4" },
-                { "type": "text", "param": "session", "label": "Session", "stacked": true, "cellClassName": "sm-col-12 lg-col-4" },
-                { "type": "text", "param": "source", "label": "Source", "stacked": true, "cellClassName": "sm-col-12 lg-col-4" },
-                { "type": "label", "param": "variantSectionTitle", "label": "Variants", "labelFor": "variant" },
+                {
+                    "type": "text",
+                    "param": "collection",
+                    "label": "Collection",
+                    "stacked": true,
+                    "cellClassName": "sm-col-12 lg-col-4"
+                },
+                {
+                    "type": "text",
+                    "param": "session",
+                    "label": "Session",
+                    "stacked": true,
+                    "cellClassName": "sm-col-12 lg-col-4"
+                },
+                {
+                    "type": "text",
+                    "param": "source",
+                    "label": "Source",
+                    "stacked": true,
+                    "cellClassName": "sm-col-12 lg-col-4",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 775,
+                                "y": 1390
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "label",
+                    "param": "variantSectionTitle",
+                    "label": "Variants",
+                    "labelFor": "variant"
+                },
                 {
                     "type": "looper",
                     "param": "variant",
                     "label": "Variants",
                     "addRows": true,
-                    "value": [{}],
+                    "value": [
+                        {}
+                    ],
                     "controls": [
                         {
                             "type": "collapsible",
                             "param": "variantItem",
                             "label": "{name}",
                             "controls": [
-                                { "type": "text", "param": "name", "label": "Name", "stacked": true, "cellClassName": "sm-col-12 lg-col-6" },
-                                { "type": "text", "param": "source", "label": "Source", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                                { "type": "text", "param": "page", "label": "Page", "stacked": true, "cellClassName": "sm-col-6 lg-col-3" },
-                                { "type": "text", "param": "type", "label": "Type", "stacked": true },
-                                { "type": "textarea", "param": "entries", "label": "Entries" }
+                                {
+                                    "type": "text",
+                                    "param": "name",
+                                    "label": "Name",
+                                    "stacked": true,
+                                    "cellClassName": "sm-col-12 lg-col-6"
+                                },
+                                {
+                                    "type": "text",
+                                    "param": "source",
+                                    "label": "Source",
+                                    "stacked": true,
+                                    "cellClassName": "sm-col-6 lg-col-3"
+                                },
+                                {
+                                    "type": "text",
+                                    "param": "page",
+                                    "label": "Page",
+                                    "stacked": true,
+                                    "cellClassName": "sm-col-6 lg-col-3"
+                                },
+                                {
+                                    "type": "text",
+                                    "param": "type",
+                                    "label": "Type",
+                                    "stacked": true
+                                },
+                                {
+                                    "type": "textarea",
+                                    "param": "entries",
+                                    "label": "Entries"
+                                }
                             ]
                         }
                     ]
                 },
-                { "type": "textarea", "param": "languages", "label": "Languages" },
-                { "type": "textarea", "param": "fluff", "label": "Description" },
-              {
-                "type": "popup",
-                "param": "imgpopup",
-                "label": "Picture",
-                "controls": [
-                    { "type": "image", "param": "image", "label": "Token" },
-                    { "type": "image", "param": "image", "label": "Token", "cellClassName": "sm-col-12 lg-col-3" }
-                ]
-              }
+                {
+                    "type": "textarea",
+                    "param": "languages",
+                    "label": "Languages",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 700,
+                                "y": 722
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "textarea",
+                    "param": "fluff",
+                    "label": "Description"
+                },
+                {
+                    "type": "popup",
+                    "param": "imgpopup",
+                    "label": "Picture",
+                    "controls": [
+                        {
+                            "type": "image",
+                            "param": "image",
+                            "label": "Token"
+                        },
+                        {
+                            "type": "image",
+                            "param": "image",
+                            "label": "Token",
+                            "cellClassName": "sm-col-12 lg-col-3"
+                        }
+                    ]
+                }
             ]
         }
-    ]
+    ],
+    "export": {
+        "pdf": true
+    }
 }
