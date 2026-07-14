@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
 import type { InstanceEntity, InstanceChange, LookupTable } from '../../_context';
-import type { ControlDef, ControlOption, DbOptions } from './controls/controlTypes';
+import type { ControlDef, ControlOption, DbOptions, FlattenCtx, FlattenResult } from './controls/controlTypes';
 
 import
     {ControlText
@@ -13,7 +13,7 @@ import
     ,ControlDropdown
     ,ControlError
     } from './controls';
-import { ControlCollapsible, ControlLooper, ControlPopup, ControlTab } from './controls/layout';
+import { ControlCollapsible, ControlLooper, ControlPopup, ControlTab, looperFlatten } from './controls/layout';
 import { DbContext, resolveDbOptions } from './lookup';
 import { resolveLabel } from './resolveLabel';
 
@@ -53,6 +53,26 @@ export function ControlItem({ control, instance, onChange, depth = 0 }: ControlI
             const def = resolved as ControlDef;
             return <ControlError param={def.param}>Unknown control type: {def.type}</ControlError>;
         }
+    }
+}
+
+// Intent: export-flatten router — the non-React sibling of the render switch above; dispatches a resolved control to its
+// flatten plugin. Layout recurses (emits nothing); looper has its own plugin; every leaf falls through to its raw value.
+export function flattenControl(resolved: ControlDef, ctx: FlattenCtx): FlattenResult
+{
+    switch (resolved.type)
+    {
+        case 'tab':
+        case 'collapsible':
+        case 'popup':
+            ctx.recurse(resolved.controls);
+            return undefined;
+
+        case 'looper':
+            return looperFlatten(resolved, ctx);
+
+        default:
+            return { value: resolved.value ?? null };
     }
 }
 

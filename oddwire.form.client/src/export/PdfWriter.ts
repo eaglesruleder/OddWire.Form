@@ -8,33 +8,43 @@ const PAGE_SIZE: [number, number] = [612, 792];
 const DEFAULT_FONT_SIZE = 11;
 const PDF_TYPE = 'application/pdf';
 
+const GRID_THICKNESS = 0.5;
+const GRID_COLOR = rgb(0, 0.35, 1);
+const GRID_OPACITY = 0.3;
+const GRID_LABEL_SIZE = 6;
+const GRID_LABEL_COLOR = rgb(1, 0, 0);
+
 export class PdfWriter
 {
     private readonly pdf: PDFDocument;
     private readonly font: PDFFont;
+    private readonly fontSize: number;
 
-    private constructor(pdf: PDFDocument, font: PDFFont)
+    private constructor(pdf: PDFDocument, font: PDFFont, fontSize: number)
     {
         this.pdf = pdf;
         this.font = font;
+        this.fontSize = fontSize;
     }
 
-    static async create(template?: PdfTemplateRecord): Promise<PdfWriter>
+    // Intent: fontSize <= 0 means "auto" — fall back to the page-scaled default
+    static async create(template?: PdfTemplateRecord, fontSize = 0): Promise<PdfWriter>
     {
         const pdf = template ? await createFromTemplate(template) : await PDFDocument.create();
         const font = await pdf.embedFont(StandardFonts.Helvetica);
 
-        return new PdfWriter(pdf, font);
+        return new PdfWriter(pdf, font, fontSize);
     }
 
-    writeText(pageIndex: number, value: string, box: ControlPdfBox): void
+    // Intent: size precedence — per-control override, then the configured default, then page-scaled auto
+    writeText(pageIndex: number, value: string, box: ControlPdfBox, fontSize = 0): void
     {
         const page = this.page(pageIndex);
 
         page.drawText(value, {
             x: box.x,
             y: box.y,
-            size: DEFAULT_FONT_SIZE,
+            size: fontSize > 0 ? fontSize : this.fontSize > 0 ? this.fontSize : fontSizeFor(page),
             font: this.font,
             color: rgb(0, 0, 0),
             maxWidth: box.w,
@@ -59,12 +69,63 @@ export class PdfWriter
         }
     }
 
+    // Intent: calibration overlay — a coordinate ruler so box {x,y} can be authored against the template
+    drawGrid(spacing: number): void
+    {
+        if (spacing <= 0)
+            return;
+
+        for (const page of this.pdf.getPages())
+            this.drawPageGrid(page, spacing);
+    }
+
     async toBlob(): Promise<Blob>
     {
         const bytes = await this.pdf.save();
         const buffer = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
 
         return new Blob([buffer], { type: PDF_TYPE });
+    }
+
+    private drawPageGrid(page: PDFPage, spacing: number): void
+    {
+        const width = page.getWidth();
+        const height = page.getHeight();
+
+        for (let x = spacing; x < width; x += spacing)
+        {
+            page.drawLine(
+                { start: { x, y: 0 }
+                , end:   { x, y: height }
+                , thickness: GRID_THICKNESS
+                , color: GRID_COLOR
+                , opacity: GRID_OPACITY
+                });
+            this.drawGridLabel(page, String(x), x + 1, 1);
+        }
+
+        for (let y = spacing; y < height; y += spacing)
+        {
+            page.drawLine(
+                { start: { x: 0,     y }
+                , end:   { x: width, y }
+                , thickness: GRID_THICKNESS
+                , color: GRID_COLOR
+                , opacity: GRID_OPACITY
+                });
+            this.drawGridLabel(page, String(y), 1, y + 1);
+        }
+    }
+
+    private drawGridLabel(page: PDFPage, text: string, x: number, y: number): void
+    {
+        page.drawText(text, {
+            x,
+            y,
+            size: GRID_LABEL_SIZE,
+            font: this.font,
+            color: GRID_LABEL_COLOR,
+            });
     }
 
     private page(index: number): PDFPage
@@ -74,6 +135,11 @@ export class PdfWriter
 
         return this.pdf.getPage(index);
     }
+}
+
+function fontSizeFor(page: PDFPage): number
+{
+    return Math.min(DEFAULT_FONT_SIZE * (page.getHeight() / PAGE_SIZE[1]), 14);
 }
 
 async function createFromTemplate(template: PdfTemplateRecord): Promise<PDFDocument>

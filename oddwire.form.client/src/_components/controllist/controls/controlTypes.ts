@@ -47,6 +47,13 @@ export type ControlPdfBox = {
 
 export type ControlPdfDef = Record<string, ControlPdfBox[]>;
 
+// Intent: per-control export config; pdf.fontSize overrides settings.export.pdf.fontSize for this control's slots
+export type ControlExportDef = {
+    pdf?: {
+        fontSize?: number;
+        };
+    };
+
 export type ControlDefBase<TType extends string, TValue = unknown> = {
     type: TType;
     param: string;
@@ -59,6 +66,7 @@ export type ControlDefBase<TType extends string, TValue = unknown> = {
     cellClassName?: string;
     rows?: number;
     pdf?: ControlPdfDef;
+    export?: ControlExportDef;
     };
 
 export type LabelControlDef = ControlDefBase<'label', string> & {
@@ -119,3 +127,12 @@ export type ControlDef =
     | TabControlDef
     | PopupControlDef
     | LooperControlDef;
+
+// Intent: export-flatten plugin contract. A control's flatten returns { value } to emit under its param, or undefined to
+// emit nothing (layout recurses via ctx). The walker owns the tree walk + pdf emission; plugins only shape their node.
+export type FlattenResult = { value: unknown } | undefined;
+
+export type FlattenCtx = {
+    recurse: (children: ControlDef[]) => void;                                 // flatten children into the same flat scope
+    scope: (children: ControlDef[], row: unknown) => Record<string, unknown>;  // flatten children into a fresh row scope
+    };

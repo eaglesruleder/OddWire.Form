@@ -1,4 +1,5 @@
-import type { ControlDef, ControlPdfBox } from '../_components/controllist';
+import type { ControlDef, ControlPdfBox, FlattenCtx } from '../_components/controllist';
+import { flattenControl } from '../_components/controllist';
 import type { FormDefinition } from '../_context';
 
 import { InstanceEntity } from '../_context';
@@ -16,6 +17,7 @@ export type FlattenedPdfField = {
     param: string;
     value: unknown;
     pages: Record<string, ControlPdfBox[]>;
+    fontSize?: number;
     };
 
 export function flattenInstance(form: FormDefinition, instance: InstanceEntity): FlattenedInstanceExport
@@ -23,7 +25,7 @@ export function flattenInstance(form: FormDefinition, instance: InstanceEntity):
     const values: Record<string, unknown> = {};
     const pdf: FlattenedPdfField[] = [];
 
-    flattenControls(form.controls, instance, values, pdf);
+    walkControls(form.controls, instance, values, pdf);
 
     return {
         formId: form.formId,
@@ -35,54 +37,40 @@ export function flattenInstance(form: FormDefinition, instance: InstanceEntity):
         };
 }
 
-function flattenControls(controls: ControlDef[], instance: InstanceEntity, values: Record<string, unknown>, pdf: FlattenedPdfField[]): void
+function walkControls(controls: ControlDef[], instance: InstanceEntity, values: Record<string, unknown>, pdf: FlattenedPdfField[]): void
 {
     for (const control of controls)
-        flattenControl(control, instance, values, pdf);
+        walkControl(control, instance, values, pdf);
 }
 
-function flattenControl(control: ControlDef, instance: InstanceEntity, values: Record<string, unknown>, pdf: FlattenedPdfField[]): void
+// Intent: the walker owns the tree walk + pdf emission; flattenControl (the plugin switch) only shapes each node's value
+function walkControl(control: ControlDef, instance: InstanceEntity, values: Record<string, unknown>, pdf: FlattenedPdfField[]): void
 {
     const resolved = instance.resolve(control);
 
-    switch (resolved.type)
+    const ctx: FlattenCtx =
+        { recurse: children => walkControls(children, instance, values, pdf)
+        , scope:   rowScope
+        };
+
+    const result = flattenControl(resolved, ctx);
+
+    if (result)
     {
-        case 'collapsible':
-        case 'popup':
-        case 'tab':
-            flattenChildren(resolved.controls, instance, values, pdf);
-            return;
-
-        case 'looper':
-            values[resolved.param] = flattenRows(resolved.controls, resolved.value);
-            addPdfField(resolved, values[resolved.param], pdf);
-            return;
-
-        default:
-            values[resolved.param] = resolved.value ?? null;
-            addPdfField(resolved, values[resolved.param], pdf);
-            return;
+        values[resolved.param] = result.value;
+        addPdfField(resolved, result.value, pdf);
     }
 }
 
-function flattenChildren(controls: ControlDef[], instance: InstanceEntity, values: Record<string, unknown>, pdf: FlattenedPdfField[]): void
+// Intent: flatten children into a fresh row instance (looper rows) — own scope, pdf boxes dropped
+function rowScope(controls: ControlDef[], row: unknown): Record<string, unknown>
 {
-    for (const control of controls)
-        flattenControl(control, instance, values, pdf);
-}
+    const rowInstance = new InstanceEntity(isRowInstance(row) ? row : { controls: [] });
+    const rowValues: Record<string, unknown> = {};
 
-function flattenRows(controls: ControlDef[], rows: unknown): Record<string, unknown>[]
-{
-    if (!Array.isArray(rows))
-        return [];
+    walkControls(controls, rowInstance, rowValues, []);
 
-    return rows.map(row =>
-    {
-        const rowInstance = new InstanceEntity(isRowInstance(row) ? row : { controls: [] });
-        const values: Record<string, unknown> = {};
-        flattenControls(controls, rowInstance, values, []);
-        return values;
-    });
+    return rowValues;
 }
 
 function addPdfField(control: ControlDef, value: unknown, pdf: FlattenedPdfField[]): void
@@ -94,6 +82,7 @@ function addPdfField(control: ControlDef, value: unknown, pdf: FlattenedPdfField
         param: control.param,
         value,
         pages: control.pdf,
+        fontSize: control.export?.pdf?.fontSize,
         });
 }
 

@@ -2,6 +2,8 @@ import type { FormDefinition } from '../_context';
 import { InstanceEntity } from '../_context';
 import type { PdfTemplateRecord } from '../_context';
 
+import settings from '../settings.json';
+
 import { flattenInstance } from './flattenInstance';
 import type { FlattenedInstanceExport } from './flattenInstance';
 import { PdfWriter } from './PdfWriter';
@@ -22,9 +24,10 @@ export class FormPdfExporter
     async export(): Promise<Blob>
     {
         const flattened = flattenInstance(this.form, this.instance);
-        const writer = await PdfWriter.create(this.template);
+        const writer = await PdfWriter.create(this.template, settings.export.pdf.fontSize);
 
         this.writePlacedValues(writer, flattened);
+        writer.drawGrid(settings.export.pdf.showGrid);
 
         return writer.toBlob();
     }
@@ -34,7 +37,7 @@ export class FormPdfExporter
         for (const field of flattened.pdf)
             for (const [pageKey, boxes] of Object.entries(field.pages))
                 for (const box of boxes)
-                    writer.writeText(pageIndex(pageKey), String(field.value ?? ''), box);
+                    writer.writeText(pageIndex(pageKey), String(field.value ?? ''), box, field.fontSize);
     }
 }
 
