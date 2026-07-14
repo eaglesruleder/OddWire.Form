@@ -1,0 +1,8 @@
+{
+    "export": {
+        "pdf": {
+            "showGrid": 100,
+            "fontSize": 24
+        }
+    }
+}
