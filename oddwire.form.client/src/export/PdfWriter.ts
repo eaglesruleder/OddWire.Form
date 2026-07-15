@@ -41,11 +41,15 @@ export class PdfWriter
     {
         const page = this.page(pageIndex);
         const boxSize = box.fontSize ?? 0;
+        const size = boxSize > 0 ? boxSize : this.fontSize > 0 ? this.fontSize : fontSizeFor(page);
+
+        const textWidth = this.font.widthOfTextAtSize(value, size);
+        const textHeight = this.font.heightAtSize(size);
 
         page.drawText(value, {
-            x: box.x,
-            y: box.y,
-            size: boxSize > 0 ? boxSize : this.fontSize > 0 ? this.fontSize : fontSizeFor(page),
+            x: alignedX(box, textWidth),
+            y: alignedY(box, textHeight),
+            size,
             font: this.font,
             color: rgb(0, 0, 0),
             maxWidth: box.w,
@@ -141,6 +145,32 @@ export class PdfWriter
 function fontSizeFor(page: PDFPage): number
 {
     return Math.min(DEFAULT_FONT_SIZE * (page.getHeight() / PAGE_SIZE[1]), 14);
+}
+
+// Intent: w = 0 (no width) collapses the box to the x anchor, so the same offset both aligns within a box and anchors a point
+function alignedX(box: ControlPdfBox, textWidth: number): number
+{
+    const w = box.w ?? 0;
+
+    switch (box.align)
+    {
+        case 'center': return box.x + (w - textWidth) / 2;
+        case 'right':  return box.x + w - textWidth;   // right edge at x+w (or at x when no width) — text extends left
+        default:       return box.x;                   // left / unset
+    }
+}
+
+// Intent: pdf-lib y is the text baseline; valign 'bottom' keeps the baseline at box.y (the prior default)
+function alignedY(box: ControlPdfBox, textHeight: number): number
+{
+    const h = box.h ?? 0;
+
+    switch (box.valign)
+    {
+        case 'middle': return box.y + (h - textHeight) / 2;
+        case 'top':    return box.y + h - textHeight;
+        default:       return box.y;                   // bottom / unset
+    }
 }
 
 async function createFromTemplate(template: PdfTemplateRecord): Promise<PDFDocument>

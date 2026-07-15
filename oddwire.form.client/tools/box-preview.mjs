@@ -28,7 +28,7 @@ const walk = controls => controls.forEach(c =>
     {
         // mirror PdfWriter precedence: per-box override, else settings default
         for (const pageBoxes of Object.values(c.pdf))
-            pageBoxes.forEach(b => boxes.push({ param: c.param, x: b.x, y: b.y, fontSize: b.fontSize > 0 ? b.fontSize : defaultSize }));
+            pageBoxes.forEach(b => boxes.push({ param: c.param, x: b.x, y: b.y, w: b.w, h: b.h, align: b.align, valign: b.valign, fontSize: b.fontSize > 0 ? b.fontSize : defaultSize }));
     }
 
     if (c.controls && ['tab', 'collapsible', 'popup', 'looper'].includes(c.type))
@@ -50,8 +50,15 @@ const html = [
     ` g.lineWidth=0.5;g.strokeStyle='rgba(0,90,255,0.22)';g.textBaseline='bottom';`,
     ` for(let x=GRID;x<W;x+=GRID){g.beginPath();g.moveTo(x,0);g.lineTo(x,H);g.stroke();g.font='7px Helvetica';g.fillStyle='rgba(255,0,0,0.5)';g.fillText(x,x+1,H-1);}`,
     ` for(let y=GRID;y<H;y+=GRID){const cy=H-y;g.beginPath();g.moveTo(0,cy);g.lineTo(W,cy);g.stroke();g.fillStyle='rgba(255,0,0,0.5)';g.fillText(y,1,cy-1);}`,
-    // pdf y is bottom-left origin -> canvas y = H - y
-    ` BOXES.forEach(b=>{const cy=H-b.y;g.fillStyle='rgba(220,0,0,0.85)';g.beginPath();g.arc(b.x,cy,3,0,7);g.fill();g.fillStyle='rgba(0,0,0,0.9)';g.font=b.fontSize+'px Helvetica';g.textBaseline='alphabetic';g.fillText(b.param,b.x,cy);});`,
+    // pdf y is bottom-left origin -> canvas y = H - y; align/valign mirror PdfWriter (w/h 0 -> anchor-relative)
+    ` BOXES.forEach(b=>{`,
+    `  g.font=b.fontSize+'px Helvetica';g.textAlign='left';g.textBaseline='alphabetic';`,
+    `  const tw=g.measureText(b.param).width,th=b.fontSize,w=b.w||0,h=b.h||0;`,
+    `  let dx=b.x;if(b.align==='center')dx=b.x+(w-tw)/2;else if(b.align==='right')dx=b.x+w-tw;`,
+    `  let dy=b.y;if(b.valign==='middle')dy=b.y+(h-th)/2;else if(b.valign==='top')dy=b.y+h-th;`,
+    `  g.fillStyle='rgba(220,0,0,0.85)';g.beginPath();g.arc(b.x,H-b.y,3,0,7);g.fill();`,   // anchor dot at (x,y)
+    `  g.fillStyle='rgba(0,0,0,0.9)';g.fillText(b.param,dx,H-dy);`,                        // text at aligned position
+    ` });`,
     `};img.src=IMG;`,
     '</script>',
 ].join('\n');
