@@ -2,7 +2,7 @@ import type { FormDefinition } from '../_context';
 import { InstanceEntity } from '../_context';
 import type { PdfTemplateRecord } from '../_context';
 
-import settings from '../settings.json';
+import appSettings from '../AppSettings.json';
 
 import { flattenInstance } from './flattenInstance';
 import type { FlattenedInstanceExport } from './flattenInstance';
@@ -24,10 +24,10 @@ export class FormPdfExporter
     async export(): Promise<Blob>
     {
         const flattened = flattenInstance(this.form, this.instance);
-        const writer = await PdfWriter.create(this.template, settings.export.pdf.fontSize);
+        const writer = await PdfWriter.create(this.template, appSettings.export.pdf.fontSize);
 
         this.writePlacedValues(writer, flattened);
-        writer.drawGrid(settings.export.pdf.showGrid);
+        writer.drawGrid(appSettings.export.pdf.showGrid);
 
         return writer.toBlob();
     }

@@ -4,7 +4,7 @@ import { ContextsProvider } from './_context';
 import { ExportPDFPage } from './export/pdf';
 import { FormPage } from './form';
 import { LandingPage } from './landing';
-import { SettingsPage } from './settings/index';   // explicit: sibling settings.json config would otherwise shadow ./settings
+import { SettingsPage } from './settings';
 
 function App() {
     return (
