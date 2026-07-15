@@ -98,11 +98,18 @@
                     "param": "type",
                     "label": "Type",
                     "stacked": true,
-                    "cellClassName": "sm-col-6 lg-col-3",
+                    "cellClassName": "sm-col-6 lg-col-3"
+                },
+                {
+                    "type": "text",
+                    "param": "sizeType",
+                    "label": "Size / Type",
+                    "hidden": true,
+                    "value": "{size} {type}",
                     "pdf": {
                         "0": [
                             {
-                                "x": 250,
+                                "x": 118,
                                 "y": 1360
                             }
                         ]
@@ -113,15 +120,7 @@
                     "param": "size",
                     "label": "Size",
                     "stacked": true,
-                    "cellClassName": "sm-col-6 lg-col-3",
-                    "pdf": {
-                        "0": [
-                            {
-                                "x": 118,
-                                "y": 1360
-                            }
-                        ]
-                    }
+                    "cellClassName": "sm-col-6 lg-col-3"
                 },
                 {
                     "type": "text",
