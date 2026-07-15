@@ -8,6 +8,9 @@ const PAGE_SIZE: [number, number] = [612, 792];
 const DEFAULT_FONT_SIZE = 11;
 const PDF_TYPE = 'application/pdf';
 
+const MIN_FONT_SIZE = 5;
+const ELLIPSIS = '…';
+
 const GRID_THICKNESS = 0.5;
 const GRID_COLOR = rgb(0, 0.35, 1);
 const GRID_OPACITY = 0.3;
@@ -36,24 +39,85 @@ export class PdfWriter
         return new PdfWriter(pdf, font, fontSize);
     }
 
-    // Intent: size precedence — per-box override, then the configured default, then page-scaled auto
     writeText(pageIndex: number, value: string, box: ControlPdfBox): void
     {
+        if (!value)
+            return;
+
         const page = this.page(pageIndex);
+        const baseSize = this.sizeFor(box, page);
+
+        // Intent: no width -> single line at the anchor (fast path, prior behaviour)
+        if (!box.w)
+        {
+            const y = alignedY(box, this.font.heightAtSize(baseSize));
+            page.drawText(value, { x: alignedX(box, this.font.widthOfTextAtSize(value, baseSize)), y, size: baseSize, font: this.font, color: rgb(0, 0, 0) });
+            return;
+        }
+
+        const size = box.shrinkToFit ? this.shrunkToFit(value, box, baseSize) : baseSize;
+        let lines = wrapLines(this.font, value, size, box.w);
+
+        if (!box.shrinkToFit && box.h)
+            lines = this.clampToHeight(lines, box, size);
+
+        this.drawLines(page, lines, box, size);
+    }
+
+    // Intent: size precedence — per-box override, then the configured default, then page-scaled auto
+    private sizeFor(box: ControlPdfBox, page: PDFPage): number
+    {
         const boxSize = box.fontSize ?? 0;
-        const size = boxSize > 0 ? boxSize : this.fontSize > 0 ? this.fontSize : fontSizeFor(page);
+        return boxSize > 0 ? boxSize : this.fontSize > 0 ? this.fontSize : fontSizeFor(page);
+    }
 
-        const textWidth = this.font.widthOfTextAtSize(value, size);
-        const textHeight = this.font.heightAtSize(size);
+    // Intent: shrink the font one step at a time until the wrapped block fits the box's w (and h, if given), floored at MIN_FONT_SIZE
+    private shrunkToFit(value: string, box: ControlPdfBox, startSize: number): number
+    {
+        let size = startSize;
 
-        page.drawText(value, {
-            x: alignedX(box, textWidth),
-            y: alignedY(box, textHeight),
-            size,
-            font: this.font,
-            color: rgb(0, 0, 0),
-            maxWidth: box.w,
-            });
+        while (size > MIN_FONT_SIZE)
+        {
+            const lines = wrapLines(this.font, value, size, box.w ?? 0);
+            const widest = Math.max(...lines.map(line => this.font.widthOfTextAtSize(line, size)));
+            const blockHeight = lines.length * this.font.heightAtSize(size);
+
+            if (widest <= (box.w ?? 0)
+            &&  (!box.h || blockHeight <= box.h)
+                )
+                break;
+
+            size -= 1;
+        }
+
+        return size;
+    }
+
+    // Intent: keep only the lines that fit h; mark truncation with an ellipsis on the last kept line
+    private clampToHeight(lines: string[], box: ControlPdfBox, size: number): string[]
+    {
+        const maxLines = Math.max(1, Math.floor((box.h ?? 0) / this.font.heightAtSize(size)));
+
+        if (lines.length <= maxLines)
+            return lines;
+
+        const kept = lines.slice(0, maxLines);
+        kept[maxLines - 1] = ellipsize(this.font, kept[maxLines - 1], size, box.w ?? 0);
+        return kept;
+    }
+
+    // Intent: stack wrapped lines top-to-bottom; the block is valign-placed and each line is align-placed by its own width
+    private drawLines(page: PDFPage, lines: string[], box: ControlPdfBox, size: number): void
+    {
+        const lineHeight = this.font.heightAtSize(size);
+        const bottomBaseline = alignedY(box, lines.length * lineHeight);   // baseline of the last (bottom) line
+
+        lines.forEach((line, index) =>
+        {
+            const x = alignedX(box, this.font.widthOfTextAtSize(line, size));
+            const y = bottomBaseline + (lines.length - 1 - index) * lineHeight;
+            page.drawText(line, { x, y, size, font: this.font, color: rgb(0, 0, 0) });
+        });
     }
 
     writeLines(lines: string[], options: { x: number; y: number; lineHeight: number; marginBottom: number }): void
@@ -158,6 +222,47 @@ function alignedX(box: ControlPdfBox, textWidth: number): number
         case 'right':  return box.x + w - textWidth;   // right edge at x+w (or at x when no width) — text extends left
         default:       return box.x;                   // left / unset
     }
+}
+
+// Intent: greedy word-wrap to maxWidth; a single word wider than the box is left on its own line rather than dropped
+function wrapLines(font: PDFFont, text: string, size: number, maxWidth: number): string[]
+{
+    const words = text.split(/\s+/).filter(Boolean);
+
+    if (words.length === 0)
+        return [text];
+
+    const lines: string[] = [];
+    let line = '';
+
+    for (const word of words)
+    {
+        const candidate = line ? `${line} ${word}` : word;
+
+        if (!line || font.widthOfTextAtSize(candidate, size) <= maxWidth)
+            line = candidate;
+        else
+        {
+            lines.push(line);
+            line = word;
+        }
+    }
+
+    if (line)
+        lines.push(line);
+
+    return lines;
+}
+
+// Intent: trim characters until text + '…' fits maxWidth
+function ellipsize(font: PDFFont, text: string, size: number, maxWidth: number): string
+{
+    let clipped = text;
+
+    while (clipped.length > 0 && font.widthOfTextAtSize(clipped + ELLIPSIS, size) > maxWidth)
+        clipped = clipped.slice(0, -1);
+
+    return clipped.trimEnd() + ELLIPSIS;
 }
 
 // Intent: pdf-lib y is the text baseline; valign 'bottom' keeps the baseline at box.y (the prior default)

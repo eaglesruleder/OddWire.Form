@@ -163,7 +163,10 @@
                             {
                                 "x": 435,
                                 "y": 865,
-                                "align": "center"
+                                "align": "center",
+                                "w": 120,
+                                "h": 30,
+                                "shrinkToFit": true
                             }
                         ]
                     }

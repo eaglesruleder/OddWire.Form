@@ -46,6 +46,7 @@ export type ControlPdfBox = {
     fontSize?: number;                        // per-box override of settings.export.pdf.fontSize; 0/absent = use default
     align?: 'left' | 'center' | 'right';      // horizontal: relative to [x, x+w] when w set, else to the x anchor
     valign?: 'top' | 'middle' | 'bottom';     // vertical: relative to [y, y+h] when h set, else to the y anchor
+    shrinkToFit?: boolean;                     // with w set: scale font down until the wrapped text fits w (and h); else ellipsis-clip to h
     };
 
 export type ControlPdfDef = Record<string, ControlPdfBox[]>;
