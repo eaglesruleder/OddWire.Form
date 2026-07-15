@@ -7,6 +7,7 @@ import appSettings from '../AppSettings.json';
 import { flattenInstance } from './flattenInstance';
 import type { FlattenedInstanceExport } from './flattenInstance';
 import { PdfWriter } from './PdfWriter';
+import { rasterizeToPng } from './rasterizeImage';
 
 export class FormPdfExporter
 {
@@ -26,18 +27,29 @@ export class FormPdfExporter
         const flattened = flattenInstance(this.form, this.instance);
         const writer = await PdfWriter.create(this.template, appSettings.export.pdf.fontSize);
 
-        this.writePlacedValues(writer, flattened);
+        await this.writePlacedValues(writer, flattened);
         writer.drawGrid(appSettings.export.pdf.showGrid);
 
         return writer.toBlob();
     }
 
-    private writePlacedValues(writer: PdfWriter, flattened: FlattenedInstanceExport): void
+    private async writePlacedValues(writer: PdfWriter, flattened: FlattenedInstanceExport): Promise<void>
     {
         for (const field of flattened.pdf)
+        {
+            // Intent: image fields rasterize once, then draw into every box; text fields draw per box
+            const png = field.image ? await rasterizeToPng(String(field.value ?? '')) : null;
+
             for (const [pageKey, boxes] of Object.entries(field.pages))
                 for (const box of boxes)
-                    writer.writeText(pageIndex(pageKey), String(field.value ?? ''), box);
+                    if (field.image)
+                    {
+                        if (png)
+                            await writer.drawImage(pageIndex(pageKey), png, box);
+                    }
+                    else
+                        writer.writeText(pageIndex(pageKey), String(field.value ?? ''), box);
+        }
     }
 }
 

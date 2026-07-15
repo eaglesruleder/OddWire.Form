@@ -120,6 +120,24 @@ export class PdfWriter
         });
     }
 
+    // Intent: draw pre-rasterized PNG bytes fit-contained (aspect-preserved) and centered inside the box
+    async drawImage(pageIndex: number, pngBytes: Uint8Array, box: ControlPdfBox): Promise<void>
+    {
+        const boxW = box.w ?? 0;
+        const boxH = box.h ?? 0;
+
+        if (boxW <= 0 || boxH <= 0)
+            return;
+
+        const page = this.page(pageIndex);
+        const image = await this.pdf.embedPng(pngBytes);
+        const scale = Math.min(boxW / image.width, boxH / image.height);
+        const width = image.width * scale;
+        const height = image.height * scale;
+
+        page.drawImage(image, { x: box.x + (boxW - width) / 2, y: box.y + (boxH - height) / 2, width, height });
+    }
+
     writeLines(lines: string[], options: { x: number; y: number; lineHeight: number; marginBottom: number }): void
     {
         let pageIndex = 0;

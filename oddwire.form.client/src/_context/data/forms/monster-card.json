@@ -45,7 +45,17 @@
                     "type": "image",
                     "param": "image",
                     "label": "Token",
-                    "cellClassName": "sm-col-12 lg-col-3"
+                    "cellClassName": "sm-col-12 lg-col-3",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 350,
+                                "y": 50,
+                                "w": 350,
+                                "h": 350
+                            }
+                        ]
+                    }
                 },
                 {
                     "type": "text",

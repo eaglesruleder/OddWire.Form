@@ -17,6 +17,7 @@ export type FlattenedPdfField = {
     param: string;
     value: unknown;
     pages: Record<string, ControlPdfBox[]>;
+    image?: boolean;   // draw the value as an embedded image rather than text
     };
 
 // Intent: a control whose value carries {param} tokens; deferred to a second pass so its referenced params are already flattened
@@ -145,6 +146,7 @@ function addPdfField(control: ControlDef, value: unknown, pdf: FlattenedPdfField
         param: control.param,
         value,
         pages: control.pdf,
+        image: control.type === 'image',
         });
 }
 
