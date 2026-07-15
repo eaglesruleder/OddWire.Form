@@ -90,9 +90,10 @@ function optionSource
     return resolveDbOptions(dbOptions, db, instance, staticControls ?? []);
 }
 
-// Intent: dbOptions.fill → selecting a row writes the key AND every other (non-empty) column into its matching param
-// Batches the columns through instance.setValues (one persist) instead of N onChange calls; skips empty columns so a
-// blank source value never clobbers an existing edit (e.g. notes) — key-lossy on the instance drops the rest.
+// Intent: dbOptions.fill → selecting a row writes the key AND every other column present in the row into its matching param.
+// A column present but empty is still applied (cleared/hidden) so reselecting a record blanks the fields it does not have —
+// the table row is authoritative and non-lossy; only the instance overlay stays sparse. Params absent from the row are untouched.
+// Batches the columns through instance.setValues (one persist) instead of N onChange calls.
 function fillOnChange(dbOptions: DbOptions | undefined, db: Record<string, LookupTable>, onChange: InstanceChange, instance: InstanceEntity): InstanceChange
 {
     if (!dbOptions || typeof dbOptions === 'string' || !dbOptions.fill)
@@ -113,7 +114,7 @@ function fillOnChange(dbOptions: DbOptions | undefined, db: Record<string, Looku
 
             for (const [column, columnValue] of Object.entries(row))
             {
-                if (column === dbOptions.valueParam || columnValue === '' || columnValue == null)
+                if (column === dbOptions.valueParam)
                     continue;
 
                 if (isControlPatch(columnValue))
