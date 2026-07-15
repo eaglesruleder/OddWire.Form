@@ -37,7 +37,7 @@ export class FormPdfExporter
         for (const field of flattened.pdf)
             for (const [pageKey, boxes] of Object.entries(field.pages))
                 for (const box of boxes)
-                    writer.writeText(pageIndex(pageKey), String(field.value ?? ''), box, field.fontSize);
+                    writer.writeText(pageIndex(pageKey), String(field.value ?? ''), box);
     }
 }
 

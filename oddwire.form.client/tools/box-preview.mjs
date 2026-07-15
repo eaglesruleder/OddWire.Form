@@ -26,10 +26,9 @@ const walk = controls => controls.forEach(c =>
 {
     if (c.pdf)
     {
-        // mirror PdfWriter precedence: control override, else settings default
-        const size = c.export?.pdf?.fontSize > 0 ? c.export.pdf.fontSize : defaultSize;
+        // mirror PdfWriter precedence: per-box override, else settings default
         for (const pageBoxes of Object.values(c.pdf))
-            pageBoxes.forEach(b => boxes.push({ param: c.param, x: b.x, y: b.y, fontSize: size }));
+            pageBoxes.forEach(b => boxes.push({ param: c.param, x: b.x, y: b.y, fontSize: b.fontSize > 0 ? b.fontSize : defaultSize }));
     }
 
     if (c.controls && ['tab', 'collapsible', 'popup', 'looper'].includes(c.type))

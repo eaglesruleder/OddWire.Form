@@ -43,16 +43,10 @@ export type ControlPdfBox = {
     y: number;
     w?: number;
     h?: number;
+    fontSize?: number;   // per-box override of settings.export.pdf.fontSize; 0/absent = use default
     };
 
 export type ControlPdfDef = Record<string, ControlPdfBox[]>;
-
-// Intent: per-control export config; pdf.fontSize overrides settings.export.pdf.fontSize for this control's slots
-export type ControlExportDef = {
-    pdf?: {
-        fontSize?: number;
-        };
-    };
 
 export type ControlDefBase<TType extends string, TValue = unknown> = {
     type: TType;
@@ -66,7 +60,6 @@ export type ControlDefBase<TType extends string, TValue = unknown> = {
     cellClassName?: string;
     rows?: number;
     pdf?: ControlPdfDef;
-    export?: ControlExportDef;
     };
 
 export type LabelControlDef = ControlDefBase<'label', string> & {

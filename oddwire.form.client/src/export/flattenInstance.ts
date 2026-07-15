@@ -17,7 +17,6 @@ export type FlattenedPdfField = {
     param: string;
     value: unknown;
     pages: Record<string, ControlPdfBox[]>;
-    fontSize?: number;
     };
 
 export function flattenInstance(form: FormDefinition, instance: InstanceEntity): FlattenedInstanceExport
@@ -82,7 +81,6 @@ function addPdfField(control: ControlDef, value: unknown, pdf: FlattenedPdfField
         param: control.param,
         value,
         pages: control.pdf,
-        fontSize: control.export?.pdf?.fontSize,
         });
 }
 

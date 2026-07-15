@@ -36,15 +36,16 @@ export class PdfWriter
         return new PdfWriter(pdf, font, fontSize);
     }
 
-    // Intent: size precedence — per-control override, then the configured default, then page-scaled auto
-    writeText(pageIndex: number, value: string, box: ControlPdfBox, fontSize = 0): void
+    // Intent: size precedence — per-box override, then the configured default, then page-scaled auto
+    writeText(pageIndex: number, value: string, box: ControlPdfBox): void
     {
         const page = this.page(pageIndex);
+        const boxSize = box.fontSize ?? 0;
 
         page.drawText(value, {
             x: box.x,
             y: box.y,
-            size: fontSize > 0 ? fontSize : this.fontSize > 0 ? this.fontSize : fontSizeFor(page),
+            size: boxSize > 0 ? boxSize : this.fontSize > 0 ? this.fontSize : fontSizeFor(page),
             font: this.font,
             color: rgb(0, 0, 0),
             maxWidth: box.w,
