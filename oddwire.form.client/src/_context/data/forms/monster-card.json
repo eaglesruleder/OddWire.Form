@@ -57,14 +57,10 @@
                         "0": [
                             {
                                 "x": 355,
-                                "y": 1362
+                                "y": 1362,
+                                "fontSize": 40
                             }
                         ]
-                    },
-                    "export": {
-                        "pdf": {
-                            "fontSize": 40
-                        }
                     }
                 },
                 {
@@ -102,7 +98,7 @@
                     "param": "type",
                     "label": "Type",
                     "stacked": true,
-                    "cellClassName": "sm-col-12 lg-col-6",
+                    "cellClassName": "sm-col-6 lg-col-3",
                     "pdf": {
                         "0": [
                             {
@@ -137,7 +133,22 @@
                         "0": [
                             {
                                 "x": 270,
-                                "y": 846
+                                "y": 855
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "text",
+                    "param": "initiative",
+                    "label": "Initiative",
+                    "stacked": true,
+                    "cellClassName": "sm-col-6 lg-col-3",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 217,
+                                "y": 855
                             }
                         ]
                     }
@@ -151,8 +162,8 @@
                     "pdf": {
                         "0": [
                             {
-                                "x": 382,
-                                "y": 820
+                                "x": 395,
+                                "y": 865
                             }
                         ]
                     }
@@ -181,15 +192,11 @@
                     "pdf": {
                         "0": [
                             {
-                                "x": 97,
-                                "y": 860
+                                "x": 95,
+                                "y": 860,
+                                "fontSize": 46
                             }
                         ]
-                    },
-                    "export": {
-                        "pdf": {
-                            "fontSize": 46
-                        }
                     }
                 },
                 {
@@ -201,8 +208,24 @@
                     "pdf": {
                         "0": [
                             {
-                                "x": 730,
-                                "y": 820
+                                "x": 740,
+                                "y": 835,
+                                "fontSize": 46
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "text",
+                    "param": "darkvision",
+                    "label": "Darkvision",
+                    "stacked": true,
+                    "cellClassName": "sm-col-6 lg-col-3",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 760,
+                                "y": 785
                             }
                         ]
                     }
@@ -214,8 +237,8 @@
                     "pdf": {
                         "0": [
                             {
-                                "x": 752,
-                                "y": 700
+                                "x": 710,
+                                "y": 640
                             }
                         ]
                     }
@@ -229,7 +252,7 @@
                         "0": [
                             {
                                 "x": 368,
-                                "y": 722
+                                "y": 670
                             }
                         ]
                     }
@@ -243,7 +266,7 @@
                         "0": [
                             {
                                 "x": 368,
-                                "y": 690
+                                "y": 640
                             }
                         ]
                     }
@@ -257,7 +280,7 @@
                         "0": [
                             {
                                 "x": 368,
-                                "y": 658
+                                "y": 610
                             }
                         ]
                     }
@@ -271,7 +294,7 @@
                         "0": [
                             {
                                 "x": 368,
-                                "y": 626
+                                "y": 580
                             }
                         ]
                     }
@@ -312,124 +335,42 @@
                     ]
                 },
                 {
-                    "type": "text",
-                    "param": "strMod",
-                    "label": "STR Mod",
-                    "hidden": true,
-                    "pdf": {
-                        "0": [
-                            {
-                                "x": 74,
-                                "y": 1162
-                            }
-                        ]
-                    },
-                    "export": {
-                        "pdf": {
-                            "fontSize": 40
-                        }
-                    }
-                },
-                {
-                    "type": "text",
-                    "param": "dexMod",
-                    "label": "DEX Mod",
-                    "hidden": true,
-                    "pdf": {
-                        "0": [
-                            {
-                                "x": 240,
-                                "y": 1162
-                            }
-                        ]
-                    },
-                    "export": {
-                        "pdf": {
-                            "fontSize": 40
-                        }
-                    }
-                },
-                {
-                    "type": "text",
-                    "param": "conMod",
-                    "label": "CON Mod",
-                    "hidden": true,
-                    "pdf": {
-                        "0": [
-                            {
-                                "x": 404,
-                                "y": 1162
-                            }
-                        ]
-                    },
-                    "export": {
-                        "pdf": {
-                            "fontSize": 40
-                        }
-                    }
-                },
-                {
-                    "type": "text",
-                    "param": "intMod",
-                    "label": "INT Mod",
-                    "hidden": true,
-                    "pdf": {
-                        "0": [
-                            {
-                                "x": 564,
-                                "y": 1162
-                            }
-                        ]
-                    },
-                    "export": {
-                        "pdf": {
-                            "fontSize": 40
-                        }
-                    }
-                },
-                {
-                    "type": "text",
-                    "param": "wisMod",
-                    "label": "WIS Mod",
-                    "hidden": true,
-                    "pdf": {
-                        "0": [
-                            {
-                                "x": 732,
-                                "y": 1162
-                            }
-                        ]
-                    },
-                    "export": {
-                        "pdf": {
-                            "fontSize": 40
-                        }
-                    }
-                },
-                {
-                    "type": "text",
-                    "param": "chaMod",
-                    "label": "CHA Mod",
-                    "hidden": true,
-                    "pdf": {
-                        "0": [
-                            {
-                                "x": 896,
-                                "y": 1162
-                            }
-                        ]
-                    },
-                    "export": {
-                        "pdf": {
-                            "fontSize": 40
-                        }
-                    }
-                },
-                {
                     "type": "tab",
                     "param": "tabStr",
                     "label": "STR {strMod}",
                     "controls": [
+                        {
+                            "type": "text",
+                            "param": "strAttr",
+                            "label": "STR Score",
+                            "valueType": "int",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 105,
+                                        "y": 1100
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "strMod",
+                            "label": "STR Mod",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 85,
+                                        "y": 1162,
+                                        "fontSize": 40
+                                    }
+                                ]
+                            },
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3"
+                        },
                         {
                             "type": "text",
                             "param": "strSave",
@@ -446,7 +387,7 @@
                             "pdf": {
                                 "0": [
                                     {
-                                        "x": 78,
+                                        "x": 73,
                                         "y": 1055
                                     }
                                 ]
@@ -459,6 +400,38 @@
                     "param": "tabDex",
                     "label": "DEX {dexMod}",
                     "controls": [
+                        {
+                            "type": "text",
+                            "param": "dexAttr",
+                            "label": "DEX Score",
+                            "valueType": "int",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 270,
+                                        "y": 1100
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "dexMod",
+                            "label": "DEX Mod",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 245,
+                                        "y": 1162,
+                                        "fontSize": 40
+                                    }
+                                ]
+                            },
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3"
+                        },
                         {
                             "type": "text",
                             "param": "dexSave",
@@ -520,8 +493,42 @@
                     "controls": [
                         {
                             "type": "text",
+                            "param": "conAttr",
+                            "label": "CON Score",
+                            "valueType": "int",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 430,
+                                        "y": 1100
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "conMod",
+                            "label": "CON Mod",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 404,
+                                        "y": 1162,
+                                        "fontSize": 40
+                                    }
+                                ]
+                            },
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3"
+                        },
+                        {
+                            "type": "text",
                             "param": "conSave",
-                            "label": "Saving Throw"
+                            "label": "Saving Throw",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3"
                         }
                     ]
                 },
@@ -530,6 +537,38 @@
                     "param": "tabInt",
                     "label": "INT {intMod}",
                     "controls": [
+                        {
+                            "type": "text",
+                            "param": "intAttr",
+                            "label": "INT Score",
+                            "valueType": "int",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 590,
+                                        "y": 1100
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "intMod",
+                            "label": "INT Mod",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 570,
+                                        "y": 1162,
+                                        "fontSize": 40
+                                    }
+                                ]
+                            },
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3"
+                        },
                         {
                             "type": "text",
                             "param": "intSave",
@@ -621,6 +660,38 @@
                     "controls": [
                         {
                             "type": "text",
+                            "param": "wisAttr",
+                            "label": "WIS Score",
+                            "valueType": "int",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 745,
+                                        "y": 1100
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "wisMod",
+                            "label": "WIS Mod",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 730,
+                                        "y": 1162,
+                                        "fontSize": 40
+                                    }
+                                ]
+                            },
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3"
+                        },
+                        {
+                            "type": "text",
                             "param": "wisSave",
                             "label": "Saving Throw",
                             "stacked": true,
@@ -708,6 +779,38 @@
                     "param": "tabCha",
                     "label": "CHA {chaMod}",
                     "controls": [
+                        {
+                            "type": "text",
+                            "param": "chaAttr",
+                            "label": "CHA Score",
+                            "valueType": "int",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 905,
+                                        "y": 1100
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "chaMod",
+                            "label": "CHA Mod",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 885,
+                                        "y": 1162,
+                                        "fontSize": 40
+                                    }
+                                ]
+                            },
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-3"
+                        },
                         {
                             "type": "text",
                             "param": "chaSave",
@@ -1085,7 +1188,7 @@
                         "0": [
                             {
                                 "x": 775,
-                                "y": 1390
+                                "y": 1370
                             }
                         ]
                     }
@@ -1153,8 +1256,8 @@
                     "pdf": {
                         "0": [
                             {
-                                "x": 700,
-                                "y": 722
+                                "x": 710,
+                                "y": 670
                             }
                         ]
                     }
