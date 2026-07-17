@@ -36,6 +36,10 @@ export type RawMonster =
     ,mythic?: NamedEntries[]
     ,variant?: VariantEntry[]
     ,spellcasting?: SpellcastingEntry[]
+    ,legendaryGroup?: { name?: string; source?: string }
+    ,environment?: string[]
+    ,attachedItems?: string[]
+    ,group?: string[]
     ,hasToken?: boolean
     ,_copy?: MonsterCopy
     ,_mod?: MonsterModMap
@@ -89,8 +93,9 @@ export function mapMonster(m: RawMonster, options: MonsterImportOptions = {}): M
     return (
         {monster: m.name
         ,name: m.name
-        ,collection: options.collection ?? ''
-        ,session: options.session ?? ''
+        // Intent: update-only — omit the key when empty so fill preserves an existing instance's collection/session
+        ,...(options.collection ? { collection: options.collection } : {})
+        ,...(options.session ? { session: options.session } : {})
         ,source: sourceName(m.source)
         ,cr: crToText(m.cr)
         ,size: sizeToText(m.size)
@@ -98,7 +103,8 @@ export function mapMonster(m: RawMonster, options: MonsterImportOptions = {}): M
         ,alignment: alignmentToText(m.alignment)
         ,ac: acToText(m.ac)
         ,hp: hpToText(m.hp)
-        ,speed: speedToText(m.speed)
+        ,speed: baseSpeed(m.speed)
+        ,speedExtra: otherSpeeds(m.speed)
         ,initiative: dexInitiative(m)
         ,passive: m.passive != null ? String(m.passive) : ''
         ,...abilityScoreColumns(m)
@@ -110,8 +116,12 @@ export function mapMonster(m: RawMonster, options: MonsterImportOptions = {}): M
         ,damageImm: hideWhenEmpty(damageListToText(m.immune))
         ,conditionImm: hideWhenEmpty(damageListToText(m.conditionImmune))
         ,...sensesColumns(m)
+        ,legendaryGroup: m.legendaryGroup?.name ?? ''
         ,...combatLoopers(m)
         ,languages: rowsWhenFilled(listToText(m.languages))
+        ,environment: (m.environment ?? []).map(cap).join(', ')
+        ,attachedItems: (m.attachedItems ?? []).map(item => item.split('|')[0]).join(', ')
+        ,group: (m.group ?? []).join(', ')
         ,fluff: ''
         ,image: tokenUrl(m)
         });
@@ -287,24 +297,31 @@ function hpToText(hp: RawMonster['hp']): string
     return `${hp.average ?? ''}${hp.formula ? ` (${hp.formula})` : ''}`;
 }
 
-function speedToText(speed: RawMonster['speed']): string
+const fmtSpeed = (v: number | { number: number; condition?: string }): string =>
+    typeof v === 'number' ? `${v} ft.` : `${v.number} ft.${v.condition ? ` ${v.condition}` : ''}`;
+
+// Intent: base walk speed for the arrow's SPD slot (a plain number speed is the walk)
+function baseSpeed(speed: RawMonster['speed']): string
 {
     if (speed == null)
         return '';
     if (typeof speed === 'number')
         return `${speed} ft.`;
 
-    const fmt = (v: number | { number: number; condition?: string }): string =>
-        typeof v === 'number' ? `${v} ft.` : `${v.number} ft.${v.condition ? ` ${v.condition}` : ''}`;
+    return speed.walk != null ? fmtSpeed(speed.walk) : '';
+}
+
+// Intent: the non-walk modes (burrow/climb/fly/swim) as a separate descriptive field
+function otherSpeeds(speed: RawMonster['speed']): string
+{
+    if (speed == null || typeof speed === 'number')
+        return '';
 
     const parts: string[] = [];
 
-    if (speed.walk != null)
-        parts.push(fmt(speed.walk));
-
     for (const mode of ['burrow', 'climb', 'fly', 'swim'])
         if (speed[mode] != null)
-            parts.push(`${mode} ${fmt(speed[mode])}`);
+            parts.push(`${mode} ${fmtSpeed(speed[mode])}`);
 
     return parts.join(', ');
 }
@@ -606,6 +623,7 @@ const MONSTER_COLUMNS: { param: string; label: string }[] =
     ,{ param: 'ac', label: 'Armor Class' }
     ,{ param: 'hp', label: 'Hit Points' }
     ,{ param: 'speed', label: 'Speed' }
+    ,{ param: 'speedExtra', label: 'Other Speeds' }
     ,{ param: 'initiative', label: 'Initiative' }
     ,{ param: 'passive', label: 'Passive Perception' }
     ,{ param: 'strAttr', label: 'STR Score' }
@@ -658,8 +676,12 @@ const MONSTER_COLUMNS: { param: string; label: string }[] =
     ,{ param: 'reaction', label: 'Reactions' }
     ,{ param: 'legendary', label: 'Legendary Actions' }
     ,{ param: 'mythic', label: 'Mythic Actions' }
+    ,{ param: 'legendaryGroup', label: 'Legendary Group' }
     ,{ param: 'variant', label: 'Variants' }
     ,{ param: 'languages', label: 'Languages' }
+    ,{ param: 'environment', label: 'Environment' }
+    ,{ param: 'attachedItems', label: 'Attached Items' }
+    ,{ param: 'group', label: 'Group' }
     ,{ param: 'fluff', label: 'Description' }
     ,{ param: 'image', label: 'Image' }
     ];

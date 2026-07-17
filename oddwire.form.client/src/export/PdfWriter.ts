@@ -71,19 +71,32 @@ export class PdfWriter
         return boxSize > 0 ? boxSize : this.fontSize > 0 ? this.fontSize : fontSizeFor(page);
     }
 
-    // Intent: shrink the font one step at a time until the wrapped block fits the box's w (and h, if given), floored at MIN_FONT_SIZE
+    // Intent: shrink the font one step at a time, floored at MIN_FONT_SIZE.
+    // No height -> single line: shrink until the whole string fits w (no wrapping).
+    // Height set -> shrink until the wrapped block fits both w and h.
     private shrunkToFit(value: string, box: ControlPdfBox, startSize: number): number
     {
+        const w = box.w ?? 0;
         let size = startSize;
+
+        if (!box.h)
+        {
+            while (size > MIN_FONT_SIZE
+            &&  this.font.widthOfTextAtSize(value, size) > w
+                )
+                size -= 1;
+
+            return size;
+        }
 
         while (size > MIN_FONT_SIZE)
         {
-            const lines = wrapLines(this.font, value, size, box.w ?? 0);
+            const lines = wrapLines(this.font, value, size, w);
             const widest = Math.max(...lines.map(line => this.font.widthOfTextAtSize(line, size)));
             const blockHeight = lines.length * this.font.heightAtSize(size);
 
-            if (widest <= (box.w ?? 0)
-            &&  (!box.h || blockHeight <= box.h)
+            if (widest <= w
+            &&  blockHeight <= box.h
                 )
                 break;
 

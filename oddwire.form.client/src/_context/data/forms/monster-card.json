@@ -66,9 +66,12 @@
                     "pdf": {
                         "0": [
                             {
-                                "x": 355,
+                                "x": 350,
                                 "y": 1362,
-                                "fontSize": 40
+                                "fontSize": 40,
+                                "w": 400,
+                                "align": "center",
+                                "shrinkToFit": true
                             }
                         ]
                     }
@@ -120,7 +123,9 @@
                         "0": [
                             {
                                 "x": 118,
-                                "y": 1360
+                                "y": 1360,
+                                "w": 225,
+                                "shrinkToFit": true
                             }
                         ]
                     }
@@ -149,6 +154,24 @@
                 },
                 {
                     "type": "text",
+                    "param": "speedExtra",
+                    "label": "Other Speeds",
+                    "stacked": true,
+                    "cellClassName": "sm-col-6 lg-col-3",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 200,
+                                "y": 760,
+                                "w": 170,
+                                "h": 45,
+                                "shrinkToFit": true
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "text",
                     "param": "initiative",
                     "label": "Initiative",
                     "stacked": true,
@@ -171,11 +194,10 @@
                     "pdf": {
                         "0": [
                             {
-                                "x": 435,
+                                "x": 390,
                                 "y": 865,
                                 "align": "center",
-                                "w": 120,
-                                "h": 30,
+                                "w": 100,
                                 "shrinkToFit": true
                             }
                         ]
@@ -241,7 +263,8 @@
                         "0": [
                             {
                                 "x": 750,
-                                "y": 775
+                                "y": 775,
+                                "fontSize": 16
                             }
                         ]
                     }
@@ -254,7 +277,9 @@
                         "0": [
                             {
                                 "x": 710,
-                                "y": 640
+                                "y": 640,
+                                "w": 300,
+                                "shrinkToFit": true
                             }
                         ]
                     }
@@ -268,7 +293,9 @@
                         "0": [
                             {
                                 "x": 368,
-                                "y": 670
+                                "y": 670,
+                                "w": 300,
+                                "shrinkToFit": true
                             }
                         ]
                     }
@@ -282,7 +309,9 @@
                         "0": [
                             {
                                 "x": 368,
-                                "y": 640
+                                "y": 640,
+                                "w": 300,
+                                "shrinkToFit": true
                             }
                         ]
                     }
@@ -296,7 +325,9 @@
                         "0": [
                             {
                                 "x": 368,
-                                "y": 610
+                                "y": 610,
+                                "w": 300,
+                                "shrinkToFit": true
                             }
                         ]
                     }
@@ -310,7 +341,9 @@
                         "0": [
                             {
                                 "x": 368,
-                                "y": 580
+                                "y": 580,
+                                "w": 300,
+                                "shrinkToFit": true
                             }
                         ]
                     }
@@ -1128,6 +1161,13 @@
                                     ]
                                 }
                             ]
+                        },
+                        {
+                            "type": "text",
+                            "param": "legendaryGroup",
+                            "label": "Legendary Group (Lair)",
+                            "stacked": true,
+                            "cellClassName": "sm-col-12 lg-col-6"
                         }
                     ]
                 },
@@ -1303,7 +1343,9 @@
                         "0": [
                             {
                                 "x": 710,
-                                "y": 670
+                                "y": 670,
+                                "w": 300,
+                                "shrinkToFit": true
                             }
                         ]
                     }
@@ -1330,6 +1372,27 @@
                             "cellClassName": "sm-col-12 lg-col-3"
                         }
                     ]
+                },
+                {
+                    "type": "text",
+                    "param": "environment",
+                    "label": "Environment",
+                    "stacked": true,
+                    "cellClassName": "sm-col-12 lg-col-6"
+                },
+                {
+                    "type": "text",
+                    "param": "attachedItems",
+                    "label": "Attached Items",
+                    "stacked": true,
+                    "cellClassName": "sm-col-12 lg-col-6"
+                },
+                {
+                    "type": "text",
+                    "param": "group",
+                    "label": "Group",
+                    "stacked": true,
+                    "cellClassName": "sm-col-12 lg-col-6"
                 }
             ]
         }
