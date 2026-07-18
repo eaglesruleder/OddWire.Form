@@ -48,9 +48,21 @@ export class FormPdfExporter
                             await writer.drawImage(pageIndex(pageKey), png, box);
                     }
                     else
-                        writer.writeText(pageIndex(pageKey), String(field.value ?? ''), box);
+                        writer.writeText(pageIndex(pageKey), renderText(field.value), box);
         }
     }
+}
+
+// Intent: PDF-only formatting — a boolean checkbox prints 'X' when true, blank when false (custom glyph overrides are future).
+// The flattened value stays a real boolean so API export still posts true/false.
+const CHECKBOX_TRUE = 'X';
+
+function renderText(value: unknown): string
+{
+    if (typeof value === 'boolean')
+        return value ? CHECKBOX_TRUE : '';
+
+    return String(value ?? '');
 }
 
 function pageIndex(page: string): number

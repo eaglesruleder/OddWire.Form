@@ -1,6 +1,8 @@
 import { useContext, useEffect, useReducer, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import type { ButtonProps } from 'react-bootstrap/Button';
+import Toast from 'react-bootstrap/Toast';
+import ToastContainer from 'react-bootstrap/ToastContainer';
 
 import type { FormDefinition } from '../../_context';
 import { FormContext, PdfTemplateContext } from '../../_context';
@@ -22,18 +24,29 @@ export function FormList()
     const { list, saveForm } = useContext(FormContext);
     const { saveTemplate } = useContext(PdfTemplateContext);
     const [packages, setPackages] = useState<BundledFormPackage[]>(bundledForms);
+    const [toastMessage, setToastMessage] = useState<string>();
     const [, bumpRender] = useReducer(tick => tick + 1, 0);
 
+    // Intent: a bad zip must not blank the catalogue — settle each package, keep the good ones, toast the failures
     useEffect(() =>
     {
         let active = true;
 
         (async () =>
         {
-            const loaded = await Promise.all(bundledPackageUrls.map(loadFormPackage));
+            const results = await Promise.allSettled(bundledPackageUrls.map(loadFormPackage));
 
-            if (active)
-                setPackages(mergePackages([...bundledForms, ...loaded]));
+            if (!active)
+                return;
+
+            const loaded = results
+                .filter((result): result is PromiseFulfilledResult<BundledFormPackage> => result.status === 'fulfilled')
+                .map(result => result.value);
+
+            if (loaded.length < bundledPackageUrls.length)
+                setToastMessage('Failed to load form: incorrect package format');
+
+            setPackages(mergePackages([...bundledForms, ...loaded]));
         })();
 
         return () => { active = false; };
@@ -43,12 +56,19 @@ export function FormList()
 
     const install = async (pkg: BundledFormPackage) =>
     {
-        const formId = await saveForm(pkg.form);
+        try
+        {
+            const formId = await saveForm(pkg.form);
 
-        if (pkg.template)
-            await saveTemplate(formId, pkg.template.fileName, pkg.template.type, pkg.template.blob);
+            if (pkg.template)
+                await saveTemplate(formId, pkg.template.fileName, pkg.template.type, pkg.template.blob);
 
-        bumpRender();
+            bumpRender();
+        }
+        catch (error)
+        {
+            setToastMessage(error instanceof Error ? `Install failed: ${error.message}` : 'Install failed');
+        }
     };
 
     // Intent: not installed → Install; bundled newer → Update (blue); same/older → Refresh (grey reinstall)
@@ -79,6 +99,11 @@ export function FormList()
                     </div>
                     );
             })}
+            <ToastContainer position="bottom-center" className="p-3">
+                <Toast show={!!toastMessage} onClose={() => setToastMessage(undefined)} delay={2400} autohide>
+                    <Toast.Body>{toastMessage}</Toast.Body>
+                </Toast>
+            </ToastContainer>
         </div>
         );
 }
