@@ -41,7 +41,7 @@ export function ControlItem({ control, instance, onChange, depth = 0 }: ControlI
         case 'text':     return <ControlTextField {...resolved} onChange={onChange} />;
         case 'textarea': return <ControlTextArea  {...resolved} onChange={onChange} />;
         case 'checkbox': return <ControlCheckbox  {...resolved} onChange={onChange} />;
-        case 'image':    return <ControlImage     {...resolved} />;
+        case 'image':    return <ControlImage     {...resolved} onChange={onChange} formId={instance.instance.formId ?? ''} instanceId={instance.instanceId} />;
         case 'radio':    return <ControlRadio     {...resolved} {...optionSource(resolved.dbOptions, resolved.controls, db, instance)} onChange={fillOnChange(resolved.dbOptions, db, onChange, instance)} />;
         case 'dropdown': return <ControlDropdown  {...resolved} {...optionSource(resolved.dbOptions, resolved.controls, db, instance)} onChange={fillOnChange(resolved.dbOptions, db, onChange, instance)} />;
         case 'collapsible': return <ControlCollapsible {...resolved} instance={instance} onChange={onChange} depth={depth} />;

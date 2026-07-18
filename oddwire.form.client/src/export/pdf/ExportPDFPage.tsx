@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { ControlError } from '../../_components/controllist';
 import { StripLayout } from '../../_components/layout';
-import { FormContext, InstanceContext, InstanceEntity, PdfTemplateContext } from '../../_context';
+import { FormContext, InstanceContext, InstanceEntity, PdfTemplateContext, FormImageContext } from '../../_context';
 import type { FormDefinition } from '../../_context';
 import { FormPdfExporter } from '../FormPdfExporter';
 
@@ -16,6 +16,7 @@ export function ExportPDFPage()
     const { getForm } = useContext(FormContext);
     const { getInstance } = useContext(InstanceContext);
     const { getTemplate } = useContext(PdfTemplateContext);
+    const images = useContext(FormImageContext);
 
     const [form, setForm] = useState<FormDefinition | null>(null);
     const [blob, setBlob] = useState<Blob | null>(null);
@@ -51,7 +52,7 @@ export function ExportPDFPage()
                     throw new Error('Instance Not Found');
 
                 const template = await getTemplate(loadedForm.formId);
-                const exported = await new FormPdfExporter(loadedForm, InstanceEntity.from(loadedInstance), template).export();
+                const exported = await new FormPdfExporter(loadedForm, InstanceEntity.from(loadedInstance), template, images).export();
 
                 if (active)
                 {
@@ -72,7 +73,7 @@ export function ExportPDFPage()
         })();
 
         return () => { active = false; };
-    }, [formId, instanceId, getForm, getInstance, getTemplate]);
+    }, [formId, instanceId, getForm, getInstance, getTemplate, images]);
 
     const url = useMemo(() =>
     {

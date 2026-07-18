@@ -7,6 +7,7 @@ import type { DisplayParam, FormIndexEntry, InstanceIndexEntry, ParamList } from
 import { FormContext, InstanceContext } from '../_context';
 import { StripLayout } from '../_components/layout';
 import { ControlDropdown } from '../_components/controllist/controls';
+import { isCapturedImage, imageValueText } from '../_components/controllist';
 import './landing.css';
 
 export function LandingPage()
@@ -274,6 +275,10 @@ function paramList(value: ParamList | undefined): string[]
 function valueText(value: unknown): string
 {
     const unwrapped = projectionValue(value);
+
+    if (isCapturedImage(unwrapped))
+        return imageValueText(unwrapped);
+
     return unwrapped == null ? '' : String(unwrapped);
 }
 

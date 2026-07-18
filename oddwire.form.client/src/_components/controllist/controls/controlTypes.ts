@@ -22,6 +22,27 @@ export type ControlOption = {
     label: string;
     };
 
+// Intent: an image control's value is a string (external URL/data-URI) OR a captured record — id keys the full-res blob
+// store, thumbnail is a small data-URI shown natively. isCapturedImage discriminates the two; imageValueText keeps the
+// object from stringifying to [object Object] wherever a value is projected as text (landing labels, etc.).
+export type CapturedImage = {
+    id: string;
+    thumbnail: string;
+    };
+
+export function isCapturedImage(value: unknown): value is CapturedImage
+{
+    return typeof value === 'object'
+    &&  value !== null
+    && 'id' in value
+    && 'thumbnail' in value;
+}
+
+export function imageValueText(value: unknown): string
+{
+    return isCapturedImage(value) ? 'Captured image' : '';
+}
+
 // Intent: filter string means formParam === tableParam (dependent list on one shared param name)
 export type DbOptionsFilter = string | { formParam: string; tableParam: string };
 
@@ -76,7 +97,7 @@ export type TextAreaControlDef = ControlDefBase<'textarea', string> & {
     rows?: number;
     };
 export type CheckboxControlDef = ControlDefBase<'checkbox', boolean>;
-export type ImageControlDef = ControlDefBase<'image', string>;   // value is a URL/URN loaded into <img>; static (capture is future)
+export type ImageControlDef = ControlDefBase<'image', string | CapturedImage>;   // string = external URL/data-URI; object = captured (full-res in blob store)
 export type RadioControlDef = ControlDefBase<'radio', string> & {
     controls?: ControlOption[];
     dbOptions?: DbOptions;
