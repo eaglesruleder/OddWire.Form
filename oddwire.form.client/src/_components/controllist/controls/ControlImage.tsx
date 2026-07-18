@@ -6,7 +6,7 @@ import { FormImageContext, FormActionsContext } from '../../../_context';
 import type { CoreControlProps, CapturedImage } from './controlTypes';
 import { isCapturedImage } from './controlTypes';
 import { ControlBase } from './ControlBase';
-import { captureImageFromFile } from './captureImage';
+import { captureImage } from './captureImage';
 
 // Intent: editable when !disabled — Open captures a file to the blob store (gated on the instance being saved first),
 // the thumbnail renders natively, a click loads the full-res blob into a modal. disabled → static display only.
@@ -51,7 +51,7 @@ export function ControlImage(props: ControlImageProps)
 
         try
         {
-            const data = await captureImageFromFile(file);
+            const data = await captureImage(file);
             const id = crypto.randomUUID();
 
             await images.saveImage(
@@ -66,7 +66,7 @@ export function ControlImage(props: ControlImageProps)
                 });
 
             if (captured)
-                await images.deleteImage(captured.id);   // replacing — drop the superseded blob
+                await deleteOwned(captured.id);   // replacing — drop the superseded blob (but never a shared bundled default)
 
             props.onChange?.({ id, thumbnail: data.thumbnail }, props.param);
         }
@@ -85,9 +85,19 @@ export function ControlImage(props: ControlImageProps)
     const onClear = async () =>
     {
         if (captured)
-            await images.deleteImage(captured.id);
+            await deleteOwned(captured.id);
 
         props.onChange?.('', props.param);   // key-lossy clear drops the instance entry
+    };
+
+    // Intent: only delete a blob this instance owns — a bundled form-default blob is shared across instances, so clearing/
+    // replacing here just drops the overlay (reverting to the default) rather than destroying the shared source
+    const deleteOwned = async (id: string) =>
+    {
+        const record = await images.getImage(id);
+
+        if (record?.instanceId === props.instanceId)
+            await images.deleteImage(id);
     };
 
     const onZoom = async () =>

@@ -6,17 +6,19 @@ const THUMB_QUALITY = 0.8;
 
 export type CapturedImageData = { blob: Blob; mime: string; w: number; h: number; thumbnail: string };
 
-export async function captureImageFromFile(file: File): Promise<CapturedImageData>
+// Intent: works for a picked File or a bundled-package Blob — the original bytes are kept as the source; only the thumbnail
+// is re-encoded. mime defaults to the blob's own type (a File carries it; a zip entry supplies it).
+export async function captureImage(source: Blob, mime = source.type): Promise<CapturedImageData>
 {
-    const url = URL.createObjectURL(file);
+    const url = URL.createObjectURL(source);
 
     try
     {
         const image = await loadImage(url);
 
         return {
-            blob: file,
-            mime: file.type || 'application/octet-stream',
+            blob: source,
+            mime: mime || 'application/octet-stream',
             w: image.naturalWidth,
             h: image.naturalHeight,
             thumbnail: makeThumbnail(image),

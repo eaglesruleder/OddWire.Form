@@ -3,6 +3,10 @@ import localforage from 'localforage';
 
 const storage = localforage.createInstance({ name: 'oddwire.form', storeName: 'formImages' });
 
+// Intent: instanceId sentinel for a form-default image (shipped by a package, shared by every instance) — never a real
+// instance id, so imagesFor({ formId, instanceId: FORM_DEFAULT_INSTANCE }) finds exactly the defaults to sweep on reinstall.
+export const FORM_DEFAULT_INSTANCE = '_default';
+
 // Intent: the full-res captured image is owned here as a Blob; the instance value carries only { id, thumbnail }.
 // Metadata rides in the record (not a separate manifest) so imagesFor()/orphan sweeps are one iterate(), no index drift.
 export type StoredImage = {
