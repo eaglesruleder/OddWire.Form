@@ -38,6 +38,19 @@ export type TextValueType = 'text' | 'int' | 'decimal' | 'email' | 'phone';
 
 export type KeyboardType = HTMLAttributes<HTMLElement>['inputMode'];
 
+export type ControlPdfBox = {
+    x: number;
+    y: number;
+    w?: number;
+    h?: number;
+    fontSize?: number;                        // per-box override of settings.export.pdf.fontSize; 0/absent = use default
+    align?: 'left' | 'center' | 'right';      // horizontal: relative to [x, x+w] when w set, else to the x anchor
+    valign?: 'top' | 'middle' | 'bottom';     // vertical: relative to [y, y+h] when h set, else to the y anchor
+    shrinkToFit?: boolean;                     // with w set: scale font down until the wrapped text fits w (and h); else ellipsis-clip to h
+    };
+
+export type ControlPdfDef = Record<string, ControlPdfBox[]>;
+
 export type ControlDefBase<TType extends string, TValue = unknown> = {
     type: TType;
     param: string;
@@ -49,6 +62,7 @@ export type ControlDefBase<TType extends string, TValue = unknown> = {
     stacked?: boolean;
     cellClassName?: string;
     rows?: number;
+    pdf?: ControlPdfDef;
     };
 
 export type LabelControlDef = ControlDefBase<'label', string> & {
@@ -109,3 +123,12 @@ export type ControlDef =
     | TabControlDef
     | PopupControlDef
     | LooperControlDef;
+
+// Intent: export-flatten plugin contract. A control's flatten returns { value } to emit under its param, or undefined to
+// emit nothing (layout recurses via ctx). The walker owns the tree walk + pdf emission; plugins only shape their node.
+export type FlattenResult = { value: unknown } | undefined;
+
+export type FlattenCtx = {
+    recurse: (children: ControlDef[]) => void;                                 // flatten children into the same flat scope
+    scope: (children: ControlDef[], row: unknown) => Record<string, unknown>;  // flatten children into a fresh row scope
+    };

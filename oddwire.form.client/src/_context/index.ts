@@ -7,9 +7,12 @@ export { InstanceContext, instanceStore } from './InstanceContext';
 export type { InstanceContextValue } from './InstanceContext';
 export { LookupContext, lookupStore } from './LookupContext';
 export type { LookupContextValue } from './LookupContext';
+export { PdfTemplateContext, pdfTemplateStore } from './PdfTemplateContext';
+export type { PdfTemplateContextValue, PdfTemplateRecord } from './PdfTemplateContext';
 export { GLOBAL_SCOPE } from './types';
 export type
     {FormDefinition
+    ,FormExportDefinition
     ,FormInstance
     ,ControlInstance
     ,FormIndexEntry

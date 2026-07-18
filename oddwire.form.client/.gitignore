@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+tools/box-preview.html
+src/bestiary-mm.json
+src/bestiary-oota.json

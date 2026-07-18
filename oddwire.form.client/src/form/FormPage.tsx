@@ -1,13 +1,17 @@
 import { useContext, useEffect, useReducer, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
+import Toast from 'react-bootstrap/Toast';
+import ToastContainer from 'react-bootstrap/ToastContainer';
 
 import type { FormDefinition, InstanceChange, ParamList } from '../_context';
 import type { ControlDef, TabSection } from '../_components/controllist';
 
 import { FormContext, InstanceContext, LookupContext, InstanceEntity } from '../_context';
 import { StripLayout } from '../_components/layout';
-import { ControlList, ControlTab, ControlError, DbContext, resolveLabel } from '../_components/controllist';
+import { ControlList, ControlTab, ControlError, ControlButton, DbContext, resolveLabel } from '../_components/controllist';
+import { flattenInstance } from '../export';
 
 function buildRootTabSections(controls: ControlDef[], instance: InstanceEntity): TabSection[]
 {
@@ -38,6 +42,9 @@ export function FormPage()
     const [form, setForm] = useState<FormDefinition | null>(null);
     const [instance, setInstance] = useState<InstanceEntity | null>(null);
     const [autosaving, setAutosaving] = useState(false);
+    const [actionsOpen, setActionsOpen] = useState(false);
+    const [exporting, setExporting] = useState(false);
+    const [toastMessage, setToastMessage] = useState<string>();
     const [, bumpRender] = useReducer(tick => tick + 1, 0);
 
     const instanceRef = useRef<InstanceEntity | null>(null);
@@ -105,7 +112,7 @@ export function FormPage()
     const onSave = async () =>
     {
         if (!instance)
-            return;
+            return undefined;
 
         // Intent: hard save writes immediately — drop any pending debounced write so it doesn't fire a stale duplicate
         instance.cancelPersist();
@@ -114,6 +121,89 @@ export function FormPage()
 
         if (!instanceId)
             navigate(`/form/${formId}/${id}`, { replace: true });
+
+        return id;
+    };
+
+    const onHeaderAction = () =>
+    {
+        if (form?.export)
+        {
+            setActionsOpen(true);
+            return;
+        }
+
+        if (autosaving)
+        {
+            setToastMessage('Autosaving enabled');
+            return;
+        }
+
+        void onSave();
+    };
+
+    const onExportApi = async () =>
+    {
+        if (!form || !instance)
+            return;
+
+        const url = exportApiUrl(form);
+        if (!url)
+            return;
+
+        setExporting(true);
+
+        try
+        {
+            instance.flush();
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(flattenInstance(form, instance)),
+                });
+
+            if (!response.ok)
+                throw new Error(`Export failed (${response.status})`);
+
+            setToastMessage('Exported');
+        }
+        catch (error)
+        {
+            setToastMessage(error instanceof Error ? error.message : 'Export failed');
+        }
+        finally
+        {
+            setExporting(false);
+        }
+    };
+
+    const onExportPdf = async () =>
+    {
+        if (!form || !instance)
+            return;
+
+        if (!exportPdfEnabled(form))
+            return;
+
+        setExporting(true);
+
+        try
+        {
+            instance.cancelPersist();
+            const id = await save(instance.instance);
+            setAutosaving(true);
+            setActionsOpen(false);
+            navigate(`/export-pdf/${formId}/${id}`);
+        }
+        catch (error)
+        {
+            setToastMessage(error instanceof Error ? error.message : 'PDF export failed');
+        }
+        finally
+        {
+            setExporting(false);
+        }
     };
 
     const errorPage = (message: string) =>
@@ -138,19 +228,22 @@ export function FormPage()
 
     const backLink = landingBackLink(formId, form.groupParam, instance);
 
-    const saveIcon =
+    const exportUrl = exportApiUrl(form);
+    const hasPdfExport = exportPdfEnabled(form);
+    const hasExport = !!form.export;
+
+    const actionsIcon =
         <button
             type="button"
             className="strip-btn"
-            onClick={onSave}
-            disabled={autosaving}
-            title={autosaving ? 'Autosaving' : 'Save'}
-        >💾</button>;
+            onClick={onHeaderAction}
+            title={hasExport ? 'Export' : autosaving ? 'Autosaving' : 'Save'}
+        >{hasExport ? '...' : '💾'}</button>;
 
     const isRootTab = form.controls[0]?.type === 'tab';
 
     return (
-        <StripLayout left="←" leftLink={backLink} right={saveIcon} title={form.label ?? 'OddWire Forms'}>
+        <StripLayout left="←" leftLink={backLink} right={actionsIcon} title={form.label ?? 'OddWire Forms'}>
             <DbContext.Provider value={getDb(formId)}>
                 <Form>
                     {isRootTab
@@ -158,9 +251,63 @@ export function FormPage()
                     :   <ControlList controls={form.controls} instance={instance} onChange={onChange} />
                     }
                 </Form>
+                {hasExport &&
+                    <Modal show={actionsOpen} onHide={() => setActionsOpen(false)} centered dialogClassName="popup-dialog" contentClassName="popup-content">
+                        <StripLayout
+                            title="Export"
+                            left={<button type="button" className="strip-btn" onClick={() => setActionsOpen(false)}>←</button>}
+                        >
+                            <div className="flex column gap">
+                                {!autosaving
+                                ?   <ControlButton label="Save" onClick={onSave} />
+                                :   <div className="control-static">Autosaving</div>
+                                }
+                                {exportUrl &&
+                                    <ControlButton label={exporting ? 'Exporting...' : 'Export API'} onClick={onExportApi} disabled={exporting} />
+                                }
+                                {hasPdfExport &&
+                                    <ControlButton label={exporting ? 'Exporting...' : 'Export PDF'} onClick={onExportPdf} disabled={exporting} />
+                                }
+                            </div>
+                        </StripLayout>
+                    </Modal>
+                }
+                <ToastContainer position="bottom-center" className="p-3">
+                    <Toast show={!!toastMessage} onClose={() => setToastMessage(undefined)} delay={1600} autohide>
+                        <Toast.Body>{toastMessage}</Toast.Body>
+                    </Toast>
+                </ToastContainer>
             </DbContext.Provider>
         </StripLayout>
         );
+}
+
+function exportApiUrl(form: FormDefinition): string | undefined
+{
+    return exportUrl(form, 'api');
+}
+
+function exportPdfEnabled(form: FormDefinition): boolean
+{
+    const value = form.export?.pdf;
+    return value === true || (typeof value === 'object' && value.enabled !== false);
+}
+
+function exportUrl(form: FormDefinition, key: 'api'): string | undefined
+{
+    const config = form.export;
+    if (!config)
+        return undefined;
+
+    const value = config[key];
+
+    if (typeof value === 'string')
+        return value;
+
+    if (typeof value === 'object' && value.url)
+        return value.url;
+
+    return key === 'api' ? config.url : undefined;
 }
 
 function landingBackLink(formId: string, groupParam: ParamList | undefined, instance: InstanceEntity): string

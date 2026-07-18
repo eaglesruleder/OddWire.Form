@@ -6,10 +6,10 @@ import { FormManager } from './FormManager';
 
 export function SettingsPage()
 {
-    // Intent: wipe every localforage store (forms/instances/lookup) then reload so the stores re-seed from scratch
+    // Intent: wipe every localforage store (forms/instances/lookup/pdf templates) then reload so the stores re-seed from scratch
     const clearAll = async () =>
     {
-        if (!window.confirm('Delete ALL cached data (forms, instances, and lookup)?'))
+        if (!window.confirm('Delete ALL cached data (forms, instances, lookup, and PDF templates)?'))
             return;
 
         await localforage.dropInstance({ name: 'oddwire.form' });

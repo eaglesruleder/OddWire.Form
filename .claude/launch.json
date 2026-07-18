@@ -7,6 +7,13 @@
       "runtimeArgs": ["-m", "http.server", "4199", "--bind", "127.0.0.1"],
       "port": 4199,
       "cwd": "oddwire.form.client/dist"
+    },
+    {
+      "name": "client-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 59392,
+      "cwd": "oddwire.form.client"
     }
   ]
 }

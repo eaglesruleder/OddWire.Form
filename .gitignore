@@ -54,6 +54,7 @@ dist/
 build/
 .vite/
 .cache/
+.npm-cache/
 .parcel-cache/
 
 # Logs

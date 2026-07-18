@@ -36,6 +36,10 @@ export type RawMonster =
     ,mythic?: NamedEntries[]
     ,variant?: VariantEntry[]
     ,spellcasting?: SpellcastingEntry[]
+    ,legendaryGroup?: { name?: string; source?: string }
+    ,environment?: string[]
+    ,attachedItems?: string[]
+    ,group?: string[]
     ,hasToken?: boolean
     ,_copy?: MonsterCopy
     ,_mod?: MonsterModMap
@@ -89,17 +93,21 @@ export function mapMonster(m: RawMonster, options: MonsterImportOptions = {}): M
     return (
         {monster: m.name
         ,name: m.name
-        ,collection: options.collection ?? ''
-        ,session: options.session ?? ''
-        ,source: m.source ?? ''
+        // Intent: update-only — omit the key when empty so fill preserves an existing instance's collection/session
+        ,...(options.collection ? { collection: options.collection } : {})
+        ,...(options.session ? { session: options.session } : {})
+        ,source: sourceName(m.source)
         ,cr: crToText(m.cr)
         ,size: sizeToText(m.size)
         ,type: typeToText(m.type)
         ,alignment: alignmentToText(m.alignment)
         ,ac: acToText(m.ac)
         ,hp: hpToText(m.hp)
-        ,speed: speedToText(m.speed)
+        ,speed: baseSpeed(m.speed)
+        ,speedExtra: otherSpeeds(m.speed)
+        ,initiative: dexInitiative(m)
         ,passive: m.passive != null ? String(m.passive) : ''
+        ,...abilityScoreColumns(m)
         ,...abilityModColumns(m)
         ,...saveColumns(m)
         ,...skillColumns(m)
@@ -107,9 +115,13 @@ export function mapMonster(m: RawMonster, options: MonsterImportOptions = {}): M
         ,damageRes: hideWhenEmpty(damageListToText(m.resist))
         ,damageImm: hideWhenEmpty(damageListToText(m.immune))
         ,conditionImm: hideWhenEmpty(damageListToText(m.conditionImmune))
-        ,senses: rowsWhenFilled(listToText(m.senses))
+        ,...sensesColumns(m)
+        ,legendaryGroup: m.legendaryGroup?.name ?? ''
         ,...combatLoopers(m)
         ,languages: rowsWhenFilled(listToText(m.languages))
+        ,environment: (m.environment ?? []).map(cap).join(', ')
+        ,attachedItems: (m.attachedItems ?? []).map(item => item.split('|')[0]).join(', ')
+        ,group: (m.group ?? []).join(', ')
         ,fluff: ''
         ,image: tokenUrl(m)
         });
@@ -123,6 +135,20 @@ export const mapMonsters = (raw: RawMonster[], options: MonsterImportOptions = {
 // #region Abilities → save & skill columns
 
 const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'] as const;
+
+// Intent: the raw 8-20 score for the *Attr card slots; blank when the source omits the ability
+function abilityScoreColumns(m: RawMonster): MonsterRow
+{
+    const out: MonsterRow = {};
+
+    for (const ability of ABILITIES)
+    {
+        const score = m[ability];
+        out[`${ability}Attr`] = typeof score === 'number' ? String(score) : '';
+    }
+
+    return out;
+}
 
 function abilityModColumns(m: RawMonster): MonsterRow
 {
@@ -196,6 +222,33 @@ const fmtMod = (n: number): string => (n >= 0 ? `+${n}` : `${n}`);
 const SIZE: Record<string, string> = { T: 'Tiny', S: 'Small', M: 'Medium', L: 'Large', H: 'Huge', G: 'Gargantuan' };
 const ALIGN: Record<string, string> = { L: 'Lawful', N: 'Neutral', C: 'Chaotic', G: 'Good', E: 'Evil', U: 'Unaligned', A: 'Any' };
 
+// Intent: 5etools source code -> book name; unmapped codes fall back to the raw code
+const SOURCE_NAMES: Record<string, string> =
+    {MM: 'Monster Manual'
+    ,MPMM: 'Mordenkainen Presents: Monsters of the Multiverse'
+    ,MTF: "Mordenkainen's Tome of Foes"
+    ,VGM: "Volo's Guide to Monsters"
+    ,PHB: "Player's Handbook"
+    ,DMG: "Dungeon Master's Guide"
+    ,XGE: "Xanathar's Guide to Everything"
+    ,TCE: "Tasha's Cauldron of Everything"
+    ,FTD: "Fizban's Treasury of Dragons"
+    ,OotA: 'Out of the Abyss'
+    ,CoS: 'Curse of Strahd'
+    ,PotA: 'Princes of the Apocalypse'
+    ,ToA: 'Tomb of Annihilation'
+    ,WDH: 'Waterdeep: Dragon Heist'
+    ,WDMM: 'Waterdeep: Dungeon of the Mad Mage'
+    ,LMoP: 'Lost Mine of Phandelver'
+    };
+
+const sourceName = (code: string | undefined): string =>
+    code ? SOURCE_NAMES[code] ?? code : '';
+
+// Intent: 2014 statblocks carry no explicit initiative — it is the DEX modifier
+const dexInitiative = (m: RawMonster): string =>
+    typeof m.dex === 'number' ? fmtMod(abilityMod(m.dex)) : '';
+
 const crToText = (cr: RawMonster['cr']): string =>
     cr == null ? '' : typeof cr === 'string' ? cr : cr.cr;
 
@@ -230,15 +283,9 @@ function alignmentToText(alignment: RawMonster['alignment']): string
     return codes.map(code => ALIGN[code] ?? code).join(' ');
 }
 
+// Intent: card slot wants the bare number — drop the "(from natural armor/…)" source note
 const acToText = (ac: RawMonster['ac']): string =>
-    (ac ?? []).map(entry =>
-    {
-        if (typeof entry === 'number')
-            return String(entry);
-
-        const from = (entry.from ?? []).map(deTag).join(', ');
-        return `${entry.ac}${from ? ` (${from})` : ''}`;
-    }).join(', ');
+    (ac ?? []).map(entry => typeof entry === 'number' ? String(entry) : String(entry.ac)).join(', ');
 
 function hpToText(hp: RawMonster['hp']): string
 {
@@ -250,24 +297,31 @@ function hpToText(hp: RawMonster['hp']): string
     return `${hp.average ?? ''}${hp.formula ? ` (${hp.formula})` : ''}`;
 }
 
-function speedToText(speed: RawMonster['speed']): string
+const fmtSpeed = (v: number | { number: number; condition?: string }): string =>
+    typeof v === 'number' ? `${v} ft.` : `${v.number} ft.${v.condition ? ` ${v.condition}` : ''}`;
+
+// Intent: base walk speed for the arrow's SPD slot (a plain number speed is the walk)
+function baseSpeed(speed: RawMonster['speed']): string
 {
     if (speed == null)
         return '';
     if (typeof speed === 'number')
         return `${speed} ft.`;
 
-    const fmt = (v: number | { number: number; condition?: string }): string =>
-        typeof v === 'number' ? `${v} ft.` : `${v.number} ft.${v.condition ? ` ${v.condition}` : ''}`;
+    return speed.walk != null ? fmtSpeed(speed.walk) : '';
+}
+
+// Intent: the non-walk modes (burrow/climb/fly/swim) as a separate descriptive field
+function otherSpeeds(speed: RawMonster['speed']): string
+{
+    if (speed == null || typeof speed === 'number')
+        return '';
 
     const parts: string[] = [];
 
-    if (speed.walk != null)
-        parts.push(fmt(speed.walk));
-
     for (const mode of ['burrow', 'climb', 'fly', 'swim'])
         if (speed[mode] != null)
-            parts.push(`${mode} ${fmt(speed[mode])}`);
+            parts.push(`${mode} ${fmtSpeed(speed[mode])}`);
 
     return parts.join(', ');
 }
@@ -300,6 +354,28 @@ function damageListToText(list: DamageList | undefined): string
 
 const listToText = (list: string[] | undefined): string =>
     (list ?? []).map(deTag).join(', ');
+
+// Intent: darkvision is embedded in the senses string; lift it into its own field and strip it out —
+// same parse-then-strip split as parseAttack / stripParsedAttackParts does for an action's to-hit & damage
+const DARKVISION_RE = /darkvision\s+(\d+\s*ft\.?)/i;
+
+function sensesColumns(m: RawMonster): MonsterRow
+{
+    const source = listToText(m.senses);
+    const match = source.match(DARKVISION_RE);
+
+    const darkvision = match ? match[1].replace(/\s+/g, ' ').trim() : '';
+    const senses = match
+        ?   source
+                .replace(DARKVISION_RE, '')
+                .replace(/\s*,\s*,\s*/g, ', ')          // collapse the comma the darkvision entry left behind
+                .replace(/(^\s*,\s*)|(\s*,\s*$)/g, '')  // trim a dangling leading/trailing comma
+                .replace(/\s{2,}/g, ' ')
+                .trim()
+        :   source;
+
+    return { darkvision, senses: rowsWhenFilled(senses) };
+}
 
 function hideWhenEmpty(value: string): ControlPatch
 {
@@ -488,6 +564,7 @@ function stripParsedAttackParts(text: string): string
 {
     return text
         .replace(/^(?:[a-z]{1,3}(?:,[a-z]{1,3})?\s+)?[+-]?\d+\s+to hit,?\s*/i, '')
+        .replace(/(?:reach 5 ?ft\.|one target)(?:, |\.\s)?/gi, '')
         .replace(/\s*(?:or\s+|plus\s+)?\d+\s*\([^)]*\)\s+[a-zA-Z]+\s+damage(?:\s+(?:in melee|at range|if used with two hands))?/g, '')
         .replace(/\.\s*,\s*and\s+/g, '. ')
         .replace(/\.\s*\./g, '.')
@@ -546,7 +623,15 @@ const MONSTER_COLUMNS: { param: string; label: string }[] =
     ,{ param: 'ac', label: 'Armor Class' }
     ,{ param: 'hp', label: 'Hit Points' }
     ,{ param: 'speed', label: 'Speed' }
+    ,{ param: 'speedExtra', label: 'Other Speeds' }
+    ,{ param: 'initiative', label: 'Initiative' }
     ,{ param: 'passive', label: 'Passive Perception' }
+    ,{ param: 'strAttr', label: 'STR Score' }
+    ,{ param: 'dexAttr', label: 'DEX Score' }
+    ,{ param: 'conAttr', label: 'CON Score' }
+    ,{ param: 'intAttr', label: 'INT Score' }
+    ,{ param: 'wisAttr', label: 'WIS Score' }
+    ,{ param: 'chaAttr', label: 'CHA Score' }
     ,{ param: 'strMod', label: 'STR Mod' }
     ,{ param: 'dexMod', label: 'DEX Mod' }
     ,{ param: 'conMod', label: 'CON Mod' }
@@ -582,6 +667,7 @@ const MONSTER_COLUMNS: { param: string; label: string }[] =
     ,{ param: 'damageImm', label: 'Damage Immunities' }
     ,{ param: 'conditionImm', label: 'Condition Immunities' }
     ,{ param: 'senses', label: 'Senses' }
+    ,{ param: 'darkvision', label: 'Darkvision' }
     ,{ param: 'trait', label: 'Traits' }
     ,{ param: 'spellcasting', label: 'Spellcasting' }
     ,{ param: 'tabSpellcasting', label: 'Spellcasting Tab' }
@@ -590,8 +676,12 @@ const MONSTER_COLUMNS: { param: string; label: string }[] =
     ,{ param: 'reaction', label: 'Reactions' }
     ,{ param: 'legendary', label: 'Legendary Actions' }
     ,{ param: 'mythic', label: 'Mythic Actions' }
+    ,{ param: 'legendaryGroup', label: 'Legendary Group' }
     ,{ param: 'variant', label: 'Variants' }
     ,{ param: 'languages', label: 'Languages' }
+    ,{ param: 'environment', label: 'Environment' }
+    ,{ param: 'attachedItems', label: 'Attached Items' }
+    ,{ param: 'group', label: 'Group' }
     ,{ param: 'fluff', label: 'Description' }
     ,{ param: 'image', label: 'Image' }
     ];

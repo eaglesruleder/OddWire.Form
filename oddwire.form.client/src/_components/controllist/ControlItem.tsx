@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
 import type { InstanceEntity, InstanceChange, LookupTable } from '../../_context';
-import type { ControlDef, ControlOption, DbOptions } from './controls/controlTypes';
+import type { ControlDef, ControlOption, DbOptions, FlattenCtx, FlattenResult } from './controls/controlTypes';
 
 import
     {ControlText
@@ -13,7 +13,7 @@ import
     ,ControlDropdown
     ,ControlError
     } from './controls';
-import { ControlCollapsible, ControlLooper, ControlPopup, ControlTab } from './controls/layout';
+import { ControlCollapsible, ControlLooper, ControlPopup, ControlTab, looperFlatten } from './controls/layout';
 import { DbContext, resolveDbOptions } from './lookup';
 import { resolveLabel } from './resolveLabel';
 
@@ -56,6 +56,26 @@ export function ControlItem({ control, instance, onChange, depth = 0 }: ControlI
     }
 }
 
+// Intent: export-flatten router — the non-React sibling of the render switch above; dispatches a resolved control to its
+// flatten plugin. Layout recurses (emits nothing); looper has its own plugin; every leaf falls through to its raw value.
+export function flattenControl(resolved: ControlDef, ctx: FlattenCtx): FlattenResult
+{
+    switch (resolved.type)
+    {
+        case 'tab':
+        case 'collapsible':
+        case 'popup':
+            ctx.recurse(resolved.controls);
+            return undefined;
+
+        case 'looper':
+            return looperFlatten(resolved, ctx);
+
+        default:
+            return { value: resolved.value ?? null };
+    }
+}
+
 // Intent: no dbOptions → leave the control's own props untouched; otherwise db-resolved options override controls/disabled/placeholder
 function optionSource
     (dbOptions: DbOptions | undefined
@@ -70,9 +90,10 @@ function optionSource
     return resolveDbOptions(dbOptions, db, instance, staticControls ?? []);
 }
 
-// Intent: dbOptions.fill → selecting a row writes the key AND every other (non-empty) column into its matching param
-// Batches the columns through instance.setValues (one persist) instead of N onChange calls; skips empty columns so a
-// blank source value never clobbers an existing edit (e.g. notes) — key-lossy on the instance drops the rest.
+// Intent: dbOptions.fill → selecting a row writes the key AND every other column present in the row into its matching param.
+// A column present but empty is still applied (cleared/hidden) so reselecting a record blanks the fields it does not have —
+// the table row is authoritative and non-lossy; only the instance overlay stays sparse. Params absent from the row are untouched.
+// Batches the columns through instance.setValues (one persist) instead of N onChange calls.
 function fillOnChange(dbOptions: DbOptions | undefined, db: Record<string, LookupTable>, onChange: InstanceChange, instance: InstanceEntity): InstanceChange
 {
     if (!dbOptions || typeof dbOptions === 'string' || !dbOptions.fill)
@@ -93,7 +114,7 @@ function fillOnChange(dbOptions: DbOptions | undefined, db: Record<string, Looku
 
             for (const [column, columnValue] of Object.entries(row))
             {
-                if (column === dbOptions.valueParam || columnValue === '' || columnValue == null)
+                if (column === dbOptions.valueParam)
                     continue;
 
                 if (isControlPatch(columnValue))
