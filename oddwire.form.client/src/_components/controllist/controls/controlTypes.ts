@@ -22,6 +22,36 @@ export type ControlOption = {
     label: string;
     };
 
+// Intent: an image control's value is a string (external URL/data-URI) OR a captured record — id keys the full-res blob
+// store, thumbnail is a small data-URI shown natively. isCapturedImage discriminates the two; imageValueText keeps the
+// object from stringifying to [object Object] wherever a value is projected as text (landing labels, etc.).
+export type CapturedImage = {
+    id: string;
+    thumbnail: string;
+    };
+
+export function isCapturedImage(value: unknown): value is CapturedImage
+{
+    return typeof value === 'object'
+    &&  value !== null
+    && 'id' in value
+    && 'thumbnail' in value;
+}
+
+// Intent: single text representation of an image value. `display` (default) is the type-blind projection view — it can only
+// recognise the captured object; a bare string is indistinguishable from a text field there, so it returns ''. `export` is
+// for callers that KNOW the control is an image (the flatten/export walkers), so a string is labelled 'External image'.
+export function imageValueText(value: unknown, mode: 'display' | 'export' = 'display'): string
+{
+    if (isCapturedImage(value))
+        return 'Captured image';
+
+    if (mode === 'export' && typeof value === 'string' && value !== '')
+        return 'External image';
+
+    return '';
+}
+
 // Intent: filter string means formParam === tableParam (dependent list on one shared param name)
 export type DbOptionsFilter = string | { formParam: string; tableParam: string };
 
@@ -76,7 +106,23 @@ export type TextAreaControlDef = ControlDefBase<'textarea', string> & {
     rows?: number;
     };
 export type CheckboxControlDef = ControlDefBase<'checkbox', boolean>;
-export type ImageControlDef = ControlDefBase<'image', string>;   // value is a URL/URN loaded into <img>; static (capture is future)
+// Intent: enable the draw/signature capture surface. Bare true → a plain draw pad; the object tunes canvas size, pen, an
+// optional solid background, and whether file upload is offered alongside draw (allowUpload → annotate an uploaded image).
+export type DrawConfig = boolean | {
+    w?: number;
+    h?: number;
+    penColor?: string;
+    background?: string;
+    allowUpload?: boolean;
+    };
+
+export type ImageControlDef = ControlDefBase<'image', string | CapturedImage> & {   // string = external URL/data-URI; object = captured (full-res in blob store)
+    draw?: DrawConfig;
+    };
+// Intent: authoring alias — a signature is an image control preset to draw-only with a wide-short canvas (ControlItem maps it)
+export type SignatureControlDef = ControlDefBase<'signature', string | CapturedImage> & {
+    draw?: DrawConfig;
+    };
 export type RadioControlDef = ControlDefBase<'radio', string> & {
     controls?: ControlOption[];
     dbOptions?: DbOptions;
@@ -117,6 +163,7 @@ export type ControlDef =
     | TextAreaControlDef
     | CheckboxControlDef
     | ImageControlDef
+    | SignatureControlDef
     | RadioControlDef
     | DropdownControlDef
     | CollapsibleControlDef

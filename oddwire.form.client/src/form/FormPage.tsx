@@ -8,7 +8,7 @@ import ToastContainer from 'react-bootstrap/ToastContainer';
 import type { FormDefinition, InstanceChange, ParamList } from '../_context';
 import type { ControlDef, TabSection } from '../_components/controllist';
 
-import { FormContext, InstanceContext, LookupContext, InstanceEntity } from '../_context';
+import { FormContext, InstanceContext, LookupContext, InstanceEntity, FormActionsContext } from '../_context';
 import { StripLayout } from '../_components/layout';
 import { ControlList, ControlTab, ControlError, ControlButton, DbContext, resolveLabel } from '../_components/controllist';
 import { flattenInstance } from '../export';
@@ -245,6 +245,7 @@ export function FormPage()
     return (
         <StripLayout left="←" leftLink={backLink} right={actionsIcon} title={form.label ?? 'OddWire Forms'}>
             <DbContext.Provider value={getDb(formId)}>
+                <FormActionsContext.Provider value={{ requestSave: onSave, isSaved: autosaving }}>
                 <Form>
                     {isRootTab
                     ?   <ControlTab pageLayout sections={buildRootTabSections(form.controls, instance)} instance={instance} onChange={onChange} />
@@ -277,6 +278,7 @@ export function FormPage()
                         <Toast.Body>{toastMessage}</Toast.Body>
                     </Toast>
                 </ToastContainer>
+                </FormActionsContext.Provider>
             </DbContext.Provider>
         </StripLayout>
         );
