@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
 import type { InstanceEntity, InstanceChange, LookupTable } from '../../_context';
-import type { ControlDef, ControlOption, DbOptions, FlattenCtx, FlattenResult } from './controls/controlTypes';
+import type { ControlDef, ControlOption, DbOptions, DrawConfig, FlattenCtx, FlattenResult } from './controls/controlTypes';
 
 import
     {ControlText
@@ -42,6 +42,7 @@ export function ControlItem({ control, instance, onChange, depth = 0 }: ControlI
         case 'textarea': return <ControlTextArea  {...resolved} onChange={onChange} />;
         case 'checkbox': return <ControlCheckbox  {...resolved} onChange={onChange} />;
         case 'image':    return <ControlImage     {...resolved} onChange={onChange} formId={instance.instance.formId ?? ''} instanceId={instance.instanceId} />;
+        case 'signature':return <ControlImage     {...resolved} draw={signatureDraw(resolved.draw)} onChange={onChange} formId={instance.instance.formId ?? ''} instanceId={instance.instanceId} />;
         case 'radio':    return <ControlRadio     {...resolved} {...optionSource(resolved.dbOptions, resolved.controls, db, instance)} onChange={fillOnChange(resolved.dbOptions, db, onChange, instance)} />;
         case 'dropdown': return <ControlDropdown  {...resolved} {...optionSource(resolved.dbOptions, resolved.controls, db, instance)} onChange={fillOnChange(resolved.dbOptions, db, onChange, instance)} />;
         case 'collapsible': return <ControlCollapsible {...resolved} instance={instance} onChange={onChange} depth={depth} />;
@@ -132,6 +133,14 @@ function fillOnChange(dbOptions: DbOptions | undefined, db: Record<string, Looku
 
         onChange(value, key, subkey);   // the key + the single render
     };
+}
+
+// Intent: signature preset — draw-only, wide-short pad; an authored draw object still overrides the defaults
+function signatureDraw(draw: DrawConfig | undefined): DrawConfig
+{
+    const base = { w: 600, h: 200, allowUpload: false };
+
+    return draw && typeof draw === 'object' ? { ...base, ...draw } : base;
 }
 
 function targetHidden(param: string | undefined, instance: InstanceEntity): boolean

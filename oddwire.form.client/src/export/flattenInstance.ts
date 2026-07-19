@@ -146,7 +146,7 @@ function addPdfField(control: ControlDef, value: unknown, pdf: FlattenedPdfField
         param: control.param,
         value,
         pages: control.pdf,
-        image: control.type === 'image',
+        image: control.type === 'image' || control.type === 'signature',
         });
 }
 

@@ -97,7 +97,23 @@ export type TextAreaControlDef = ControlDefBase<'textarea', string> & {
     rows?: number;
     };
 export type CheckboxControlDef = ControlDefBase<'checkbox', boolean>;
-export type ImageControlDef = ControlDefBase<'image', string | CapturedImage>;   // string = external URL/data-URI; object = captured (full-res in blob store)
+// Intent: enable the draw/signature capture surface. Bare true → a plain draw pad; the object tunes canvas size, pen, an
+// optional solid background, and whether file upload is offered alongside draw (allowUpload → annotate an uploaded image).
+export type DrawConfig = boolean | {
+    w?: number;
+    h?: number;
+    penColor?: string;
+    background?: string;
+    allowUpload?: boolean;
+    };
+
+export type ImageControlDef = ControlDefBase<'image', string | CapturedImage> & {   // string = external URL/data-URI; object = captured (full-res in blob store)
+    draw?: DrawConfig;
+    };
+// Intent: authoring alias — a signature is an image control preset to draw-only with a wide-short canvas (ControlItem maps it)
+export type SignatureControlDef = ControlDefBase<'signature', string | CapturedImage> & {
+    draw?: DrawConfig;
+    };
 export type RadioControlDef = ControlDefBase<'radio', string> & {
     controls?: ControlOption[];
     dbOptions?: DbOptions;
@@ -138,6 +154,7 @@ export type ControlDef =
     | TextAreaControlDef
     | CheckboxControlDef
     | ImageControlDef
+    | SignatureControlDef
     | RadioControlDef
     | DropdownControlDef
     | CollapsibleControlDef

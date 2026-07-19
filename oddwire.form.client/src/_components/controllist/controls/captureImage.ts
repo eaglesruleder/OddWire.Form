@@ -15,13 +15,14 @@ export async function captureImage(source: Blob, mime = source.type): Promise<Ca
     try
     {
         const image = await loadImage(url);
+        const resolvedMime = mime || 'application/octet-stream';
 
         return {
             blob: source,
-            mime: mime || 'application/octet-stream',
+            mime: resolvedMime,
             w: image.naturalWidth,
             h: image.naturalHeight,
-            thumbnail: makeThumbnail(image),
+            thumbnail: makeThumbnail(image, resolvedMime),
             };
     }
     finally
@@ -30,7 +31,9 @@ export async function captureImage(source: Blob, mime = source.type): Promise<Ca
     }
 }
 
-function makeThumbnail(image: HTMLImageElement): string
+// Intent: keep the thumbnail in the source's own format so transparency (png) survives natively; the res-shrink is what
+// bounds size. A format the canvas can't encode falls back to png per the toDataURL spec.
+function makeThumbnail(image: HTMLImageElement, mime: string): string
 {
     const scale = Math.min(1, MAX_THUMB_RES / Math.max(image.naturalWidth, image.naturalHeight));
     const w = Math.max(1, Math.round(image.naturalWidth * scale));
@@ -45,7 +48,7 @@ function makeThumbnail(image: HTMLImageElement): string
         throw new Error('Canvas unavailable');
 
     context.drawImage(image, 0, 0, w, h);
-    return canvas.toDataURL('image/jpeg', THUMB_QUALITY);
+    return canvas.toDataURL(mime, THUMB_QUALITY);
 }
 
 function loadImage(src: string): Promise<HTMLImageElement>
