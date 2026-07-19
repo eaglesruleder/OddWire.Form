@@ -51,6 +51,7 @@
   object-fit: cover;
   border-radius: 4px;
   border: 1px solid var(--bs-border-color);
+  cursor: zoom-in;
 }
 
 .instance-row-main {

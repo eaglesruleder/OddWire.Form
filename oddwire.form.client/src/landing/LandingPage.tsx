@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 import type { DisplayParam, FormIndexEntry, InstanceIndexEntry, ParamList } from '../_context';
 
-import { FormContext, InstanceContext } from '../_context';
+import { FormContext, InstanceContext, FormImageContext } from '../_context';
 import { StripLayout } from '../_components/layout';
 import { ControlDropdown } from '../_components/controllist/controls';
 import { isCapturedImage, imageValueText } from '../_components/controllist';
@@ -170,6 +171,19 @@ function isGroupOpen(label: string, groupOpen: Record<string, boolean>, routeGro
 
 function InstanceLinks({ form, instances }: { form: FormIndexEntry; instances: InstanceIndexEntry[] })
 {
+    const images = useContext(FormImageContext);
+    const [zoomSrc, setZoomSrc] = useState<string>();
+
+    // Intent: click the list thumbnail → full-size popup. A captured value has an id → load the full-res blob (fall back to
+    // the thumbnail if it's gone); a string value is an external URL shown as-is. preventDefault stops the row's navigation.
+    const openZoom = async (value: unknown) =>
+    {
+        if (isCapturedImage(value))
+            setZoomSrc(await images.getObjectUrl(value.id) ?? value.thumbnail);
+        else if (typeof value === 'string')
+            setZoomSrc(value);
+    };
+
     return (
         <div className="instance-list">
             {instances.map(instance =>
@@ -197,13 +211,26 @@ function InstanceLinks({ form, instances }: { form: FormIndexEntry; instances: I
                         {thumb
                         ?   <span className="instance-row-thumbwrap">
                                 <span className="instance-row-content">{main}{details}</span>
-                                <img className="instance-row-thumb" src={thumb} alt="" />
+                                <img
+                                    className="instance-row-thumb"
+                                    src={thumb}
+                                    alt=""
+                                    onClick={e => { e.preventDefault(); e.stopPropagation(); void openZoom(instance.thumbnail); }}
+                                />
                             </span>
                         :   <>{main}{details}</>
                         }
                     </Link>
                     );
             })}
+
+            <Modal show={!!zoomSrc} onHide={() => setZoomSrc(undefined)} centered size="lg">
+                <Modal.Body className="center">
+                    {zoomSrc &&
+                    <img src={zoomSrc} alt="" style={{ maxWidth: '100%', height: 'auto' }} />
+                    }
+                </Modal.Body>
+            </Modal>
         </div>
         );
 }
