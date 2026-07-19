@@ -140,6 +140,7 @@ class FormStore implements FormContextValue
             ,version: form.version
             ,displayParam: form.displayParam
             ,thumbnailParam: form.thumbnailParam
+            ,thumbnailDefault: form.thumbnailParam ? controlDefault(form.controls, form.thumbnailParam) : undefined
             ,groupParam: form.groupParam
             ,filterParam: form.filterParam
             ,orderParam: form.orderParam
@@ -163,6 +164,26 @@ function controlLabels(controls: ControlDef[], labels: Record<string, string> = 
     }
 
     return labels;
+}
+
+// Intent: the form-level default value for a param (first control that actually carries one, recursing layout children) —
+// lets the landing fall back to a shared default thumbnail for instances that never overrode it
+function controlDefault(controls: ControlDef[], param: string): unknown
+{
+    for (const control of controls)
+    {
+        if (control.param === param && control.value !== undefined)
+            return control.value;
+
+        if ('controls' in control && Array.isArray(control.controls) && isControlDefs(control.controls))
+        {
+            const found = controlDefault(control.controls, param);
+            if (found !== undefined)
+                return found;
+        }
+    }
+
+    return undefined;
 }
 
 function isControlDefs(controls: unknown[]): controls is ControlDef[]

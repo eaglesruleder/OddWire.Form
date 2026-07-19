@@ -50,6 +50,7 @@ export type FormIndexEntry = {
     version?: string;
     displayParam?: DisplayParam[];
     thumbnailParam?: string;
+    thumbnailDefault?: unknown;      // form's default value for thumbnailParam — one shared copy the landing falls back to
     groupParam?: ParamList;
     filterParam?: string[];
     orderParam?: ParamList;

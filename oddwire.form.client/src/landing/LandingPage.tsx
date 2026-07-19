@@ -188,7 +188,10 @@ function InstanceLinks({ form, instances }: { form: FormIndexEntry; instances: I
         <div className="instance-list">
             {instances.map(instance =>
             {
-                const thumb = thumbnailSrc(instance.thumbnail);
+                // Intent: an instance that never overrode the image falls back to the form's shared default (one copy in the
+                // form index) — no per-instance duplication, and the default blob is shared for the full-size zoom
+                const thumbValue = instance.thumbnail ?? form.thumbnailDefault;
+                const thumb = thumbnailSrc(thumbValue);
                 const main =
                     <span className="instance-row-main">
                         <span className="instance-row-title">{displayTitle(instance, form.displayParam)}</span>
@@ -215,7 +218,7 @@ function InstanceLinks({ form, instances }: { form: FormIndexEntry; instances: I
                                     className="instance-row-thumb"
                                     src={thumb}
                                     alt=""
-                                    onClick={e => { e.preventDefault(); e.stopPropagation(); void openZoom(instance.thumbnail); }}
+                                    onClick={e => { e.preventDefault(); e.stopPropagation(); void openZoom(thumbValue); }}
                                 />
                             </span>
                         :   <>{main}{details}</>
