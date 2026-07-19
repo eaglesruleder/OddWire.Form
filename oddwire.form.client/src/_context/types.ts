@@ -14,6 +14,7 @@ export type FormDefinition = {
     version?: string;
     export?: FormExportDefinition;
     displayParam?: DisplayParam[];
+    thumbnailParam?: string;          // param of an image/signature control whose thumbnail shows in the instance list
     groupParam?: ParamList;
     filterParam?: string[];
     orderParam?: ParamList;
@@ -48,6 +49,7 @@ export type FormIndexEntry = {
     label?: string;
     version?: string;
     displayParam?: DisplayParam[];
+    thumbnailParam?: string;
     groupParam?: ParamList;
     filterParam?: string[];
     orderParam?: ParamList;
@@ -60,6 +62,7 @@ export type InstanceIndexEntry = {
     formId?: string;
     dateModified?: string;
     display: ProjectionRecord;
+    thumbnail?: unknown;             // raw value of the form's thumbnailParam (captured object or URL string)
     group?: ProjectionRecord;
     filter?: ProjectionRecord;
     order?: ProjectionRecord;

@@ -1,7 +1,7 @@
 {
     "formId": "11111111-1111-4111-8111-111111111111",
     "label": "Contact Form",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "export": {
         "api": "/api/form/contact",
         "pdf": true
@@ -10,6 +10,7 @@
         "fullName",
         "email"
     ],
+    "thumbnailParam": "photo",
     "controls": [
         {
             "type": "label",

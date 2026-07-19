@@ -41,10 +41,11 @@ export function paramList(value: ParamList | undefined): string[]
     return Array.isArray(value) ? value : [value];
 }
 
-function projectionParams(form: Pick<FormIndexEntry, 'displayParam' | 'groupParam' | 'filterParam' | 'orderParam'>): string[]
+function projectionParams(form: Pick<FormIndexEntry, 'displayParam' | 'thumbnailParam' | 'groupParam' | 'filterParam' | 'orderParam'>): string[]
 {
     return [
         ...displayParams(form.displayParam),
+        ...(form.thumbnailParam ? [form.thumbnailParam] : []),
         ...paramList(form.groupParam),
         ...(form.filterParam ?? []),
         ...paramList(form.orderParam)
@@ -95,11 +96,12 @@ class FormStore implements FormContextValue
     getDisplayParam = (formId: string): DisplayParam[] =>
         this.index.find(entry => entry.formId === formId)?.displayParam ?? [];
 
-    getProjectionParams = (formId: string): Pick<FormIndexEntry, 'displayParam' | 'groupParam' | 'filterParam' | 'orderParam' | 'projectionLabels'> =>
+    getProjectionParams = (formId: string): Pick<FormIndexEntry, 'displayParam' | 'thumbnailParam' | 'groupParam' | 'filterParam' | 'orderParam' | 'projectionLabels'> =>
     {
         const entry = this.index.find(entry => entry.formId === formId);
         return {
             displayParam: entry?.displayParam,
+            thumbnailParam: entry?.thumbnailParam,
             groupParam: entry?.groupParam,
             filterParam: entry?.filterParam,
             orderParam: entry?.orderParam,
@@ -137,6 +139,7 @@ class FormStore implements FormContextValue
             ,label: form.label
             ,version: form.version
             ,displayParam: form.displayParam
+            ,thumbnailParam: form.thumbnailParam
             ,groupParam: form.groupParam
             ,filterParam: form.filterParam
             ,orderParam: form.orderParam

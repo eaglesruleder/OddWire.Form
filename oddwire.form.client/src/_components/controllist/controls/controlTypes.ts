@@ -38,9 +38,18 @@ export function isCapturedImage(value: unknown): value is CapturedImage
     && 'thumbnail' in value;
 }
 
-export function imageValueText(value: unknown): string
+// Intent: single text representation of an image value. `display` (default) is the type-blind projection view — it can only
+// recognise the captured object; a bare string is indistinguishable from a text field there, so it returns ''. `export` is
+// for callers that KNOW the control is an image (the flatten/export walkers), so a string is labelled 'External image'.
+export function imageValueText(value: unknown, mode: 'display' | 'export' = 'display'): string
 {
-    return isCapturedImage(value) ? 'Captured image' : '';
+    if (isCapturedImage(value))
+        return 'Captured image';
+
+    if (mode === 'export' && typeof value === 'string' && value !== '')
+        return 'External image';
+
+    return '';
 }
 
 // Intent: filter string means formParam === tableParam (dependent list on one shared param name)

@@ -173,11 +173,14 @@ function InstanceLinks({ form, instances }: { form: FormIndexEntry; instances: I
     return (
         <div className="instance-list">
             {instances.map(instance =>
-                <Link key={instance.instanceId} className="instance-row" to={`/form/${form.formId}/${instance.instanceId}`}>
+            {
+                const thumb = thumbnailSrc(instance.thumbnail);
+                const main =
                     <span className="instance-row-main">
                         <span className="instance-row-title">{displayTitle(instance, form.displayParam)}</span>
                         {instance.dateModified ? <span className="instance-row-subtitle">Edited {formatDate(instance.dateModified)}</span> : null}
-                    </span>
+                    </span>;
+                const details =
                     <span className="instance-row-details">
                         {displayDetails(instance, form.displayParam).map(detail =>
                             detail.kind === 'break'
@@ -187,9 +190,20 @@ function InstanceLinks({ form, instances }: { form: FormIndexEntry; instances: I
                                     <span>{detail.value}</span>
                                 </span>
                             )}
-                    </span>
-                </Link>
-                )}
+                    </span>;
+
+                return (
+                    <Link key={instance.instanceId} className="instance-row" to={`/form/${form.formId}/${instance.instanceId}`}>
+                        {thumb
+                        ?   <span className="instance-row-thumbwrap">
+                                <span className="instance-row-content">{main}{details}</span>
+                                <img className="instance-row-thumb" src={thumb} alt="" />
+                            </span>
+                        :   <>{main}{details}</>
+                        }
+                    </Link>
+                    );
+            })}
         </div>
         );
 }
@@ -270,6 +284,16 @@ function paramList(value: ParamList | undefined): string[]
         return [];
 
     return Array.isArray(value) ? value : [value];
+}
+
+// Intent: the thumbnail rides in the value already — a captured object exposes its data-URI thumbnail; a bare string is an
+// external URL usable directly. Anything else → no thumbnail (row falls back to full-width text).
+function thumbnailSrc(value: unknown): string | undefined
+{
+    if (isCapturedImage(value))
+        return value.thumbnail;
+
+    return typeof value === 'string' && value !== '' ? value : undefined;
 }
 
 function valueText(value: unknown): string
