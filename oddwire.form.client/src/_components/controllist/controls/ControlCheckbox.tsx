@@ -7,8 +7,13 @@ export function ControlCheckbox(props: CoreControlProps<boolean>)
     if (props.hidden)
         return null;
 
+    const wrapClass =
+        ['flex', 'items-center', 'gap', 'mb-3', props.cellClassName]
+        .filter(Boolean)
+        .join(' ');
+
     return (
-        <div className="flex items-center gap mb-3">
+        <div className={wrapClass}>
             {props.label &&
             <label className="fill" htmlFor={props.param}>{props.label}</label>
             }
