@@ -10,6 +10,7 @@ import testForm from './data/forms/testform.json';
 import tabForm from './data/forms/tabform.json';
 import layoutTestForm from './data/forms/layouttestform.json';
 import vehicleForm from './data/forms/vehicleform.json';
+import ootaSession1Form from './data/forms/oota-session1.json';
 
 const INDEX_KEY = 'index';
 
@@ -18,6 +19,7 @@ const seedForms =
     ,tabForm
     ,layoutTestForm
     ,vehicleForm
+    ,ootaSession1Form
     ] as unknown as FormDefinition[];
 
 const storage = localforage.createInstance({ name: 'oddwire.form', storeName: 'forms' });

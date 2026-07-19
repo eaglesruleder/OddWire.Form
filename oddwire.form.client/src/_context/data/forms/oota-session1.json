@@ -1,0 +1,476 @@
+{
+    "formId": "5e550001-0001-4001-8001-000000000001",
+    "label": "OotA — Session 1: Five Days in Velkynvelve",
+    "version": "1.1.0",
+    "displayParam": ["sessionDate", "playersPresent"],
+    "controls": [
+        {
+            "type": "tab",
+            "param": "tabBrief",
+            "label": "Brief",
+            "controls": [
+                { "type": "text", "param": "sessionDate", "label": "Session Date", "stacked": true, "cellClassName": "sm-col-12 lg-col-6" },
+                { "type": "text", "param": "playersPresent", "label": "Players Present", "stacked": true, "cellClassName": "sm-col-12 lg-col-6" },
+                { "type": "textarea", "param": "overview", "label": "OotA — Session 1", "rows": 8, "value": "Property of Velkynvelve → Last Chance. Five days in the drow slave pen at Velkynvelve: learn the routine, win allies, find the openings, and break out before the transfer to Menzoberranzan.\n\nThe five-day arc: Day 1 establishes the routine and the initial prisoners. Day 2 stages the Jorlan/Shoor rivalry. Day 3 lands new prisoners and reveals the lift. Day 4 has Asha probe for divisions while Jorlan quietly manufactures an opening. Day 5 forces the break before the transfer." },
+                { "type": "textarea", "param": "sessionGoal", "label": "Session Goal", "rows": 3, "value": "By the end of Day 5 the party should hold a workable escape plan and commit to it. Cooperation with at least some fellow prisoners is the through-line of the whole session." },
+                { "type": "textarea", "param": "sessionNotes", "label": "Session Notes", "rows": 6 }
+            ]
+        },
+        {
+            "type": "tab",
+            "param": "tabSession",
+            "label": "Session",
+            "controls": [
+                {
+                    "type": "tab",
+                    "param": "tabDay1",
+                    "label": "Day 1",
+                    "controls": [
+                        { "type": "textarea", "param": "d1Progress", "label": "Day 1 — Property of Velkynvelve", "rows": 2, "value": "Prison progression: learn the routine, meet the initial prisoners, and establish Jorlan as the apparent authority over the slave pen." },
+                        {
+                            "type": "collapsible", "param": "d1EscapeSec", "label": "Escape Information", "subtitle": "Tick each as the party learns it",
+                            "controls": [
+                                {
+                                    "type": "looper", "param": "d1Escape", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
+                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "info", "value": "Work parties leave the pen under guard each day." } ] },
+                                        { "controls": [ { "param": "info", "value": "Prisoners are assigned chores by perceived usefulness." } ] },
+                                        { "controls": [ { "param": "info", "value": "Jorlan controls the routine but isn't the outpost's highest authority." } ] },
+                                        { "controls": [ { "param": "info", "value": "Guards catalogue prisoners' names, abilities and condition." } ] },
+                                        { "controls": [ { "param": "info", "value": "The cell gate, guard post and work-detail procedures can be observed." } ] }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "collapsible", "param": "d1MorningSec", "label": "Morning — Intake and Inspection",
+                            "controls": [
+                                { "type": "textarea", "param": "d1MorningScene", "label": "Scene", "rows": 5, "value": "Jorlan receives the newest prisoners, strips anything useful, and states the rules without ceremony — sizing prisoners as labour: strong, skilled, dangerous or unusual. Each PC is assigned a chore; their chosen skill check decides what the work detail yields — intelligence, an asset, or influence with another prisoner." },
+                                { "type": "label", "param": "d1MorningIntHead", "label": "Interactions" },
+                                {
+                                    "type": "looper", "param": "d1MorningInt", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
+                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "info", "value": "Jorlan — reads the Goblin as kitchen labour, the Ranger as hunter/scout, the Paladin as an organiser." } ] },
+                                        { "controls": [ { "param": "info", "value": "Jorlan — studies the Reborn Cleric longer than the rest, but explains nothing." } ] },
+                                        { "controls": [ { "param": "info", "value": "Ront — challenges Jorlan and is subdued quickly and impersonally." } ] },
+                                        { "controls": [ { "param": "info", "value": "Eldeth — complies while quietly noting guard positions and procedures." } ] },
+                                        { "controls": [ { "param": "info", "value": "Buppido — presents as helpful; offers to explain the prison routine." } ] },
+                                        { "controls": [ { "param": "info", "value": "Sarith — avoids the Drow unless directly ordered." } ] },
+                                        { "controls": [ { "param": "info", "value": "Stool — reaches out with rapport spores if allowed; simple, immediate friendliness." } ] },
+                                        { "controls": [ { "param": "info", "value": "A guard cites orders from 'Captain Shoor'; Jorlan snaps that he already knows his orders." } ] }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "collapsible", "param": "d1EveningSec", "label": "Evening — First Comparisons",
+                            "controls": [
+                                { "type": "textarea", "param": "d1EveningScene", "label": "Scene", "rows": 5, "value": "Back in the pen with poor food and little water — the first real chance for introductions. Keep it to a few NPCs. Prisoners compare what they learned: Eldeth pushes practical sharing, Buppido offers interpretations, Ront complains talk is useless without a fight.\n\nThe takeaway the PCs should reach: escape is possible only by learning the routine and cooperating with at least some prisoners." }
+                            ]
+                        },
+                        { "type": "textarea", "param": "d1Notes", "label": "DM Notes — Day 1", "rows": 4 }
+                    ]
+                },
+                {
+                    "type": "tab",
+                    "param": "tabDay2",
+                    "label": "Day 2",
+                    "controls": [
+                        { "type": "textarea", "param": "d2Progress", "label": "Day 2 — Shoor's Inspection", "rows": 2, "value": "Prison progression: reveal the gap between Jorlan's controlled discipline and Shoor's insecure cruelty, and establish their rivalry." },
+                        {
+                            "type": "collapsible", "param": "d2EscapeSec", "label": "Escape Information", "subtitle": "Tick each as the party learns it",
+                            "controls": [
+                                {
+                                    "type": "looper", "param": "d2Escape", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
+                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "info", "value": "Shoor carries a wand that can restrain prisoners." } ] },
+                                        { "controls": [ { "param": "info", "value": "Guard responses are less coordinated when Shoor overrides Jorlan." } ] },
+                                        { "controls": [ { "param": "info", "value": "Shoor values spectacle and status over operational security." } ] },
+                                        { "controls": [ { "param": "info", "value": "Jorlan obeys Shoor publicly but resents it." } ] },
+                                        { "controls": [ { "param": "info", "value": "Public punishments pull guards and prisoners into predictable positions." } ] }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "collapsible", "param": "d2MorningSec", "label": "Morning — The Captain Improves Matters",
+                            "controls": [
+                                { "type": "textarea", "param": "d2MorningScene", "label": "Scene", "rows": 5, "value": "Jorlan starts assigning chores; Shoor arrives and reshuffles them for no practical reason — redoing finished work, splitting useful pairings, singling someone out for humiliation. The point is proving his authority outranks Jorlan's. Play him as dangerous but visibly dependent on Ilvara's favour." },
+                                { "type": "label", "param": "d2MorningIntHead", "label": "Interactions" },
+                                {
+                                    "type": "looper", "param": "d2MorningInt", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
+                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "info", "value": "Shoor — provokes Ront, knowing the Orc angers easily." } ] },
+                                        { "controls": [ { "param": "info", "value": "Shoor — mocks Eldeth's dignity, trying to make her visibly submit." } ] },
+                                        { "controls": [ { "param": "info", "value": "Shoor — treats Stool as an object or oddity, not a person." } ] },
+                                        { "controls": [ { "param": "info", "value": "Shoor — asks whether the Paladin speaks for the prisoners; if they accept, he punishes someone else for the answer." } ] },
+                                        { "controls": [ { "param": "info", "value": "Jorlan — objects on grounds of 'productivity', framing his resentment carefully." } ] },
+                                        { "controls": [ { "param": "info", "value": "Shoor — publicly reminds Jorlan who holds the captain's title." } ] },
+                                        { "controls": [ { "param": "info", "value": "A defiant prisoner may be restrained with the wand — a live demo of what it does." } ] },
+                                        { "controls": [ { "param": "info", "value": "PCs working nearby can watch where guards move during a disturbance." } ] }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "collapsible", "param": "d2EveningSec", "label": "Evening — Strength, Submission and Leadership",
+                            "controls": [
+                                { "type": "textarea", "param": "d2EveningScene", "label": "Scene", "rows": 4, "value": "Reactions split: Ront says someone should have hit Shoor; Eldeth argues pointless death only strengthens the Drow; Sarith warns Shoor's cruelty is impulsive but Ilvara's is deliberate. Use the argument to ask, directly or not, what kind of escape group the PCs intend to be." },
+                                { "type": "label", "param": "d2EveDevHead", "label": "Possible Developments" },
+                                {
+                                    "type": "looper", "param": "d2EveDev", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
+                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "info", "value": "Paladin — asked whether they truly mean to lead." } ] },
+                                        { "controls": [ { "param": "info", "value": "Goblin — can defuse tension with food, humour or work." } ] },
+                                        { "controls": [ { "param": "info", "value": "Ranger — can question witnesses about the wand and guard positions." } ] },
+                                        { "controls": [ { "param": "info", "value": "Cleric — can answer despair, injury or spiritual doubt." } ] },
+                                        { "controls": [ { "param": "info", "value": "Buppido — backs whichever argument splits the group most." } ] }
+                                    ]
+                                }
+                            ]
+                        },
+                        { "type": "textarea", "param": "d2Notes", "label": "DM Notes — Day 2", "rows": 4 }
+                    ]
+                },
+                {
+                    "type": "tab",
+                    "param": "tabDay3",
+                    "label": "Day 3",
+                    "controls": [
+                        { "type": "textarea", "param": "d3Progress", "label": "Day 3 — New Cargo", "rows": 2, "value": "Prison progression: introduce the second wave of prisoner NPCs and reveal the lift as both an entry route and a possible escape mechanism." },
+                        {
+                            "type": "collapsible", "param": "d3EscapeSec", "label": "Escape Information", "subtitle": "Tick each as the party learns it",
+                            "controls": [
+                                {
+                                    "type": "looper", "param": "d3Escape", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
+                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "info", "value": "The lift needs a set number of operators or a specific control process." } ] },
+                                        { "controls": [ { "param": "info", "value": "Guards stand in predictable positions while receiving cargo." } ] },
+                                        { "controls": [ { "param": "info", "value": "Prisoners and supplies are checked differently." } ] },
+                                        { "controls": [ { "param": "info", "value": "The platform stays accessible during unloading." } ] },
+                                        { "controls": [ { "param": "info", "value": "Cargo arrival disrupts normal guard assignments." } ] },
+                                        { "controls": [ { "param": "info", "value": "Ilvara personally assesses valuable or unusual prisoners." } ] }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "collapsible", "param": "d3MorningSec", "label": "Morning — The Lift Descends",
+                            "controls": [
+                                { "type": "textarea", "param": "d3MorningScene", "label": "Scene", "rows": 5, "value": "The routine breaks for the lift. Existing prisoners are pulled to unload, carry, clean the platform or restrain arrivals. Play it as a moving demonstration — ropes tightening, guards taking positions, the platform settling — and let every PC investigate part of the process with a skill check. The new shipment: Derendil, Jimjar, Shuushar, and Topsy & Turvy." },
+                                { "type": "label", "param": "d3MorningIntHead", "label": "Interactions" },
+                                {
+                                    "type": "looper", "param": "d3MorningInt", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
+                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "info", "value": "Derendil — needs several guards; insists he is not what he appears." } ] },
+                                        { "controls": [ { "param": "info", "value": "Jimjar — makes a wager almost at once (who'll try to escape first?)." } ] },
+                                        { "controls": [ { "param": "info", "value": "Shuushar — offers no resistance; works to lower the tension." } ] },
+                                        { "controls": [ { "param": "info", "value": "Topsy & Turvy — stay close together and reveal as little as possible." } ] },
+                                        { "controls": [ { "param": "info", "value": "Ilvara — appraises each arrival as property." } ] },
+                                        { "controls": [ { "param": "info", "value": "Asha — records names, condition, useful skills and unusual traits." } ] },
+                                        { "controls": [ { "param": "info", "value": "Ilvara — shows controlled interest in the Reborn Cleric; orders them kept undamaged." } ] },
+                                        { "controls": [ { "param": "info", "value": "Ilvara — marks the Paladin (or emerging organiser) as one to watch." } ] },
+                                        { "controls": [ { "param": "info", "value": "Shoor — stays near Ilvara and inflates his own importance." } ] },
+                                        { "controls": [ { "param": "info", "value": "Jorlan — watches Shoor and Ilvara more than he watches the prisoners." } ] },
+                                        { "controls": [ { "param": "info", "value": "Existing prisoners may be told to show newcomers the work — instant PC–NPC pairings." } ] }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "collapsible", "param": "d3EveningSec", "label": "Evening — A Crowded Cell",
+                            "controls": [
+                                { "type": "textarea", "param": "d3EveningScene", "label": "Scene", "rows": 5, "value": "The new arrivals join the pen. Don't run four introductions back-to-back — give each a clear first impression, then let the PCs choose who to approach. The original prisoners recap what they know, letting players summarise their discoveries. By the end, the group should start naming possible escape routes rather than gathering isolated facts." },
+                                { "type": "label", "param": "d3EveImpHead", "label": "First Impressions" },
+                                {
+                                    "type": "looper", "param": "d3EveImp", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
+                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "info", "value": "Derendil — demands to be addressed by his claimed identity." } ] },
+                                        { "controls": [ { "param": "info", "value": "Jimjar — offers a wager, or reads the room in a glance." } ] },
+                                        { "controls": [ { "param": "info", "value": "Shuushar — asks that no one start a fight while trapped together." } ] },
+                                        { "controls": [ { "param": "info", "value": "Topsy & Turvy — quietly clock the exits; dodge questions about themselves." } ] }
+                                    ]
+                                }
+                            ]
+                        },
+                        { "type": "textarea", "param": "d3Notes", "label": "DM Notes — Day 3", "rows": 4 }
+                    ]
+                },
+                {
+                    "type": "tab",
+                    "param": "tabDay4",
+                    "label": "Day 4",
+                    "controls": [
+                        { "type": "textarea", "param": "d4Progress", "label": "Day 4 — Tests of Loyalty", "rows": 2, "value": "Prison progression: Asha probes the prisoners for divisions while Jorlan quietly begins manufacturing an escape opportunity." },
+                        {
+                            "type": "collapsible", "param": "d4EscapeSec", "label": "Escape Information", "subtitle": "Tick each as the party learns it",
+                            "controls": [
+                                {
+                                    "type": "looper", "param": "d4Escape", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
+                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "info", "value": "Asha and Ilvara are not fully aligned." } ] },
+                                        { "controls": [ { "param": "info", "value": "Jorlan may be willing to undermine Shoor." } ] },
+                                        { "controls": [ { "param": "info", "value": "Select chores give access to the shrine, officer areas or guard tower." } ] },
+                                        { "controls": [ { "param": "info", "value": "The Drow are actively hunting for the prisoners' leader." } ] },
+                                        { "controls": [ { "param": "info", "value": "A tool, key or route may surface through deliberate negligence." } ] },
+                                        { "controls": [ { "param": "info", "value": "Jorlan's help is motivated by revenge, not sympathy." } ] }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "collapsible", "param": "d4MorningSec", "label": "Morning — Asha's Examination",
+                            "controls": [
+                                { "type": "textarea", "param": "d4MorningScene", "label": "Scene", "rows": 6, "value": "Asha has the prisoners inspected under a pretext — health, religious contamination, inventory — asking questions built to expose alliances and weaknesses, framing cooperation as a way for one prisoner to gain at another's expense. She avoids open threats.\n\nHer questions: Who leads? Who'll betray the others? Who's discussed escape? Who's dangerous? Who's hiding something?" },
+                                { "type": "label", "param": "d4MorningIntHead", "label": "Interactions" },
+                                {
+                                    "type": "looper", "param": "d4MorningInt", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
+                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "info", "value": "Asha — questions Sarith about his disgrace, memory and condition." } ] },
+                                        { "controls": [ { "param": "info", "value": "Asha — asks the Ranger to name the most suspicious prisoner, testing evidence vs accusation." } ] },
+                                        { "controls": [ { "param": "info", "value": "Asha — questions the Cleric about their god, undeath and lost identity." } ] },
+                                        { "controls": [ { "param": "info", "value": "Asha — tries to make the Paladin privately contradict a public statement." } ] },
+                                        { "controls": [ { "param": "info", "value": "Asha — treats Stool as a biological specimen." } ] },
+                                        { "controls": [ { "param": "info", "value": "Buppido — plays cooperative and harmless; may offer plausible-sounding accusations." } ] },
+                                        { "controls": [ { "param": "info", "value": "Topsy & Turvy — become visibly tense if separated or examined." } ] },
+                                        { "controls": [ { "param": "info", "value": "Shuushar — refuses to condemn another prisoner." } ] },
+                                        { "controls": [ { "param": "info", "value": "Eldeth — warns the PCs not to show divisions in front of Asha." } ] }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "collapsible", "param": "d4MiddaySec", "label": "Midday — Jorlan's Manufactured Opening",
+                            "controls": [
+                                { "type": "textarea", "param": "d4MiddayScene", "label": "Scene", "rows": 4, "value": "Later, Jorlan oversees a work detail and creates an opening that looks accidental. He never admits he wants an escape — he only lets the prisoners see that Shoor's embarrassment would please him." },
+                                { "type": "label", "param": "d4MiddayOptHead", "label": "Possible Openings (pick one)" },
+                                {
+                                    "type": "looper", "param": "d4MiddayOpts", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
+                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "info", "value": "Leaving a tool within reach." } ] },
+                                        { "controls": [ { "param": "info", "value": "Letting a prisoner see the guard tower interior." } ] },
+                                        { "controls": [ { "param": "info", "value": "Assigning a reduced escort." } ] },
+                                        { "controls": [ { "param": "info", "value": "Mentioning tomorrow's transport inspection." } ] },
+                                        { "controls": [ { "param": "info", "value": "Failing to search a prisoner properly." } ] },
+                                        { "controls": [ { "param": "info", "value": "Ordering a guard away at exactly the wrong moment." } ] },
+                                        { "controls": [ { "param": "info", "value": "Correcting someone who misreads how the lift controls work." } ] }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "collapsible", "param": "d4EveningSec", "label": "Evening — Is It a Trap?",
+                            "controls": [
+                                { "type": "textarea", "param": "d4EveningScene", "label": "Scene", "rows": 3, "value": "The prisoners debate whether Jorlan's apparent help is genuine. The PCs should leave with a provisional plan and a list of what's still missing." },
+                                { "type": "label", "param": "d4EvePosHead", "label": "Positions Around the Cell" },
+                                {
+                                    "type": "looper", "param": "d4EvePos", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
+                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "info", "value": "Eldeth — use the opening, but cautiously." } ] },
+                                        { "controls": [ { "param": "info", "value": "Ront — act immediately." } ] },
+                                        { "controls": [ { "param": "info", "value": "Shuushar — hating Shoor doesn't make Jorlan an ally." } ] },
+                                        { "controls": [ { "param": "info", "value": "Jimjar — bets Jorlan expects them to try something." } ] },
+                                        { "controls": [ { "param": "info", "value": "Sarith — knows enough Drow politics to confirm Jorlan has motive." } ] },
+                                        { "controls": [ { "param": "info", "value": "Buppido — use it, but plan to abandon any liability." } ] },
+                                        { "controls": [ { "param": "info", "value": "Topsy & Turvy — quietly prepare their own contingency." } ] }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "collapsible", "param": "d4ReqsSec", "label": "Plan Requirements", "subtitle": "Tick each as the party secures it",
+                            "controls": [
+                                {
+                                    "type": "looper", "param": "d4Reqs", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
+                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "info", "value": "A weapon." } ] },
+                                        { "controls": [ { "param": "info", "value": "A key or way through the pen gate." } ] },
+                                        { "controls": [ { "param": "info", "value": "Knowledge of the lift." } ] },
+                                        { "controls": [ { "param": "info", "value": "A distraction." } ] },
+                                        { "controls": [ { "param": "info", "value": "Agreement on whether to free every prisoner." } ] },
+                                        { "controls": [ { "param": "info", "value": "A route to the confiscated equipment." } ] }
+                                    ]
+                                }
+                            ]
+                        },
+                        { "type": "textarea", "param": "d4Notes", "label": "DM Notes — Day 4", "rows": 4 }
+                    ]
+                },
+                {
+                    "type": "tab",
+                    "param": "tabDay5",
+                    "label": "Day 5",
+                    "controls": [
+                        { "type": "textarea", "param": "d5Progress", "label": "Day 5 — Last Chance", "rows": 2, "value": "Prison progression: announce the imminent transfer, tighten security, and force the group to act before their accumulated openings vanish." },
+                        {
+                            "type": "collapsible", "param": "d5EscapeSec", "label": "Escape Information", "subtitle": "Tick each as the party learns it",
+                            "controls": [
+                                {
+                                    "type": "looper", "param": "d5Escape", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
+                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "info", "value": "The prisoners will soon be transferred toward Menzoberranzan." } ] },
+                                        { "controls": [ { "param": "info", "value": "Confiscated equipment is moved or prepped for transport." } ] },
+                                        { "controls": [ { "param": "info", "value": "Guard routines change during departure prep." } ] },
+                                        { "controls": [ { "param": "info", "value": "The lift, gate or outbound route must be opened during processing." } ] },
+                                        { "controls": [ { "param": "info", "value": "Shoor's confidence creates a final security mistake." } ] },
+                                        { "controls": [ { "param": "info", "value": "Jorlan provides the last opening but won't openly fight for them." } ] }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "collapsible", "param": "d5MorningSec", "label": "Morning — Prepared for Transport",
+                            "controls": [
+                                { "type": "textarea", "param": "d5MorningScene", "label": "Scene", "rows": 5, "value": "Ilvara announces the transfer. Work details shorten or redirect to departure prep — packing supplies, moving confiscated goods, checking restraints, preparing the lift, sorting prisoners by value, loading food and water, clearing the route out. Security is tighter, but the outpost is busier and less orderly." },
+                                { "type": "label", "param": "d5MorningIntHead", "label": "Interactions" },
+                                {
+                                    "type": "looper", "param": "d5MorningInt", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
+                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "info", "value": "Ilvara — orders the Paladin/leader to keep the others compliant; implies cooperation may get some to the city alive." } ] },
+                                        { "controls": [ { "param": "info", "value": "Shoor — stages a public punishment or inspection, massing guards in one spot." } ] },
+                                        { "controls": [ { "param": "info", "value": "Shoor — pulls guards off routine posts to help with transport." } ] },
+                                        { "controls": [ { "param": "info", "value": "Asha — selects a prisoner for further examination, sacrifice or separate transport." } ] },
+                                        { "controls": [ { "param": "info", "value": "Jorlan — gives one precise piece of info, or deliberately leaves the final opening." } ] },
+                                        { "controls": [ { "param": "info", "value": "The prisoners' confiscated gear becomes visible or briefly reachable." } ] },
+                                        { "controls": [ { "param": "info", "value": "Derendil — harder to control as transport becomes real." } ] },
+                                        { "controls": [ { "param": "info", "value": "Ront — demands immediate action." } ] },
+                                        { "controls": [ { "param": "info", "value": "Eldeth — pushes for a coordinated plan." } ] },
+                                        { "controls": [ { "param": "info", "value": "Jimjar — calls in or offers a final wager." } ] },
+                                        { "controls": [ { "param": "info", "value": "Shuushar — asks whether escape means killing every guard." } ] },
+                                        { "controls": [ { "param": "info", "value": "Topsy & Turvy — refuse to be separated." } ] },
+                                        { "controls": [ { "param": "info", "value": "Stool — frightened; seeks reassurance." } ] }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "collapsible", "param": "d5OpeningsSec", "label": "Jorlan's Final Openings", "subtitle": "Pick the last opening he leaves",
+                            "controls": [
+                                {
+                                    "type": "looper", "param": "d5Openings", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
+                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "info", "value": "The cell door is left incompletely secured." } ] },
+                                        { "controls": [ { "param": "info", "value": "A key is placed where a prisoner can reach it." } ] },
+                                        { "controls": [ { "param": "info", "value": "A guard rotation is delayed." } ] },
+                                        { "controls": [ { "param": "info", "value": "The way to the equipment room is identified." } ] },
+                                        { "controls": [ { "param": "info", "value": "Guards are ordered away from the lift." } ] },
+                                        { "controls": [ { "param": "info", "value": "Jorlan warns the next inspection is the last chance to act." } ] }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "collapsible", "param": "d5EveningSec", "label": "Evening — The Escape Begins",
+                            "controls": [
+                                { "type": "textarea", "param": "d5EveningScene", "label": "Scene", "rows": 3, "value": "Ideally there is no peaceful evening on Day 5 — the 'evening' is the moment the prisoners gather, confirm the plan and commit. Let the players decide the specifics." },
+                                { "type": "label", "param": "d5EveDecHead", "label": "Player Decisions" },
+                                {
+                                    "type": "looper", "param": "d5EveDec", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
+                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "info", "value": "Who is being freed." } ] },
+                                        { "controls": [ { "param": "info", "value": "Who carries the limited equipment." } ] },
+                                        { "controls": [ { "param": "info", "value": "Whether the lift is an objective, distraction or false route." } ] },
+                                        { "controls": [ { "param": "info", "value": "How to handle prisoners who disagree." } ] },
+                                        { "controls": [ { "param": "info", "value": "Whether to trust Jorlan's opening." } ] },
+                                        { "controls": [ { "param": "info", "value": "What signal begins the escape." } ] }
+                                    ]
+                                },
+                                { "type": "textarea", "param": "d5Demon", "label": "The Demon Attack", "rows": 3, "value": "The demon attack (or another major disruption) can land three ways — and must never solve the escape on its own; it removes Drow control, not the need for player decisions." },
+                                {
+                                    "type": "looper", "param": "d5DemonWays", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
+                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "info", "value": "Player-created opportunity — the party already has a plan; the attack complicates it." } ] },
+                                        { "controls": [ { "param": "info", "value": "Escalation — the escape starts, then the attack turns a controlled breakout into chaos." } ] },
+                                        { "controls": [ { "param": "info", "value": "Failure valve — the party is discovered or trapped, and the attack creates a second chance." } ] }
+                                    ]
+                                }
+                            ]
+                        },
+                        { "type": "textarea", "param": "d5Notes", "label": "DM Notes — Day 5", "rows": 4 }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "tab",
+            "param": "tabCast",
+            "label": "Cast",
+            "controls": [
+                { "type": "textarea", "param": "castCaptors", "label": "Captors — The Drow", "rows": 12, "value": "Jorlan (Slavemaster) — stern, observant, efficient rather than cruel. Runs the immediate routine but isn't the outpost's highest authority. Resents Shoor; any 'help' he later gives is revenge, never sympathy.\n\nShoor (Captain) — insecure and cruel, values spectacle over security, easy to bait into overriding Jorlan. Dangerous but visibly dependent on Ilvara's favour.\n\nIlvara (Priestess & Commander) — the outpost's true authority. Appraises prisoners as property; deliberate where Shoor is impulsive. Takes a controlled interest in the Reborn Cleric.\n\nAsha (Priestess's Aide) — catalogues prisoners and probes for divisions under pretexts of health or inventory. Not fully aligned with Ilvara." },
+                { "type": "textarea", "param": "castPrisoners", "label": "Fellow Prisoners", "rows": 14, "value": "Ront (Orc) — aggressive, easy to anger, always pushing to fight now.\nEldeth (Shield Dwarf) — practical and observant; pushes coordination and caution, warns against showing divisions.\nBuppido (Derro) — presents as helpful; actually backs whichever argument splits the group most, and would abandon a liability.\nSarith (Drow) — disgraced; avoids the Drow unless ordered. Reads Drow politics and motives.\nStool (Myconid sprout) — simple, immediate friendliness through rapport spores. Easily frightened; seeks reassurance.\nDerendil (Quaggoth) — insists he is an elf prince, not what he appears. Harder to control as transport nears.\nJimjar (Deep Gnome) — compulsive gambler; makes a wager almost immediately and reads a room fast.\nShuushar (Kuo-toa) — pacifist; refuses to condemn others or start fights, questions whether escape means killing every guard.\nTopsy & Turvy (Deep Gnome twins) — stay close, reveal little, clock exits, prepare their own contingency. Refuse to be separated." }
+            ]
+        }
+    ]
+}
