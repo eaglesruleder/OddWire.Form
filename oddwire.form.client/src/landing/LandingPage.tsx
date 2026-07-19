@@ -1,12 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 import type { DisplayParam, FormIndexEntry, InstanceIndexEntry, ParamList } from '../_context';
 
-import { FormContext, InstanceContext } from '../_context';
+import { FormContext, InstanceContext, FormImageContext } from '../_context';
 import { StripLayout } from '../_components/layout';
 import { ControlDropdown } from '../_components/controllist/controls';
+import { isCapturedImage, imageValueText } from '../_components/controllist';
 import './landing.css';
 
 export function LandingPage()
@@ -169,14 +171,33 @@ function isGroupOpen(label: string, groupOpen: Record<string, boolean>, routeGro
 
 function InstanceLinks({ form, instances }: { form: FormIndexEntry; instances: InstanceIndexEntry[] })
 {
+    const images = useContext(FormImageContext);
+    const [zoomSrc, setZoomSrc] = useState<string>();
+
+    // Intent: click the list thumbnail → full-size popup. A captured value has an id → load the full-res blob (fall back to
+    // the thumbnail if it's gone); a string value is an external URL shown as-is. preventDefault stops the row's navigation.
+    const openZoom = async (value: unknown) =>
+    {
+        if (isCapturedImage(value))
+            setZoomSrc(await images.getObjectUrl(value.id) ?? value.thumbnail);
+        else if (typeof value === 'string')
+            setZoomSrc(value);
+    };
+
     return (
         <div className="instance-list">
             {instances.map(instance =>
-                <Link key={instance.instanceId} className="instance-row" to={`/form/${form.formId}/${instance.instanceId}`}>
+            {
+                // Intent: an instance that never overrode the image falls back to the form's shared default (one copy in the
+                // form index) — no per-instance duplication, and the default blob is shared for the full-size zoom
+                const thumbValue = instance.thumbnail ?? form.thumbnailDefault;
+                const thumb = thumbnailSrc(thumbValue);
+                const main =
                     <span className="instance-row-main">
                         <span className="instance-row-title">{displayTitle(instance, form.displayParam)}</span>
                         {instance.dateModified ? <span className="instance-row-subtitle">Edited {formatDate(instance.dateModified)}</span> : null}
-                    </span>
+                    </span>;
+                const details =
                     <span className="instance-row-details">
                         {displayDetails(instance, form.displayParam).map(detail =>
                             detail.kind === 'break'
@@ -186,9 +207,33 @@ function InstanceLinks({ form, instances }: { form: FormIndexEntry; instances: I
                                     <span>{detail.value}</span>
                                 </span>
                             )}
-                    </span>
-                </Link>
-                )}
+                    </span>;
+
+                return (
+                    <Link key={instance.instanceId} className="instance-row" to={`/form/${form.formId}/${instance.instanceId}`}>
+                        {thumb
+                        ?   <span className="instance-row-thumbwrap">
+                                <span className="instance-row-content">{main}{details}</span>
+                                <img
+                                    className="instance-row-thumb"
+                                    src={thumb}
+                                    alt=""
+                                    onClick={e => { e.preventDefault(); e.stopPropagation(); void openZoom(thumbValue); }}
+                                />
+                            </span>
+                        :   <>{main}{details}</>
+                        }
+                    </Link>
+                    );
+            })}
+
+            <Modal show={!!zoomSrc} onHide={() => setZoomSrc(undefined)} centered size="lg">
+                <Modal.Body className="center">
+                    {zoomSrc &&
+                    <img src={zoomSrc} alt="" style={{ maxWidth: '100%', height: 'auto' }} />
+                    }
+                </Modal.Body>
+            </Modal>
         </div>
         );
 }
@@ -271,9 +316,23 @@ function paramList(value: ParamList | undefined): string[]
     return Array.isArray(value) ? value : [value];
 }
 
+// Intent: the thumbnail rides in the value already — a captured object exposes its data-URI thumbnail; a bare string is an
+// external URL usable directly. Anything else → no thumbnail (row falls back to full-width text).
+function thumbnailSrc(value: unknown): string | undefined
+{
+    if (isCapturedImage(value))
+        return value.thumbnail;
+
+    return typeof value === 'string' && value !== '' ? value : undefined;
+}
+
 function valueText(value: unknown): string
 {
     const unwrapped = projectionValue(value);
+
+    if (isCapturedImage(unwrapped))
+        return imageValueText(unwrapped);
+
     return unwrapped == null ? '' : String(unwrapped);
 }
 

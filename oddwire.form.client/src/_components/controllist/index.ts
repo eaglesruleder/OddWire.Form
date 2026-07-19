@@ -5,4 +5,5 @@ export { ControlTab } from './controls/layout';
 export type { TabSection } from './controls/layout';
 export { DbContext } from './lookup';
 export { resolveLabel } from './resolveLabel';
-export type { ControlDef, ControlOption, ControlPdfBox, ControlPdfDef, FlattenCtx, FlattenResult } from './controls/controlTypes';
+export type { ControlDef, ControlOption, ControlPdfBox, ControlPdfDef, FlattenCtx, FlattenResult, CapturedImage } from './controls/controlTypes';
+export { isCapturedImage, imageValueText } from './controls/controlTypes';

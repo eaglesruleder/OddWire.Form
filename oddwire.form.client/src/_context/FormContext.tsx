@@ -41,10 +41,11 @@ export function paramList(value: ParamList | undefined): string[]
     return Array.isArray(value) ? value : [value];
 }
 
-function projectionParams(form: Pick<FormIndexEntry, 'displayParam' | 'groupParam' | 'filterParam' | 'orderParam'>): string[]
+function projectionParams(form: Pick<FormIndexEntry, 'displayParam' | 'thumbnailParam' | 'groupParam' | 'filterParam' | 'orderParam'>): string[]
 {
     return [
         ...displayParams(form.displayParam),
+        ...(form.thumbnailParam ? [form.thumbnailParam] : []),
         ...paramList(form.groupParam),
         ...(form.filterParam ?? []),
         ...paramList(form.orderParam)
@@ -95,11 +96,12 @@ class FormStore implements FormContextValue
     getDisplayParam = (formId: string): DisplayParam[] =>
         this.index.find(entry => entry.formId === formId)?.displayParam ?? [];
 
-    getProjectionParams = (formId: string): Pick<FormIndexEntry, 'displayParam' | 'groupParam' | 'filterParam' | 'orderParam' | 'projectionLabels'> =>
+    getProjectionParams = (formId: string): Pick<FormIndexEntry, 'displayParam' | 'thumbnailParam' | 'groupParam' | 'filterParam' | 'orderParam' | 'projectionLabels'> =>
     {
         const entry = this.index.find(entry => entry.formId === formId);
         return {
             displayParam: entry?.displayParam,
+            thumbnailParam: entry?.thumbnailParam,
             groupParam: entry?.groupParam,
             filterParam: entry?.filterParam,
             orderParam: entry?.orderParam,
@@ -137,6 +139,8 @@ class FormStore implements FormContextValue
             ,label: form.label
             ,version: form.version
             ,displayParam: form.displayParam
+            ,thumbnailParam: form.thumbnailParam
+            ,thumbnailDefault: form.thumbnailParam ? controlDefault(form.controls, form.thumbnailParam) : undefined
             ,groupParam: form.groupParam
             ,filterParam: form.filterParam
             ,orderParam: form.orderParam
@@ -160,6 +164,26 @@ function controlLabels(controls: ControlDef[], labels: Record<string, string> = 
     }
 
     return labels;
+}
+
+// Intent: the form-level default value for a param (first control that actually carries one, recursing layout children) —
+// lets the landing fall back to a shared default thumbnail for instances that never overrode it
+function controlDefault(controls: ControlDef[], param: string): unknown
+{
+    for (const control of controls)
+    {
+        if (control.param === param && control.value !== undefined)
+            return control.value;
+
+        if ('controls' in control && Array.isArray(control.controls) && isControlDefs(control.controls))
+        {
+            const found = controlDefault(control.controls, param);
+            if (found !== undefined)
+                return found;
+        }
+    }
+
+    return undefined;
 }
 
 function isControlDefs(controls: unknown[]): controls is ControlDef[]

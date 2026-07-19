@@ -1,7 +1,7 @@
 {
     "formId": "44444444-4444-4444-8444-444444444444",
     "label": "Monster Reference Card",
-    "version": "0.3.3",
+    "version": "0.3.4",
     "displayParam": [
         "name",
         "hp",
@@ -15,6 +15,7 @@
         "wisMod",
         "chaMod"
     ],
+    "thumbnailParam": "image",
     "groupParam": "collection",
     "filterParam": [
         "session"

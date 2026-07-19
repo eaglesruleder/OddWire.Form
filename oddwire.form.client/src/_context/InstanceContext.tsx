@@ -102,12 +102,13 @@ class InstanceStore implements InstanceContextValue
     };
 
     // Intent: display is a form concern — read displayParam off the form store (FK-style navigation)
-    private projectListFields = (instance: FormInstance): Pick<InstanceIndexEntry, 'display' | 'group' | 'filter' | 'order'> =>
+    private projectListFields = (instance: FormInstance): Pick<InstanceIndexEntry, 'display' | 'thumbnail' | 'group' | 'filter' | 'order'> =>
     {
         const params = formStore.getProjectionParams(instance.formId ?? '');
 
         return {
             display: this.projectParams(instance, (params.displayParam ?? []).filter((param): param is string => typeof param === 'string'), params.projectionLabels),
+            thumbnail: params.thumbnailParam ? instance.controls.find(control => control.param === params.thumbnailParam)?.value : undefined,
             group: this.projectParams(instance, paramList(params.groupParam), params.projectionLabels),
             filter: this.projectParams(instance, params.filterParam ?? [], params.projectionLabels),
             order: this.projectParams(instance, paramList(params.orderParam), params.projectionLabels)

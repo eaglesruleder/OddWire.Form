@@ -9,6 +9,10 @@ export { LookupContext, lookupStore } from './LookupContext';
 export type { LookupContextValue } from './LookupContext';
 export { PdfTemplateContext, pdfTemplateStore } from './PdfTemplateContext';
 export type { PdfTemplateContextValue, PdfTemplateRecord } from './PdfTemplateContext';
+export { FormImageContext, formImageStore, FORM_DEFAULT_INSTANCE } from './FormImageContext';
+export type { FormImageContextValue, StoredImage } from './FormImageContext';
+export { FormActionsContext } from './FormActionsContext';
+export type { FormActionsContextValue } from './FormActionsContext';
 export { GLOBAL_SCOPE } from './types';
 export type
     {FormDefinition
