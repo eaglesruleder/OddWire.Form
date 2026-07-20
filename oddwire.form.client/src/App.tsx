@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { ContextsProvider } from './_context';
+import { DevWorkspace } from './dev';
 import { ExportPDFPage } from './export/pdf';
 import { FormPage } from './form';
 import { LandingPage } from './landing';
@@ -14,6 +15,7 @@ function App() {
                     <Route path="/" element={<LandingPage />} />
                     <Route path="/form/:formId/:instanceId?" element={<FormPage />} />
                     <Route path="/export-pdf/:formId/:instanceId" element={<ExportPDFPage />} />
+                    <Route path="/forms/dev" element={<DevWorkspace />} />
                     <Route path="/settings" element={<SettingsPage />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>

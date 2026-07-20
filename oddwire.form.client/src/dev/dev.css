@@ -1,0 +1,63 @@
+.dev-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+    }
+
+.dev-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+    }
+
+.dev-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    }
+
+.dev-toolbar .fill { flex: 1; }
+
+.dev-btn {
+    border: 1px solid var(--bs-border-color, #ccc);
+    background: var(--bs-body-bg, #fff);
+    border-radius: 6px;
+    padding: 2px 10px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    }
+
+.dev-btn:disabled { opacity: 0.5; cursor: default; }
+
+.dev-json {
+    width: 100%;
+    min-height: 70vh;
+    resize: vertical;
+    font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    tab-size: 2;
+    border: 1px solid var(--bs-border-color, #ccc);
+    border-radius: 6px;
+    padding: 10px;
+    }
+
+.dev-error {
+    color: #b00020;
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+    }
+
+.dev-preview {
+    min-width: 0;
+    }
+
+/* stack on narrow viewports — editor over preview */
+@media (max-width: 900px) {
+    .dev-workspace { grid-template-columns: minmax(0, 1fr); }
+    .dev-editor { position: static; }
+    .dev-json { min-height: 40vh; }
+    }

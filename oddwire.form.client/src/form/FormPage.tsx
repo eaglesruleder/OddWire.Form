@@ -6,28 +6,11 @@ import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 
 import type { FormDefinition, InstanceChange, ParamList } from '../_context';
-import type { ControlDef, TabSection } from '../_components/controllist';
 
 import { FormContext, InstanceContext, LookupContext, InstanceEntity, FormActionsContext } from '../_context';
 import { StripLayout } from '../_components/layout';
-import { ControlList, ControlTab, ControlError, ControlButton, DbContext, resolveLabel } from '../_components/controllist';
+import { ControlList, ControlTab, ControlError, ControlButton, DbContext, buildRootTabSections } from '../_components/controllist';
 import { flattenInstance } from '../export';
-
-function buildRootTabSections(controls: ControlDef[], instance: InstanceEntity): TabSection[]
-{
-    const sections: TabSection[] = controls
-        .map(control => instance.resolve(control))
-        .filter(control => control.type === 'tab' && !control.hidden)
-        .map(tab => ({ param: tab.param, label: resolveLabel(tab.label, instance) ?? tab.param, controls: (tab as { controls: ControlDef[] }).controls }));
-
-    const strays = controls
-        .map(control => instance.resolve(control))
-        .filter(control => control.type !== 'tab' && !control.hidden);
-    if (strays.length > 0)
-        sections.push({ param: '__unexpected', label: '⚠', controls: strays, notice: 'Unexpected controls in tab layout' });
-
-    return sections;
-}
 
 export function FormPage()
 {
