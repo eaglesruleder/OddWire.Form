@@ -10,7 +10,7 @@ import testForm from './data/forms/testform.json';
 import tabForm from './data/forms/tabform.json';
 import layoutTestForm from './data/forms/layouttestform.json';
 import vehicleForm from './data/forms/vehicleform.json';
-import ootaSession1Form from './data/forms/oota-session1.json';
+import ootaSession1Form from '../mods/5etools/forms/oota-session1.json';
 
 const INDEX_KEY = 'index';
 

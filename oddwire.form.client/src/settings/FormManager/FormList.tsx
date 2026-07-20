@@ -12,11 +12,18 @@ import { captureImage } from '../../_components/controllist/controls/captureImag
 import { loadFormPackage } from './formPackages';
 import type { BundledFormPackage } from './formPackages';
 
-// Intent: the install catalogue is every loose JSON form plus every zip package in data/forms — no manual list
-const bundledForms = Object.values(import.meta.glob('../../_context/data/forms/*.json', { eager: true }))
+// Intent: the install catalogue is every loose JSON form + zip package, from both the shared data/forms folder and each
+// mod's own mods/<mod>/forms folder — no manual list. Mods own their bundled forms (e.g. 5etools ships oota + monster-card).
+const bundledForms = Object.values(
+    {...import.meta.glob('../../_context/data/forms/*.json', { eager: true })
+    ,...import.meta.glob('../../mods/*/forms/*.json', { eager: true })
+    })
     .map(module => ({ form: (module as { default: FormDefinition }).default, images: [] }));
 
-const bundledPackageUrls = Object.values(import.meta.glob('../../_context/data/forms/*.zip', { eager: true, query: '?url', import: 'default' }))
+const bundledPackageUrls = Object.values(
+    {...import.meta.glob('../../_context/data/forms/*.zip', { eager: true, query: '?url', import: 'default' })
+    ,...import.meta.glob('../../mods/*/forms/*.zip', { eager: true, query: '?url', import: 'default' })
+    })
     .map(url => String(url));
 
 type FormAction = { label: string; variant: ButtonProps['variant'] };
