@@ -1,7 +1,7 @@
 {
     "formId": "5e550001-0001-4001-8001-000000000001",
     "label": "OotA — Session 1: Five Days in Velkynvelve",
-    "version": "1.1.0",
+    "version": "1.2.1",
     "displayParam": ["sessionDate", "playersPresent"],
     "controls": [
         {
@@ -54,18 +54,19 @@
                                 {
                                     "type": "looper", "param": "d1MorningInt", "addRows": true,
                                     "controls": [
-                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
-                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                        { "type": "text", "param": "npc", "label": "NPC", "stacked": true, "cellClassName": "sm-col-3" },
+                                        { "type": "text", "param": "interactee", "label": "interactee", "stacked": true, "cellClassName": "sm-col-3" },
+                                        { "type": "textarea", "param": "interaction", "label": "interaction", "stacked": true, "cellClassName": "sm-col-6" }
                                     ],
                                     "value": [
-                                        { "controls": [ { "param": "info", "value": "Jorlan — reads the Goblin as kitchen labour, the Ranger as hunter/scout, the Paladin as an organiser." } ] },
-                                        { "controls": [ { "param": "info", "value": "Jorlan — studies the Reborn Cleric longer than the rest, but explains nothing." } ] },
-                                        { "controls": [ { "param": "info", "value": "Ront — challenges Jorlan and is subdued quickly and impersonally." } ] },
-                                        { "controls": [ { "param": "info", "value": "Eldeth — complies while quietly noting guard positions and procedures." } ] },
-                                        { "controls": [ { "param": "info", "value": "Buppido — presents as helpful; offers to explain the prison routine." } ] },
-                                        { "controls": [ { "param": "info", "value": "Sarith — avoids the Drow unless directly ordered." } ] },
-                                        { "controls": [ { "param": "info", "value": "Stool — reaches out with rapport spores if allowed; simple, immediate friendliness." } ] },
-                                        { "controls": [ { "param": "info", "value": "A guard cites orders from 'Captain Shoor'; Jorlan snaps that he already knows his orders." } ] }
+                                        { "controls": [ { "param": "npc", "value": "Jorlan" }, { "param": "interaction", "value": "reads the Goblin as kitchen labour, the Ranger as hunter/scout, the Paladin as an organiser." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Jorlan" }, { "param": "interaction", "value": "studies the Reborn Cleric longer than the rest, but explains nothing." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Ront" }, { "param": "interaction", "value": "challenges Jorlan and is subdued quickly and impersonally." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Eldeth" }, { "param": "interaction", "value": "complies while quietly noting guard positions and procedures." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Buppido" }, { "param": "interaction", "value": "presents as helpful; offers to explain the prison routine." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Sarith" }, { "param": "interaction", "value": "avoids the Drow unless directly ordered." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Stool" }, { "param": "interaction", "value": "reaches out with rapport spores if allowed; simple, immediate friendliness." } ] },
+                                        { "controls": [ { "param": "interaction", "value": "A guard cites orders from 'Captain Shoor'; Jorlan snaps that he already knows his orders." } ] }
                                     ]
                                 }
                             ]
@@ -112,18 +113,19 @@
                                 {
                                     "type": "looper", "param": "d2MorningInt", "addRows": true,
                                     "controls": [
-                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
-                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                        { "type": "text", "param": "npc", "label": "NPC", "stacked": true, "cellClassName": "sm-col-3" },
+                                        { "type": "text", "param": "interactee", "label": "interactee", "stacked": true, "cellClassName": "sm-col-3" },
+                                        { "type": "textarea", "param": "interaction", "label": "interaction", "stacked": true, "cellClassName": "sm-col-6" }
                                     ],
                                     "value": [
-                                        { "controls": [ { "param": "info", "value": "Shoor — provokes Ront, knowing the Orc angers easily." } ] },
-                                        { "controls": [ { "param": "info", "value": "Shoor — mocks Eldeth's dignity, trying to make her visibly submit." } ] },
-                                        { "controls": [ { "param": "info", "value": "Shoor — treats Stool as an object or oddity, not a person." } ] },
-                                        { "controls": [ { "param": "info", "value": "Shoor — asks whether the Paladin speaks for the prisoners; if they accept, he punishes someone else for the answer." } ] },
-                                        { "controls": [ { "param": "info", "value": "Jorlan — objects on grounds of 'productivity', framing his resentment carefully." } ] },
-                                        { "controls": [ { "param": "info", "value": "Shoor — publicly reminds Jorlan who holds the captain's title." } ] },
-                                        { "controls": [ { "param": "info", "value": "A defiant prisoner may be restrained with the wand — a live demo of what it does." } ] },
-                                        { "controls": [ { "param": "info", "value": "PCs working nearby can watch where guards move during a disturbance." } ] }
+                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interaction", "value": "provokes Ront, knowing the Orc angers easily." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interaction", "value": "mocks Eldeth's dignity, trying to make her visibly submit." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interaction", "value": "treats Stool as an object or oddity, not a person." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interaction", "value": "asks whether the Paladin speaks for the prisoners; if they accept, he punishes someone else for the answer." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Jorlan" }, { "param": "interaction", "value": "objects on grounds of 'productivity', framing his resentment carefully." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interaction", "value": "publicly reminds Jorlan who holds the captain's title." } ] },
+                                        { "controls": [ { "param": "interaction", "value": "A defiant prisoner may be restrained with the wand — a live demo of what it does." } ] },
+                                        { "controls": [ { "param": "interaction", "value": "PCs working nearby can watch where guards move during a disturbance." } ] }
                                     ]
                                 }
                             ]
@@ -186,21 +188,22 @@
                                 {
                                     "type": "looper", "param": "d3MorningInt", "addRows": true,
                                     "controls": [
-                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
-                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                        { "type": "text", "param": "npc", "label": "NPC", "stacked": true, "cellClassName": "sm-col-3" },
+                                        { "type": "text", "param": "interactee", "label": "interactee", "stacked": true, "cellClassName": "sm-col-3" },
+                                        { "type": "textarea", "param": "interaction", "label": "interaction", "stacked": true, "cellClassName": "sm-col-6" }
                                     ],
                                     "value": [
-                                        { "controls": [ { "param": "info", "value": "Derendil — needs several guards; insists he is not what he appears." } ] },
-                                        { "controls": [ { "param": "info", "value": "Jimjar — makes a wager almost at once (who'll try to escape first?)." } ] },
-                                        { "controls": [ { "param": "info", "value": "Shuushar — offers no resistance; works to lower the tension." } ] },
-                                        { "controls": [ { "param": "info", "value": "Topsy & Turvy — stay close together and reveal as little as possible." } ] },
-                                        { "controls": [ { "param": "info", "value": "Ilvara — appraises each arrival as property." } ] },
-                                        { "controls": [ { "param": "info", "value": "Asha — records names, condition, useful skills and unusual traits." } ] },
-                                        { "controls": [ { "param": "info", "value": "Ilvara — shows controlled interest in the Reborn Cleric; orders them kept undamaged." } ] },
-                                        { "controls": [ { "param": "info", "value": "Ilvara — marks the Paladin (or emerging organiser) as one to watch." } ] },
-                                        { "controls": [ { "param": "info", "value": "Shoor — stays near Ilvara and inflates his own importance." } ] },
-                                        { "controls": [ { "param": "info", "value": "Jorlan — watches Shoor and Ilvara more than he watches the prisoners." } ] },
-                                        { "controls": [ { "param": "info", "value": "Existing prisoners may be told to show newcomers the work — instant PC–NPC pairings." } ] }
+                                        { "controls": [ { "param": "npc", "value": "Derendil" }, { "param": "interaction", "value": "needs several guards; insists he is not what he appears." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Jimjar" }, { "param": "interaction", "value": "makes a wager almost at once (who'll try to escape first?)." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Shuushar" }, { "param": "interaction", "value": "offers no resistance; works to lower the tension." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Topsy & Turvy" }, { "param": "interaction", "value": "stay close together and reveal as little as possible." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Ilvara" }, { "param": "interaction", "value": "appraises each arrival as property." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Asha" }, { "param": "interaction", "value": "records names, condition, useful skills and unusual traits." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Ilvara" }, { "param": "interaction", "value": "shows controlled interest in the Reborn Cleric; orders them kept undamaged." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Ilvara" }, { "param": "interaction", "value": "marks the Paladin (or emerging organiser) as one to watch." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interaction", "value": "stays near Ilvara and inflates his own importance." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Jorlan" }, { "param": "interaction", "value": "watches Shoor and Ilvara more than he watches the prisoners." } ] },
+                                        { "controls": [ { "param": "interaction", "value": "Existing prisoners may be told to show newcomers the work — instant PC–NPC pairings." } ] }
                                     ]
                                 }
                             ]
@@ -262,19 +265,20 @@
                                 {
                                     "type": "looper", "param": "d4MorningInt", "addRows": true,
                                     "controls": [
-                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
-                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                        { "type": "text", "param": "npc", "label": "NPC", "stacked": true, "cellClassName": "sm-col-3" },
+                                        { "type": "text", "param": "interactee", "label": "interactee", "stacked": true, "cellClassName": "sm-col-3" },
+                                        { "type": "textarea", "param": "interaction", "label": "interaction", "stacked": true, "cellClassName": "sm-col-6" }
                                     ],
                                     "value": [
-                                        { "controls": [ { "param": "info", "value": "Asha — questions Sarith about his disgrace, memory and condition." } ] },
-                                        { "controls": [ { "param": "info", "value": "Asha — asks the Ranger to name the most suspicious prisoner, testing evidence vs accusation." } ] },
-                                        { "controls": [ { "param": "info", "value": "Asha — questions the Cleric about their god, undeath and lost identity." } ] },
-                                        { "controls": [ { "param": "info", "value": "Asha — tries to make the Paladin privately contradict a public statement." } ] },
-                                        { "controls": [ { "param": "info", "value": "Asha — treats Stool as a biological specimen." } ] },
-                                        { "controls": [ { "param": "info", "value": "Buppido — plays cooperative and harmless; may offer plausible-sounding accusations." } ] },
-                                        { "controls": [ { "param": "info", "value": "Topsy & Turvy — become visibly tense if separated or examined." } ] },
-                                        { "controls": [ { "param": "info", "value": "Shuushar — refuses to condemn another prisoner." } ] },
-                                        { "controls": [ { "param": "info", "value": "Eldeth — warns the PCs not to show divisions in front of Asha." } ] }
+                                        { "controls": [ { "param": "npc", "value": "Asha" }, { "param": "interactee", "value": "Sarith" }, { "param": "interaction", "value": "questions Sarith about his disgrace, memory and condition." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Asha" }, { "param": "interactee", "value": "Ranger" }, { "param": "interaction", "value": "asks the Ranger to name the most suspicious prisoner, testing evidence vs accusation." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Asha" }, { "param": "interactee", "value": "Cleric" }, { "param": "interaction", "value": "questions the Cleric about their god, undeath and lost identity." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Asha" }, { "param": "interactee", "value": "Paladin" }, { "param": "interaction", "value": "tries to make the Paladin privately contradict a public statement." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Asha" }, { "param": "interactee", "value": "Stool" }, { "param": "interaction", "value": "treats Stool as a biological specimen." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Buppido" }, { "param": "interaction", "value": "plays cooperative and harmless; may offer plausible-sounding accusations." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Topsy & Turvy" }, { "param": "interaction", "value": "become visibly tense if separated or examined." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Shuushar" }, { "param": "interaction", "value": "refuses to condemn another prisoner." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Eldeth" }, { "param": "interaction", "value": "warns the PCs not to show divisions in front of Asha." } ] }
                                     ]
                                 }
                             ]
@@ -382,23 +386,24 @@
                                 {
                                     "type": "looper", "param": "d5MorningInt", "addRows": true,
                                     "controls": [
-                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
-                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                        { "type": "text", "param": "npc", "label": "NPC", "stacked": true, "cellClassName": "sm-col-3" },
+                                        { "type": "text", "param": "interactee", "label": "interactee", "stacked": true, "cellClassName": "sm-col-3" },
+                                        { "type": "textarea", "param": "interaction", "label": "interaction", "stacked": true, "cellClassName": "sm-col-6" }
                                     ],
                                     "value": [
-                                        { "controls": [ { "param": "info", "value": "Ilvara — orders the Paladin/leader to keep the others compliant; implies cooperation may get some to the city alive." } ] },
-                                        { "controls": [ { "param": "info", "value": "Shoor — stages a public punishment or inspection, massing guards in one spot." } ] },
-                                        { "controls": [ { "param": "info", "value": "Shoor — pulls guards off routine posts to help with transport." } ] },
-                                        { "controls": [ { "param": "info", "value": "Asha — selects a prisoner for further examination, sacrifice or separate transport." } ] },
-                                        { "controls": [ { "param": "info", "value": "Jorlan — gives one precise piece of info, or deliberately leaves the final opening." } ] },
-                                        { "controls": [ { "param": "info", "value": "The prisoners' confiscated gear becomes visible or briefly reachable." } ] },
-                                        { "controls": [ { "param": "info", "value": "Derendil — harder to control as transport becomes real." } ] },
-                                        { "controls": [ { "param": "info", "value": "Ront — demands immediate action." } ] },
-                                        { "controls": [ { "param": "info", "value": "Eldeth — pushes for a coordinated plan." } ] },
-                                        { "controls": [ { "param": "info", "value": "Jimjar — calls in or offers a final wager." } ] },
-                                        { "controls": [ { "param": "info", "value": "Shuushar — asks whether escape means killing every guard." } ] },
-                                        { "controls": [ { "param": "info", "value": "Topsy & Turvy — refuse to be separated." } ] },
-                                        { "controls": [ { "param": "info", "value": "Stool — frightened; seeks reassurance." } ] }
+                                        { "controls": [ { "param": "npc", "value": "Ilvara" }, { "param": "interactee", "value": "Paladin/leader" }, { "param": "interaction", "value": "orders the Paladin/leader to keep the others compliant; implies cooperation may get some to the city alive." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interaction", "value": "stages a public punishment or inspection, massing guards in one spot." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interaction", "value": "pulls guards off routine posts to help with transport." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Asha" }, { "param": "interaction", "value": "selects a prisoner for further examination, sacrifice or separate transport." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Jorlan" }, { "param": "interaction", "value": "gives one precise piece of info, or deliberately leaves the final opening." } ] },
+                                        { "controls": [ { "param": "interaction", "value": "The prisoners' confiscated gear becomes visible or briefly reachable." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Derendil" }, { "param": "interaction", "value": "harder to control as transport becomes real." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Ront" }, { "param": "interaction", "value": "demands immediate action." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Eldeth" }, { "param": "interaction", "value": "pushes for a coordinated plan." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Jimjar" }, { "param": "interaction", "value": "calls in or offers a final wager." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Shuushar" }, { "param": "interaction", "value": "asks whether escape means killing every guard." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Topsy & Turvy" }, { "param": "interaction", "value": "refuse to be separated." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Stool" }, { "param": "interaction", "value": "frightened; seeks reassurance." } ] }
                                     ]
                                 }
                             ]
