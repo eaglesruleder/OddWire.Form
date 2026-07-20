@@ -1,5 +1,7 @@
 import type { ControlDef } from '../../_components/controllist';
 
+import APPEARANCE from './appearance.json';
+
 // Intent: the lookup table the monster-card form binds to (dropdown valueParam 'monster', labelParam 'name')
 export const MONSTER_TABLE = 'Monster';
 
@@ -122,6 +124,8 @@ export function mapMonster(m: RawMonster, options: MonsterImportOptions = {}): M
         ,environment: (m.environment ?? []).map(cap).join(', ')
         ,attachedItems: (m.attachedItems ?? []).map(item => item.split('|')[0]).join(', ')
         ,group: (m.group ?? []).join(', ')
+        ,physique: physique(m)
+        ,personality: personality(m)
         ,fluff: ''
         ,image: tokenUrl(m)
         });
@@ -214,6 +218,54 @@ function skillColumns(m: RawMonster): MonsterRow
 
 const abilityMod = (score: number): number => Math.floor((score - 10) / 2);
 const fmtMod = (n: number): string => (n >= 0 ? `+${n}` : `${n}`);
+
+// #endregion
+
+// #region Physique & personality
+
+// Intent: within this band two stats count as "the same" — the tie tolerance that opens the 3x3x3 space
+const ATTR_TOLERANCE = 2;
+
+type AttrRank = 0 | 1 | 2;               // bot / mid / top
+type RankTriple = [AttrRank, AttrRank, AttrRank];
+type DescriptorTable = Record<string, string>;
+
+// Intent: physique from STR/DEX/CON, personality from INT/WIS/CHA — a build/demeanour adjective from stat *shape*
+const physique = (m: RawMonster): string => descriptor(APPEARANCE.physique, m.str, m.dex, m.con);
+const personality = (m: RawMonster): string => descriptor(APPEARANCE.personality, m.int, m.wis, m.cha);
+
+function descriptor(table: DescriptorTable, a: number | undefined, b: number | undefined, c: number | undefined): string
+{
+    if (typeof a !== 'number'
+    ||  typeof b !== 'number'
+    ||  typeof c !== 'number'
+        )
+        return '';
+
+    const [ra, rb, rc] = rankTriple(a, b, c);
+    return table[`${ra}${rb}${rc}`] ?? '';
+}
+
+// Intent: rank each stat bot/mid/top *relative to its two siblings*, so multiple stats can tie at top within tolerance
+function rankTriple(a: number, b: number, c: number): RankTriple
+{
+    const top = Math.max(a, b, c);
+    const bot = Math.min(a, b, c);
+
+    // Intent: all three within tolerance of each other → balanced, no standout stat
+    if (top - bot <= ATTR_TOLERANCE)
+        return [1, 1, 1];
+
+    return [rankOne(a, top, bot), rankOne(b, top, bot), rankOne(c, top, bot)];
+}
+
+function rankOne(score: number, top: number, bot: number): AttrRank
+{
+    const nearTop = top - score <= ATTR_TOLERANCE;
+    const nearBot = score - bot <= ATTR_TOLERANCE;
+
+    return nearTop && !nearBot ? 2 : nearBot && !nearTop ? 0 : 1;
+}
 
 // #endregion
 
@@ -682,6 +734,8 @@ const MONSTER_COLUMNS: { param: string; label: string }[] =
     ,{ param: 'environment', label: 'Environment' }
     ,{ param: 'attachedItems', label: 'Attached Items' }
     ,{ param: 'group', label: 'Group' }
+    ,{ param: 'physique', label: 'Physique' }
+    ,{ param: 'personality', label: 'Personality' }
     ,{ param: 'fluff', label: 'Description' }
     ,{ param: 'image', label: 'Image' }
     ];

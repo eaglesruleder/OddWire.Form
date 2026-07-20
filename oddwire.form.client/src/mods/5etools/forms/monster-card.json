@@ -1281,6 +1281,36 @@
                     }
                 },
                 {
+                    "type": "text",
+                    "param": "physique",
+                    "label": "Physique",
+                    "stacked": true,
+                    "cellClassName": "sm-col-12 lg-col-4",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 775,
+                                "y": 1340
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "text",
+                    "param": "personality",
+                    "label": "Personality",
+                    "stacked": true,
+                    "cellClassName": "sm-col-12 lg-col-4",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 775,
+                                "y": 1310
+                            }
+                        ]
+                    }
+                },
+                {
                     "type": "label",
                     "param": "variantSectionTitle",
                     "label": "Variants",
