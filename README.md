@@ -22,6 +22,22 @@ The ASP.NET Core project hosts the client and keeps the template `WeatherForecas
 
 ---
 
+## Screenshots
+
+**Landing page** - installed forms with grouped, summarised saved instances.
+
+<img src="docs/screenshots/landing-form-list.png" alt="OddWire Forms landing page listing saved instances grouped by category" width="420">
+
+**Monster Reference Card** - leaf controls, collapsible traits, root tabs, and a looper-driven ability strip.
+
+<img src="docs/screenshots/monster-reference-card.png" alt="Monster Reference Card form showing stat fields, trait collapsibles, and ability tabs" width="420">
+
+**OotA Session 1** - nested collapsibles, inline day tabs, and multi-column interaction loopers.
+
+<img src="docs/screenshots/oota-session1.png" alt="Out of the Abyss session form with day tabs, checklist looper, and interaction rows" width="420">
+
+---
+
 ## Project Map
 
 - `OddWire.Form.slnx` - solution
