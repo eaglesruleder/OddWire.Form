@@ -16,6 +16,7 @@ import
 import { ControlCollapsible, ControlLooper, ControlPopup, ControlTab, looperFlatten } from './controls/layout';
 import { DbContext, resolveDbOptions } from './lookup';
 import { resolveLabel } from './resolveLabel';
+import { resolveIcon } from './resolveIcon';
 
 type ControlItemProps = {
     control: ControlDef;
@@ -33,9 +34,6 @@ export function ControlItem({ control, instance, onChange, depth = 0 }: ControlI
     {
         const subtitle = resolveLabel(resolved.subtitle, instance)?.trim();
         resolved.subtitle = subtitle || undefined;
-
-        const icon = resolveLabel(resolved.icon, instance)?.trim();
-        resolved.icon = icon || undefined;
     }
 
     switch (resolved.type)
@@ -48,7 +46,7 @@ export function ControlItem({ control, instance, onChange, depth = 0 }: ControlI
         case 'signature':return <ControlImage     {...resolved} draw={signatureDraw(resolved.draw)} onChange={onChange} formId={instance.instance.formId ?? ''} instanceId={instance.instanceId} />;
         case 'radio':    return <ControlRadio     {...resolved} {...optionSource(resolved.dbOptions, resolved.controls, db, instance)} onChange={fillOnChange(resolved.dbOptions, db, onChange, instance)} />;
         case 'dropdown': return <ControlDropdown  {...resolved} {...optionSource(resolved.dbOptions, resolved.controls, db, instance)} onChange={fillOnChange(resolved.dbOptions, db, onChange, instance)} />;
-        case 'collapsible': return <ControlCollapsible {...resolved} instance={instance} onChange={onChange} depth={depth} />;
+        case 'collapsible': return <ControlCollapsible {...resolved} icon={resolveIcon(resolved.icon, instance)} instance={instance} onChange={onChange} depth={depth} />;
         case 'popup':       return <ControlPopup       {...resolved} instance={instance} onChange={onChange} />;
         case 'tab':         return <ControlTab sections={[{ param: resolved.param, label: resolved.label ?? resolved.param, controls: resolved.controls }]} instance={instance} onChange={onChange} depth={depth} />;
         case 'looper':      return <ControlLooper      {...resolved} onChange={onChange} />;

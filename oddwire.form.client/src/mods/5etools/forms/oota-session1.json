@@ -1,7 +1,7 @@
 {
     "formId": "5e550001-0001-4001-8001-000000000001",
     "label": "OotA — Session 1: Five Days in Velkynvelve",
-    "version": "1.4.0",
+    "version": "1.5.0",
     "displayParam": [
         "sessionDate",
         "playersPresent"
@@ -2110,21 +2110,21 @@
                             "param": "statblockItem",
                             "label": "{who}",
                             "subtitle": "{name}",
-                            "icon": "{icon}",
+                            "icon": "{image}",
                             "controls": [
                                 {
                                     "type": "text",
                                     "param": "who",
                                     "label": "Who",
                                     "stacked": true,
-                                    "cellClassName": "sm-col-9 lg-col-4"
+                                    "cellClassName": "sm-col-12 lg-col-5"
                                 },
                                 {
                                     "type": "text",
-                                    "param": "icon",
-                                    "label": "Icon",
+                                    "param": "image",
+                                    "label": "Token URL",
                                     "stacked": true,
-                                    "cellClassName": "sm-col-3 lg-col-1"
+                                    "cellClassName": "sm-col-12 lg-col-7"
                                 },
                                 {
                                     "type": "text",
@@ -2202,8 +2202,8 @@
                                     "value": "Drow"
                                 },
                                 {
-                                    "param": "icon",
-                                    "value": "🗡"
+                                    "param": "image",
+                                    "value": "https://5e.tools/img/bestiary/tokens/MM/Drow.webp"
                                 }
                             ]
                         },
@@ -2226,8 +2226,8 @@
                                     "value": "Drow"
                                 },
                                 {
-                                    "param": "icon",
-                                    "value": "🗡"
+                                    "param": "image",
+                                    "value": "https://5e.tools/img/bestiary/tokens/MM/Drow.webp"
                                 }
                             ]
                         },
@@ -2250,8 +2250,8 @@
                                     "value": "Drow Mage"
                                 },
                                 {
-                                    "param": "icon",
-                                    "value": "🕸"
+                                    "param": "image",
+                                    "value": "https://5e.tools/img/bestiary/tokens/MM/Drow%20Mage.webp"
                                 }
                             ]
                         },
@@ -2274,8 +2274,8 @@
                                     "value": "Drow Mage"
                                 },
                                 {
-                                    "param": "icon",
-                                    "value": "🕸"
+                                    "param": "image",
+                                    "value": "https://5e.tools/img/bestiary/tokens/MM/Drow%20Mage.webp"
                                 }
                             ]
                         },
@@ -2298,8 +2298,8 @@
                                     "value": "Drow"
                                 },
                                 {
-                                    "param": "icon",
-                                    "value": "🗡"
+                                    "param": "image",
+                                    "value": "https://5e.tools/img/bestiary/tokens/MM/Drow.webp"
                                 }
                             ]
                         },
@@ -2322,8 +2322,8 @@
                                     "value": "Orc"
                                 },
                                 {
-                                    "param": "icon",
-                                    "value": "⛓"
+                                    "param": "image",
+                                    "value": "https://5e.tools/img/bestiary/tokens/MM/Orc.webp"
                                 }
                             ]
                         },
@@ -2346,8 +2346,8 @@
                                     "value": "Derro"
                                 },
                                 {
-                                    "param": "icon",
-                                    "value": "⛓"
+                                    "param": "image",
+                                    "value": "https://5e.tools/img/bestiary/tokens/OotA/Derro.webp"
                                 }
                             ]
                         },
@@ -2370,8 +2370,8 @@
                                     "value": "Drow"
                                 },
                                 {
-                                    "param": "icon",
-                                    "value": "⛓"
+                                    "param": "image",
+                                    "value": "https://5e.tools/img/bestiary/tokens/MM/Drow.webp"
                                 }
                             ]
                         },
@@ -2394,8 +2394,8 @@
                                     "value": "Myconid Adult"
                                 },
                                 {
-                                    "param": "icon",
-                                    "value": "⛓"
+                                    "param": "image",
+                                    "value": "https://5e.tools/img/bestiary/tokens/MM/Myconid%20Adult.webp"
                                 }
                             ]
                         },
@@ -2418,8 +2418,8 @@
                                     "value": "Quaggoth"
                                 },
                                 {
-                                    "param": "icon",
-                                    "value": "⛓"
+                                    "param": "image",
+                                    "value": "https://5e.tools/img/bestiary/tokens/MM/Quaggoth.webp"
                                 }
                             ]
                         },
@@ -2432,10 +2432,6 @@
                                 {
                                     "param": "role",
                                     "value": "Prisoner — Shield Dwarf, pushes coordination"
-                                },
-                                {
-                                    "param": "icon",
-                                    "value": "⛓"
                                 }
                             ]
                         },
@@ -2448,10 +2444,6 @@
                                 {
                                     "param": "role",
                                     "value": "Prisoner — Deep Gnome gambler"
-                                },
-                                {
-                                    "param": "icon",
-                                    "value": "⛓"
                                 }
                             ]
                         },
@@ -2464,10 +2456,6 @@
                                 {
                                     "param": "role",
                                     "value": "Prisoner — Kuo-toa pacifist"
-                                },
-                                {
-                                    "param": "icon",
-                                    "value": "⛓"
                                 }
                             ]
                         },
@@ -2480,10 +2468,6 @@
                                 {
                                     "param": "role",
                                     "value": "Prisoners — Deep Gnome twins, inseparable"
-                                },
-                                {
-                                    "param": "icon",
-                                    "value": "⛓"
                                 }
                             ]
                         },
@@ -2506,8 +2490,8 @@
                                     "value": "Giant Spider"
                                 },
                                 {
-                                    "param": "icon",
-                                    "value": "🕸"
+                                    "param": "image",
+                                    "value": "https://5e.tools/img/bestiary/tokens/MM/Giant%20Spider.webp"
                                 }
                             ]
                         }

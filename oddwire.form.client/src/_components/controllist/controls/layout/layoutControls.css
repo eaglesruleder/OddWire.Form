@@ -37,12 +37,22 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-/* Intent: the header's trailing corner slot — sits right of the subtitle and never shrinks or wraps */
+/* Intent: the header's trailing corner slot — sits right of the subtitle and never shrinks or wraps.
+   A glyph renders as text; a picture gets the instance-list token treatment at header scale. */
 .collapsible-icon {
   flex: 0 0 auto;
   margin-left: 4px;
   font-size: 20px;
   line-height: 1;
+}
+.collapsible-icon-img {
+  flex: 0 0 auto;
+  margin: -4px 0 -4px 8px;   /* let the token outgrow the text line without stretching the header */
+  width: 34px;
+  height: 34px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--border);
 }
 .collapsible-body { padding: 12px; }
 

@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import type { ControlDef } from '../controlTypes';
 import type { InstanceEntity, InstanceChange } from '../../../../_context';
+import type { ResolvedIcon } from '../../resolveIcon';
 
 import { ControlList } from '../../ControlList';
 import { stickyTop } from './stickyTop';
@@ -11,7 +12,7 @@ type ControlCollapsibleProps = {
     param: string;
     label?: string;
     subtitle?: string;
-    icon?: string;
+    icon?: ResolvedIcon;
     hidden?: boolean;
     controls: ControlDef[];
     instance: InstanceEntity;
@@ -41,7 +42,10 @@ export function ControlCollapsible(props: ControlCollapsibleProps)
                     <span>{props.label ?? props.param}</span>
                 </span>
                 {props.subtitle && <span className="collapsible-subtitle">{props.subtitle}</span>}
-                {props.icon && <span className="collapsible-icon" aria-hidden="true">{props.icon}</span>}
+                {props.icon && ('src' in props.icon
+                ?   <img className="collapsible-icon-img" src={props.icon.src} alt="" />
+                :   <span className="collapsible-icon" aria-hidden="true">{props.icon.text}</span>
+                )}
             </button>
             {expanded &&
             <div className="collapsible-body">
