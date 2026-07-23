@@ -5,16 +5,18 @@ ASP.NET Core-hosted React/TypeScript client for building and filling JSON-driven
 ---
 
 ## What This Is
-
-OddWire.Form renders form definitions from JSON control trees and stores live documents as sparse `param`-keyed instance overlays. A form is opened from the landing page, rendered through a dynamic control dispatcher, edited in the browser, then saved to local browser storage.
+Objective: Define a webpage by a JSON  config file, that lists an input (text/number/image/file) within a layout (tabs, columns, popups). These inputs then configure thier own export options, eg to an API or PDF
+Implementation: OddWire.Form renders form definitions from JSON control trees and stores live documents as sparse `param`-keyed instance overlays. A form is opened from the landing page, rendered through a dynamic control dispatcher, edited in the browser, then saved to local browser storage.
+Fun: As proof of concept we are making Dungeons and Dragon toolsets to model and export monster stats and session information
 
 Current behaviour:
-- seeded form definitions and lookup tables load into `localforage`
-- saved instances survive refresh through a local `instances` store
-- a new instance is memory-only until the first Save, then later edits autosave
-- radio/dropdown controls can resolve options from lookup tables
-- layout controls support collapsibles, inline/root tabs, popups, and loopers
-- settings include a global DB Manager, form install/refresh list, and 5etools monster import
+- `localforage` database seeded with form definitions and lookup tables
+- Instances(active data) auto-saves to database live
+  - (autosave enables after first save)
+- Radio and dropdown controls resolve from lookup tables
+  - On selected, the object loads all additional info 
+- Layout controls support collapsibles, inline/root tabs, popups, and loopers
+- Settings include a global DB Manager, form install/refresh list, and 5etools monster import
 
 The ASP.NET Core project hosts the client and keeps the template `WeatherForecast` endpoint; there are no form/instance/lookup server endpoints yet.
 
