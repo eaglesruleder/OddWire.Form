@@ -11,6 +11,7 @@ type ControlCollapsibleProps = {
     param: string;
     label?: string;
     subtitle?: string;
+    icon?: string;
     hidden?: boolean;
     controls: ControlDef[];
     instance: InstanceEntity;
@@ -40,6 +41,7 @@ export function ControlCollapsible(props: ControlCollapsibleProps)
                     <span>{props.label ?? props.param}</span>
                 </span>
                 {props.subtitle && <span className="collapsible-subtitle">{props.subtitle}</span>}
+                {props.icon && <span className="collapsible-icon" aria-hidden="true">{props.icon}</span>}
             </button>
             {expanded &&
             <div className="collapsible-body">

@@ -37,6 +37,13 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+/* Intent: the header's trailing corner slot — sits right of the subtitle and never shrinks or wraps */
+.collapsible-icon {
+  flex: 0 0 auto;
+  margin-left: 4px;
+  font-size: 20px;
+  line-height: 1;
+}
 .collapsible-body { padding: 12px; }
 
 .tab-bar { display: flex; gap: 4px; }

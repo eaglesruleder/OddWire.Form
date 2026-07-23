@@ -33,6 +33,9 @@ export function ControlItem({ control, instance, onChange, depth = 0 }: ControlI
     {
         const subtitle = resolveLabel(resolved.subtitle, instance)?.trim();
         resolved.subtitle = subtitle || undefined;
+
+        const icon = resolveLabel(resolved.icon, instance)?.trim();
+        resolved.icon = icon || undefined;
     }
 
     switch (resolved.type)

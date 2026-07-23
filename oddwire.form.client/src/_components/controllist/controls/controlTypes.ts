@@ -145,6 +145,7 @@ export type LooperRowInstance = {
 export type CollapsibleControlDef = ControlDefBase<'collapsible'> & {
     controls: ControlDef[];
     subtitle?: string;
+    icon?: string;    // corner glyph — a literal (emoji/char) or a {param} token resolved against the instance
     };
 export type TabControlDef = ControlDefBase<'tab'> & {
     controls: ControlDef[];
