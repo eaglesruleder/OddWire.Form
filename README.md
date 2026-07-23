@@ -5,9 +5,9 @@ ASP.NET Core-hosted React/TypeScript client for building and filling JSON-driven
 ---
 
 ## What This Is
-Objective: Define a webpage by a JSON  config file, that lists an input (text/number/image/file) within a layout (tabs, columns, popups). These inputs then configure thier own export options, eg to an API or PDF
-Implementation: OddWire.Form renders form definitions from JSON control trees and stores live documents as sparse `param`-keyed instance overlays. A form is opened from the landing page, rendered through a dynamic control dispatcher, edited in the browser, then saved to local browser storage.
-Fun: As proof of concept we are making Dungeons and Dragon toolsets to model and export monster stats and session information
+- Objective: Define a webpage by a JSON  config file, that lists an input (text/number/image/file) within a layout (tabs, columns, popups). These inputs then configure thier own export options, eg to an API or PDF
+- Implementation: OddWire.Form renders form definitions from JSON control trees and stores live documents as sparse `param`-keyed instance overlays. A form is opened from the landing page, rendered through a dynamic control dispatcher, edited in the browser, then saved to local browser storage.
+- Fun: As proof of concept we are making Dungeons and Dragon toolsets to model and export monster stats and session information
 
 Current behaviour:
 - `localforage` database seeded with form definitions and lookup tables
