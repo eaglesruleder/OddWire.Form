@@ -1,7 +1,7 @@
 {
     "formId": "44444444-4444-4444-8444-444444444444",
     "label": "Monster Reference Card",
-    "version": "0.3.4",
+    "version": "0.4.0",
     "displayParam": [
         "name",
         "hp",
@@ -277,8 +277,8 @@
                     "pdf": {
                         "0": [
                             {
-                                "x": 710,
-                                "y": 640,
+                                "x": 368,
+                                "y": 550,
                                 "w": 300,
                                 "shrinkToFit": true
                             }
@@ -345,6 +345,113 @@
                                 "y": 580,
                                 "w": 300,
                                 "shrinkToFit": true
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "label",
+                    "param": "proficiencySectionTitle",
+                    "label": "Proficiencies"
+                },
+                {
+                    "type": "checkbox",
+                    "param": "profLight",
+                    "label": "Light Armor",
+                    "stacked": true,
+                    "cellClassName": "sm-col-4 lg-col-2",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 57,
+                                "y": 666,
+                                "fontSize": 12,
+                                "align": "center"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "checkbox",
+                    "param": "profMedium",
+                    "label": "Medium Armor",
+                    "stacked": true,
+                    "cellClassName": "sm-col-4 lg-col-2",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 132,
+                                "y": 666,
+                                "fontSize": 12,
+                                "align": "center"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "checkbox",
+                    "param": "profHeavy",
+                    "label": "Heavy Armor",
+                    "stacked": true,
+                    "cellClassName": "sm-col-4 lg-col-2",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 212,
+                                "y": 666,
+                                "fontSize": 12,
+                                "align": "center"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "checkbox",
+                    "param": "profShields",
+                    "label": "Shields",
+                    "stacked": true,
+                    "cellClassName": "sm-col-4 lg-col-2",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 280,
+                                "y": 666,
+                                "fontSize": 12,
+                                "align": "center"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "checkbox",
+                    "param": "profSimple",
+                    "label": "Simple Weapons",
+                    "stacked": true,
+                    "cellClassName": "sm-col-4 lg-col-2",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 56,
+                                "y": 634,
+                                "fontSize": 12,
+                                "align": "center"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "checkbox",
+                    "param": "profMartial",
+                    "label": "Martial Weapons",
+                    "stacked": true,
+                    "cellClassName": "sm-col-4 lg-col-2",
+                    "pdf": {
+                        "0": [
+                            {
+                                "x": 130,
+                                "y": 634,
+                                "fontSize": 12,
+                                "align": "center"
                             }
                         ]
                     }
@@ -428,7 +535,16 @@
                             "param": "strSave",
                             "label": "Saving Throw",
                             "stacked": true,
-                            "cellClassName": "sm-col-6 lg-col-3"
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 97,
+                                        "y": 1056,
+                                        "align": "right"
+                                    }
+                                ]
+                            }
                         },
                         {
                             "type": "text",
@@ -440,7 +556,7 @@
                                 "0": [
                                     {
                                         "x": 97,
-                                        "y": 1055,
+                                        "y": 1026,
                                         "align": "right"
                                     }
                                 ]
@@ -492,7 +608,16 @@
                             "param": "dexSave",
                             "label": "Saving Throw",
                             "stacked": true,
-                            "cellClassName": "sm-col-6 lg-col-3"
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 245,
+                                        "y": 1056,
+                                        "align": "right"
+                                    }
+                                ]
+                            }
                         },
                         {
                             "type": "text",
@@ -504,7 +629,7 @@
                                 "0": [
                                     {
                                         "x": 245,
-                                        "y": 1055,
+                                        "y": 1024,
                                         "align": "right"
                                     }
                                 ]
@@ -520,7 +645,7 @@
                                 "0": [
                                     {
                                         "x": 245,
-                                        "y": 1005,
+                                        "y": 977,
                                         "align": "right"
                                     }
                                 ]
@@ -536,7 +661,7 @@
                                 "0": [
                                     {
                                         "x": 245,
-                                        "y": 1030,
+                                        "y": 1001,
                                         "align": "right"
                                     }
                                 ]
@@ -588,7 +713,16 @@
                             "param": "conSave",
                             "label": "Saving Throw",
                             "stacked": true,
-                            "cellClassName": "sm-col-6 lg-col-3"
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 412,
+                                        "y": 1054,
+                                        "align": "right"
+                                    }
+                                ]
+                            }
                         }
                     ]
                 },
@@ -636,7 +770,16 @@
                             "param": "intSave",
                             "label": "Saving Throw",
                             "stacked": true,
-                            "cellClassName": "sm-col-6 lg-col-3"
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 570,
+                                        "y": 1051,
+                                        "align": "right"
+                                    }
+                                ]
+                            }
                         },
                         {
                             "type": "text",
@@ -648,7 +791,7 @@
                                 "0": [
                                     {
                                         "x": 570,
-                                        "y": 1050,
+                                        "y": 1031,
                                         "align": "right"
                                     }
                                 ]
@@ -664,7 +807,7 @@
                                 "0": [
                                     {
                                         "x": 570,
-                                        "y": 1023,
+                                        "y": 1007,
                                         "align": "right"
                                     }
                                 ]
@@ -680,7 +823,7 @@
                                 "0": [
                                     {
                                         "x": 570,
-                                        "y": 953,
+                                        "y": 939,
                                         "align": "right"
                                     }
                                 ]
@@ -696,7 +839,7 @@
                                 "0": [
                                     {
                                         "x": 570,
-                                        "y": 1000,
+                                        "y": 982,
                                         "align": "right"
                                     }
                                 ]
@@ -712,7 +855,7 @@
                                 "0": [
                                     {
                                         "x": 570,
-                                        "y": 977,
+                                        "y": 963,
                                         "align": "right"
                                     }
                                 ]
@@ -764,7 +907,16 @@
                             "param": "wisSave",
                             "label": "Saving Throw",
                             "stacked": true,
-                            "cellClassName": "sm-col-6 lg-col-3"
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 733,
+                                        "y": 1054,
+                                        "align": "right"
+                                    }
+                                ]
+                            }
                         },
                         {
                             "type": "text",
@@ -776,7 +928,7 @@
                                 "0": [
                                     {
                                         "x": 733,
-                                        "y": 995,
+                                        "y": 981,
                                         "align": "right"
                                     }
                                 ]
@@ -792,7 +944,7 @@
                                 "0": [
                                     {
                                         "x": 733,
-                                        "y": 1046,
+                                        "y": 1036,
                                         "align": "right"
                                     }
                                 ]
@@ -808,7 +960,7 @@
                                 "0": [
                                     {
                                         "x": 733,
-                                        "y": 975,
+                                        "y": 961,
                                         "align": "right"
                                     }
                                 ]
@@ -824,7 +976,7 @@
                                 "0": [
                                     {
                                         "x": 733,
-                                        "y": 1022,
+                                        "y": 1010,
                                         "align": "right"
                                     }
                                 ]
@@ -840,7 +992,7 @@
                                 "0": [
                                     {
                                         "x": 733,
-                                        "y": 950,
+                                        "y": 937,
                                         "align": "right"
                                     }
                                 ]
@@ -892,7 +1044,16 @@
                             "param": "chaSave",
                             "label": "Saving Throw",
                             "stacked": true,
-                            "cellClassName": "sm-col-6 lg-col-3"
+                            "cellClassName": "sm-col-6 lg-col-3",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 880,
+                                        "y": 1054,
+                                        "align": "right"
+                                    }
+                                ]
+                            }
                         },
                         {
                             "type": "text",
@@ -904,7 +1065,7 @@
                                 "0": [
                                     {
                                         "x": 880,
-                                        "y": 1020,
+                                        "y": 1008,
                                         "align": "right"
                                     }
                                 ]
@@ -920,7 +1081,7 @@
                                 "0": [
                                     {
                                         "x": 880,
-                                        "y": 1044,
+                                        "y": 1032,
                                         "align": "right"
                                     }
                                 ]
@@ -936,7 +1097,7 @@
                                 "0": [
                                     {
                                         "x": 880,
-                                        "y": 970,
+                                        "y": 956,
                                         "align": "right"
                                     }
                                 ]
@@ -952,7 +1113,7 @@
                                 "0": [
                                     {
                                         "x": 880,
-                                        "y": 995,
+                                        "y": 982,
                                         "align": "right"
                                     }
                                 ]
@@ -1243,6 +1404,437 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "type": "tab",
+                    "param": "tabMagic",
+                    "label": "Magic",
+                    "controls": [
+                        {
+                            "type": "text",
+                            "param": "magicStat",
+                            "label": "Spellcasting Ability",
+                            "stacked": true,
+                            "cellClassName": "sm-col-12 lg-col-4",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 772,
+                                        "y": 655
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "magicSave",
+                            "label": "Spell Attack",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-4",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 772,
+                                        "y": 613
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "param": "magicDc",
+                            "label": "Spell Save DC",
+                            "stacked": true,
+                            "cellClassName": "sm-col-6 lg-col-4",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 772,
+                                        "y": 591
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "label",
+                            "param": "slotSectionTitle",
+                            "label": "Spell Slots"
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot1_1",
+                            "label": "L1 #1",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 727,
+                                        "y": 522,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot1_2",
+                            "label": "L1 #2",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 727,
+                                        "y": 487,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot1_3",
+                            "label": "L1 #3",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 727,
+                                        "y": 452,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot1_4",
+                            "label": "L1 #4",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 727,
+                                        "y": 418,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot2_1",
+                            "label": "L2 #1",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 760,
+                                        "y": 522,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot2_2",
+                            "label": "L2 #2",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 760,
+                                        "y": 487,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot2_3",
+                            "label": "L2 #3",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 760,
+                                        "y": 452,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot3_1",
+                            "label": "L3 #1",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 792,
+                                        "y": 521,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot3_2",
+                            "label": "L3 #2",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 792,
+                                        "y": 486,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot3_3",
+                            "label": "L3 #3",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 792,
+                                        "y": 451,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot4_1",
+                            "label": "L4 #1",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 825,
+                                        "y": 521,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot4_2",
+                            "label": "L4 #2",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 825,
+                                        "y": 486,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot4_3",
+                            "label": "L4 #3",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 825,
+                                        "y": 451,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot5_1",
+                            "label": "L5 #1",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 858,
+                                        "y": 520,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot5_2",
+                            "label": "L5 #2",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 858,
+                                        "y": 485,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot5_3",
+                            "label": "L5 #3",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 858,
+                                        "y": 450,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot6_1",
+                            "label": "L6 #1",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 890,
+                                        "y": 519,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot6_2",
+                            "label": "L6 #2",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 890,
+                                        "y": 484,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot7_1",
+                            "label": "L7 #1",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 923,
+                                        "y": 519,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot7_2",
+                            "label": "L7 #2",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 923,
+                                        "y": 484,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot8_1",
+                            "label": "L8 #1",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 956,
+                                        "y": 519,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "checkbox",
+                            "param": "slot9_1",
+                            "label": "L9 #1",
+                            "stacked": true,
+                            "cellClassName": "sm-col-3 lg-col-1",
+                            "pdf": {
+                                "0": [
+                                    {
+                                        "x": 989,
+                                        "y": 518,
+                                        "fontSize": 16,
+                                        "align": "center"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
                 }
             ]
         },
@@ -1373,8 +1965,8 @@
                     "pdf": {
                         "0": [
                             {
-                                "x": 710,
-                                "y": 670,
+                                "x": 368,
+                                "y": 520,
                                 "w": 300,
                                 "shrinkToFit": true
                             }
