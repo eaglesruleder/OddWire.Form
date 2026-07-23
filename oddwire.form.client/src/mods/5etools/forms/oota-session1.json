@@ -1,7 +1,7 @@
 {
     "formId": "5e550001-0001-4001-8001-000000000001",
     "label": "OotA — Session 1: Five Days in Velkynvelve",
-    "version": "1.2.1",
+    "version": "1.3.0",
     "displayParam": ["sessionDate", "playersPresent"],
     "controls": [
         {
@@ -26,7 +26,7 @@
                     "param": "tabDay1",
                     "label": "Day 1",
                     "controls": [
-                        { "type": "textarea", "param": "d1Progress", "label": "Day 1 — Property of Velkynvelve", "rows": 2, "value": "Prison progression: learn the routine, meet the initial prisoners, and establish Jorlan as the apparent authority over the slave pen." },
+                        { "type": "textarea", "param": "d1Progress", "label": "Day 1 — Property of Velkynvelve", "rows": 2, "value": "Morning prison exposition act\nActivity Skill roles per daily chore" },
                         {
                             "type": "collapsible", "param": "d1EscapeSec", "label": "Escape Information", "subtitle": "Tick each as the party learns it",
                             "controls": [
@@ -37,11 +37,11 @@
                                         { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
                                     ],
                                     "value": [
-                                        { "controls": [ { "param": "info", "value": "Work parties leave the pen under guard each day." } ] },
-                                        { "controls": [ { "param": "info", "value": "Prisoners are assigned chores by perceived usefulness." } ] },
-                                        { "controls": [ { "param": "info", "value": "Jorlan controls the routine but isn't the outpost's highest authority." } ] },
-                                        { "controls": [ { "param": "info", "value": "Guards catalogue prisoners' names, abilities and condition." } ] },
-                                        { "controls": [ { "param": "info", "value": "The cell gate, guard post and work-detail procedures can be observed." } ] }
+                                        { "controls": [ { "param": "info", "value": "Jorlan assigns chores by perceived usefulness" } ] },
+                                        { "controls": [ { "param": "info", "value": "Work parties leave under guard" } ] },
+                                        { "controls": [ { "param": "info", "value": "Ilvara is the leader in a Matriarchy" } ] },
+                                        { "controls": [ { "param": "info", "value": "Guards catalogue prisoners" } ] },
+                                        { "controls": [ { "param": "info", "value": "Daily Skill-roll reward structure" } ] }
                                     ]
                                 }
                             ]
@@ -49,7 +49,7 @@
                         {
                             "type": "collapsible", "param": "d1MorningSec", "label": "Morning — Intake and Inspection",
                             "controls": [
-                                { "type": "textarea", "param": "d1MorningScene", "label": "Scene", "rows": 5, "value": "Jorlan receives the newest prisoners, strips anything useful, and states the rules without ceremony — sizing prisoners as labour: strong, skilled, dangerous or unusual. Each PC is assigned a chore; their chosen skill check decides what the work detail yields — intelligence, an asset, or influence with another prisoner." },
+                                { "type": "textarea", "param": "d1MorningScene", "label": "Scene", "rows": 5, "value": "Jorlan intro\nStates session structure / day routine\n2 NPCs assigned chores, then PCs" },
                                 { "type": "label", "param": "d1MorningIntHead", "label": "Interactions" },
                                 {
                                     "type": "looper", "param": "d1MorningInt", "addRows": true,
@@ -59,14 +59,12 @@
                                         { "type": "textarea", "param": "interaction", "label": "interaction", "stacked": true, "cellClassName": "sm-col-6" }
                                     ],
                                     "value": [
-                                        { "controls": [ { "param": "npc", "value": "Jorlan" }, { "param": "interaction", "value": "reads the Goblin as kitchen labour, the Ranger as hunter/scout, the Paladin as an organiser." } ] },
-                                        { "controls": [ { "param": "npc", "value": "Jorlan" }, { "param": "interaction", "value": "studies the Reborn Cleric longer than the rest, but explains nothing." } ] },
-                                        { "controls": [ { "param": "npc", "value": "Ront" }, { "param": "interaction", "value": "challenges Jorlan and is subdued quickly and impersonally." } ] },
-                                        { "controls": [ { "param": "npc", "value": "Eldeth" }, { "param": "interaction", "value": "complies while quietly noting guard positions and procedures." } ] },
-                                        { "controls": [ { "param": "npc", "value": "Buppido" }, { "param": "interaction", "value": "presents as helpful; offers to explain the prison routine." } ] },
-                                        { "controls": [ { "param": "npc", "value": "Sarith" }, { "param": "interaction", "value": "avoids the Drow unless directly ordered." } ] },
-                                        { "controls": [ { "param": "npc", "value": "Stool" }, { "param": "interaction", "value": "reaches out with rapport spores if allowed; simple, immediate friendliness." } ] },
-                                        { "controls": [ { "param": "interaction", "value": "A guard cites orders from 'Captain Shoor'; Jorlan snaps that he already knows his orders." } ] }
+                                        { "controls": [ { "param": "npc", "value": "Jorlan" }, { "param": "interaction", "value": "- Drops off 'Goblin Chef' to cell\n- Gonna go over the rules\n-- Next few days gonna do role call & task assignment in morning\n-- Tasks during the day\n-- While out Ilvara tolerates seeing you, so talking to her is defiantly over the line.\n-- LR & NPC RP in the evening\n\n- Takes out imaginary paper reel" } ] },
+                                        { "controls": [ { "param": "npc", "value": "^" }, { "param": "interactee", "value": "Buppido" }, { "param": "interaction", "value": "Buppido presents as helpful\nJorlan assigns to (2) Spider-Carrion Disposal\nBuppido excited" } ] },
+                                        { "controls": [ { "param": "npc", "value": "^" }, { "param": "interactee", "value": "Gaurd" }, { "param": "interaction", "value": "Cites orders from 'Captain Shoor'\nJorlan snaps \"I knows his orders\"" } ] },
+                                        { "controls": [ { "param": "npc", "value": "^" }, { "param": "interactee", "value": "Ront" }, { "param": "interaction", "value": "Jorlan calls Ront\nRont walks up, towers over Jorlan\nJorlan assigns (6) Water Hauling" } ] },
+                                        { "controls": [ { "param": "npc", "value": "^" }, { "param": "interactee", "value": "Players" }, { "param": "interaction", "value": "- Draven (13) Kitchen Preparation\n- Susi (12) Armour Maintenance\n- Evan (18) Officer-Quarters Service\n- Leigh? (5) Corpse Retrieval" } ] },
+                                        { "controls": [ { "param": "interactee", "value": "Players" }, { "param": "interaction", "value": "* Over few days, aiming 20min a day\n* RP is mainly end of day\n* Day1 sets scene\n- Underdark, chasm, cliff prison\n- Factions\n- Layout\n- Tasks" } ] }
                                     ]
                                 }
                             ]
@@ -74,7 +72,23 @@
                         {
                             "type": "collapsible", "param": "d1EveningSec", "label": "Evening — First Comparisons",
                             "controls": [
-                                { "type": "textarea", "param": "d1EveningScene", "label": "Scene", "rows": 5, "value": "Back in the pen with poor food and little water — the first real chance for introductions. Keep it to a few NPCs. Prisoners compare what they learned: Eldeth pushes practical sharing, Buppido offers interpretations, Ront complains talk is useless without a fight.\n\nThe takeaway the PCs should reach: escape is possible only by learning the routine and cooperating with at least some prisoners." }
+                                { "type": "textarea", "param": "d1EveningScene", "label": "Scene", "rows": 3, "value": "Back in the pen with poor food and little water\nNPC rewards below" },
+                                { "type": "label", "param": "d1EveningIntHead", "label": "Interactions" },
+                                {
+                                    "type": "looper", "param": "d1EveningInt", "addRows": true,
+                                    "controls": [
+                                        { "type": "text", "param": "npc", "label": "NPC", "stacked": true, "cellClassName": "sm-col-3" },
+                                        { "type": "text", "param": "interactee", "label": "interactee", "stacked": true, "cellClassName": "sm-col-3" },
+                                        { "type": "textarea", "param": "interaction", "label": "interaction", "stacked": true, "cellClassName": "sm-col-6" }
+                                    ],
+                                    "value": [
+                                        { "controls": [ { "param": "npc", "value": "Buppido" }, { "param": "interactee", "value": "(2) Spider Disposal" }, { "param": "interaction", "value": "Roll to get spider poison" } ] },
+                                        { "controls": [ { "param": "npc", "value": "Ront" }, { "param": "interactee", "value": "(6) Water Hauling" }, { "param": "interaction", "value": "Roll for STR save" } ] },
+                                        { "controls": [ { "param": "npc", "value": "Eldeth" }, { "param": "interactee", "value": "(14) Storeroom" }, { "param": "interaction", "value": "Roll to get tool\nNeed to figure a way out as a team" } ] },
+                                        { "controls": [ { "param": "npc", "value": "Sarith" }, { "param": "interaction", "value": "Skulking in corner (no roll)" } ] },
+                                        { "controls": [ { "param": "npc", "value": "Stool" }, { "param": "interaction", "value": "Befriending players (no roll)" } ] }
+                                    ]
+                                }
                             ]
                         },
                         { "type": "textarea", "param": "d1Notes", "label": "DM Notes — Day 1", "rows": 4 }
@@ -85,7 +99,7 @@
                     "param": "tabDay2",
                     "label": "Day 2",
                     "controls": [
-                        { "type": "textarea", "param": "d2Progress", "label": "Day 2 — Shoor's Inspection", "rows": 2, "value": "Prison progression: reveal the gap between Jorlan's controlled discipline and Shoor's insecure cruelty, and establish their rivalry." },
+                        { "type": "textarea", "param": "d2Progress", "label": "Day 2 — Shoor's Inspection", "rows": 2, "value": "Reveal Jorlan's vs Shoor" },
                         {
                             "type": "collapsible", "param": "d2EscapeSec", "label": "Escape Information", "subtitle": "Tick each as the party learns it",
                             "controls": [
@@ -96,11 +110,11 @@
                                         { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
                                     ],
                                     "value": [
-                                        { "controls": [ { "param": "info", "value": "Shoor carries a wand that can restrain prisoners." } ] },
-                                        { "controls": [ { "param": "info", "value": "Guard responses are less coordinated when Shoor overrides Jorlan." } ] },
                                         { "controls": [ { "param": "info", "value": "Shoor values spectacle and status over operational security." } ] },
                                         { "controls": [ { "param": "info", "value": "Jorlan obeys Shoor publicly but resents it." } ] },
-                                        { "controls": [ { "param": "info", "value": "Public punishments pull guards and prisoners into predictable positions." } ] }
+                                        { "controls": [ { "param": "info", "value": "Shoor carries a wand that can restrain prisoners." } ] },
+                                        { "controls": [ { "param": "info", "value": "Guards uncoordinated when Shoor commands (extra skill roll)" } ] },
+                                        { "controls": [ { "param": "info", "value": "" } ] }
                                     ]
                                 }
                             ]
@@ -108,7 +122,7 @@
                         {
                             "type": "collapsible", "param": "d2MorningSec", "label": "Morning — The Captain Improves Matters",
                             "controls": [
-                                { "type": "textarea", "param": "d2MorningScene", "label": "Scene", "rows": 5, "value": "Jorlan starts assigning chores; Shoor arrives and reshuffles them for no practical reason — redoing finished work, splitting useful pairings, singling someone out for humiliation. The point is proving his authority outranks Jorlan's. Play him as dangerous but visibly dependent on Ilvara's favour." },
+                                { "type": "textarea", "param": "d2MorningScene", "label": "Scene", "rows": 3, "value": "Jorlan starts assigning chores; Shoor arrives and reshuffles them\nProving his authority over Jorlan in spectacle\nJorlan bites his tounge" },
                                 { "type": "label", "param": "d2MorningIntHead", "label": "Interactions" },
                                 {
                                     "type": "looper", "param": "d2MorningInt", "addRows": true,
@@ -118,14 +132,12 @@
                                         { "type": "textarea", "param": "interaction", "label": "interaction", "stacked": true, "cellClassName": "sm-col-6" }
                                     ],
                                     "value": [
-                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interaction", "value": "provokes Ront, knowing the Orc angers easily." } ] },
-                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interaction", "value": "mocks Eldeth's dignity, trying to make her visibly submit." } ] },
-                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interaction", "value": "treats Stool as an object or oddity, not a person." } ] },
-                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interaction", "value": "asks whether the Paladin speaks for the prisoners; if they accept, he punishes someone else for the answer." } ] },
-                                        { "controls": [ { "param": "npc", "value": "Jorlan" }, { "param": "interaction", "value": "objects on grounds of 'productivity', framing his resentment carefully." } ] },
-                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interaction", "value": "publicly reminds Jorlan who holds the captain's title." } ] },
-                                        { "controls": [ { "param": "interaction", "value": "A defiant prisoner may be restrained with the wand — a live demo of what it does." } ] },
-                                        { "controls": [ { "param": "interaction", "value": "PCs working nearby can watch where guards move during a disturbance." } ] }
+                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interactee", "value": "Ront" }, { "param": "interaction", "value": "Assigns (1) Waste Duty\nRont punches the wall standing to leave." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interactee", "value": "Buppido" }, { "param": "interaction", "value": "Assigns (20) Kitchen Cook\nBupido is delighted." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interactee", "value": "Sarith" }, { "param": "interaction", "value": "Assigns (11) Barracks Cleaning" } ] },
+                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interactee", "value": "Players" }, { "param": "interaction", "value": "Roll D20 and to get assignment" } ] },
+                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interactee", "value": "Jorlan" }, { "param": "interaction", "value": "Reminds Jorlan who holds the captain's title" } ] },
+                                        { "controls": [ { "param": "npc", "value": "Gaurd" }, { "param": "interactee", "value": "Players" }, { "param": "interaction", "value": "Disheveled in the replanning. Open to extra skill check during day." } ] }
                                     ]
                                 }
                             ]
@@ -133,20 +145,21 @@
                         {
                             "type": "collapsible", "param": "d2EveningSec", "label": "Evening — Strength, Submission and Leadership",
                             "controls": [
-                                { "type": "textarea", "param": "d2EveningScene", "label": "Scene", "rows": 4, "value": "Reactions split: Ront says someone should have hit Shoor; Eldeth argues pointless death only strengthens the Drow; Sarith warns Shoor's cruelty is impulsive but Ilvara's is deliberate. Use the argument to ask, directly or not, what kind of escape group the PCs intend to be." },
+                                { "type": "textarea", "param": "d2EveningScene", "label": "Scene", "rows": 3, "value": "NPCs bitch about Shoor\nNPC rewards below" },
                                 { "type": "label", "param": "d2EveDevHead", "label": "Possible Developments" },
                                 {
                                     "type": "looper", "param": "d2EveDev", "addRows": true,
                                     "controls": [
-                                        { "type": "text", "param": "info", "cellClassName": "sm-col-11" },
-                                        { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
+                                        { "type": "text", "param": "npc", "label": "NPC", "stacked": true, "cellClassName": "sm-col-3" },
+                                        { "type": "text", "param": "interactee", "label": "interactee", "stacked": true, "cellClassName": "sm-col-3" },
+                                        { "type": "textarea", "param": "interaction", "label": "interaction", "stacked": true, "cellClassName": "sm-col-6" }
                                     ],
                                     "value": [
-                                        { "controls": [ { "param": "info", "value": "Paladin — asked whether they truly mean to lead." } ] },
-                                        { "controls": [ { "param": "info", "value": "Goblin — can defuse tension with food, humour or work." } ] },
-                                        { "controls": [ { "param": "info", "value": "Ranger — can question witnesses about the wand and guard positions." } ] },
-                                        { "controls": [ { "param": "info", "value": "Cleric — can answer despair, injury or spiritual doubt." } ] },
-                                        { "controls": [ { "param": "info", "value": "Buppido — backs whichever argument splits the group most." } ] }
+                                        { "controls": [ { "param": "npc", "value": "Ront" }, { "param": "interactee", "value": "(1) Waste Duty" }, { "param": "interaction", "value": "Roll STR save from exhaustion\nRoll CON save from poisoned\n\"Someone should have hit Shoor\"" } ] },
+                                        { "controls": [ { "param": "npc", "value": "Bupido" }, { "param": "interactee", "value": "(20) Kitchen Cook" }, { "param": "interaction", "value": "Roll Sleight of Hand to swipe knife\nif(spiderVenom) Roll Deception to party \"I mean, i could poison the food\" (that everyones eating)" } ] },
+                                        { "controls": [ { "param": "npc", "value": "Sarith" }, { "param": "interactee", "value": "(11) Barracks Cleaning" }, { "param": "interaction", "value": "Roll Perc for overhearing\nRoll Sleight of Hand for knife" } ] },
+                                        { "controls": [] },
+                                        { "controls": [] }
                                     ]
                                 }
                             ]
@@ -159,7 +172,7 @@
                     "param": "tabDay3",
                     "label": "Day 3",
                     "controls": [
-                        { "type": "textarea", "param": "d3Progress", "label": "Day 3 — New Cargo", "rows": 2, "value": "Prison progression: introduce the second wave of prisoner NPCs and reveal the lift as both an entry route and a possible escape mechanism." },
+                        { "type": "textarea", "param": "d3Progress", "label": "Day 3 — New Cargo", "rows": 2, "value": "Second wave of prisoner NPCs\nReveal the lift as entry/exit" },
                         {
                             "type": "collapsible", "param": "d3EscapeSec", "label": "Escape Information", "subtitle": "Tick each as the party learns it",
                             "controls": [
@@ -170,12 +183,12 @@
                                         { "type": "checkbox", "param": "seen", "cellClassName": "sm-col-1" }
                                     ],
                                     "value": [
-                                        { "controls": [ { "param": "info", "value": "The lift needs a set number of operators or a specific control process." } ] },
-                                        { "controls": [ { "param": "info", "value": "Guards stand in predictable positions while receiving cargo." } ] },
-                                        { "controls": [ { "param": "info", "value": "Prisoners and supplies are checked differently." } ] },
-                                        { "controls": [ { "param": "info", "value": "The platform stays accessible during unloading." } ] },
-                                        { "controls": [ { "param": "info", "value": "Cargo arrival disrupts normal guard assignments." } ] },
-                                        { "controls": [ { "param": "info", "value": "Ilvara personally assesses valuable or unusual prisoners." } ] }
+                                        { "controls": [ { "param": "info", "value": "Lift operation" } ] },
+                                        { "controls": [ { "param": "info", "value": "Ilvara/Asha personally assesses prisoners." } ] },
+                                        { "controls": [ { "param": "info", "value": "Lift arrival disrupts guard assignments." } ] },
+                                        { "controls": [ { "param": "info", "value": "" } ] },
+                                        { "controls": [ { "param": "info", "value": "" } ] },
+                                        { "controls": [ { "param": "info", "value": "" } ] }
                                     ]
                                 }
                             ]
@@ -183,7 +196,7 @@
                         {
                             "type": "collapsible", "param": "d3MorningSec", "label": "Morning — The Lift Descends",
                             "controls": [
-                                { "type": "textarea", "param": "d3MorningScene", "label": "Scene", "rows": 5, "value": "The routine breaks for the lift. Existing prisoners are pulled to unload, carry, clean the platform or restrain arrivals. Play it as a moving demonstration — ropes tightening, guards taking positions, the platform settling — and let every PC investigate part of the process with a skill check. The new shipment: Derendil, Jimjar, Shuushar, and Topsy & Turvy." },
+                                { "type": "textarea", "param": "d3MorningScene", "label": "Scene", "rows": 4, "value": "The routine breaks for the lift.\nExisting NPCs woken early to assist.\nIntro Derendil, Jimjar, Shuushar, and Topsy & Turvy." },
                                 { "type": "label", "param": "d3MorningIntHead", "label": "Interactions" },
                                 {
                                     "type": "looper", "param": "d3MorningInt", "addRows": true,
@@ -193,17 +206,12 @@
                                         { "type": "textarea", "param": "interaction", "label": "interaction", "stacked": true, "cellClassName": "sm-col-6" }
                                     ],
                                     "value": [
-                                        { "controls": [ { "param": "npc", "value": "Derendil" }, { "param": "interaction", "value": "needs several guards; insists he is not what he appears." } ] },
-                                        { "controls": [ { "param": "npc", "value": "Jimjar" }, { "param": "interaction", "value": "makes a wager almost at once (who'll try to escape first?)." } ] },
-                                        { "controls": [ { "param": "npc", "value": "Shuushar" }, { "param": "interaction", "value": "offers no resistance; works to lower the tension." } ] },
-                                        { "controls": [ { "param": "npc", "value": "Topsy & Turvy" }, { "param": "interaction", "value": "stay close together and reveal as little as possible." } ] },
+                                        { "controls": [ { "param": "npc", "value": "Ront" }, { "param": "interaction", "value": "'Look tough'\nRoll STR intimidate" } ] },
+                                        { "controls": [ { "param": "npc", "value": "Bupido" }, { "param": "interaction", "value": "Patdown new inmates.\nRoll Sleight to find Derendils knife\nRoll Deception to keep it" } ] },
                                         { "controls": [ { "param": "npc", "value": "Ilvara" }, { "param": "interaction", "value": "appraises each arrival as property." } ] },
                                         { "controls": [ { "param": "npc", "value": "Asha" }, { "param": "interaction", "value": "records names, condition, useful skills and unusual traits." } ] },
-                                        { "controls": [ { "param": "npc", "value": "Ilvara" }, { "param": "interaction", "value": "shows controlled interest in the Reborn Cleric; orders them kept undamaged." } ] },
-                                        { "controls": [ { "param": "npc", "value": "Ilvara" }, { "param": "interaction", "value": "marks the Paladin (or emerging organiser) as one to watch." } ] },
-                                        { "controls": [ { "param": "npc", "value": "Shoor" }, { "param": "interaction", "value": "stays near Ilvara and inflates his own importance." } ] },
                                         { "controls": [ { "param": "npc", "value": "Jorlan" }, { "param": "interaction", "value": "watches Shoor and Ilvara more than he watches the prisoners." } ] },
-                                        { "controls": [ { "param": "interaction", "value": "Existing prisoners may be told to show newcomers the work — instant PC–NPC pairings." } ] }
+                                        { "controls": [ { "param": "npc", "value": "Players" }, { "param": "interaction", "value": "Take a task from\n- Security\n- Unloading freight\n- Patdown & Onboard new prisoners\n- Operating lift\n- Managing Quaggoth" } ] }
                                     ]
                                 }
                             ]
