@@ -1,0 +1,13 @@
+.form-manager-section-title {
+  font-weight: 600;
+  color: var(--text-accent);
+  margin: 4px 0 2px;
+}
+
+.form-manager-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--bs-border-color);
+}

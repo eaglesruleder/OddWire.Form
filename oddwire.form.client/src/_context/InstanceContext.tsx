@@ -32,6 +32,8 @@ export type InstanceContextValue = {
     getInstance: (instanceId: string) => Promise<FormInstance | undefined>;
     list: (formId: string) => InstanceIndexEntry[];
     save: (instance: FormInstance) => Promise<string>;
+    deleteInstance: (instanceId: string) => Promise<void>;
+    deleteFormInstances: (formId: string) => Promise<void>;
     };
 
 class InstanceStore implements InstanceContextValue
@@ -73,6 +75,23 @@ class InstanceStore implements InstanceContextValue
         await this.refreshIndex(body);
 
         return instance.instanceId;
+    };
+
+    deleteInstance = async (instanceId: string): Promise<void> =>
+    {
+        await storage.removeItem(instanceId);
+        this.index = this.index.filter(entry => entry.instanceId !== instanceId);
+        await storage.setItem(INDEX_KEY, this.index);
+    };
+
+    deleteFormInstances = async (formId: string): Promise<void> =>
+    {
+        const removed = this.index.filter(entry => entry.formId === formId);
+
+        await Promise.all(removed.map(entry => storage.removeItem(entry.instanceId)));
+
+        this.index = this.index.filter(entry => entry.formId !== formId);
+        await storage.setItem(INDEX_KEY, this.index);
     };
 
     // Intent: called by FormStore when a form's displayParam changes — re-project every affected instance

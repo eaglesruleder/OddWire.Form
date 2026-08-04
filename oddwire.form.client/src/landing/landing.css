@@ -5,6 +5,12 @@
   border-top: 1px solid var(--bs-border-color);
 }
 
+.instance-row-wrap {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
 .instance-order-button {
   min-height: 37.6px;
   height: 37.6px;
@@ -15,11 +21,12 @@
 .instance-row {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
   gap: 0.3rem;
   padding: 0.65rem 0.75rem;
-  border-bottom: 1px solid var(--bs-border-color);
   color: var(--bs-body-color);
   text-decoration: none;
+  min-width: 0;
 }
 
 .instance-row:hover,
@@ -92,4 +99,10 @@
 
 .instance-row-detail-label {
   color: var(--bs-tertiary-color);
+}
+
+.instance-row-action {
+  flex: 0 0 auto;
+  align-self: center;
+  margin: 0 0.75rem;
 }

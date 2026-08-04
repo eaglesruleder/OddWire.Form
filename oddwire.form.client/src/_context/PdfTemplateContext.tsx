@@ -15,6 +15,7 @@ export type PdfTemplateRecord = {
 export type PdfTemplateContextValue = {
     getTemplate: (formId: string) => Promise<PdfTemplateRecord | undefined>;
     saveTemplate: (formId: string, fileName: string, type: string, blob: Blob) => Promise<void>;
+    deleteTemplate: (formId: string) => Promise<void>;
     };
 
 class PdfTemplateStore implements PdfTemplateContextValue
@@ -32,6 +33,11 @@ class PdfTemplateStore implements PdfTemplateContextValue
     saveTemplate = async (formId: string, fileName: string, type: string, blob: Blob): Promise<void> =>
     {
         await storage.setItem(keyOf(formId), { formId, fileName, type, blob });
+    };
+
+    deleteTemplate = async (formId: string): Promise<void> =>
+    {
+        await storage.removeItem(keyOf(formId));
     };
 }
 
