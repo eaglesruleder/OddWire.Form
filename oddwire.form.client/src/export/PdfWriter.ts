@@ -1,5 +1,5 @@
 import type { PDFFont, PDFPage } from 'pdf-lib';
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import { degrees, PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 
 import type { ControlPdfBox } from '../_components/controllist';
 import type { PdfTemplateRecord } from '../_context';
@@ -50,8 +50,9 @@ export class PdfWriter
         // Intent: no width -> single line at the anchor (fast path, prior behaviour)
         if (!box.w)
         {
-            const y = alignedY(box, this.font.heightAtSize(baseSize));
-            page.drawText(value, { x: alignedX(box, this.font.widthOfTextAtSize(value, baseSize)), y, size: baseSize, font: this.font, color: rgb(0, 0, 0) });
+            const width = this.font.widthOfTextAtSize(value, baseSize);
+            const height = this.font.heightAtSize(baseSize);
+            this.drawTextAt(page, value, { x: alignedX(box, width), y: alignedY(box, height), width, height }, box, baseSize);
             return;
         }
 
@@ -127,10 +128,38 @@ export class PdfWriter
 
         lines.forEach((line, index) =>
         {
-            const x = alignedX(box, this.font.widthOfTextAtSize(line, size));
+            const width = this.font.widthOfTextAtSize(line, size);
+            const x = alignedX(box, width);
             const y = bottomBaseline + (lines.length - 1 - index) * lineHeight;
-            page.drawText(line, { x, y, size, font: this.font, color: rgb(0, 0, 0) });
+            this.drawTextAt(page, line, { x, y, width, height: lineHeight }, box, size);
         });
+    }
+
+    private drawTextAt(page: PDFPage, value: string, placement: Placement, box: ControlPdfBox, size: number): void
+    {
+        const rotate = normaliseRotation(box.rotate);
+
+        if (rotate === 180)
+        {
+            page.drawText(value, {
+                x: placement.x + placement.width,
+                y: placement.y + placement.height,
+                size,
+                font: this.font,
+                color: rgb(0, 0, 0),
+                rotate: degrees(180),
+                });
+            return;
+        }
+
+        page.drawText(value, {
+            x: placement.x,
+            y: placement.y,
+            size,
+            font: this.font,
+            color: rgb(0, 0, 0),
+            ...(rotate ? { rotate: degrees(rotate) } : {}),
+            });
     }
 
     // Intent: draw pre-rasterized PNG bytes fit-contained (aspect-preserved) and centered inside the box
@@ -148,7 +177,23 @@ export class PdfWriter
         const width = image.width * scale;
         const height = image.height * scale;
 
-        page.drawImage(image, { x: box.x + (boxW - width) / 2, y: box.y + (boxH - height) / 2, width, height });
+        const x = box.x + (boxW - width) / 2;
+        const y = box.y + (boxH - height) / 2;
+        const rotate = normaliseRotation(box.rotate);
+
+        if (rotate === 180)
+        {
+            page.drawImage(image, { x: x + width, y: y + height, width, height, rotate: degrees(180) });
+            return;
+        }
+
+        page.drawImage(image, {
+            x,
+            y,
+            width,
+            height,
+            ...(rotate ? { rotate: degrees(rotate) } : {}),
+            });
     }
 
     writeLines(lines: string[], options: { x: number; y: number; lineHeight: number; marginBottom: number }): void
@@ -237,9 +282,24 @@ export class PdfWriter
     }
 }
 
+type Placement = {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    };
+
 function fontSizeFor(page: PDFPage): number
 {
     return Math.min(DEFAULT_FONT_SIZE * (page.getHeight() / PAGE_SIZE[1]), 14);
+}
+
+function normaliseRotation(value: number | undefined): number
+{
+    if (!value)
+        return 0;
+
+    return ((value % 360) + 360) % 360;
 }
 
 // Intent: w = 0 (no width) collapses the box to the x anchor, so the same offset both aligns within a box and anchors a point

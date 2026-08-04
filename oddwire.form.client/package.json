@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "preview:boxes": "node tools/box-preview.mjs"
+    "preview:boxes": "node tools/box-preview.mjs",
+    "template:monster-card": "node tools/build-card-pair-template.mjs"
   },
   "dependencies": {
     "bootstrap": "^5.3.8",

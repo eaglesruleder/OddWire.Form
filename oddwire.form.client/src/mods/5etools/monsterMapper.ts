@@ -1,5 +1,7 @@
 import type { ControlDef } from '../../_components/controllist';
 
+import APPEARANCE from './appearance.json';
+
 // Intent: the lookup table the monster-card form binds to (dropdown valueParam 'monster', labelParam 'name')
 export const MONSTER_TABLE = 'Monster';
 
@@ -111,6 +113,7 @@ export function mapMonster(m: RawMonster, options: MonsterImportOptions = {}): M
         ,...abilityModColumns(m)
         ,...saveColumns(m)
         ,...skillColumns(m)
+        ,skillSummary: skillSummary(m)
         ,damageVuln: hideWhenEmpty(damageListToText(m.vulnerable))
         ,damageRes: hideWhenEmpty(damageListToText(m.resist))
         ,damageImm: hideWhenEmpty(damageListToText(m.immune))
@@ -118,10 +121,14 @@ export function mapMonster(m: RawMonster, options: MonsterImportOptions = {}): M
         ,...sensesColumns(m)
         ,legendaryGroup: m.legendaryGroup?.name ?? ''
         ,...combatLoopers(m)
+        ,...actionCardColumns(m.action)
+        ,traitCardText: traitCardText(m.trait)
         ,languages: rowsWhenFilled(listToText(m.languages))
         ,environment: (m.environment ?? []).map(cap).join(', ')
         ,attachedItems: (m.attachedItems ?? []).map(item => item.split('|')[0]).join(', ')
         ,group: (m.group ?? []).join(', ')
+        ,physique: physique(m)
+        ,personality: personality(m)
         ,fluff: ''
         ,image: tokenUrl(m)
         });
@@ -163,7 +170,7 @@ function abilityModColumns(m: RawMonster): MonsterRow
     return out;
 }
 
-// Intent: proficient save is stored pre-formatted ('+5'); otherwise fall back to the raw ability modifier
+// Intent: statblocks only need a save when it differs from the base ability modifier; equal/absent saves stay blank
 function saveColumns(m: RawMonster): MonsterRow
 {
     const out: MonsterRow = {};
@@ -172,9 +179,9 @@ function saveColumns(m: RawMonster): MonsterRow
     {
         const proficient = m.save?.[ability];
         const score = m[ability];
+        const mod = typeof score === 'number' ? fmtMod(abilityMod(score)) : '';
 
-        out[`${ability}Save`] = proficient
-            ?? (typeof score === 'number' ? fmtMod(abilityMod(score)) : '');
+        out[`${ability}Save`] = proficient && proficient !== mod ? proficient : '';
     }
 
     return out;
@@ -212,8 +219,72 @@ function skillColumns(m: RawMonster): MonsterRow
     return out;
 }
 
+function skillSummary(m: RawMonster): string
+{
+    return Object.entries(SKILL_KEY)
+        .map(([param, key]) => ({ label: skillLabel(param), value: m.skill?.[key] }))
+        .filter((skill): skill is { label: string; value: string } => !!skill.value)
+        .map(skill => `${skill.value} ${skill.label}`)
+        .join(' ');
+}
+
+function skillLabel(param: string): string
+{
+    return param
+        .replace(/([a-z])([A-Z])/g, '$1 $2')
+        .replace(/^./, char => char.toUpperCase());
+}
+
 const abilityMod = (score: number): number => Math.floor((score - 10) / 2);
 const fmtMod = (n: number): string => (n >= 0 ? `+${n}` : `${n}`);
+
+// #endregion
+
+// #region Physique & personality
+
+// Intent: within this band two stats count as "the same" — the tie tolerance that opens the 3x3x3 space
+const ATTR_TOLERANCE = 2;
+
+type AttrRank = 0 | 1 | 2;               // bot / mid / top
+type RankTriple = [AttrRank, AttrRank, AttrRank];
+type DescriptorTable = Record<string, string>;
+
+// Intent: physique from STR/DEX/CON, personality from INT/WIS/CHA — a build/demeanour adjective from stat *shape*
+const physique = (m: RawMonster): string => descriptor(APPEARANCE.physique, m.str, m.dex, m.con);
+const personality = (m: RawMonster): string => descriptor(APPEARANCE.personality, m.int, m.wis, m.cha);
+
+function descriptor(table: DescriptorTable, a: number | undefined, b: number | undefined, c: number | undefined): string
+{
+    if (typeof a !== 'number'
+    ||  typeof b !== 'number'
+    ||  typeof c !== 'number'
+        )
+        return '';
+
+    const [ra, rb, rc] = rankTriple(a, b, c);
+    return table[`${ra}${rb}${rc}`] ?? '';
+}
+
+// Intent: rank each stat bot/mid/top *relative to its two siblings*, so multiple stats can tie at top within tolerance
+function rankTriple(a: number, b: number, c: number): RankTriple
+{
+    const top = Math.max(a, b, c);
+    const bot = Math.min(a, b, c);
+
+    // Intent: all three within tolerance of each other → balanced, no standout stat
+    if (top - bot <= ATTR_TOLERANCE)
+        return [1, 1, 1];
+
+    return [rankOne(a, top, bot), rankOne(b, top, bot), rankOne(c, top, bot)];
+}
+
+function rankOne(score: number, top: number, bot: number): AttrRank
+{
+    const nearTop = top - score <= ATTR_TOLERANCE;
+    const nearBot = score - bot <= ATTR_TOLERANCE;
+
+    return nearTop && !nearBot ? 2 : nearBot && !nearTop ? 0 : 1;
+}
 
 // #endregion
 
@@ -420,6 +491,15 @@ function namedEntriesSection(entries: NamedEntries[] | undefined): LooperControl
             })));
 }
 
+function traitCardText(entries: NamedEntries[] | undefined): string
+{
+    return (entries ?? [])
+        .slice(0, 3)
+        .map(entry => `${entry.name ?? 'Trait'}: ${entriesToText(entry.entries)}`.trim())
+        .filter(Boolean)
+        .join('\n\n');
+}
+
 function actionSection(entries: NamedEntries[] | undefined): LooperControlPatch
 {
     return looperSection(entries?.map(entry =>
@@ -433,6 +513,25 @@ function actionSection(entries: NamedEntries[] | undefined): LooperControlPatch
             ,entries: actionEntriesToText(entry.entries)
             });
     }));
+}
+
+function actionCardColumns(entries: NamedEntries[] | undefined): MonsterRow
+{
+    const out: MonsterRow = {};
+
+    for (let i = 0; i < 3; i++)
+    {
+        const entry = entries?.[i];
+        const attack = parseAttack(entriesToRawText(entry?.entries));
+        const prefix = `action${i + 1}`;
+
+        out[`${prefix}Name`] = entry?.name ?? '';
+        out[`${prefix}ToHit`] = attack.toHit;
+        out[`${prefix}Damage`] = attack.damage;
+        out[`${prefix}Text`] = actionEntriesToText(entry?.entries);
+    }
+
+    return out;
 }
 
 function variantSection(entries: VariantEntry[] | undefined): LooperControlPatch
@@ -662,6 +761,7 @@ const MONSTER_COLUMNS: { param: string; label: string }[] =
     ,{ param: 'intimidation', label: 'Intimidation' }
     ,{ param: 'performance', label: 'Performance' }
     ,{ param: 'persuasion', label: 'Persuasion' }
+    ,{ param: 'skillSummary', label: 'Skill Summary' }
     ,{ param: 'damageVuln', label: 'Damage Vulnerabilities' }
     ,{ param: 'damageRes', label: 'Damage Resistances' }
     ,{ param: 'damageImm', label: 'Damage Immunities' }
@@ -669,9 +769,22 @@ const MONSTER_COLUMNS: { param: string; label: string }[] =
     ,{ param: 'senses', label: 'Senses' }
     ,{ param: 'darkvision', label: 'Darkvision' }
     ,{ param: 'trait', label: 'Traits' }
+    ,{ param: 'traitCardText', label: 'Trait Card Text' }
     ,{ param: 'spellcasting', label: 'Spellcasting' }
     ,{ param: 'tabSpellcasting', label: 'Spellcasting Tab' }
     ,{ param: 'action', label: 'Actions' }
+    ,{ param: 'action1Name', label: 'Action 1 Name' }
+    ,{ param: 'action1ToHit', label: 'Action 1 To Hit' }
+    ,{ param: 'action1Damage', label: 'Action 1 Damage' }
+    ,{ param: 'action1Text', label: 'Action 1 Text' }
+    ,{ param: 'action2Name', label: 'Action 2 Name' }
+    ,{ param: 'action2ToHit', label: 'Action 2 To Hit' }
+    ,{ param: 'action2Damage', label: 'Action 2 Damage' }
+    ,{ param: 'action2Text', label: 'Action 2 Text' }
+    ,{ param: 'action3Name', label: 'Action 3 Name' }
+    ,{ param: 'action3ToHit', label: 'Action 3 To Hit' }
+    ,{ param: 'action3Damage', label: 'Action 3 Damage' }
+    ,{ param: 'action3Text', label: 'Action 3 Text' }
     ,{ param: 'bonus', label: 'Bonus Actions' }
     ,{ param: 'reaction', label: 'Reactions' }
     ,{ param: 'legendary', label: 'Legendary Actions' }
@@ -682,6 +795,8 @@ const MONSTER_COLUMNS: { param: string; label: string }[] =
     ,{ param: 'environment', label: 'Environment' }
     ,{ param: 'attachedItems', label: 'Attached Items' }
     ,{ param: 'group', label: 'Group' }
+    ,{ param: 'physique', label: 'Physique' }
+    ,{ param: 'personality', label: 'Personality' }
     ,{ param: 'fluff', label: 'Description' }
     ,{ param: 'image', label: 'Image' }
     ];

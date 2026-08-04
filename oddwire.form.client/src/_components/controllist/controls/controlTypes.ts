@@ -76,6 +76,7 @@ export type ControlPdfBox = {
     fontSize?: number;                        // per-box override of settings.export.pdf.fontSize; 0/absent = use default
     align?: 'left' | 'center' | 'right';      // horizontal: relative to [x, x+w] when w set, else to the x anchor
     valign?: 'top' | 'middle' | 'bottom';     // vertical: relative to [y, y+h] when h set, else to the y anchor
+    rotate?: number;                           // degrees clockwise; 180 keeps content inside the same box for duplex/top-card placement
     shrinkToFit?: boolean;                     // with w set: scale font down until the wrapped text fits w (and h); else ellipsis-clip to h
     };
 
@@ -106,6 +107,8 @@ export type TextAreaControlDef = ControlDefBase<'textarea', string> & {
     rows?: number;
     };
 export type CheckboxControlDef = ControlDefBase<'checkbox', boolean>;
+// Intent: non-rendering derived field. Its definition value is evaluated during export/flatten and emitted under param.
+export type CalcControlDef = ControlDefBase<'calc', string>;
 // Intent: enable the draw/signature capture surface. Bare true → a plain draw pad; the object tunes canvas size, pen, an
 // optional solid background, and whether file upload is offered alongside draw (allowUpload → annotate an uploaded image).
 export type DrawConfig = boolean | {
@@ -145,6 +148,7 @@ export type LooperRowInstance = {
 export type CollapsibleControlDef = ControlDefBase<'collapsible'> & {
     controls: ControlDef[];
     subtitle?: string;
+    icon?: string;    // corner glyph — a literal (emoji/char) or a {param} token resolved against the instance
     };
 export type TabControlDef = ControlDefBase<'tab'> & {
     controls: ControlDef[];
@@ -162,6 +166,7 @@ export type ControlDef =
     | TextControlDef
     | TextAreaControlDef
     | CheckboxControlDef
+    | CalcControlDef
     | ImageControlDef
     | SignatureControlDef
     | RadioControlDef

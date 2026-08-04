@@ -1,4 +1,4 @@
-import { useContext, useEffect, useReducer, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useReducer, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
@@ -6,28 +6,12 @@ import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 
 import type { FormDefinition, InstanceChange, ParamList } from '../_context';
-import type { ControlDef, TabSection } from '../_components/controllist';
 
 import { FormContext, InstanceContext, LookupContext, InstanceEntity, FormActionsContext } from '../_context';
 import { StripLayout } from '../_components/layout';
-import { ControlList, ControlTab, ControlError, ControlButton, DbContext, resolveLabel } from '../_components/controllist';
+import { ControlList, ControlTab, ControlError, ControlButton, DbContext, buildRootTabSections } from '../_components/controllist';
 import { flattenInstance } from '../export';
-
-function buildRootTabSections(controls: ControlDef[], instance: InstanceEntity): TabSection[]
-{
-    const sections: TabSection[] = controls
-        .map(control => instance.resolve(control))
-        .filter(control => control.type === 'tab' && !control.hidden)
-        .map(tab => ({ param: tab.param, label: resolveLabel(tab.label, instance) ?? tab.param, controls: (tab as { controls: ControlDef[] }).controls }));
-
-    const strays = controls
-        .map(control => instance.resolve(control))
-        .filter(control => control.type !== 'tab' && !control.hidden);
-    if (strays.length > 0)
-        sections.push({ param: '__unexpected', label: '⚠', controls: strays, notice: 'Unexpected controls in tab layout' });
-
-    return sections;
-}
+import { downloadBlob } from '../export/pdf/downloadBlob';
 
 export function FormPage()
 {
@@ -48,14 +32,15 @@ export function FormPage()
     const [, bumpRender] = useReducer(tick => tick + 1, 0);
 
     const instanceRef = useRef<InstanceEntity | null>(null);
-    instanceRef.current = instance;
 
     // Intent: the entity persists itself (debounced) but only once autosaving — read the live flag off a ref, not a stale closure
     const autosavingRef = useRef(autosaving);
-    autosavingRef.current = autosaving;
 
-    const attachPersist = (entity: InstanceEntity) =>
-        entity.withPersist(body => { if (autosavingRef.current) void save(body); });
+    useEffect(() => { instanceRef.current = instance; }, [instance]);
+    useEffect(() => { autosavingRef.current = autosaving; }, [autosaving]);
+
+    const attachPersist = useCallback((entity: InstanceEntity) =>
+        entity.withPersist(body => { if (autosavingRef.current) void save(body); }), [save]);
 
     useEffect(() =>
     {
@@ -97,7 +82,7 @@ export function FormPage()
                 setAutosaving(!!loaded);
             }
         }
-    }, [getForm, getInstance, formId, instanceId]);
+    }, [getForm, getInstance, formId, instanceId, attachPersist]);
 
     // Intent: apply + render now; the entity persists itself (debounced) so we don't save the whole instance per keystroke
     const onChange: InstanceChange = (value, key, subkey = 'value') =>
@@ -176,6 +161,21 @@ export function FormPage()
         {
             setExporting(false);
         }
+    };
+
+    const onExportJson = () =>
+    {
+        if (!form || !instance)
+            return;
+
+        instance.flush();
+
+        downloadBlob(
+            new Blob([JSON.stringify(instance.instance, null, 2)], { type: 'application/json' }),
+            `${fileStem(form)}.instance.json`);
+
+        setActionsOpen(false);
+        setToastMessage('JSON exported');
     };
 
     const onExportPdf = async () =>
@@ -266,6 +266,7 @@ export function FormPage()
                                 {exportUrl &&
                                     <ControlButton label={exporting ? 'Exporting...' : 'Export API'} onClick={onExportApi} disabled={exporting} />
                                 }
+                                <ControlButton label="Export JSON" onClick={onExportJson} disabled={exporting} />
                                 {hasPdfExport &&
                                     <ControlButton label={exporting ? 'Exporting...' : 'Export PDF'} onClick={onExportPdf} disabled={exporting} />
                                 }
@@ -333,4 +334,9 @@ function paramList(value: ParamList | undefined): string[]
         return [];
 
     return Array.isArray(value) ? value : [value];
+}
+
+function fileStem(form: FormDefinition): string
+{
+    return (form.label ?? form.formId ?? 'form').replace(/[^\w.-]+/g, '_');
 }

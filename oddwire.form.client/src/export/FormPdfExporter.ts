@@ -12,7 +12,7 @@ import { PdfWriter } from './PdfWriter';
 import { rasterizeToPng } from './rasterizeImage';
 
 // Intent: rasterize a placed image only to its box footprint — a first-pass reference PDF stays light with 20+ images;
-// full-res stays in the blob store (server source-of-truth later). External-URL image values are skipped, not embedded.
+// captured images read their full-res blob, while URL/data-URI image values are attempted through the same safe canvas path.
 const PDF_IMAGE_DPI = 150;
 
 export class FormPdfExporter
@@ -52,24 +52,29 @@ export class FormPdfExporter
                         writer.writeText(pageIndex(pageKey), renderText(field.value), box);
     }
 
-    // Intent: only captured images print (external-URL values are skipped); each box rasterizes the full-res blob down to
-    // its own footprint, so differently-sized boxes each carry only the pixels they show.
+    // Intent: each box rasterizes the source down to its own footprint, so differently-sized boxes each carry only the
+    // pixels they show. URL/CORS failures return null inside rasterizeToPng and leave the box blank.
     private async writeImageField(writer: PdfWriter, field: FlattenedPdfField): Promise<void>
     {
-        if (!isCapturedImage(field.value))
-            return;
-
-        const record = await this.images?.getImage(field.value.id);
-        if (!record)
+        const source = await this.imageSource(field.value);
+        if (!source)
             return;
 
         for (const [pageKey, boxes] of Object.entries(field.pages))
             for (const box of boxes)
             {
-                const png = await rasterizeToPng(record.blob, boxTargetPx(box));
+                const png = await rasterizeToPng(source, boxTargetPx(box));
                 if (png)
                     await writer.drawImage(pageIndex(pageKey), png, box);
             }
+    }
+
+    private async imageSource(value: unknown): Promise<string | Blob | undefined>
+    {
+        if (isCapturedImage(value))
+            return (await this.images?.getImage(value.id))?.blob;
+
+        return typeof value === 'string' && value !== '' ? value : undefined;
     }
 }
 

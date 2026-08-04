@@ -1,5 +1,6 @@
 import type { ControlDef, ControlPdfBox, FlattenCtx } from '../_components/controllist';
 import { flattenControl } from '../_components/controllist';
+import { evaluateTemplate, hasTemplate, templateRefs } from '../_components/controllist/template';
 import type { FormDefinition } from '../_context';
 
 import { InstanceEntity } from '../_context';
@@ -94,23 +95,26 @@ function walkControls(controls: ControlDef[], instance: InstanceEntity, values: 
 function walkControl(control: ControlDef, instance: InstanceEntity, values: Record<string, unknown>, pdf: FlattenedPdfField[], staged: StagedField[]): void
 {
     const resolved = instance.resolve(control);
+    const effective: ControlDef = control.type === 'calc' && resolved.type === 'calc'
+        ? { ...resolved, value: control.value }
+        : resolved;
 
     const ctx: FlattenCtx =
         { recurse: children => walkControls(children, instance, values, pdf, staged)
         , scope:   rowScope
         };
 
-    const result = flattenControl(resolved, ctx);
+    const result = flattenControl(effective, ctx);
 
     if (!result)
         return;
 
     if (typeof result.value === 'string' && hasTemplate(result.value))
-        staged.push({ resolved, template: result.value });
+        staged.push({ resolved: effective, template: result.value });
     else
     {
-        values[resolved.param] = result.value;
-        addPdfField(resolved, result.value, pdf);
+        values[effective.param] = result.value;
+        addPdfField(effective, result.value, pdf);
     }
 }
 
@@ -125,17 +129,12 @@ function rowScope(controls: ControlDef[], row: unknown): Record<string, unknown>
     return rowValues;
 }
 
-const TEMPLATE_RE = /\{(\w+)\}/;
-
-const hasTemplate = (value: string): boolean =>
-    TEMPLATE_RE.test(value);
-
 const refsOf = (template: string): string[] =>
-    [...template.matchAll(/\{(\w+)\}/g)].map(match => match[1]);
+    templateRefs(template);
 
-// Intent: single-level {param} substitution against the flattened values; unknown/empty params collapse to ''
+// Intent: {param} and {param?then:else} substitution against flattened values; unknown/empty params collapse to ''
 const interpolate = (template: string, values: Record<string, unknown>): string =>
-    template.replace(/\{(\w+)\}/g, (_match, param: string) => String(values[param] ?? ''));
+    evaluateTemplate(template, param => values[param]);
 
 function addPdfField(control: ControlDef, value: unknown, pdf: FlattenedPdfField[]): void
 {
