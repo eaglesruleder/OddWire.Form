@@ -11,8 +11,8 @@ import { installFormPackage } from './installFormPackage';
 import { upsert } from './storeUtils';
 import { loadFormPackage } from '../settings/FormManager/formPackages';
 import contactForm from './data/forms/contactform.json';
-import ootaSession1Form from '../mods/5etools/forms/oota-session1.json';
 import monsterCardPackageUrl from '../mods/5etools/forms/monster-card.zip?url';
+import ootaSession1PackageUrl from '../mods/5etools/forms/oota-session1.zip?url';
 
 const INDEX_KEY = 'index';
 
@@ -81,7 +81,7 @@ class FormStore implements FormContextValue
         {
             await this.saveForm(contactForm as unknown as FormDefinition);
             await this.installDefaultPackage(monsterCardPackageUrl);
-            await this.saveForm(ootaSession1Form as unknown as FormDefinition);
+            await this.installDefaultPackage(ootaSession1PackageUrl);
         }
 
         this.initialised = true;
