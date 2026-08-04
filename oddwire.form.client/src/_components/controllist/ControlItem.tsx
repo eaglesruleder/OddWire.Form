@@ -38,6 +38,7 @@ export function ControlItem({ control, instance, onChange, depth = 0 }: ControlI
 
     switch (resolved.type)
     {
+        case 'calc':     return null;
         case 'label':    return <ControlText      {...resolved} hidden={resolved.hidden || targetHidden(resolved.labelFor, instance)} />;
         case 'text':     return <ControlTextField {...resolved} onChange={onChange} />;
         case 'textarea': return <ControlTextArea  {...resolved} onChange={onChange} />;
@@ -72,6 +73,9 @@ export function flattenControl(resolved: ControlDef, ctx: FlattenCtx): FlattenRe
 
         case 'looper':
             return looperFlatten(resolved, ctx);
+
+        case 'calc':
+            return { value: resolved.value ?? '' };
 
         default:
             return { value: resolved.value ?? null };

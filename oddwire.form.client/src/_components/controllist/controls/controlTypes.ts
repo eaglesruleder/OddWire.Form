@@ -107,6 +107,8 @@ export type TextAreaControlDef = ControlDefBase<'textarea', string> & {
     rows?: number;
     };
 export type CheckboxControlDef = ControlDefBase<'checkbox', boolean>;
+// Intent: non-rendering derived field. Its definition value is evaluated during export/flatten and emitted under param.
+export type CalcControlDef = ControlDefBase<'calc', string>;
 // Intent: enable the draw/signature capture surface. Bare true → a plain draw pad; the object tunes canvas size, pen, an
 // optional solid background, and whether file upload is offered alongside draw (allowUpload → annotate an uploaded image).
 export type DrawConfig = boolean | {
@@ -164,6 +166,7 @@ export type ControlDef =
     | TextControlDef
     | TextAreaControlDef
     | CheckboxControlDef
+    | CalcControlDef
     | ImageControlDef
     | SignatureControlDef
     | RadioControlDef
