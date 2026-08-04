@@ -6,19 +6,15 @@ import type { DisplayParam, FormDefinition, FormIndexEntry, ParamList } from './
 
 import { instanceStore } from './InstanceContext';
 import { upsert } from './storeUtils';
-import testForm from './data/forms/testform.json';
-import tabForm from './data/forms/tabform.json';
-import layoutTestForm from './data/forms/layouttestform.json';
-import vehicleForm from './data/forms/vehicleform.json';
+import contactForm from './data/forms/contactform.json';
+import monsterCardForm from '../mods/5etools/forms/monster-card.json';
 import ootaSession1Form from '../mods/5etools/forms/oota-session1.json';
 
 const INDEX_KEY = 'index';
 
 const seedForms =
-    [testForm
-    ,tabForm
-    ,layoutTestForm
-    ,vehicleForm
+    [contactForm
+    ,monsterCardForm
     ,ootaSession1Form
     ] as unknown as FormDefinition[];
 
@@ -68,6 +64,7 @@ export type FormContextValue = {
     getForm: (formId: string) => Promise<FormDefinition | undefined>;
     list: () => FormIndexEntry[];
     saveForm: (form: FormDefinition) => Promise<string>;
+    deleteForm: (formId: string) => Promise<void>;
     };
 
 class FormStore implements FormContextValue
@@ -132,6 +129,14 @@ class FormStore implements FormContextValue
             await instanceStore.reindexForm(form.formId);
 
         return form.formId;
+    };
+
+    deleteForm = async (formId: string): Promise<void> =>
+    {
+        await storage.removeItem(formId);
+        this.index = this.index.filter(entry => entry.formId !== formId);
+        await storage.setItem(INDEX_KEY, this.index);
+        await instanceStore.deleteFormInstances(formId);
     };
 
     private refreshIndex = async (form: FormDefinition, labels = controlLabels(form.controls)): Promise<void> =>

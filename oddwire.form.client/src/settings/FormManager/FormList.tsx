@@ -3,14 +3,16 @@ import Button from 'react-bootstrap/Button';
 import type { ButtonProps } from 'react-bootstrap/Button';
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
+import { Link } from 'react-router-dom';
 
-import type { FormDefinition } from '../../_context';
-import { FormContext, PdfTemplateContext, FormImageContext, FORM_DEFAULT_INSTANCE } from '../../_context';
+import type { FormDefinition, FormIndexEntry } from '../../_context';
+import { FormContext, InstanceContext, PdfTemplateContext, FormImageContext, FORM_DEFAULT_INSTANCE } from '../../_context';
 import type { ControlDef, CapturedImage } from '../../_components/controllist';
 import { captureImage } from '../../_components/controllist/controls/captureImage';
 
 import { loadFormPackage } from './formPackages';
 import type { BundledFormPackage } from './formPackages';
+import './formManager.css';
 
 // Intent: the install catalogue is every loose JSON form + zip package, from both the shared data/forms folder and each
 // mod's own mods/<mod>/forms folder — no manual list. Mods own their bundled forms (e.g. 5etools ships oota + monster-card).
@@ -30,8 +32,9 @@ type FormAction = { label: string; variant: ButtonProps['variant'] };
 
 export function FormList()
 {
-    const { list, saveForm } = useContext(FormContext);
-    const { saveTemplate } = useContext(PdfTemplateContext);
+    const { list, saveForm, deleteForm } = useContext(FormContext);
+    const { list: listInstances } = useContext(InstanceContext);
+    const { saveTemplate, deleteTemplate } = useContext(PdfTemplateContext);
     const images = useContext(FormImageContext);
     const [packages, setPackages] = useState<BundledFormPackage[]>(bundledForms);
     const [toastMessage, setToastMessage] = useState<string>();
@@ -62,7 +65,9 @@ export function FormList()
         return () => { active = false; };
     }, []);
 
-    const installed = new Map(list().map(entry => [entry.formId, entry.version]));
+    const installedForms = [...list()]
+        .sort((a, b) => (a.label ?? a.formId).localeCompare(b.label ?? b.formId));
+    const installedVersions = new Map(installedForms.map(entry => [entry.formId, entry.version]));
 
     const install = async (pkg: BundledFormPackage) =>
     {
@@ -79,6 +84,30 @@ export function FormList()
         catch (error)
         {
             setToastMessage(error instanceof Error ? `Install failed: ${error.message}` : 'Install failed');
+        }
+    };
+
+    const deleteInstalledForm = async (form: FormIndexEntry) =>
+    {
+        const label = form.label ?? form.formId;
+        const count = listInstances(form.formId).length;
+        const suffix = count === 1 ? '1 saved instance' : `${count} saved instances`;
+
+        if (!window.confirm(`Delete "${label}" and ${suffix}?`))
+            return;
+
+        try
+        {
+            const ownedImages = await images.imagesFor({ formId: form.formId });
+
+            await Promise.all(ownedImages.map(record => images.deleteImage(record.id)));
+            await deleteTemplate(form.formId);
+            await deleteForm(form.formId);
+            bumpRender();
+        }
+        catch (error)
+        {
+            setToastMessage(error instanceof Error ? `Delete failed: ${error.message}` : 'Delete failed');
         }
     };
 
@@ -119,23 +148,42 @@ export function FormList()
     // Intent: not installed → Install; bundled newer → Update (blue); same/older → Refresh (grey reinstall)
     const actionFor = (form: FormDefinition): FormAction =>
     {
-        if (!installed.has(form.formId))
+        if (!installedVersions.has(form.formId))
             return { label: 'Install', variant: 'outline-primary' };
 
-        return compareVersions(form.version, installed.get(form.formId)) > 0
+        return compareVersions(form.version, installedVersions.get(form.formId)) > 0
             ? { label: 'Update', variant: 'outline-primary' }
             : { label: 'Refresh', variant: 'outline-secondary' };
     };
 
     return (
         <div className="flex column gap">
+            <div className="form-manager-section-title">Installed</div>
+            {installedForms.map(form =>
+                <div key={form.formId} className="form-manager-row">
+                    <span className="fill">
+                        {form.label ?? form.formId}
+                        {form.version ? <span className="text-muted"> v{form.version}</span> : null}
+                        <span className="text-muted"> · {listInstances(form.formId).length} instances</span>
+                    </span>
+                    <Link className="btn btn-sm btn-outline-primary" to={`/form/${form.formId}`}>New</Link>
+                    <Link className="btn btn-sm btn-outline-secondary" to={`/?FormID=${encodeURIComponent(form.formId)}`}>Open</Link>
+                    <Button size="sm" variant="outline-danger" onClick={() => void deleteInstalledForm(form)}>Delete</Button>
+                </div>
+                )}
+
+            {installedForms.length === 0
+            ?   <span className="text-muted">No installed forms.</span>
+            :   null}
+
+            <div className="form-manager-section-title mt-2">Bundled</div>
             {packages.map(pkg =>
             {
                 const form = pkg.form;
                 const action = actionFor(form);
 
                 return (
-                    <div key={form.formId} className="flex items-center gap">
+                    <div key={form.formId} className="form-manager-row">
                         <span className="fill">
                             {form.label ?? form.formId}
                             {form.version ? <span className="text-muted"> v{form.version}</span> : null}
