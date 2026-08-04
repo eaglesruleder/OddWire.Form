@@ -6,10 +6,12 @@ import { FormPage } from './form';
 import { LandingPage } from './landing';
 import { SettingsPage } from './settings';
 
+const routerBasename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/';
+
 function App() {
     return (
         <ContextsProvider>
-            <BrowserRouter>
+            <BrowserRouter basename={routerBasename}>
                 <Routes>
                     <Route path="/" element={<LandingPage />} />
                     <Route path="/form/:formId/:instanceId?" element={<FormPage />} />
