@@ -2245,7 +2245,15 @@
                           "param": "alignment",
                           "label": "Alignment",
                           "stacked": true,
-                          "cellClassName": "sm-col-6 lg-col-3"
+                          "cellClassName": "sm-col-6 lg-col-3",
+                          "pdf": {
+                            "0": [
+                              {
+                                "x": 118,
+                                "y": 1335
+                              }
+                            ]
+                          }
                         },
                         {
                           "type": "text",
@@ -2255,11 +2263,60 @@
                           "cellClassName": "sm-col-6 lg-col-3"
                         },
                         {
+                          "type": "calc",
+                          "param": "crRender",
+                          "label": "CR Render",
+                          "hidden": true,
+                          "value": "{cr?\"CR: {cr}\":\"\"}",
+                          "pdf": {
+                            "0": [
+                              {
+                                "x": 118,
+                                "y": 1385
+                              }
+                            ]
+                          }
+                        },
+                        {
                           "type": "text",
                           "param": "type",
                           "label": "Type",
                           "stacked": true,
                           "cellClassName": "sm-col-6 lg-col-3"
+                        },
+                        {
+                          "type": "calc",
+                          "param": "sizeType",
+                          "label": "Size / Type",
+                          "hidden": true,
+                          "value": "{size} {type}",
+                          "pdf": {
+                            "0": [
+                              {
+                                "x": 118,
+                                "y": 1360,
+                                "w": 225,
+                                "shrinkToFit": true
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "param": "source",
+                          "label": "Source",
+                          "hidden": true,
+                          "pdf": {
+                            "0": [
+                              {
+                                "x": 750,
+                                "y": 1370,
+                                "w": 250,
+                                "align": "right",
+                                "shrinkToFit": true
+                              }
+                            ]
+                          }
                         },
                         {
                           "type": "text",
@@ -2312,13 +2369,6 @@
                         },
                         {
                           "type": "text",
-                          "param": "initiative",
-                          "label": "Initiative",
-                          "stacked": true,
-                          "cellClassName": "sm-col-6 lg-col-3"
-                        },
-                        {
-                          "type": "text",
                           "param": "hp",
                           "label": "HP Max",
                           "stacked": true,
@@ -2337,13 +2387,6 @@
                               }
                             ]
                           }
-                        },
-                        {
-                          "type": "text",
-                          "param": "hp_curr",
-                          "label": "HP Current",
-                          "stacked": true,
-                          "cellClassName": "sm-col-6 lg-col-3"
                         },
                         {
                           "type": "text",
@@ -2932,16 +2975,24 @@
                           "param": "traitCardText",
                           "label": "Trait Card Text",
                           "hidden": true,
-                          "rows": 8,
+                          "rows": 8
+                        },
+                        {
+                          "type": "calc",
+                          "param": "loreTraits",
+                          "label": "Lore Traits",
+                          "hidden": true,
+                          "value": "{languages?\"LANGUAGES: {languages}\\n\\n\":\"\"}{traitCardText}",
                           "pdf": {
                             "1": [
                               {
-                                "x": 90,
-                                "y": 1585,
-                                "w": 875,
-                                "h": 520,
-                                "fontSize": 16,
-                                "valign": "top",
+                                "x": 50,
+                                "y": 1525,
+                                "w": 900,
+                                "h": 1350,
+                                "fontSize": 38,
+                                "align": "right",
+                                "valign": "bottom",
                                 "shrinkToFit": true,
                                 "rotate": 180
                               }
@@ -3854,7 +3905,15 @@
                           "param": "alignment",
                           "label": "Alignment",
                           "stacked": true,
-                          "cellClassName": "sm-col-6 lg-col-3"
+                          "cellClassName": "sm-col-6 lg-col-3",
+                          "pdf": {
+                            "0": [
+                              {
+                                "x": 118,
+                                "y": 1335
+                              }
+                            ]
+                          }
                         },
                         {
                           "type": "text",
@@ -3864,11 +3923,60 @@
                           "cellClassName": "sm-col-6 lg-col-3"
                         },
                         {
+                          "type": "calc",
+                          "param": "crRender",
+                          "label": "CR Render",
+                          "hidden": true,
+                          "value": "{cr?\"CR: {cr}\":\"\"}",
+                          "pdf": {
+                            "0": [
+                              {
+                                "x": 118,
+                                "y": 1385
+                              }
+                            ]
+                          }
+                        },
+                        {
                           "type": "text",
                           "param": "type",
                           "label": "Type",
                           "stacked": true,
                           "cellClassName": "sm-col-6 lg-col-3"
+                        },
+                        {
+                          "type": "calc",
+                          "param": "sizeType",
+                          "label": "Size / Type",
+                          "hidden": true,
+                          "value": "{size} {type}",
+                          "pdf": {
+                            "0": [
+                              {
+                                "x": 118,
+                                "y": 1360,
+                                "w": 225,
+                                "shrinkToFit": true
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "param": "source",
+                          "label": "Source",
+                          "hidden": true,
+                          "pdf": {
+                            "0": [
+                              {
+                                "x": 750,
+                                "y": 1370,
+                                "w": 250,
+                                "align": "right",
+                                "shrinkToFit": true
+                              }
+                            ]
+                          }
                         },
                         {
                           "type": "text",
@@ -3921,13 +4029,6 @@
                         },
                         {
                           "type": "text",
-                          "param": "initiative",
-                          "label": "Initiative",
-                          "stacked": true,
-                          "cellClassName": "sm-col-6 lg-col-3"
-                        },
-                        {
-                          "type": "text",
                           "param": "hp",
                           "label": "HP Max",
                           "stacked": true,
@@ -3946,13 +4047,6 @@
                               }
                             ]
                           }
-                        },
-                        {
-                          "type": "text",
-                          "param": "hp_curr",
-                          "label": "HP Current",
-                          "stacked": true,
-                          "cellClassName": "sm-col-6 lg-col-3"
                         },
                         {
                           "type": "text",
@@ -4541,16 +4635,24 @@
                           "param": "traitCardText",
                           "label": "Trait Card Text",
                           "hidden": true,
-                          "rows": 8,
+                          "rows": 8
+                        },
+                        {
+                          "type": "calc",
+                          "param": "loreTraits",
+                          "label": "Lore Traits",
+                          "hidden": true,
+                          "value": "{languages?\"LANGUAGES: {languages}\\n\\n\":\"\"}{traitCardText}",
                           "pdf": {
                             "1": [
                               {
-                                "x": 90,
-                                "y": 1585,
-                                "w": 875,
-                                "h": 520,
-                                "fontSize": 16,
-                                "valign": "top",
+                                "x": 50,
+                                "y": 1525,
+                                "w": 900,
+                                "h": 1350,
+                                "fontSize": 38,
+                                "align": "right",
+                                "valign": "bottom",
                                 "shrinkToFit": true,
                                 "rotate": 180
                               }
@@ -5391,7 +5493,15 @@
                           "param": "alignment",
                           "label": "Alignment",
                           "stacked": true,
-                          "cellClassName": "sm-col-6 lg-col-3"
+                          "cellClassName": "sm-col-6 lg-col-3",
+                          "pdf": {
+                            "0": [
+                              {
+                                "x": 118,
+                                "y": 1335
+                              }
+                            ]
+                          }
                         },
                         {
                           "type": "text",
@@ -5401,11 +5511,60 @@
                           "cellClassName": "sm-col-6 lg-col-3"
                         },
                         {
+                          "type": "calc",
+                          "param": "crRender",
+                          "label": "CR Render",
+                          "hidden": true,
+                          "value": "{cr?\"CR: {cr}\":\"\"}",
+                          "pdf": {
+                            "0": [
+                              {
+                                "x": 118,
+                                "y": 1385
+                              }
+                            ]
+                          }
+                        },
+                        {
                           "type": "text",
                           "param": "type",
                           "label": "Type",
                           "stacked": true,
                           "cellClassName": "sm-col-6 lg-col-3"
+                        },
+                        {
+                          "type": "calc",
+                          "param": "sizeType",
+                          "label": "Size / Type",
+                          "hidden": true,
+                          "value": "{size} {type}",
+                          "pdf": {
+                            "0": [
+                              {
+                                "x": 118,
+                                "y": 1360,
+                                "w": 225,
+                                "shrinkToFit": true
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "param": "source",
+                          "label": "Source",
+                          "hidden": true,
+                          "pdf": {
+                            "0": [
+                              {
+                                "x": 750,
+                                "y": 1370,
+                                "w": 250,
+                                "align": "right",
+                                "shrinkToFit": true
+                              }
+                            ]
+                          }
                         },
                         {
                           "type": "text",
@@ -5458,13 +5617,6 @@
                         },
                         {
                           "type": "text",
-                          "param": "initiative",
-                          "label": "Initiative",
-                          "stacked": true,
-                          "cellClassName": "sm-col-6 lg-col-3"
-                        },
-                        {
-                          "type": "text",
                           "param": "hp",
                           "label": "HP Max",
                           "stacked": true,
@@ -5483,13 +5635,6 @@
                               }
                             ]
                           }
-                        },
-                        {
-                          "type": "text",
-                          "param": "hp_curr",
-                          "label": "HP Current",
-                          "stacked": true,
-                          "cellClassName": "sm-col-6 lg-col-3"
                         },
                         {
                           "type": "text",
@@ -6078,16 +6223,24 @@
                           "param": "traitCardText",
                           "label": "Trait Card Text",
                           "hidden": true,
-                          "rows": 8,
+                          "rows": 8
+                        },
+                        {
+                          "type": "calc",
+                          "param": "loreTraits",
+                          "label": "Lore Traits",
+                          "hidden": true,
+                          "value": "{languages?\"LANGUAGES: {languages}\\n\\n\":\"\"}{traitCardText}",
                           "pdf": {
                             "1": [
                               {
-                                "x": 90,
-                                "y": 1585,
-                                "w": 875,
-                                "h": 520,
-                                "fontSize": 16,
-                                "valign": "top",
+                                "x": 50,
+                                "y": 1525,
+                                "w": 900,
+                                "h": 1350,
+                                "fontSize": 38,
+                                "align": "right",
+                                "valign": "bottom",
                                 "shrinkToFit": true,
                                 "rotate": 180
                               }

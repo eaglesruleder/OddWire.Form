@@ -170,7 +170,7 @@ function abilityModColumns(m: RawMonster): MonsterRow
     return out;
 }
 
-// Intent: proficient save is stored pre-formatted ('+5'); otherwise fall back to the raw ability modifier
+// Intent: statblocks only need a save when it differs from the base ability modifier; equal/absent saves stay blank
 function saveColumns(m: RawMonster): MonsterRow
 {
     const out: MonsterRow = {};
@@ -179,9 +179,9 @@ function saveColumns(m: RawMonster): MonsterRow
     {
         const proficient = m.save?.[ability];
         const score = m[ability];
+        const mod = typeof score === 'number' ? fmtMod(abilityMod(score)) : '';
 
-        out[`${ability}Save`] = proficient
-            ?? (typeof score === 'number' ? fmtMod(abilityMod(score)) : '');
+        out[`${ability}Save`] = proficient && proficient !== mod ? proficient : '';
     }
 
     return out;

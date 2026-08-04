@@ -82,7 +82,7 @@
               },
               {
                 "x": 190,
-                "y": 1360,
+                "y": 1340,
                 "w": 675,
                 "h": 60,
                 "fontSize": 60,
@@ -98,7 +98,15 @@
           "param": "alignment",
           "label": "Alignment",
           "stacked": true,
-          "cellClassName": "sm-col-6 lg-col-3"
+          "cellClassName": "sm-col-6 lg-col-3",
+          "pdf": {
+            "0": [
+              {
+                "x": 118,
+                "y": 1335
+              }
+            ]
+          }
         },
         {
           "type": "text",
@@ -108,6 +116,21 @@
           "cellClassName": "sm-col-6 lg-col-3"
         },
         {
+          "type": "calc",
+          "param": "crRender",
+          "label": "CR Render",
+          "hidden": true,
+          "value": "{cr?\"CR: {cr}\":\"\"}",
+          "pdf": {
+            "0": [
+              {
+                "x": 118,
+                "y": 1385
+              }
+            ]
+          }
+        },
+        {
           "type": "text",
           "param": "type",
           "label": "Type",
@@ -115,11 +138,38 @@
           "cellClassName": "sm-col-6 lg-col-3"
         },
         {
-          "type": "text",
+          "type": "calc",
           "param": "sizeType",
           "label": "Size / Type",
           "hidden": true,
-          "value": "{size} {type}"
+          "value": "{size} {type}",
+          "pdf": {
+            "0": [
+              {
+                "x": 118,
+                "y": 1360,
+                "w": 225,
+                "shrinkToFit": true
+              }
+            ]
+          }
+        },
+        {
+          "type": "text",
+          "param": "source",
+          "label": "Source",
+          "hidden": true,
+          "pdf": {
+            "0": [
+              {
+                "x": 750,
+                "y": 1370,
+                "w": 230,
+                "align": "right",
+                "shrinkToFit": true
+              }
+            ]
+          }
         },
         {
           "type": "text",
@@ -172,13 +222,6 @@
         },
         {
           "type": "text",
-          "param": "initiative",
-          "label": "Initiative",
-          "stacked": true,
-          "cellClassName": "sm-col-6 lg-col-3"
-        },
-        {
-          "type": "text",
           "param": "hp",
           "label": "HP Max",
           "stacked": true,
@@ -200,13 +243,6 @@
         },
         {
           "type": "text",
-          "param": "hp_curr",
-          "label": "HP Current",
-          "stacked": true,
-          "cellClassName": "sm-col-6 lg-col-3"
-        },
-        {
-          "type": "text",
           "param": "ac",
           "label": "Armor Class",
           "stacked": true,
@@ -214,8 +250,8 @@
           "pdf": {
             "0": [
               {
-                "x": 80,
-                "y": 825,
+                "x": 75,
+                "y": 835,
                 "w": 100,
                 "fontSize": 60,
                 "align": "center",
@@ -292,53 +328,6 @@
           "param": "conditionImm",
           "label": "Cond. Immunities",
           "cellClassName": "sm-col-6 lg-col-3"
-        },
-        {
-          "type": "label",
-          "param": "proficiencySectionTitle",
-          "label": "Proficiencies"
-        },
-        {
-          "type": "checkbox",
-          "param": "profLight",
-          "label": "Light Armor",
-          "stacked": true,
-          "cellClassName": "sm-col-4 lg-col-2"
-        },
-        {
-          "type": "checkbox",
-          "param": "profMedium",
-          "label": "Medium Armor",
-          "stacked": true,
-          "cellClassName": "sm-col-4 lg-col-2"
-        },
-        {
-          "type": "checkbox",
-          "param": "profHeavy",
-          "label": "Heavy Armor",
-          "stacked": true,
-          "cellClassName": "sm-col-4 lg-col-2"
-        },
-        {
-          "type": "checkbox",
-          "param": "profShields",
-          "label": "Shields",
-          "stacked": true,
-          "cellClassName": "sm-col-4 lg-col-2"
-        },
-        {
-          "type": "checkbox",
-          "param": "profSimple",
-          "label": "Simple Weapons",
-          "stacked": true,
-          "cellClassName": "sm-col-4 lg-col-2"
-        },
-        {
-          "type": "checkbox",
-          "param": "profMartial",
-          "label": "Martial Weapons",
-          "stacked": true,
-          "cellClassName": "sm-col-4 lg-col-2"
         },
         {
           "type": "label",
@@ -457,7 +446,7 @@
               "pdf": {
                 "0": [
                   {
-                    "x": 225,
+                    "x": 245,
                     "y": 1162,
                     "w": 100,
                     "fontSize": 60,
@@ -476,7 +465,7 @@
               "pdf": {
                 "0": [
                   {
-                    "x": 250,
+                    "x": 270,
                     "y": 1097,
                     "w": 50,
                     "fontSize": 30,
@@ -827,9 +816,9 @@
           "pdf": {
             "0": [
               {
-                "x": 50,
+                "x": 70,
                 "y": 950,
-                "w": 950,
+                "w": 900,
                 "h": 125,
                 "fontSize": 38,
                 "shrinkToFit": true,
@@ -845,16 +834,24 @@
           "param": "traitCardText",
           "label": "Trait Card Text",
           "hidden": true,
-          "rows": 8,
+          "rows": 8
+        },
+        {
+          "type": "calc",
+          "param": "loreTraits",
+          "label": "Lore Traits",
+          "hidden": true,
+          "value": "{languages?\"LANGUAGES: {languages}\n\n\":\"\"}{traitCardText}",
           "pdf": {
             "1": [
               {
-                "x": 90,
-                "y": 1585,
-                "w": 875,
-                "h": 520,
-                "fontSize": 16,
-                "valign": "top",
+                "x": 50,
+                "y": 1550,
+                "w": 920,
+                "h": 1350,
+                "fontSize": 38,
+                "align": "right",
+                "valign": "bottom",
                 "shrinkToFit": true,
                 "rotate": 180
               }
@@ -1673,11 +1670,11 @@
           "pdf": {
             "1": [
               {
-                "x": 70,
-                "y": 250,
+                "x": 60,
+                "y": 50,
                 "w": 900,
-                "h": 950,
-                "fontSize": 22,
+                "h": 1375,
+                "fontSize": 38,
                 "valign": "top",
                 "shrinkToFit": true
               }
