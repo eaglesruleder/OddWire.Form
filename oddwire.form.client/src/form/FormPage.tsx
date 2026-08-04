@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 
-import type { FormDefinition, InstanceChange, ParamList } from '../_context';
+import type { DisplayParam, FormDefinition, InstanceChange, ParamList } from '../_context';
 
 import { FormContext, InstanceContext, LookupContext, InstanceEntity, FormActionsContext } from '../_context';
 import { StripLayout } from '../_components/layout';
@@ -172,7 +172,7 @@ export function FormPage()
 
         downloadBlob(
             new Blob([JSON.stringify(instance.instance, null, 2)], { type: 'application/json' }),
-            `${fileStem(form)}.instance.json`);
+            `${instanceFileStem(form, instance)}.instance.json`);
 
         setActionsOpen(false);
         setToastMessage('JSON exported');
@@ -338,5 +338,28 @@ function paramList(value: ParamList | undefined): string[]
 
 function fileStem(form: FormDefinition): string
 {
-    return (form.label ?? form.formId ?? 'form').replace(/[^\w.-]+/g, '_');
+    return cleanFileStem(form.label ?? form.formId ?? 'form');
+}
+
+function instanceFileStem(form: FormDefinition, instance: InstanceEntity): string
+{
+    return cleanFileStem(displayParamValue(form.displayParam, instance) ?? fileStem(form));
+}
+
+function displayParamValue(params: DisplayParam[] | undefined, instance: InstanceEntity): string | undefined
+{
+    const param = params?.[0];
+
+    if (typeof param !== 'string')
+        return undefined;
+
+    const value = instance.get(param)?.value;
+    const text = value == null ? '' : String(value).trim();
+
+    return text || undefined;
+}
+
+function cleanFileStem(value: string): string
+{
+    return value.replace(/[^\w.-]+/g, '_');
 }

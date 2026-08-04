@@ -1,6 +1,6 @@
 // PDF box-placement preview.
 //   node tools/box-preview.mjs [formName]     (default: monster-card)
-// Reads src/AppSettings.json + src/_context/data/forms/<form>.json + <form>.png,
+// Reads src/AppSettings.json + src/mods/5etools/forms/<form>/form.json + export/pdf/template.png,
 // then writes tools/box-preview.html — open it in any browser to see each control's
 // pdf box drawn on the template at its resolved fontSize (control override -> settings default),
 // over a coordinate grid. No server needed: the template is inlined as a data URI.
@@ -11,12 +11,13 @@ import { dirname, join } from 'path';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const clientRoot = join(here, '..');
-const formsDir = join(clientRoot, 'src/_context/data/forms');
+const formsDir = join(clientRoot, 'src/mods/5etools/forms');
 
 const formName = process.argv[2] || 'monster-card';
 const settings = JSON.parse(readFileSync(join(clientRoot, 'src/AppSettings.json'), 'utf8'));
-const form = JSON.parse(readFileSync(join(formsDir, `${formName}.json`), 'utf8'));
-const pngB64 = readFileSync(join(formsDir, `${formName}.png`)).toString('base64');
+const formRoot = join(formsDir, formName);
+const form = JSON.parse(readFileSync(join(formRoot, 'form.json'), 'utf8'));
+const pngB64 = readFileSync(join(formRoot, 'export/pdf/template.png')).toString('base64');
 
 const defaultSize = settings.export.pdf.fontSize;
 const grid = settings.export.pdf.showGrid;

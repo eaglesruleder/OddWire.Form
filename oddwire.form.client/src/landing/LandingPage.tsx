@@ -1,7 +1,9 @@
 import { useContext, useReducer, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { SwipeAction, SwipeableList, SwipeableListItem, TrailingActions, Type as SwipeableListType } from 'react-swipeable-list';
+import 'react-swipeable-list/dist/styles.css';
 
 import type { DisplayParam, FormIndexEntry, InstanceIndexEntry, ParamList } from '../_context';
 
@@ -182,6 +184,7 @@ function InstanceLinks({ form, instances, onDeleted }: { form: FormIndexEntry; i
 {
     const { deleteInstance } = useContext(InstanceContext);
     const images = useContext(FormImageContext);
+    const navigate = useNavigate();
     const [zoomSrc, setZoomSrc] = useState<string>();
 
     // Intent: click the list thumbnail → full-size popup. A captured value has an id → load the full-res blob (fall back to
@@ -209,7 +212,7 @@ function InstanceLinks({ form, instances, onDeleted }: { form: FormIndexEntry; i
     };
 
     return (
-        <div className="instance-list">
+        <SwipeableList className="instance-list" fullSwipe threshold={0.35} type={SwipeableListType.IOS}>
             {instances.map(instance =>
             {
                 // Intent: an instance that never overrode the image falls back to the form's shared default (one copy in the
@@ -234,8 +237,13 @@ function InstanceLinks({ form, instances, onDeleted }: { form: FormIndexEntry; i
                     </span>;
 
                 return (
-                    <div key={instance.instanceId} className="instance-row-wrap">
-                        <Link className="instance-row" to={`/form/${form.formId}/${instance.instanceId}`}>
+                    <SwipeableListItem
+                        key={instance.instanceId}
+                        className="instance-row-wrap"
+                        onClick={() => navigate(`/form/${form.formId}/${instance.instanceId}`)}
+                        trailingActions={deleteActions(() => deleteSavedInstance(instance))}
+                    >
+                        <div className="instance-row">
                             {thumb
                             ?   <span className="instance-row-thumbwrap">
                                     <span className="instance-row-content">{main}{details}</span>
@@ -248,16 +256,8 @@ function InstanceLinks({ form, instances, onDeleted }: { form: FormIndexEntry; i
                                 </span>
                             :   <>{main}{details}</>
                             }
-                        </Link>
-                        <Button
-                            size="sm"
-                            variant="outline-danger"
-                            className="instance-row-action"
-                            onClick={() => void deleteSavedInstance(instance)}
-                        >
-                            Delete
-                        </Button>
-                    </div>
+                        </div>
+                    </SwipeableListItem>
                     );
             })}
 
@@ -268,9 +268,16 @@ function InstanceLinks({ form, instances, onDeleted }: { form: FormIndexEntry; i
                     }
                 </Modal.Body>
             </Modal>
-        </div>
+        </SwipeableList>
         );
 }
+
+const deleteActions = (onDelete: () => Promise<void>) =>
+    <TrailingActions>
+        <SwipeAction onClick={() => void onDelete()}>
+            <button type="button" className="instance-swipe-delete">Delete</button>
+        </SwipeAction>
+    </TrailingActions>;
 
 type DisplayDetail =
     | { kind: 'break'; key: string }

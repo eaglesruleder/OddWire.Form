@@ -6,9 +6,8 @@ import ToastContainer from 'react-bootstrap/ToastContainer';
 import { Link } from 'react-router-dom';
 
 import type { FormDefinition, FormIndexEntry } from '../../_context';
-import { FormContext, InstanceContext, PdfTemplateContext, FormImageContext, FORM_DEFAULT_INSTANCE } from '../../_context';
-import type { ControlDef, CapturedImage } from '../../_components/controllist';
-import { captureImage } from '../../_components/controllist/controls/captureImage';
+import { FormContext, InstanceContext, PdfTemplateContext, FormImageContext } from '../../_context';
+import { installFormPackage } from '../../_context/installFormPackage';
 
 import { loadFormPackage } from './formPackages';
 import type { BundledFormPackage } from './formPackages';
@@ -20,7 +19,7 @@ const bundledForms = Object.values(
     {...import.meta.glob('../../_context/data/forms/*.json', { eager: true })
     ,...import.meta.glob('../../mods/*/forms/*.json', { eager: true })
     })
-    .map(module => ({ form: (module as { default: FormDefinition }).default, images: [] }));
+    .map(module => ({ form: (module as { default: FormDefinition }).default, images: [], instances: [] }));
 
 const bundledPackageUrls = Object.values(
     {...import.meta.glob('../../_context/data/forms/*.zip', { eager: true, query: '?url', import: 'default' })
@@ -33,7 +32,7 @@ type FormAction = { label: string; variant: ButtonProps['variant'] };
 export function FormList()
 {
     const { list, saveForm, deleteForm } = useContext(FormContext);
-    const { list: listInstances } = useContext(InstanceContext);
+    const { list: listInstances, save: saveInstance } = useContext(InstanceContext);
     const { saveTemplate, deleteTemplate } = useContext(PdfTemplateContext);
     const images = useContext(FormImageContext);
     const [packages, setPackages] = useState<BundledFormPackage[]>(bundledForms);
@@ -73,11 +72,7 @@ export function FormList()
     {
         try
         {
-            const form = pkg.images.length > 0 ? await installImageDefaults(pkg) : pkg.form;
-            const formId = await saveForm(form);
-
-            if (pkg.template)
-                await saveTemplate(formId, pkg.template.fileName, pkg.template.type, pkg.template.blob);
+            await installFormPackage(pkg, { saveForm, saveInstance, saveTemplate, images });
 
             bumpRender();
         }
@@ -109,40 +104,6 @@ export function FormList()
         {
             setToastMessage(error instanceof Error ? `Delete failed: ${error.message}` : 'Delete failed');
         }
-    };
-
-    // Intent: store each bundled image blob as a form-default (shared, FORM_DEFAULT_INSTANCE-scoped) and return the form with
-    // those { id, thumbnail } values baked onto the matching image controls. Sweeps this form's prior defaults first so a
-    // reinstall/update replaces rather than orphans them.
-    const installImageDefaults = async (pkg: BundledFormPackage): Promise<FormDefinition> =>
-    {
-        const prior = await images.imagesFor({ formId: pkg.form.formId, instanceId: FORM_DEFAULT_INSTANCE });
-        await Promise.all(prior.map(record => images.deleteImage(record.id)));
-
-        const defaults: Record<string, CapturedImage> = {};
-
-        for (const image of pkg.images)
-        {
-            const data = await captureImage(image.blob, image.mime);
-            const id = crypto.randomUUID();
-
-            await images.saveImage(
-                {id
-                ,formId: pkg.form.formId
-                ,instanceId: FORM_DEFAULT_INSTANCE
-                ,param: image.param
-                ,mime: data.mime
-                ,w: data.w
-                ,h: data.h
-                ,blob: data.blob
-                });
-
-            defaults[image.param] = { id, thumbnail: data.thumbnail };
-        }
-
-        const form = structuredClone(pkg.form);
-        applyImageDefaults(form.controls, defaults);
-        return form;
     };
 
     // Intent: not installed → Install; bundled newer → Update (blue); same/older → Refresh (grey reinstall)
@@ -199,22 +160,6 @@ export function FormList()
             </ToastContainer>
         </div>
         );
-}
-
-// Intent: param is flat across the form, so set the default on any image control that matches, at any nesting depth.
-// Recurse only into layout controls' child lists (a radio/dropdown's `controls` is an option list, not ControlDefs).
-const LAYOUT_TYPES = new Set(['collapsible', 'tab', 'popup', 'looper']);
-
-function applyImageDefaults(controls: ControlDef[], defaults: Record<string, CapturedImage>): void
-{
-    for (const control of controls)
-    {
-        if (control.type === 'image' && defaults[control.param])
-            (control as { value: CapturedImage }).value = defaults[control.param];
-
-        if (LAYOUT_TYPES.has(control.type) && Array.isArray((control as { controls?: ControlDef[] }).controls))
-            applyImageDefaults((control as { controls: ControlDef[] }).controls, defaults);
-    }
 }
 
 function mergePackages(packages: BundledFormPackage[]): BundledFormPackage[]

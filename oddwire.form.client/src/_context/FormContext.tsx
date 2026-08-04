@@ -5,18 +5,16 @@ import type { ControlDef } from '../_components/controllist';
 import type { DisplayParam, FormDefinition, FormIndexEntry, ParamList } from './types';
 
 import { instanceStore } from './InstanceContext';
+import { formImageStore } from './FormImageContext';
+import { pdfTemplateStore } from './PdfTemplateContext';
+import { installFormPackage } from './installFormPackage';
 import { upsert } from './storeUtils';
+import { loadFormPackage } from '../settings/FormManager/formPackages';
 import contactForm from './data/forms/contactform.json';
-import monsterCardForm from '../mods/5etools/forms/monster-card.json';
 import ootaSession1Form from '../mods/5etools/forms/oota-session1.json';
+import monsterCardPackageUrl from '../mods/5etools/forms/monster-card.zip?url';
 
 const INDEX_KEY = 'index';
-
-const seedForms =
-    [contactForm
-    ,monsterCardForm
-    ,ootaSession1Form
-    ] as unknown as FormDefinition[];
 
 const storage = localforage.createInstance({ name: 'oddwire.form', storeName: 'forms' });
 
@@ -80,8 +78,11 @@ class FormStore implements FormContextValue
         this.index = await storage.getItem<FormIndexEntry[]>(INDEX_KEY) ?? [];
 
         if (this.index.length === 0)
-            for (const form of seedForms)
-                await this.saveForm(form);
+        {
+            await this.saveForm(contactForm as unknown as FormDefinition);
+            await this.installDefaultPackage(monsterCardPackageUrl);
+            await this.saveForm(ootaSession1Form as unknown as FormDefinition);
+        }
 
         this.initialised = true;
     }
@@ -137,6 +138,16 @@ class FormStore implements FormContextValue
         this.index = this.index.filter(entry => entry.formId !== formId);
         await storage.setItem(INDEX_KEY, this.index);
         await instanceStore.deleteFormInstances(formId);
+    };
+
+    private installDefaultPackage = async (url: string): Promise<void> =>
+    {
+        await installFormPackage(await loadFormPackage(url),
+            {saveForm: this.saveForm
+            ,saveInstance: instanceStore.save
+            ,saveTemplate: pdfTemplateStore.saveTemplate
+            ,images: formImageStore
+            });
     };
 
     private refreshIndex = async (form: FormDefinition, labels = controlLabels(form.controls)): Promise<void> =>
