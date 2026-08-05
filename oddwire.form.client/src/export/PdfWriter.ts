@@ -126,7 +126,11 @@ export class PdfWriter
         const lineHeight = this.font.heightAtSize(size);
         const bottomBaseline = alignedY(box, lines.length * lineHeight);   // baseline of the last (bottom) line
 
-        lines.forEach((line, index) =>
+        const placedLines = normaliseRotation(box.rotate) === 180
+            ? [...lines].reverse()
+            : lines;
+
+        placedLines.forEach((line, index) =>
         {
             const width = this.font.widthOfTextAtSize(line, size);
             const x = alignedX(box, width);
