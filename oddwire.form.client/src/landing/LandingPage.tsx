@@ -1,7 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useContext, useReducer, useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { SwipeAction, SwipeableList, SwipeableListItem, TrailingActions, Type as SwipeableListType } from 'react-swipeable-list';
+import 'react-swipeable-list/dist/styles.css';
 
 import type { DisplayParam, FormIndexEntry, InstanceIndexEntry, ParamList } from '../_context';
 
@@ -16,17 +18,10 @@ export function LandingPage()
     const { list: listForms } = useContext(FormContext);
     const { list: listInstances } = useContext(InstanceContext);
     const [searchParams] = useSearchParams();
-
-    const [expandedFormId, setExpandedFormId] = useState<string | null>(() => searchParams.get('FormID') ?? searchParams.get('formId'));
-
     const forms = listForms();
-    const requestedForm = requestedFormId(forms, searchParams);
 
-    useEffect(() =>
-    {
-        if (requestedForm)
-            setExpandedFormId(requestedForm.formId);
-    }, [requestedForm?.formId]);
+    const [expandedFormId, setExpandedFormId] = useState<string | null>(() => initialExpandedFormId(forms, searchParams));
+    const [, bumpRender] = useReducer(tick => tick + 1, 0);
 
     const toggle = (formId: string) =>
         setExpandedFormId(current => current === formId ? null : formId);
@@ -38,13 +33,19 @@ export function LandingPage()
             <div className="d-flex flex-column gap-2">
                 {forms.map(form =>
                     <div key={form.formId} className="d-flex flex-column gap-2">
-                        <Button variant="outline-primary" onClick={() => toggle(form.formId)}>
-                            {form.label ?? form.formId}
-                            {form.version ? <span className="text-muted"> v{form.version}</span> : null}
-                        </Button>
+                        <div className="d-flex gap-2">
+                            <Button className="fill d-flex justify-content-between align-items-center" variant="outline-primary" onClick={() => toggle(form.formId)}>
+                                <span>
+                                    {form.label ?? form.formId}
+                                    {form.version ? <span className="text-muted"> v{form.version}</span> : null}
+                                </span>
+                                <span className="text-muted">{listInstances(form.formId).length}</span>
+                            </Button>
+                            <Link className="btn btn-outline-secondary" to={`/form/${form.formId}`}>New</Link>
+                        </div>
 
                         {expandedFormId === form.formId
-                        ?   <InstanceList form={form} instances={listInstances(form.formId)} searchParams={searchParams} />
+                        ?   <InstanceList form={form} instances={listInstances(form.formId)} searchParams={searchParams} onDeleted={bumpRender} />
                         :   null}
                     </div>
                     )}
@@ -67,7 +68,13 @@ function requestedFormId(forms: FormIndexEntry[], searchParams: URLSearchParams)
     return forms.find(form => form.formId === requested || form.label === requested);
 }
 
-function InstanceList({ form, instances, searchParams }: { form: FormIndexEntry; instances: InstanceIndexEntry[]; searchParams: URLSearchParams })
+function initialExpandedFormId(forms: FormIndexEntry[], searchParams: URLSearchParams): string | null
+{
+    return requestedFormId(forms, searchParams)?.formId
+        ?? (forms.length === 1 ? forms[0].formId : null);
+}
+
+function InstanceList({ form, instances, searchParams, onDeleted }: { form: FormIndexEntry; instances: InstanceIndexEntry[]; searchParams: URLSearchParams; onDeleted: () => void })
 {
     const filterParams = form.filterParam ?? [];
     const orderParams = paramList(form.orderParam);
@@ -130,14 +137,18 @@ function InstanceList({ form, instances, searchParams }: { form: FormIndexEntry;
                         </Button>
 
                         {(isGroupOpen(group.label, groupOpen, routeGroupFilters)) &&
-                        <InstanceLinks form={form} instances={group.instances} />
+                        <InstanceLinks form={form} instances={group.instances} onDeleted={onDeleted} />
                         }
                     </div>
-                :   <InstanceLinks key={group.label} form={form} instances={group.instances} />
+                :   <InstanceLinks key={group.label} form={form} instances={group.instances} onDeleted={onDeleted} />
                 )}
 
             {ordered.length === 0 && instances.length > 0
             ?   <span className="text-muted">No instances match the current filters.</span>
+            :   null}
+
+            {instances.length === 0
+            ?   <span className="text-muted">No saved instances yet.</span>
             :   null}
 
             <Link to={`/form/${form.formId}`}>+ New instance</Link>
@@ -169,9 +180,11 @@ function isGroupOpen(label: string, groupOpen: Record<string, boolean>, routeGro
     return routeLabel !== '' && normaliseRouteValue(label) === normaliseRouteValue(routeLabel);
 }
 
-function InstanceLinks({ form, instances }: { form: FormIndexEntry; instances: InstanceIndexEntry[] })
+function InstanceLinks({ form, instances, onDeleted }: { form: FormIndexEntry; instances: InstanceIndexEntry[]; onDeleted: () => void })
 {
+    const { deleteInstance } = useContext(InstanceContext);
     const images = useContext(FormImageContext);
+    const navigate = useNavigate();
     const [zoomSrc, setZoomSrc] = useState<string>();
 
     // Intent: click the list thumbnail → full-size popup. A captured value has an id → load the full-res blob (fall back to
@@ -184,8 +197,22 @@ function InstanceLinks({ form, instances }: { form: FormIndexEntry; instances: I
             setZoomSrc(value);
     };
 
+    const deleteSavedInstance = async (instance: InstanceIndexEntry) =>
+    {
+        const title = displayTitle(instance, form.displayParam);
+
+        if (!window.confirm(`Delete instance "${title}"?`))
+            return;
+
+        const ownedImages = await images.imagesFor({ formId: form.formId, instanceId: instance.instanceId });
+
+        await Promise.all(ownedImages.map(record => images.deleteImage(record.id)));
+        await deleteInstance(instance.instanceId);
+        onDeleted();
+    };
+
     return (
-        <div className="instance-list">
+        <SwipeableList className="instance-list" fullSwipe threshold={0.35} type={SwipeableListType.IOS}>
             {instances.map(instance =>
             {
                 // Intent: an instance that never overrode the image falls back to the form's shared default (one copy in the
@@ -210,20 +237,27 @@ function InstanceLinks({ form, instances }: { form: FormIndexEntry; instances: I
                     </span>;
 
                 return (
-                    <Link key={instance.instanceId} className="instance-row" to={`/form/${form.formId}/${instance.instanceId}`}>
-                        {thumb
-                        ?   <span className="instance-row-thumbwrap">
-                                <span className="instance-row-content">{main}{details}</span>
-                                <img
-                                    className="instance-row-thumb"
-                                    src={thumb}
-                                    alt=""
-                                    onClick={e => { e.preventDefault(); e.stopPropagation(); void openZoom(thumbValue); }}
-                                />
-                            </span>
-                        :   <>{main}{details}</>
-                        }
-                    </Link>
+                    <SwipeableListItem
+                        key={instance.instanceId}
+                        className="instance-row-wrap"
+                        onClick={() => navigate(`/form/${form.formId}/${instance.instanceId}`)}
+                        trailingActions={deleteActions(() => deleteSavedInstance(instance))}
+                    >
+                        <div className="instance-row">
+                            {thumb
+                            ?   <span className="instance-row-thumbwrap">
+                                    <span className="instance-row-content">{main}{details}</span>
+                                    <img
+                                        className="instance-row-thumb"
+                                        src={thumb}
+                                        alt=""
+                                        onClick={e => { e.preventDefault(); e.stopPropagation(); void openZoom(thumbValue); }}
+                                    />
+                                </span>
+                            :   <>{main}{details}</>
+                            }
+                        </div>
+                    </SwipeableListItem>
                     );
             })}
 
@@ -234,9 +268,16 @@ function InstanceLinks({ form, instances }: { form: FormIndexEntry; instances: I
                     }
                 </Modal.Body>
             </Modal>
-        </div>
+        </SwipeableList>
         );
 }
+
+const deleteActions = (onDelete: () => Promise<void>) =>
+    <TrailingActions>
+        <SwipeAction onClick={() => void onDelete()}>
+            <button type="button" className="instance-swipe-delete">Delete</button>
+        </SwipeAction>
+    </TrailingActions>;
 
 type DisplayDetail =
     | { kind: 'break'; key: string }
@@ -295,12 +336,6 @@ function trimBreaks(details: DisplayDetail[]): DisplayDetail[]
         details.pop();
 
     return details;
-}
-
-export function displayLabel(display: Record<string, unknown>): string
-{
-    const values = Object.values(display).filter(value => value !== undefined && value !== null && value !== '');
-    return values.length ? values.join(' · ') : 'Untitled instance';
 }
 
 function formatDate(iso: string): string

@@ -126,7 +126,11 @@ export class PdfWriter
         const lineHeight = this.font.heightAtSize(size);
         const bottomBaseline = alignedY(box, lines.length * lineHeight);   // baseline of the last (bottom) line
 
-        lines.forEach((line, index) =>
+        const placedLines = normaliseRotation(box.rotate) === 180
+            ? [...lines].reverse()
+            : lines;
+
+        placedLines.forEach((line, index) =>
         {
             const width = this.font.widthOfTextAtSize(line, size);
             const x = alignedX(box, width);
@@ -315,34 +319,36 @@ function alignedX(box: ControlPdfBox, textWidth: number): number
     }
 }
 
-// Intent: greedy word-wrap to maxWidth; a single word wider than the box is left on its own line rather than dropped
-function wrapLines(font: PDFFont, text: string, size: number, maxWidth: number): string[]
-{
-    const words = text.split(/\s+/).filter(Boolean);
-
-    if (words.length === 0)
-        return [text];
-
+// Intent: preserve authored line breaks; wrap each explicit line independently,
+// including empty lines used as paragraph spacing.
+function wrapLines(font: PDFFont, text: string, size: number, maxWidth: number): string[] {
     const lines: string[] = [];
-    let line = '';
 
-    for (const word of words)
-    {
-        const candidate = line ? `${line} ${word}` : word;
-
-        if (!line || font.widthOfTextAtSize(candidate, size) <= maxWidth)
-            line = candidate;
-        else
-        {
-            lines.push(line);
-            line = word;
+    for (const sourceLine of text.split(/\r\n|\r|\n/)) {
+        if (sourceLine === '') {
+            lines.push('');
+            continue;
         }
+
+        const words = sourceLine.split(/\s+/).filter(Boolean);
+        let line = '';
+
+        for (const word of words) {
+            const candidate = line ? `${line} ${word}` : word;
+
+            if (!line || font.widthOfTextAtSize(candidate, size) <= maxWidth)
+                line = candidate;
+            else {
+                lines.push(line);
+                line = word;
+            }
+        }
+
+        if (line)
+            lines.push(line);
     }
 
-    if (line)
-        lines.push(line);
-
-    return lines;
+    return lines.length > 0 ? lines : [''];
 }
 
 // Intent: trim characters until text + '…' fits maxWidth

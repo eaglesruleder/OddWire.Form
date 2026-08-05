@@ -1,14 +1,15 @@
 import JSZip from 'jszip';
 
-import type { FormDefinition, PdfTemplateRecord } from '../../_context';
+import type { FormDefinition, FormInstance, PdfTemplateRecord } from '../../_context';
 
 export type BundledFormPackage = {
     form: FormDefinition;
     template?: Omit<PdfTemplateRecord, 'formId'>;
-    images: BundledImage[];   // images/<param>.<ext> → default value for the image control of that param
+    images: BundledImage[];
+    instances: FormInstance[];
     };
 
-// Intent: a package image maps to a control by filename stem — images/logo.png installs as the default of the 'logo' control
+// Intent: a package image maps to a control by filename stem; images/logo.png installs as the default of the 'logo' control
 export type BundledImage = { param: string; fileName: string; mime: string; blob: Blob };
 
 export async function loadFormPackage(url: string): Promise<BundledFormPackage>
@@ -32,6 +33,7 @@ export async function loadFormPackage(url: string): Promise<BundledFormPackage>
                     }
             :   undefined,
         images: await imageEntries(zip),
+        instances: await instanceEntries(zip, form.formId)
         };
 }
 
@@ -54,7 +56,49 @@ async function imageEntries(zip: JSZip): Promise<BundledImage[]>
         })));
 }
 
-// Intent: control param is the image filename without its extension (images/logo.png → 'logo')
+async function instanceEntries(zip: JSZip, formId: string): Promise<FormInstance[]>
+{
+    const rootEntry = zip.file('instances.json');
+    const entries = Object.values(zip.files)
+        .filter(entry => !entry.dir && normalisePath(entry.name).startsWith('instances/') && entry.name.toLowerCase().endsWith('.json'));
+
+    const groups = await Promise.all(
+        [...(rootEntry ? [rootEntry] : []), ...entries]
+            .map(async entry => normaliseInstances(JSON.parse(await entry.async('string')), formId, entry.name))
+        );
+
+    return groups.flat();
+}
+
+function normaliseInstances(value: unknown, formId: string, path: string): FormInstance[]
+{
+    const values = Array.isArray(value) ? value : [value];
+
+    return values.map((instance, index) =>
+    {
+        const body = instance as FormInstance;
+
+        return {
+            ...body,
+            formId,
+            instanceId: body.instanceId ?? stableInstanceId(formId, path, index),
+            controls: Array.isArray(body.controls) ? body.controls : []
+        };
+    });
+}
+
+function stableInstanceId(formId: string, path: string, index: number): string
+{
+    const stem = fileName(path)
+        .replace(/\.json$/i, '')
+        .replace(/[^\w.-]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        || 'instance';
+
+    return `seed-${formId}-${stem}-${index + 1}`;
+}
+
+// Intent: control param is the image filename without its extension (images/logo.png -> 'logo')
 function paramOf(path: string): string
 {
     return fileName(path).replace(/\.[^.]+$/, '');

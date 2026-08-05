@@ -5,22 +5,16 @@ import type { ControlDef } from '../_components/controllist';
 import type { DisplayParam, FormDefinition, FormIndexEntry, ParamList } from './types';
 
 import { instanceStore } from './InstanceContext';
+import { formImageStore } from './FormImageContext';
+import { pdfTemplateStore } from './PdfTemplateContext';
+import { installFormPackage } from './installFormPackage';
 import { upsert } from './storeUtils';
-import testForm from './data/forms/testform.json';
-import tabForm from './data/forms/tabform.json';
-import layoutTestForm from './data/forms/layouttestform.json';
-import vehicleForm from './data/forms/vehicleform.json';
-import ootaSession1Form from '../mods/5etools/forms/oota-session1.json';
+import { loadFormPackage } from '../settings/FormManager/formPackages';
+import contactForm from './data/forms/contactform.json';
+import monsterCardPackageUrl from '../mods/5etools/forms/monster-card.zip?url';
+import ootaSession1PackageUrl from '../mods/5etools/forms/oota-session1.zip?url';
 
 const INDEX_KEY = 'index';
-
-const seedForms =
-    [testForm
-    ,tabForm
-    ,layoutTestForm
-    ,vehicleForm
-    ,ootaSession1Form
-    ] as unknown as FormDefinition[];
 
 const storage = localforage.createInstance({ name: 'oddwire.form', storeName: 'forms' });
 
@@ -68,6 +62,7 @@ export type FormContextValue = {
     getForm: (formId: string) => Promise<FormDefinition | undefined>;
     list: () => FormIndexEntry[];
     saveForm: (form: FormDefinition) => Promise<string>;
+    deleteForm: (formId: string) => Promise<void>;
     };
 
 class FormStore implements FormContextValue
@@ -83,8 +78,11 @@ class FormStore implements FormContextValue
         this.index = await storage.getItem<FormIndexEntry[]>(INDEX_KEY) ?? [];
 
         if (this.index.length === 0)
-            for (const form of seedForms)
-                await this.saveForm(form);
+        {
+            await this.saveForm(contactForm as unknown as FormDefinition);
+            await this.installDefaultPackage(monsterCardPackageUrl);
+            await this.installDefaultPackage(ootaSession1PackageUrl);
+        }
 
         this.initialised = true;
     }
@@ -132,6 +130,24 @@ class FormStore implements FormContextValue
             await instanceStore.reindexForm(form.formId);
 
         return form.formId;
+    };
+
+    deleteForm = async (formId: string): Promise<void> =>
+    {
+        await storage.removeItem(formId);
+        this.index = this.index.filter(entry => entry.formId !== formId);
+        await storage.setItem(INDEX_KEY, this.index);
+        await instanceStore.deleteFormInstances(formId);
+    };
+
+    private installDefaultPackage = async (url: string): Promise<void> =>
+    {
+        await installFormPackage(await loadFormPackage(url),
+            {saveForm: this.saveForm
+            ,saveInstance: instanceStore.save
+            ,saveTemplate: pdfTemplateStore.saveTemplate
+            ,images: formImageStore
+            });
     };
 
     private refreshIndex = async (form: FormDefinition, labels = controlLabels(form.controls)): Promise<void> =>

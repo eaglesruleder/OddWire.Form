@@ -8,10 +8,10 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const clientRoot = path.resolve(here, '..');
 
 const defaults = {
-    cover: path.resolve(clientRoot, 'src/mods/5etools/forms/Cover.png'),
-    page: path.resolve(clientRoot, 'src/mods/5etools/forms/Page.png'),
-    stat: path.resolve(clientRoot, 'src/mods/5etools/forms/Monster Stats.png'),
-    out: path.resolve(clientRoot, 'src/mods/5etools/forms/monster-card-pair-template.pdf'),
+    cover: path.resolve(clientRoot, 'src/mods/5etools/forms/monster-card/export/pdf/template_cover.png'),
+    page: path.resolve(clientRoot, 'src/mods/5etools/forms/monster-card/export/pdf/tempalte_page.png'),
+    stat: path.resolve(clientRoot, 'src/mods/5etools/forms/monster-card/export/pdf/template_stats.png'),
+    out: path.resolve(clientRoot, 'src/mods/5etools/forms/monster-card/export/pdf/template.pdf'),
     };
 
 const args = parseArgs(process.argv.slice(2));

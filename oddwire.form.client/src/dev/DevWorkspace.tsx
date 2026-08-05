@@ -1,7 +1,7 @@
 import { useContext, useEffect, useReducer, useRef, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 
-import type { FormDefinition, InstanceChange, LookupContextValue } from '../_context';
+import type { DisplayParam, FormDefinition, InstanceChange, LookupContextValue } from '../_context';
 import { FormContext, LookupContext, InstanceEntity } from '../_context';
 import { StripLayout } from '../_components/layout';
 import { ControlList, ControlTab, ControlError, DbContext, buildRootTabSections } from '../_components/controllist';
@@ -98,7 +98,7 @@ export function DevWorkspace()
         downloadBlob(new Blob([text], { type: 'application/json' }), `${fileStem(form)}.form.json`);
 
     const downloadInstance = () =>
-        downloadBlob(new Blob([JSON.stringify(instance.instance, null, 2)], { type: 'application/json' }), `${fileStem(form)}.instance.json`);
+        downloadBlob(new Blob([JSON.stringify(instance.instance, null, 2)], { type: 'application/json' }), `${instanceFileStem(form, instance)}.instance.json`);
 
     return (
         <StripLayout left="←" leftLink="/" title="Form Dev Workspace">
@@ -171,5 +171,28 @@ function freshInstance(formId: string): InstanceEntity
 
 function fileStem(form: FormDefinition | null): string
 {
-    return (form?.label ?? form?.formId ?? 'form').replace(/[^\w.-]+/g, '_');
+    return cleanFileStem(form?.label ?? form?.formId ?? 'form');
+}
+
+function instanceFileStem(form: FormDefinition | null, instance: InstanceEntity): string
+{
+    return cleanFileStem(displayParamValue(form?.displayParam, instance) ?? fileStem(form));
+}
+
+function displayParamValue(params: DisplayParam[] | undefined, instance: InstanceEntity): string | undefined
+{
+    const param = params?.[0];
+
+    if (typeof param !== 'string')
+        return undefined;
+
+    const value = instance.get(param)?.value;
+    const text = value == null ? '' : String(value).trim();
+
+    return text || undefined;
+}
+
+function cleanFileStem(value: string): string
+{
+    return value.replace(/[^\w.-]+/g, '_');
 }

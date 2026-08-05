@@ -1,8 +1,18 @@
 .instance-list {
-  display: flex;
-  flex-direction: column;
   margin-left: 1rem;
   border-top: 1px solid var(--bs-border-color);
+}
+
+.instance-row-wrap {
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+.instance-swipe-delete {
+  width: 96px;
+  border: 0;
+  background: var(--bs-danger);
+  color: #fff;
+  font-weight: 600;
 }
 
 .instance-order-button {
@@ -15,11 +25,12 @@
 .instance-row {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
   gap: 0.3rem;
   padding: 0.65rem 0.75rem;
-  border-bottom: 1px solid var(--bs-border-color);
   color: var(--bs-body-color);
   text-decoration: none;
+  min-width: 0;
 }
 
 .instance-row:hover,
@@ -93,3 +104,4 @@
 .instance-row-detail-label {
   color: var(--bs-tertiary-color);
 }
+

@@ -3,14 +3,15 @@ import Button from 'react-bootstrap/Button';
 import type { ButtonProps } from 'react-bootstrap/Button';
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
+import { Link } from 'react-router-dom';
 
-import type { FormDefinition } from '../../_context';
-import { FormContext, PdfTemplateContext, FormImageContext, FORM_DEFAULT_INSTANCE } from '../../_context';
-import type { ControlDef, CapturedImage } from '../../_components/controllist';
-import { captureImage } from '../../_components/controllist/controls/captureImage';
+import type { FormDefinition, FormIndexEntry } from '../../_context';
+import { FormContext, InstanceContext, PdfTemplateContext, FormImageContext } from '../../_context';
+import { installFormPackage } from '../../_context/installFormPackage';
 
 import { loadFormPackage } from './formPackages';
 import type { BundledFormPackage } from './formPackages';
+import './formManager.css';
 
 // Intent: the install catalogue is every loose JSON form + zip package, from both the shared data/forms folder and each
 // mod's own mods/<mod>/forms folder — no manual list. Mods own their bundled forms (e.g. 5etools ships oota + monster-card).
@@ -18,7 +19,7 @@ const bundledForms = Object.values(
     {...import.meta.glob('../../_context/data/forms/*.json', { eager: true })
     ,...import.meta.glob('../../mods/*/forms/*.json', { eager: true })
     })
-    .map(module => ({ form: (module as { default: FormDefinition }).default, images: [] }));
+    .map(module => ({ form: (module as { default: FormDefinition }).default, images: [], instances: [] }));
 
 const bundledPackageUrls = Object.values(
     {...import.meta.glob('../../_context/data/forms/*.zip', { eager: true, query: '?url', import: 'default' })
@@ -30,8 +31,9 @@ type FormAction = { label: string; variant: ButtonProps['variant'] };
 
 export function FormList()
 {
-    const { list, saveForm } = useContext(FormContext);
-    const { saveTemplate } = useContext(PdfTemplateContext);
+    const { list, saveForm, deleteForm } = useContext(FormContext);
+    const { list: listInstances, save: saveInstance } = useContext(InstanceContext);
+    const { saveTemplate, deleteTemplate } = useContext(PdfTemplateContext);
     const images = useContext(FormImageContext);
     const [packages, setPackages] = useState<BundledFormPackage[]>(bundledForms);
     const [toastMessage, setToastMessage] = useState<string>();
@@ -62,17 +64,15 @@ export function FormList()
         return () => { active = false; };
     }, []);
 
-    const installed = new Map(list().map(entry => [entry.formId, entry.version]));
+    const installedForms = [...list()]
+        .sort((a, b) => (a.label ?? a.formId).localeCompare(b.label ?? b.formId));
+    const installedVersions = new Map(installedForms.map(entry => [entry.formId, entry.version]));
 
     const install = async (pkg: BundledFormPackage) =>
     {
         try
         {
-            const form = pkg.images.length > 0 ? await installImageDefaults(pkg) : pkg.form;
-            const formId = await saveForm(form);
-
-            if (pkg.template)
-                await saveTemplate(formId, pkg.template.fileName, pkg.template.type, pkg.template.blob);
+            await installFormPackage(pkg, { saveForm, saveInstance, saveTemplate, images });
 
             bumpRender();
         }
@@ -82,60 +82,69 @@ export function FormList()
         }
     };
 
-    // Intent: store each bundled image blob as a form-default (shared, FORM_DEFAULT_INSTANCE-scoped) and return the form with
-    // those { id, thumbnail } values baked onto the matching image controls. Sweeps this form's prior defaults first so a
-    // reinstall/update replaces rather than orphans them.
-    const installImageDefaults = async (pkg: BundledFormPackage): Promise<FormDefinition> =>
+    const deleteInstalledForm = async (form: FormIndexEntry) =>
     {
-        const prior = await images.imagesFor({ formId: pkg.form.formId, instanceId: FORM_DEFAULT_INSTANCE });
-        await Promise.all(prior.map(record => images.deleteImage(record.id)));
+        const label = form.label ?? form.formId;
+        const count = listInstances(form.formId).length;
+        const suffix = count === 1 ? '1 saved instance' : `${count} saved instances`;
 
-        const defaults: Record<string, CapturedImage> = {};
+        if (!window.confirm(`Delete "${label}" and ${suffix}?`))
+            return;
 
-        for (const image of pkg.images)
+        try
         {
-            const data = await captureImage(image.blob, image.mime);
-            const id = crypto.randomUUID();
+            const ownedImages = await images.imagesFor({ formId: form.formId });
 
-            await images.saveImage(
-                {id
-                ,formId: pkg.form.formId
-                ,instanceId: FORM_DEFAULT_INSTANCE
-                ,param: image.param
-                ,mime: data.mime
-                ,w: data.w
-                ,h: data.h
-                ,blob: data.blob
-                });
-
-            defaults[image.param] = { id, thumbnail: data.thumbnail };
+            await Promise.all(ownedImages.map(record => images.deleteImage(record.id)));
+            await deleteTemplate(form.formId);
+            await deleteForm(form.formId);
+            bumpRender();
         }
-
-        const form = structuredClone(pkg.form);
-        applyImageDefaults(form.controls, defaults);
-        return form;
+        catch (error)
+        {
+            setToastMessage(error instanceof Error ? `Delete failed: ${error.message}` : 'Delete failed');
+        }
     };
 
     // Intent: not installed → Install; bundled newer → Update (blue); same/older → Refresh (grey reinstall)
     const actionFor = (form: FormDefinition): FormAction =>
     {
-        if (!installed.has(form.formId))
+        if (!installedVersions.has(form.formId))
             return { label: 'Install', variant: 'outline-primary' };
 
-        return compareVersions(form.version, installed.get(form.formId)) > 0
+        return compareVersions(form.version, installedVersions.get(form.formId)) > 0
             ? { label: 'Update', variant: 'outline-primary' }
             : { label: 'Refresh', variant: 'outline-secondary' };
     };
 
     return (
         <div className="flex column gap">
+            <div className="form-manager-section-title">Installed</div>
+            {installedForms.map(form =>
+                <div key={form.formId} className="form-manager-row">
+                    <span className="fill">
+                        {form.label ?? form.formId}
+                        {form.version ? <span className="text-muted"> v{form.version}</span> : null}
+                        <span className="text-muted"> · {listInstances(form.formId).length} instances</span>
+                    </span>
+                    <Link className="btn btn-sm btn-outline-primary" to={`/form/${form.formId}`}>New</Link>
+                    <Link className="btn btn-sm btn-outline-secondary" to={`/?FormID=${encodeURIComponent(form.formId)}`}>Open</Link>
+                    <Button size="sm" variant="outline-danger" onClick={() => void deleteInstalledForm(form)}>Delete</Button>
+                </div>
+                )}
+
+            {installedForms.length === 0
+            ?   <span className="text-muted">No installed forms.</span>
+            :   null}
+
+            <div className="form-manager-section-title mt-2">Bundled</div>
             {packages.map(pkg =>
             {
                 const form = pkg.form;
                 const action = actionFor(form);
 
                 return (
-                    <div key={form.formId} className="flex items-center gap">
+                    <div key={form.formId} className="form-manager-row">
                         <span className="fill">
                             {form.label ?? form.formId}
                             {form.version ? <span className="text-muted"> v{form.version}</span> : null}
@@ -151,22 +160,6 @@ export function FormList()
             </ToastContainer>
         </div>
         );
-}
-
-// Intent: param is flat across the form, so set the default on any image control that matches, at any nesting depth.
-// Recurse only into layout controls' child lists (a radio/dropdown's `controls` is an option list, not ControlDefs).
-const LAYOUT_TYPES = new Set(['collapsible', 'tab', 'popup', 'looper']);
-
-function applyImageDefaults(controls: ControlDef[], defaults: Record<string, CapturedImage>): void
-{
-    for (const control of controls)
-    {
-        if (control.type === 'image' && defaults[control.param])
-            (control as { value: CapturedImage }).value = defaults[control.param];
-
-        if (LAYOUT_TYPES.has(control.type) && Array.isArray((control as { controls?: ControlDef[] }).controls))
-            applyImageDefaults((control as { controls: ControlDef[] }).controls, defaults);
-    }
 }
 
 function mergePackages(packages: BundledFormPackage[]): BundledFormPackage[]

@@ -1,7 +1,7 @@
 {
   "formId": "44444444-4444-4444-8444-444444444444",
   "label": "Monster Reference Card",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "displayParam": [
     "name",
     "hp",
@@ -192,27 +192,6 @@
                 "w": 100,
                 "h": 60,
                 "fontSize": 60,
-                "align": "center",
-                "valign": "middle",
-                "shrinkToFit": true
-              }
-            ]
-          }
-        },
-        {
-          "type": "text",
-          "param": "speedExtra",
-          "label": "Other Speeds",
-          "stacked": true,
-          "cellClassName": "sm-col-6 lg-col-3",
-          "pdf": {
-            "0": [
-              {
-                "x": 220,
-                "y": 690,
-                "w": 190,
-                "h": 32,
-                "fontSize": 10,
                 "align": "center",
                 "valign": "middle",
                 "shrinkToFit": true
@@ -857,237 +836,6 @@
               }
             ]
           }
-        },
-        {
-          "type": "text",
-          "param": "action1Name",
-          "label": "action1 Name",
-          "hidden": true,
-          "pdf": {
-            "0": [
-              {
-                "x": 68,
-                "y": 602,
-                "w": 455,
-                "h": 34,
-                "fontSize": 17,
-                "valign": "middle",
-                "shrinkToFit": true
-              }
-            ]
-          }
-        },
-        {
-          "type": "text",
-          "param": "action1ToHit",
-          "label": "action1 To Hit",
-          "hidden": true,
-          "pdf": {
-            "0": [
-              {
-                "x": 552,
-                "y": 600,
-                "w": 85,
-                "h": 42,
-                "fontSize": 18,
-                "align": "center",
-                "valign": "middle",
-                "shrinkToFit": true
-              }
-            ]
-          }
-        },
-        {
-          "type": "text",
-          "param": "action1Damage",
-          "label": "action1 Damage",
-          "hidden": true,
-          "pdf": {
-            "0": [
-              {
-                "x": 705,
-                "y": 600,
-                "w": 290,
-                "h": 42,
-                "fontSize": 16,
-                "valign": "middle",
-                "shrinkToFit": true
-              }
-            ]
-          }
-        },
-        {
-          "type": "textarea",
-          "param": "action1Text",
-          "label": "action1 Text",
-          "hidden": true,
-          "rows": 2,
-          "pdf": {
-            "0": [
-              {
-                "x": 68,
-                "y": 552,
-                "w": 925,
-                "h": 36,
-                "fontSize": 9,
-                "shrinkToFit": true
-              }
-            ]
-          }
-        },
-        {
-          "type": "text",
-          "param": "action2Name",
-          "label": "action2 Name",
-          "hidden": true,
-          "pdf": {
-            "0": [
-              {
-                "x": 68,
-                "y": 386,
-                "w": 455,
-                "h": 34,
-                "fontSize": 17,
-                "valign": "middle",
-                "shrinkToFit": true
-              }
-            ]
-          }
-        },
-        {
-          "type": "text",
-          "param": "action2ToHit",
-          "label": "action2 To Hit",
-          "hidden": true,
-          "pdf": {
-            "0": [
-              {
-                "x": 552,
-                "y": 384,
-                "w": 85,
-                "h": 42,
-                "fontSize": 18,
-                "align": "center",
-                "valign": "middle",
-                "shrinkToFit": true
-              }
-            ]
-          }
-        },
-        {
-          "type": "text",
-          "param": "action2Damage",
-          "label": "action2 Damage",
-          "hidden": true,
-          "pdf": {
-            "0": [
-              {
-                "x": 705,
-                "y": 384,
-                "w": 290,
-                "h": 42,
-                "fontSize": 16,
-                "valign": "middle",
-                "shrinkToFit": true
-              }
-            ]
-          }
-        },
-        {
-          "type": "textarea",
-          "param": "action2Text",
-          "label": "action2 Text",
-          "hidden": true,
-          "rows": 2,
-          "pdf": {
-            "0": [
-              {
-                "x": 68,
-                "y": 336,
-                "w": 925,
-                "h": 36,
-                "fontSize": 9,
-                "shrinkToFit": true
-              }
-            ]
-          }
-        },
-        {
-          "type": "text",
-          "param": "action3Name",
-          "label": "action3 Name",
-          "hidden": true,
-          "pdf": {
-            "0": [
-              {
-                "x": 68,
-                "y": 172,
-                "w": 455,
-                "h": 34,
-                "fontSize": 17,
-                "valign": "middle",
-                "shrinkToFit": true
-              }
-            ]
-          }
-        },
-        {
-          "type": "text",
-          "param": "action3ToHit",
-          "label": "action3 To Hit",
-          "hidden": true,
-          "pdf": {
-            "0": [
-              {
-                "x": 552,
-                "y": 170,
-                "w": 85,
-                "h": 42,
-                "fontSize": 18,
-                "align": "center",
-                "valign": "middle",
-                "shrinkToFit": true
-              }
-            ]
-          }
-        },
-        {
-          "type": "text",
-          "param": "action3Damage",
-          "label": "action3 Damage",
-          "hidden": true,
-          "pdf": {
-            "0": [
-              {
-                "x": 705,
-                "y": 170,
-                "w": 290,
-                "h": 42,
-                "fontSize": 16,
-                "valign": "middle",
-                "shrinkToFit": true
-              }
-            ]
-          }
-        },
-        {
-          "type": "textarea",
-          "param": "action3Text",
-          "label": "action3 Text",
-          "hidden": true,
-          "rows": 2,
-          "pdf": {
-            "0": [
-              {
-                "x": 68,
-                "y": 122,
-                "w": 925,
-                "h": 36,
-                "fontSize": 9,
-                "shrinkToFit": true
-              }
-            ]
-          }
         }
       ]
     },
@@ -1151,6 +899,240 @@
                   ]
                 }
               ]
+            },
+            {
+              "type": "text",
+              "param": "action_0_name",
+              "value": "{action[0].name}",
+              "hidden": true,
+              "pdf": {
+                "0": [
+                  {
+                    "x": 70,
+                    "y": 660,
+                    "w": 430,
+                    "h": 75,
+                    "fontSize": 40,
+                    "valign": "middle",
+                    "shrinkToFit": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "text",
+              "param": "action_0_toHit",
+              "value": "{action[0].toHit}",
+              "hidden": true,
+              "pdf": {
+                "0": [
+                  {
+                    "x": 550,
+                    "y": 660,
+                    "w": 75,
+                    "h": 75,
+                    "fontSize": 40,
+                    "align": "center",
+                    "valign": "middle",
+                    "shrinkToFit": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "text",
+              "param": "action_0_damage",
+              "value": "{action[0].damage}",
+              "hidden": true,
+              "pdf": {
+                "0": [
+                  {
+                    "x": 700,
+                    "y": 660,
+                    "w": 280,
+                    "h": 74,
+                    "fontSize": 40,
+                    "valign": "middle",
+                    "shrinkToFit": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "textarea",
+              "param": "action_0_entries",
+              "value": "{action[0].entries}",
+              "hidden": true,
+              "rows": 2,
+              "pdf": {
+                "0": [
+                  {
+                    "x": 70,
+                    "y": 530,
+                    "w": 910,
+                    "h": 100,
+                    "fontSize": 40,
+                    "valign": "top",
+                    "shrinkToFit": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "text",
+              "param": "action_1_name",
+              "value": "{action[1].name}",
+              "hidden": true,
+              "pdf": {
+                "0": [
+                  {
+                    "x": 70,
+                    "y": 440,
+                    "w": 430,
+                    "h": 75,
+                    "fontSize": 40,
+                    "valign": "middle",
+                    "shrinkToFit": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "text",
+              "param": "action_1_toHit",
+              "value": "{action[1].toHit}",
+              "hidden": true,
+              "pdf": {
+                "0": [
+                  {
+                    "x": 550,
+                    "y": 440,
+                    "w": 75,
+                    "h": 75,
+                    "fontSize": 40,
+                    "align": "center",
+                    "valign": "middle",
+                    "shrinkToFit": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "text",
+              "param": "action_1_damage",
+              "value": "{action[1].damage}",
+              "hidden": true,
+              "pdf": {
+                "0": [
+                  {
+                    "x": 700,
+                    "y": 440,
+                    "w": 280,
+                    "h": 74,
+                    "fontSize": 40,
+                    "valign": "middle",
+                    "shrinkToFit": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "textarea",
+              "param": "action_1_entries",
+              "value": "{action[1].entries}",
+              "hidden": true,
+              "rows": 2,
+              "pdf": {
+                "0": [
+                  {
+                    "x": 70,
+                    "y": 310,
+                    "w": 910,
+                    "h": 100,
+                    "fontSize": 40,
+                    "valign": "top",
+                    "shrinkToFit": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "text",
+              "param": "action_2_name",
+              "value": "{action[2].name}",
+              "hidden": true,
+              "pdf": {
+                "0": [
+                  {
+                    "x": 70,
+                    "y": 210,
+                    "w": 430,
+                    "h": 75,
+                    "fontSize": 40,
+                    "valign": "middle",
+                    "shrinkToFit": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "text",
+              "param": "action_2_toHit",
+              "value": "{action[2].toHit}",
+              "hidden": true,
+              "pdf": {
+                "0": [
+                  {
+                    "x": 550,
+                    "y": 210,
+                    "w": 75,
+                    "h": 75,
+                    "fontSize": 40,
+                    "align": "center",
+                    "valign": "middle",
+                    "shrinkToFit": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "text",
+              "param": "action_2_damage",
+              "value": "{action[2].damage}",
+              "hidden": true,
+              "pdf": {
+                "0": [
+                  {
+                    "x": 700,
+                    "y": 210,
+                    "w": 280,
+                    "h": 74,
+                    "fontSize": 40,
+                    "valign": "middle",
+                    "shrinkToFit": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "textarea",
+              "param": "action_2_entries",
+              "value": "{action[2].entries}",
+              "hidden": true,
+              "rows": 2,
+              "pdf": {
+                "0": [
+                  {
+                    "x": 70,
+                    "y": 90,
+                    "w": 910,
+                    "h": 100,
+                    "fontSize": 40,
+                    "valign": "top",
+                    "shrinkToFit": true
+                  }
+                ]
+              }
             },
             {
               "type": "label",

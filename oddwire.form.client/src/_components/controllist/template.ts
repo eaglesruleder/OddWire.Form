@@ -1,6 +1,11 @@
 export type TemplateValueSource = (param: string) => unknown;
 
-const PARAM_RE = /^[A-Za-z_]\w*$/;
+type TemplatePath = {
+    root: string;
+    segments: (string | number)[];
+};
+
+const PARAM_RE = /^[A-Za-z_]\w*(?:\[\d+\]\.[A-Za-z_]\w*)*$/;
 const MAX_TEMPLATE_DEPTH = 20;
 
 export function hasTemplate(value: string): boolean
@@ -24,7 +29,8 @@ export function templateRefs(template: string): string[]
 
             const expr = parseExpression(part.value);
 
-            refs.add(expr.param);
+            if (expr.path)
+                refs.add(expr.path.root);
 
             if (expr.kind === 'conditional')
             {
@@ -52,11 +58,15 @@ export function evaluateTemplate(template: string, source: TemplateValueSource):
                 return part.value;
 
             const expr = parseExpression(part.value);
+            const resolved = resolvePath(expr.path, source);
 
             if (expr.kind === 'param')
-                return valueText(source(expr.param));
+                return valueText(resolved);
 
-            const branch = isFilled(source(expr.param)) ? expr.whenTrue : expr.whenFalse;
+            const branch = isFilled(resolved)
+                ? expr.whenTrue
+                : expr.whenFalse;
+
             return evaluate(branch, depth + 1);
         }).join('');
     };
@@ -160,35 +170,94 @@ function findClosingBrace(value: string, start: number): number
 }
 
 type ParsedExpression =
-    | { kind: 'param'; param: string }
-    | { kind: 'conditional'; param: string; whenTrue: string; whenFalse: string };
+    | { kind: 'param'; path: TemplatePath }
+    | {
+        kind: 'conditional';
+        path: TemplatePath;
+        whenTrue: string;
+        whenFalse: string;
+    };
 
-function parseExpression(expr: string): ParsedExpression
-{
+function parseExpression(expr: string): ParsedExpression {
     const question = findTopLevel(expr, '?');
 
     if (question < 0)
-        return { kind: 'param', param: normaliseParam(expr) };
+        return {
+            kind: 'param',
+            path: parsePath(expr),
+        };
 
-    const param = normaliseParam(expr.slice(0, question));
+    const path = parsePath(expr.slice(0, question));
     const branches = expr.slice(question + 1);
     const colon = findTopLevel(branches, ':');
 
     if (colon < 0)
-        return { kind: 'conditional', param, whenTrue: unquote(branches), whenFalse: '' };
+        return {
+            kind: 'conditional',
+            path,
+            whenTrue: unquote(branches),
+            whenFalse: '',
+        };
 
     return {
         kind: 'conditional',
-        param,
+        path,
         whenTrue: unquote(branches.slice(0, colon)),
         whenFalse: unquote(branches.slice(colon + 1)),
-        };
+    };
 }
 
-function normaliseParam(value: string): string
-{
+function parsePath(value: string): TemplatePath | undefined {
     const param = value.trim();
-    return PARAM_RE.test(param) ? param : '';
+
+    if (!PARAM_RE.test(param))
+        return undefined;
+
+    const rootMatch = /^[A-Za-z_]\w*/.exec(param);
+    if (!rootMatch)
+        return undefined;
+
+    const segments: (string | number)[] = [];
+    const tail = param.slice(rootMatch[0].length);
+
+    for (const match of tail.matchAll(/\.([A-Za-z_]\w*)|\[(\d+)\]/g)) {
+        if (match[1] !== undefined)
+            segments.push(match[1]);
+        else if (match[2] !== undefined)
+            segments.push(Number.parseInt(match[2], 10));
+    }
+
+    return {
+        root: rootMatch[0],
+        segments,
+    };
+}
+
+function resolvePath(path: TemplatePath | undefined, source: TemplateValueSource): unknown {
+    if (!path)
+        return undefined;
+
+    let value = source(path.root);
+
+    for (const segment of path.segments) {
+        if (value == null)
+            return undefined;
+
+        if (typeof segment === 'number') {
+            if (!Array.isArray(value))
+                return undefined;
+
+            value = value[segment];
+            continue;
+        }
+
+        if (typeof value !== 'object')
+            return undefined;
+
+        value = (value as Record<string, unknown>)[segment];
+    }
+
+    return value;
 }
 
 function findTopLevel(value: string, needle: string): number

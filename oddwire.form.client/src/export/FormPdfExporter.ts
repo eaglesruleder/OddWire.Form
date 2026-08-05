@@ -72,7 +72,8 @@ export class FormPdfExporter
     private async imageSource(value: unknown): Promise<string | Blob | undefined>
     {
         if (isCapturedImage(value))
-            return (await this.images?.getImage(value.id))?.blob;
+            return (await this.images?.getImage(value.id))?.blob
+                ??  value.thumbnail;
 
         return typeof value === 'string' && value !== '' ? value : undefined;
     }
