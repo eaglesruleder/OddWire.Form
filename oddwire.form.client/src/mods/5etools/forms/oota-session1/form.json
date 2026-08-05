@@ -2069,27 +2069,6 @@
     },
     {
       "type": "tab",
-      "param": "tabCast",
-      "label": "Cast",
-      "controls": [
-        {
-          "type": "textarea",
-          "param": "castCaptors",
-          "label": "Captors — The Drow",
-          "rows": 12,
-          "value": "Jorlan (Slavemaster) — stern, observant, efficient rather than cruel. Runs the immediate routine but isn't the outpost's highest authority. Resents Shoor; any 'help' he later gives is revenge, never sympathy.\n\nShoor (Captain) — insecure and cruel, values spectacle over security, easy to bait into overriding Jorlan. Dangerous but visibly dependent on Ilvara's favour.\n\nIlvara (Priestess & Commander) — the outpost's true authority. Appraises prisoners as property; deliberate where Shoor is impulsive. Takes a controlled interest in the Reborn Cleric.\n\nAsha (Priestess's Aide) — catalogues prisoners and probes for divisions under pretexts of health or inventory. Not fully aligned with Ilvara."
-        },
-        {
-          "type": "textarea",
-          "param": "castPrisoners",
-          "label": "Fellow Prisoners",
-          "rows": 14,
-          "value": "Ront (Orc) — aggressive, easy to anger, always pushing to fight now.\nEldeth (Shield Dwarf) — practical and observant; pushes coordination and caution, warns against showing divisions.\nBuppido (Derro) — presents as helpful; actually backs whichever argument splits the group most, and would abandon a liability.\nSarith (Drow) — disgraced; avoids the Drow unless ordered. Reads Drow politics and motives.\nStool (Myconid sprout) — simple, immediate friendliness through rapport spores. Easily frightened; seeks reassurance.\nDerendil (Quaggoth) — insists he is an elf prince, not what he appears. Harder to control as transport nears.\nJimjar (Deep Gnome) — compulsive gambler; makes a wager almost immediately and reads a room fast.\nShuushar (Kuo-toa) — pacifist; refuses to condemn others or start fights, questions whether escape means killing every guard.\nTopsy & Turvy (Deep Gnome twins) — stay close, reveal little, clock exits, prepare their own contingency. Refuse to be separated."
-        }
-      ]
-    },
-    {
-      "type": "tab",
       "param": "tabStatblocks",
       "label": "Statblocks",
       "controls": [
@@ -2113,8 +2092,7 @@
                 {
                   "type": "collapsible",
                   "param": "statblockItem",
-                  "label": "{who}",
-                  "subtitle": "{name}",
+                  "label": "{name}",
                   "icon": "{image}",
                   "controls": [
                     {
@@ -2123,23 +2101,11 @@
                       "label": "Summary",
                       "controls": [
                         {
-                          "type": "text",
-                          "param": "who",
-                          "label": "Who",
-                          "stacked": true,
-                          "cellClassName": "sm-col-12 lg-col-5"
-                        },
-                        {
-                          "type": "text",
-                          "param": "role",
-                          "label": "Role in Session",
-                          "stacked": true,
-                          "cellClassName": "sm-col-12 lg-col-7"
-                        },
-                        {
                           "type": "dropdown",
                           "param": "monster",
+                          "stacked": true,
                           "label": "Statblock",
+                          "stacked": true,
                           "cellClassName": "sm-col-12 lg-col-6",
                           "dbOptions": {
                             "table": "Monster",
@@ -3535,224 +3501,6 @@
                           ]
                         }
                       ]
-                    }
-                  ]
-                }
-              ],
-              "value": [
-                {
-                  "controls": [
-                    {
-                      "param": "who",
-                      "value": "Ront"
-                    },
-                    {
-                      "param": "role",
-                      "value": "Prisoner — Orc, always wants to fight now"
-                    },
-                    {
-                      "param": "monster",
-                      "value": "Orc"
-                    },
-                    {
-                      "param": "name",
-                      "value": "Orc"
-                    },
-                    {
-                      "param": "image",
-                      "value": "https://5e.tools/img/bestiary/tokens/MM/Orc.webp"
-                    }
-                  ]
-                },
-                {
-                  "controls": [
-                    {
-                      "param": "who",
-                      "value": "Buppido"
-                    },
-                    {
-                      "param": "role",
-                      "value": "Prisoner — Derro, helpful and divisive"
-                    },
-                    {
-                      "param": "monster",
-                      "value": "Derro"
-                    },
-                    {
-                      "param": "name",
-                      "value": "Derro"
-                    },
-                    {
-                      "param": "image",
-                      "value": "https://5e.tools/img/bestiary/tokens/OotA/Derro.webp"
-                    }
-                  ]
-                },
-                {
-                  "controls": [
-                    {
-                      "param": "who",
-                      "value": "Stool"
-                    },
-                    {
-                      "param": "role",
-                      "value": "Prisoner — Myconid sprout"
-                    },
-                    {
-                      "param": "monster",
-                      "value": "Myconid Sprout"
-                    },
-                    {
-                      "param": "name",
-                      "value": "Myconid Sprout"
-                    },
-                    {
-                      "param": "image",
-                      "value": "https://5e.tools/img/bestiary/tokens/MM/Myconid%20Sprout.webp"
-                    }
-                  ]
-                },
-                {
-                  "controls": [
-                    {
-                      "param": "who",
-                      "value": "Derendil"
-                    },
-                    {
-                      "param": "role",
-                      "value": "Prisoner — claims to be an elf prince"
-                    },
-                    {
-                      "param": "monster",
-                      "value": "Quaggoth"
-                    },
-                    {
-                      "param": "name",
-                      "value": "Quaggoth"
-                    },
-                    {
-                      "param": "image",
-                      "value": "https://5e.tools/img/bestiary/tokens/MM/Quaggoth.webp"
-                    }
-                  ]
-                },
-                {
-                  "controls": [
-                    {
-                      "param": "who",
-                      "value": "Eldeth"
-                    },
-                    {
-                      "param": "role",
-                      "value": "Prisoner — Shield Dwarf, pushes coordination"
-                    },
-                    {
-                      "param": "monster",
-                      "value": "Scout"
-                    },
-                    {
-                      "param": "name",
-                      "value": "Scout"
-                    },
-                    {
-                      "param": "image",
-                      "value": "https://5e.tools/img/bestiary/tokens/MM/Scout.webp"
-                    }
-                  ]
-                },
-                {
-                  "controls": [
-                    {
-                      "param": "who",
-                      "value": "Jimjar"
-                    },
-                    {
-                      "param": "role",
-                      "value": "Prisoner — Deep Gnome gambler"
-                    },
-                    {
-                      "param": "monster",
-                      "value": "Deep Gnome (Svirfneblin)"
-                    },
-                    {
-                      "param": "name",
-                      "value": "Deep Gnome (Svirfneblin)"
-                    },
-                    {
-                      "param": "image",
-                      "value": "https://5e.tools/img/bestiary/tokens/MM/Deep%20Gnome%20(Svirfneblin).webp"
-                    }
-                  ]
-                },
-                {
-                  "controls": [
-                    {
-                      "param": "who",
-                      "value": "Shuushar"
-                    },
-                    {
-                      "param": "role",
-                      "value": "Prisoner — Kuo-toa pacifist"
-                    },
-                    {
-                      "param": "monster",
-                      "value": "Kuo-toa"
-                    },
-                    {
-                      "param": "name",
-                      "value": "Kuo-toa"
-                    },
-                    {
-                      "param": "image",
-                      "value": "https://5e.tools/img/bestiary/tokens/MM/Kuo-toa.webp"
-                    }
-                  ]
-                },
-                {
-                  "controls": [
-                    {
-                      "param": "who",
-                      "value": "Topsy & Turvy"
-                    },
-                    {
-                      "param": "role",
-                      "value": "Prisoners — Deep Gnome twins, inseparable"
-                    },
-                    {
-                      "param": "monster",
-                      "value": "Deep Gnome (Svirfneblin)"
-                    },
-                    {
-                      "param": "name",
-                      "value": "Deep Gnome (Svirfneblin)"
-                    },
-                    {
-                      "param": "image",
-                      "value": "https://5e.tools/img/bestiary/tokens/MM/Deep%20Gnome%20(Svirfneblin).webp"
-                    }
-                  ]
-                },
-                {
-                  "controls": [
-                    {
-                      "param": "who",
-                      "value": "Giant Spider"
-                    },
-                    {
-                      "param": "role",
-                      "value": "(2) Spider-Carrion Disposal chore"
-                    },
-                    {
-                      "param": "monster",
-                      "value": "Giant Spider"
-                    },
-                    {
-                      "param": "name",
-                      "value": "Giant Spider"
-                    },
-                    {
-                      "param": "image",
-                      "value": "https://5e.tools/img/bestiary/tokens/MM/Giant%20Spider.webp"
                     }
                   ]
                 }
@@ -3773,8 +3521,7 @@
                 {
                   "type": "collapsible",
                   "param": "statblockItem",
-                  "label": "{who}",
-                  "subtitle": "{name}",
+                  "label": "{name}",
                   "icon": "{image}",
                   "controls": [
                     {
@@ -3783,23 +3530,10 @@
                       "label": "Summary",
                       "controls": [
                         {
-                          "type": "text",
-                          "param": "who",
-                          "label": "Who",
-                          "stacked": true,
-                          "cellClassName": "sm-col-12 lg-col-5"
-                        },
-                        {
-                          "type": "text",
-                          "param": "role",
-                          "label": "Role in Session",
-                          "stacked": true,
-                          "cellClassName": "sm-col-12 lg-col-7"
-                        },
-                        {
                           "type": "dropdown",
                           "param": "monster",
                           "label": "Statblock",
+                          "stacked": true,
                           "cellClassName": "sm-col-12 lg-col-6",
                           "dbOptions": {
                             "table": "Monster",
@@ -5195,152 +4929,6 @@
                           ]
                         }
                       ]
-                    }
-                  ]
-                }
-              ],
-              "value": [
-                {
-                  "controls": [
-                    {
-                      "param": "who",
-                      "value": "Jorlan"
-                    },
-                    {
-                      "param": "role",
-                      "value": "Slavemaster — runs the daily routine"
-                    },
-                    {
-                      "param": "monster",
-                      "value": "Drow"
-                    },
-                    {
-                      "param": "name",
-                      "value": "Drow"
-                    },
-                    {
-                      "param": "image",
-                      "value": "https://5e.tools/img/bestiary/tokens/MM/Drow.webp"
-                    }
-                  ]
-                },
-                {
-                  "controls": [
-                    {
-                      "param": "who",
-                      "value": "Shoor"
-                    },
-                    {
-                      "param": "role",
-                      "value": "Captain — Ilvara's favourite"
-                    },
-                    {
-                      "param": "monster",
-                      "value": "Drow"
-                    },
-                    {
-                      "param": "name",
-                      "value": "Drow"
-                    },
-                    {
-                      "param": "image",
-                      "value": "https://5e.tools/img/bestiary/tokens/MM/Drow.webp"
-                    }
-                  ]
-                },
-                {
-                  "controls": [
-                    {
-                      "param": "who",
-                      "value": "Ilvara"
-                    },
-                    {
-                      "param": "role",
-                      "value": "Priestess & Commander — true authority"
-                    },
-                    {
-                      "param": "monster",
-                      "value": "Drow Mage"
-                    },
-                    {
-                      "param": "name",
-                      "value": "Drow Mage"
-                    },
-                    {
-                      "param": "image",
-                      "value": "https://5e.tools/img/bestiary/tokens/MM/Drow%20Mage.webp"
-                    }
-                  ]
-                },
-                {
-                  "controls": [
-                    {
-                      "param": "who",
-                      "value": "Asha"
-                    },
-                    {
-                      "param": "role",
-                      "value": "Priestess's Aide — catalogues prisoners"
-                    },
-                    {
-                      "param": "monster",
-                      "value": "Drow Mage"
-                    },
-                    {
-                      "param": "name",
-                      "value": "Drow Mage"
-                    },
-                    {
-                      "param": "image",
-                      "value": "https://5e.tools/img/bestiary/tokens/MM/Drow%20Mage.webp"
-                    }
-                  ]
-                },
-                {
-                  "controls": [
-                    {
-                      "param": "who",
-                      "value": "Drow Guards"
-                    },
-                    {
-                      "param": "role",
-                      "value": "Work-party escort / gate post"
-                    },
-                    {
-                      "param": "monster",
-                      "value": "Drow"
-                    },
-                    {
-                      "param": "name",
-                      "value": "Drow"
-                    },
-                    {
-                      "param": "image",
-                      "value": "https://5e.tools/img/bestiary/tokens/MM/Drow.webp"
-                    }
-                  ]
-                },
-                {
-                  "controls": [
-                    {
-                      "param": "who",
-                      "value": "Sarith"
-                    },
-                    {
-                      "param": "role",
-                      "value": "Prisoner — disgraced Drow"
-                    },
-                    {
-                      "param": "monster",
-                      "value": "Drow"
-                    },
-                    {
-                      "param": "name",
-                      "value": "Drow"
-                    },
-                    {
-                      "param": "image",
-                      "value": "https://5e.tools/img/bestiary/tokens/MM/Drow.webp"
                     }
                   ]
                 }
@@ -5361,8 +4949,7 @@
                 {
                   "type": "collapsible",
                   "param": "statblockItem",
-                  "label": "{who}",
-                  "subtitle": "{name}",
+                  "label": "{name}",
                   "icon": "{image}",
                   "controls": [
                     {
@@ -5370,20 +4957,6 @@
                       "param": "tabMonsterSummary",
                       "label": "Summary",
                       "controls": [
-                        {
-                          "type": "text",
-                          "param": "who",
-                          "label": "Who",
-                          "stacked": true,
-                          "cellClassName": "sm-col-12 lg-col-5"
-                        },
-                        {
-                          "type": "text",
-                          "param": "role",
-                          "label": "Role in Session",
-                          "stacked": true,
-                          "cellClassName": "sm-col-12 lg-col-7"
-                        },
                         {
                           "type": "dropdown",
                           "param": "monster",
@@ -6783,56 +6356,6 @@
                           ]
                         }
                       ]
-                    }
-                  ]
-                }
-              ],
-              "value": [
-                {
-                  "controls": [
-                    {
-                      "param": "who",
-                      "value": "Quasit"
-                    },
-                    {
-                      "param": "role",
-                      "value": "Summoned demon option from Drow Mage"
-                    },
-                    {
-                      "param": "monster",
-                      "value": "Quasit"
-                    },
-                    {
-                      "param": "name",
-                      "value": "Quasit"
-                    },
-                    {
-                      "param": "image",
-                      "value": "https://5e.tools/img/bestiary/tokens/MM/Quasit.webp"
-                    }
-                  ]
-                },
-                {
-                  "controls": [
-                    {
-                      "param": "who",
-                      "value": "Shadow Demon"
-                    },
-                    {
-                      "param": "role",
-                      "value": "Riskier summoned demon option from Drow Mage"
-                    },
-                    {
-                      "param": "monster",
-                      "value": "Shadow Demon"
-                    },
-                    {
-                      "param": "name",
-                      "value": "Shadow Demon"
-                    },
-                    {
-                      "param": "image",
-                      "value": "https://5e.tools/img/bestiary/tokens/MM/Shadow%20Demon.webp"
                     }
                   ]
                 }
