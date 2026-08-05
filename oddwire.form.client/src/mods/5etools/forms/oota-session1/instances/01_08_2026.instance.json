@@ -1,0 +1,186 @@
+{
+  "formId": "5e550001-0001-4001-8001-000000000001",
+  "controls": [
+    {
+      "param": "sessionDate",
+      "value": "01/08/2026"
+    },
+    {
+      "param": "playersPresent",
+      "value": "Javert, Gregory, Victor, Leandros"
+    },
+    {
+      "param": "d1Escape",
+      "value": [
+        {
+          "controls": [
+            {
+              "param": "info",
+              "value": "Jorlan assigns chores by perceived usefulness"
+            },
+            {
+              "param": "seen",
+              "value": true
+            }
+          ]
+        },
+        {
+          "controls": [
+            {
+              "param": "info",
+              "value": "Work parties leave under guard"
+            },
+            {
+              "param": "seen",
+              "value": true
+            }
+          ]
+        },
+        {
+          "controls": [
+            {
+              "param": "info",
+              "value": "Ilvara is the leader in a Matriarchy"
+            },
+            {
+              "param": "seen",
+              "value": true
+            }
+          ]
+        },
+        {
+          "controls": [
+            {
+              "param": "info",
+              "value": "Guards catalogue prisoners"
+            },
+            {
+              "param": "seen",
+              "value": true
+            }
+          ]
+        },
+        {
+          "controls": [
+            {
+              "param": "info",
+              "value": "Daily Skill-roll reward structure"
+            },
+            {
+              "param": "seen",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "param": "d1Notes",
+      "value": "Buppido failed Poison, Ront saved, Eldith got File\nGregory Pers Greatpan, Javert SoH knife, Leandros Perc POI in quarters, Victor Inv Shiv"
+    },
+    {
+      "param": "d2Escape",
+      "value": [
+        {
+          "controls": [
+            {
+              "param": "info",
+              "value": "Shoor values spectacle and status over operational security."
+            },
+            {
+              "param": "seen",
+              "value": true
+            }
+          ]
+        },
+        {
+          "controls": [
+            {
+              "param": "info",
+              "value": "Jorlan obeys Shoor publicly but resents it."
+            },
+            {
+              "param": "seen",
+              "value": true
+            }
+          ]
+        },
+        {
+          "controls": [
+            {
+              "param": "info",
+              "value": "Shoor carries a wand that can restrain prisoners."
+            },
+            {
+              "param": "seen",
+              "value": true
+            }
+          ]
+        },
+        {
+          "controls": [
+            {
+              "param": "info",
+              "value": "Guards uncoordinated when Shoor commands (extra skill roll)"
+            },
+            {
+              "param": "seen",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "param": "d2Notes",
+      "value": "Ront STR&CON saved, Buppido failed SoH\nGregory (20) Kitchen prep - Dedicated to cooking (creates distraction)\nJavert (14) Storeroom - Finds belongings, takes 2x Holy Symbols & Theives Tools\nVictor (3) Web clearing - Harvests 50ft Spider Silk Rope (Immune B&P, 8tonne capacity)\nLeandros (11) Barracks Cleaning - Pers Sarith for buddies, Perc overhears south path\nThen Gregory fails Acrobatics, falls in Web saved by Victor"
+    },
+    {
+      "param": "d3Escape",
+      "value": [
+        {
+          "controls": [
+            {
+              "param": "info",
+              "value": "Lift operation"
+            },
+            {
+              "param": "seen",
+              "value": true
+            }
+          ]
+        },
+        {
+          "controls": [
+            {
+              "param": "info",
+              "value": "Ilvara/Asha personally assesses prisoners."
+            },
+            {
+              "param": "seen",
+              "value": true
+            }
+          ]
+        },
+        {
+          "controls": [
+            {
+              "param": "info",
+              "value": "Lift arrival disrupts guard assignments."
+            },
+            {
+              "param": "seen",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "param": "d3Notes",
+      "value": "Buppido fails Perc knife\nGregory, Patdown - Pers to go clean web-slime, befriends gaurd, fails Pers get-weapon roll\nLeandros, Onboarding - Fails Pers Derendil. Jimjar owes 1gp\nVictor, Quaggoth Mgmt - Insights Quaggoth to coord well.\nJavert, Freight - Finds GP chest and prisoner-transport chest"
+    }
+  ],
+  "instanceId": "bc56770a-d33b-4067-b5a1-e7decbfc105a",
+  "dateModified": "2026-08-05T02:05:55.016Z"
+}
