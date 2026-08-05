@@ -29,8 +29,10 @@ export function templateRefs(template: string): string[]
 
             const expr = parseExpression(part.value);
 
-            if (expr.path)
-                refs.add(expr.path.root);
+            if (expr.kind === 'invalid')
+                continue;
+
+            refs.add(expr.path.root);
 
             if (expr.kind === 'conditional')
             {
@@ -58,6 +60,10 @@ export function evaluateTemplate(template: string, source: TemplateValueSource):
                 return part.value;
 
             const expr = parseExpression(part.value);
+
+            if (expr.kind === 'invalid')
+                return '';
+
             const resolved = resolvePath(expr.path, source);
 
             if (expr.kind === 'param')
@@ -170,6 +176,7 @@ function findClosingBrace(value: string, start: number): number
 }
 
 type ParsedExpression =
+    | { kind: 'invalid' }
     | { kind: 'param'; path: TemplatePath }
     | {
         kind: 'conditional';
@@ -178,16 +185,28 @@ type ParsedExpression =
         whenFalse: string;
     };
 
-function parseExpression(expr: string): ParsedExpression {
+function parseExpression(expr: string): ParsedExpression
+{
     const question = findTopLevel(expr, '?');
 
     if (question < 0)
+    {
+        const path = parsePath(expr);
+
+        if (!path)
+            return { kind: 'invalid' };
+
         return {
             kind: 'param',
-            path: parsePath(expr),
+            path,
         };
+    }
 
     const path = parsePath(expr.slice(0, question));
+
+    if (!path)
+        return { kind: 'invalid' };
+
     const branches = expr.slice(question + 1);
     const colon = findTopLevel(branches, ':');
 
@@ -207,7 +226,8 @@ function parseExpression(expr: string): ParsedExpression {
     };
 }
 
-function parsePath(value: string): TemplatePath | undefined {
+function parsePath(value: string): TemplatePath | undefined
+{
     const param = value.trim();
 
     if (!PARAM_RE.test(param))
@@ -220,7 +240,8 @@ function parsePath(value: string): TemplatePath | undefined {
     const segments: (string | number)[] = [];
     const tail = param.slice(rootMatch[0].length);
 
-    for (const match of tail.matchAll(/\.([A-Za-z_]\w*)|\[(\d+)\]/g)) {
+    for (const match of tail.matchAll(/\.([A-Za-z_]\w*)|\[(\d+)\]/g))
+    {
         if (match[1] !== undefined)
             segments.push(match[1]);
         else if (match[2] !== undefined)
@@ -233,17 +254,17 @@ function parsePath(value: string): TemplatePath | undefined {
     };
 }
 
-function resolvePath(path: TemplatePath | undefined, source: TemplateValueSource): unknown {
-    if (!path)
-        return undefined;
-
+function resolvePath(path: TemplatePath, source: TemplateValueSource): unknown
+{
     let value = source(path.root);
 
-    for (const segment of path.segments) {
+    for (const segment of path.segments)
+    {
         if (value == null)
             return undefined;
 
-        if (typeof segment === 'number') {
+        if (typeof segment === 'number')
+        {
             if (!Array.isArray(value))
                 return undefined;
 

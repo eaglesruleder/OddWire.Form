@@ -1,27 +1,34 @@
-name: Deploy client to GitHub Pages
+name: Build and deploy client
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
-      - master
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
+    name: Compile solution
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
 
       - name: Setup Node
         uses: actions/setup-node@v5
@@ -30,32 +37,51 @@ jobs:
           cache: npm
           cache-dependency-path: oddwire.form.client/package-lock.json
 
-      - name: Install dependencies
+      - name: Install client dependencies
+        working-directory: oddwire.form.client
         run: npm ci
-        working-directory: oddwire.form.client
 
-      - name: Build
-        run: npm run build -- --base=/OddWire.Form/
+      - name: Compile server
+        run: >
+          dotnet build
+          OddWire.Form.Server/OddWire.Form.Server.csproj
+          --configuration Release
+          -p:BuildProjectReferences=false
+
+      - name: Compile client
         working-directory: oddwire.form.client
+        run: npm run build -- --base=/OddWire.Form/
 
       - name: Add GitHub Pages fallback
-        run: cp dist/index.html dist/404.html
+        if: github.event_name != 'pull_request'
         working-directory: oddwire.form.client
+        run: cp dist/index.html dist/404.html
 
       - name: Configure Pages
+        if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
 
-      - name: Upload artifact
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v4
         with:
           path: oddwire.form.client/dist
 
   deploy:
+    name: Deploy to Pages
+    if: github.event_name == 'push'
+    needs: build
+
+    permissions:
+      pages: write
+      id-token: write
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     runs-on: ubuntu-latest
-    needs: build
+
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
