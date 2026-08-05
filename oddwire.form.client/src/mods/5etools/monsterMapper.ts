@@ -105,8 +105,7 @@ export function mapMonster(m: RawMonster, options: MonsterImportOptions = {}): M
         ,alignment: alignmentToText(m.alignment)
         ,ac: acToText(m.ac)
         ,hp: hpToText(m.hp)
-        ,speed: baseSpeed(m.speed)
-        ,speedExtra: otherSpeeds(m.speed)
+        ,speed: speedToText(m.speed)
         ,initiative: dexInitiative(m)
         ,passive: m.passive != null ? String(m.passive) : ''
         ,...abilityScoreColumns(m)
@@ -121,7 +120,6 @@ export function mapMonster(m: RawMonster, options: MonsterImportOptions = {}): M
         ,...sensesColumns(m)
         ,legendaryGroup: m.legendaryGroup?.name ?? ''
         ,...combatLoopers(m)
-        ,...actionCardColumns(m.action)
         ,traitCardText: traitCardText(m.trait)
         ,languages: rowsWhenFilled(listToText(m.languages))
         ,environment: (m.environment ?? []).map(cap).join(', ')
@@ -372,23 +370,17 @@ const fmtSpeed = (v: number | { number: number; condition?: string }): string =>
     typeof v === 'number' ? `${v} ft.` : `${v.number} ft.${v.condition ? ` ${v.condition}` : ''}`;
 
 // Intent: base walk speed for the arrow's SPD slot (a plain number speed is the walk)
-function baseSpeed(speed: RawMonster['speed']): string
-{
+function speedToText(speed: RawMonster['speed']): string {
     if (speed == null)
         return '';
+
     if (typeof speed === 'number')
         return `${speed} ft.`;
 
-    return speed.walk != null ? fmtSpeed(speed.walk) : '';
-}
-
-// Intent: the non-walk modes (burrow/climb/fly/swim) as a separate descriptive field
-function otherSpeeds(speed: RawMonster['speed']): string
-{
-    if (speed == null || typeof speed === 'number')
-        return '';
-
     const parts: string[] = [];
+
+    if (speed.walk != null)
+        parts.push(fmtSpeed(speed.walk));
 
     for (const mode of ['burrow', 'climb', 'fly', 'swim'])
         if (speed[mode] != null)
@@ -513,25 +505,6 @@ function actionSection(entries: NamedEntries[] | undefined): LooperControlPatch
             ,entries: actionEntriesToText(entry.entries)
             });
     }));
-}
-
-function actionCardColumns(entries: NamedEntries[] | undefined): MonsterRow
-{
-    const out: MonsterRow = {};
-
-    for (let i = 0; i < 3; i++)
-    {
-        const entry = entries?.[i];
-        const attack = parseAttack(entriesToRawText(entry?.entries));
-        const prefix = `action${i + 1}`;
-
-        out[`${prefix}Name`] = entry?.name ?? '';
-        out[`${prefix}ToHit`] = attack.toHit;
-        out[`${prefix}Damage`] = attack.damage;
-        out[`${prefix}Text`] = actionEntriesToText(entry?.entries);
-    }
-
-    return out;
 }
 
 function variantSection(entries: VariantEntry[] | undefined): LooperControlPatch
