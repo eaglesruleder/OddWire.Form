@@ -1,1 +1,727 @@
-{"formId":"7e5c0c59-8d27-4b70-9d42-6c4a4f2ec6aa","label":"Dillon O'Dwyer Resume","version":"0.2.0","displayParam":["fullName","roleTitle"],"controls":[{"type":"tab","param":"tabProfile","label":"Profile","controls":[{"type":"image","param":"portrait","label":"Portrait","cellClassName":"sm-col-12 lg-col-3"},{"type":"label","param":"fullName","label":"Dillon O'Dwyer","value":"IT Coordinator and Software Developer","stacked":true,"cellClassName":"sm-col-12 lg-col-9"},{"type":"label","param":"email","label":"Contact","value":"ODwyer.Dillon@Outlook.com\n0432 990 251","stacked":true,"cellClassName":"sm-col-12 lg-col-8"},{"type":"label","param":"address","label":"Address","value":"2 Papyrus Loop\nHarrisdale, 6112\nWA, Australia","cellClassName":"sm-col-6 lg-col-4"},{"type":"label","param":"availability","label":"Availability","value":"Actively Seeking Work\n3-5 Days per Week or Contract\n9:30AM–2PM from Office + 40% WFH"},{"type":"label","param":"languagesHeading","label":"Languages and Environments","value":"In order of proficiency"},{"type":"looper","param":"languages","cellClassName":"sm-col-3","value":[{"controls":[{"param":"language","label":"C#","value":"ASP.NET, Unity"}]},{"controls":[{"param":"language","label":"SQL","value":"SSMS, EF Core"}]},{"controls":[{"param":"language","label":"PowerShell","value":"IT Supp & Domain Mgmt"}]},{"controls":[{"param":"language","label":"JavaScript","value":"ReactJS"}]}],"controls":[{"type":"label","param":"language"}]},{"type":"label","param":"skillsHeading","label":"Key Skills"},{"type":"looper","param":"keySkills","cellClassName":"sm-col-3","value":[{"controls":[{"param":"skill","value":"Self-Management"}]},{"controls":[{"param":"skill","value":"Reusability and Organisation"}]},{"controls":[{"param":"skill","value":"Team management"}]},{"controls":[{"param":"skill","value":"Mentoring"}]}],"controls":[{"type":"label","param":"skill"}]},{"type":"label","param":"recentHistory","label":"Recent History","value":"Hired to redevelop an MS-Access app into a scalable solution, I built my first independent ASP.NET with ReactJS project.\n\nBefore long, a Junior developer was placed under my supervision, wherein I inherited their integrated Android app.\n\nMy employer went through a change of ownership. As the most IT-literate person in a mining-literate organisation, I was tasked with overseeing this transition, expanding my role into IT management.\n\nThis has been an intense but rewarding experience. The role took on many forms and responsibilities I was not expecting to receive. All things were taken in stride, and I delivered a high quality of service to the company while getting it done."},{"type":"looper","param":"capabilitySections","value":[{"controls":[{"param":"sectionTitle","label":"Independence and Leadership","value":"Self-management has been a consistent strength, with proven results across independent delivery, team leadership, and client engagement."},{"param":"sectionPoints","label":"","value":"• Planning solutions, architectures, and tasks across immediate and longer-term objectives\n• Organising, prioritising and assisting a team to achieve goals and resolve challenges\n• Analysing requirements and identifying maintainability, reusability, and opportunities\n• Balancing standalone and pipelined tasks during active development while managing technical debt\n• Mentoring a Junior through Code Review, KPI and Knowledge share with measurable improvement"}]},{"controls":[{"param":"sectionTitle","label":"Architecture and Refactoring","value":"Responsible for enterprise production and rapid-prototype development environments. Prioritises cleaning and organisation to create long-term stability and ease of use."},{"param":"sectionPoints","label":"","value":"• Decoupling requirements into projects to separate concerns and improve reusability\n• Organising complex environments to keep large projects easy to comprehend and maintain\n• Decoupling assisting code into helper libraries to improve reusability"}]},{"controls":[{"param":"sectionTitle","label":"Quality of Service","value":"Across software development and IT management, a platform built for maintainability is the goal."},{"param":"sectionPoints","label":"","value":"• My SMS Load & Haul FMS attracted external licensing interest\n• IT environment was left documented, audited, and measurably improved\n• Mentored a Junior to deliver better quality product"}]}],"controls":[{"type":"label","param":"sectionTitle"},{"type":"label","param":"sectionPoints"}]}]},{"type":"tab","param":"tabExperience","label":"Experience","controls":[{"type":"label","param":"reposHeading","label":"Personal GitHub Repositories"},{"type":"looper","param":"repositories","cellClassName":"sm-col-12 lg-col-6","value":[{"controls":[{"param":"repoName","label":"GPT..md","value":"Task primer prompts"},{"param":"repoDescription","label":"","value":"A collection of prompts tailored by reviewing completed projects and refining expectation criteria."},{"param":"repoUrl","label":"","value":"https://github.com/eaglesruleder/gpt..md"}]},{"controls":[{"param":"repoName","label":"OddWire.Form","value":"Data capture and export application — in development"},{"param":"repoDescription","label":"","value":"Webpage driven by JSON configuration for inputs and layout, with configurable API and PDF export."},{"param":"repoUrl","label":"","value":"https://github.com/eaglesruleder/OddWire.Form"}]}],"controls":[{"type":"label","param":"repoName"},{"type":"label","param":"repoDescription"},{"type":"label","param":"repoUrl"}]},{"type":"label","param":"workHeading","label":"Workplace Experience"},{"type":"looper","param":"workplaceExperience","value":[{"controls":[{"param":"jobTitle","label":"IT Coordinator","value":"SMS Mining Services"},{"param":"jobDates","label":"3 years 5 months","value":"Jan 2023 — Present"},{"param":"jobSummary","label":"","value":"Beginning 2023, SMS’s owners went through Administration and I took over IT handover.\n\nI acted as HO support, planning and managing software migrations, providing technical insight to Management, and juggling the remaining mayhem that is Help Desk.\n\nI translated my Systems Architecture experience into vendor coordination, internal support, and infrastructure direction, becoming the primary in-office IT presence: owning queues, hosting weeklies, Executive and HO engagement and support, and actually getting things moving, documented, and improved."},{"param":"skillGroupA","label":"Vendor Management","value":"• MSP Weekly Meetings\n• Multiple MSP Transitions\n• Executive engagement\n• IT handover coordination"},{"param":"skillGroupB","label":"Operations Improvement","value":"• Ticket Queue Ownership\n• HO Technical Support\n• Environment documentation\n• Procedure writeups\n• Gap identification"},{"param":"skillGroupC","label":"Executive Management","value":"• On-call and priority assistance\n• Budget and procurements\n• Technical insight for leadership"},{"param":"skillGroupD","label":"Help Desk Planned & Implemented","value":"• 1st level Help Desk\n• AD/Entra user management\n• Device build and user setup\n• App documentation and CR procedures\n• User and hardware auditing\n• 60 workstation relocations — solo"}]},{"controls":[{"param":"jobTitle","label":"Senior Software Developer","value":"SMS Mining Services"},{"param":"jobDates","label":"3 years 7 months","value":"Jun 2019 — Dec 2022"},{"param":"jobSummary","label":"","value":"SMS progressed my knowledge, expanded my skills, and gave me confidence to express myself as a senior developer.\n\nWith minimal oversight and a Junior to lead, I developed a business-ready application to client requirements.\n\nReplacing an internally made MS-Access system, I self-taught ASP.NET and ReactJS to make a production-ready Load & Haul platform with scalability in mind. The product attracted genuine interest and became a valued internal tool."},{"param":"skillGroupA","label":"Develop Code","value":"• Implement architectures\n• Design for stability, efficiency, and reusability\n• Third-party integrations"},{"param":"skillGroupB","label":"Manage Junior Developer","value":"• Plan tasks and coordinate\n• Mentor under KPI reviews\n• Review pull requests"},{"param":"skillGroupC","label":"Manage Projects","value":"• Determine requirements\n• Estimate effort\n• Write proposals\n• Report by email and Gantt"},{"param":"skillGroupD","label":"Handle Support","value":"• Provide technical support\n• Document technical guides, user manuals, and troubleshooting"}]},{"controls":[{"param":"jobTitle","label":"Software Developer","value":"INX Software"},{"param":"jobDates","label":"3 years 5 months","value":"Jan 2016 — May 2019"},{"param":"jobSummary","label":"","value":"Software development role preceding SMS Mining Services."},{"param":"skillGroupA","label":"Core experience","value":"Commercial software development, maintenance, support, and team delivery."}]}],"controls":[{"type":"label","param":"jobTitle"},{"type":"label","param":"jobDates"},{"type":"label","param":"jobSummary"},{"type":"label","param":"skillGroupA","cellClassName":"sm-col-12 lg-col-6"},{"type":"label","param":"skillGroupB","cellClassName":"sm-col-12 lg-col-6"},{"type":"label","param":"skillGroupC","cellClassName":"sm-col-12 lg-col-6"},{"type":"label","param":"skillGroupD","cellClassName":"sm-col-12 lg-col-6"}]}]},{"type":"tab","param":"tabReviews","label":"Reviews","controls":[{"type":"label","param":"referencesHeading","label":"References and Reviews","value":"Referees are provided upon request. May or may not include the person(s) listed."},{"type":"looper","param":"reviews","value":[{"controls":[{"param":"reviewerName","label":"Tony Monoghan","value":"CSO at SMS Mining"},{"param":"reviewMeta","label":"Performance Appraisal Extract","value":"June 2025"},{"param":"reviewQuote","label":"","value":"Dillon is a self starter and motivated employee. He has managed a number of role and focus changes over his time in SMS. He is always happy to reprioritise his workload according to the needs of the business.\n\nHe has brought order to a rather chaotic IT environment over the journey, managing both relationships and workload effectively and ensuring that the SMS IT environment was always functional to the customer while organising major surgery behind the scenes due to Corporate activity causing seismic vibrations to the IT landscape."}]},{"controls":[{"param":"reviewerName","label":"Josh Conelly","value":"Mining Project Manager at SMS Mining"},{"param":"reviewMeta","label":"Performance Appraisal Extract","value":"Aug 2022"},{"param":"reviewQuote","label":"","value":"Dillon has been very proactive throughout the year with getting our system to industry standard level. The system is stable and functions great. The clients we have that see our system are very impressed.\n\nDillon has built and designed a system for our mining team that is of quality or higher quality than current products out there that are for sale. Dillon has also built systems in place that tell him where the defects are so they can be fixed quickly.\n\nDillon is always proactive in making sure he has a list of work priorities so he can move on to the next task."}]},{"controls":[{"param":"reviewerName","label":"Charles Wang","value":"Junior Software Developer at SMS Mining"},{"param":"reviewMeta","label":"By Request","value":"Jan 2023"},{"param":"reviewQuote","label":"","value":"I worked with Dillon for two years at SMS. As my leader, he guided me through many tough moments. He is knowledgeable across architecture, design, and language-level detail, and explains both solutions and their underlying causes.\n\nHe taught me to turn tedious procedural logic into cohesive abstract patterns, understand API contracts, and break large tasks down by scope. He was responsive, energetic, friendly, and generous with support. I was lucky and honoured to have him as my leader in my career."}]}],"controls":[{"type":"label","param":"reviewerName"},{"type":"label","param":"reviewMeta"},{"type":"label","param":"reviewQuote"}]}]},{"type":"tab","param":"tabEducation","label":"Education & Extras","controls":[{"type":"label","param":"educationHeading","label":"Education Experience"},{"type":"looper","param":"education","value":[{"controls":[{"param":"educationTitle","label":"Diploma of Software Development","value":"Central TAFE"},{"param":"educationDates","label":"1 year","value":"Feb 2015 — Nov 2015"},{"param":"educationSummary","label":"","value":"Gained entry via portfolio and was accepted directly into the Diploma, completing the certification within one year."}]},{"controls":[{"param":"educationTitle","label":"Gap of Experience","value":"Osteosarcoma"},{"param":"educationDates","label":"2 years","value":"Dec 2012 — Feb 2015"},{"param":"educationSummary","label":"","value":"My second year at ECU was interrupted by osteosarcoma, chemotherapy, recovery, and amputation. During this time I began game-development projects using skills from ECU and Unity tutorials, strengthening my programming and self-learning."}]},{"controls":[{"param":"educationTitle","label":"Bachelor of Computer Science — Incomplete","value":"Edith Cowan University"},{"param":"educationDates","label":"2 years","value":"Feb 2011 — Dec 2012"},{"param":"educationSummary","label":"","value":"Majored in Games Programming and Software Engineering. First-year scores averaged a Distinction."}]}],"controls":[{"type":"label","param":"educationTitle"},{"type":"label","param":"educationDates"},{"type":"label","param":"educationSummary"}]},{"type":"label","param":"extrasHeading","label":"Extracurricular Hobbies"},{"type":"looper","param":"extras","cellClassName":"sm-col-12 lg-col-4","value":[{"controls":[{"param":"extraTitle","label":"Game Modding","value":"Vintage Story, Unity, Mount & Blade"},{"param":"extraStatus","label":"Occasionally HyperCommitted","value":"Always"},{"param":"extraDescription","label":"","value":"I’ve developed game ideas in the background since high school. Currently building a Vintage Story mod aimed at real-world concepts."},{"param":"extraUrl","label":"","value":"https://github.com/eaglesruleder/OddWire"}]},{"controls":[{"param":"extraTitle","label":"GPT..md Primers","value":"ChatGPT and Claude"},{"param":"extraStatus","label":"Passive Ongoing","value":"4 months"},{"param":"extraDescription","label":"","value":"After manually building a code feature with GPT, I reviewed what worked and what did not, beginning the gpt..md series of refined task and style primers."}]},{"controls":[{"param":"extraTitle","label":"Satisfactory","value":"2,930 hours"},{"param":"extraStatus","label":"We’re taking a break","value":"3 years"},{"param":"extraDescription","label":"","value":"Got obsessed with a single 2,500-hour maximum-potential playthrough."}]}],"controls":[{"type":"label","param":"extraTitle"},{"type":"label","param":"extraStatus"},{"type":"label","param":"extraDescription"},{"type":"label","param":"extraUrl"},{"type":"image","param":"extraImage","label":"Image"}]},{"type":"label","param":"closingSource","label":"ChatGPT — OpenAI Model 5.4 Thinking","value":"“Roast me per our conversation history” — response extract"},{"type":"label","param":"closingQuote","value":"You have the soul of a systems engineer trapped in the body of someone who wants to make art.\n\nSo every time creativity appears, your brain tackles it like an intruder:\n“Interesting idea. Shame if someone replaced it with infrastructure.”"}]}]}
+{
+  "formId": "7e5c0c59-8d27-4b70-9d42-6c4a4f2ec6aa",
+  "label": "Dillon O'Dwyer Resume",
+  "version": "0.2.0",
+  "displayParam": [
+    "fullName",
+    "roleTitle"
+  ],
+  "controls": [
+    {
+      "type": "tab",
+      "param": "tabProfile",
+      "label": "Profile",
+      "controls": [
+        {
+          "type": "image",
+          "param": "portrait",
+          "label": "Portrait",
+          "cellClassName": "sm-col-12 lg-col-3"
+        },
+        {
+          "type": "label",
+          "param": "fullName",
+          "label": "Dillon O'Dwyer",
+          "value": "IT Coordinator and Software Developer",
+          "stacked": true,
+          "cellClassName": "sm-col-12 lg-col-9"
+        },
+        {
+          "type": "label",
+          "param": "email",
+          "label": "Contact",
+          "value": "ODwyer.Dillon@Outlook.com\n0432 990 251",
+          "stacked": true,
+          "cellClassName": "sm-col-12 lg-col-8"
+        },
+        {
+          "type": "label",
+          "param": "address",
+          "label": "Address",
+          "value": "2 Papyrus Loop\nHarrisdale, 6112\nWA, Australia",
+          "cellClassName": "sm-col-6 lg-col-4"
+        },
+        {
+          "type": "label",
+          "param": "availability",
+          "label": "Availability",
+          "value": "Actively Seeking Work\n3-5 Days per Week or Contract\n9:30AM–2PM from Office + 40% WFH"
+        },
+        {
+          "type": "label",
+          "param": "languagesHeading",
+          "label": "Languages and Environments",
+          "value": "In order of proficiency"
+        },
+        {
+          "type": "looper",
+          "param": "languages",
+          "cellClassName": "sm-col-3",
+          "value": [
+            {
+              "controls": [
+                {
+                  "param": "language",
+                  "label": "C#",
+                  "value": "ASP.NET, Unity"
+                }
+              ]
+            },
+            {
+              "controls": [
+                {
+                  "param": "language",
+                  "label": "SQL",
+                  "value": "SSMS, EF Core"
+                }
+              ]
+            },
+            {
+              "controls": [
+                {
+                  "param": "language",
+                  "label": "PowerShell",
+                  "value": "IT Supp & Domain Mgmt"
+                }
+              ]
+            },
+            {
+              "controls": [
+                {
+                  "param": "language",
+                  "label": "JavaScript",
+                  "value": "ReactJS"
+                }
+              ]
+            }
+          ],
+          "controls": [
+            {
+              "type": "label",
+              "param": "language"
+            }
+          ]
+        },
+        {
+          "type": "label",
+          "param": "skillsHeading",
+          "label": "Key Skills"
+        },
+        {
+          "type": "looper",
+          "param": "keySkills",
+          "cellClassName": "sm-col-3",
+          "value": [
+            {
+              "controls": [
+                {
+                  "param": "skill",
+                  "value": "Self-Management"
+                }
+              ]
+            },
+            {
+              "controls": [
+                {
+                  "param": "skill",
+                  "value": "Reusability and Organisation"
+                }
+              ]
+            },
+            {
+              "controls": [
+                {
+                  "param": "skill",
+                  "value": "Team management"
+                }
+              ]
+            },
+            {
+              "controls": [
+                {
+                  "param": "skill",
+                  "value": "Mentoring"
+                }
+              ]
+            }
+          ],
+          "controls": [
+            {
+              "type": "label",
+              "param": "skill"
+            }
+          ]
+        },
+        {
+          "type": "label",
+          "param": "recentHistory",
+          "label": "Recent History",
+          "value": "Hired to redevelop an MS-Access app into a scalable solution, I built my first independent ASP.NET with ReactJS project.\n\nBefore long, a Junior developer was placed under my supervision, wherein I inherited their integrated Android app.\n\nMy employer went through a change of ownership. As the most IT-literate person in a mining-literate organisation, I was tasked with overseeing this transition, expanding my role into IT management.\n\nThis has been an intense but rewarding experience. The role took on many forms and responsibilities I was not expecting to receive. All things were taken in stride, and I delivered a high quality of service to the company while getting it done."
+        },
+        {
+          "type": "looper",
+          "param": "capabilitySections",
+          "value": [
+            {
+              "controls": [
+                {
+                  "param": "sectionTitle",
+                  "label": "Independence and Leadership",
+                  "value": "Self-management has been a consistent strength, with proven results across independent delivery, team leadership, and client engagement."
+                },
+                {
+                  "param": "sectionPoints",
+                  "label": "",
+                  "value": "• Planning solutions, architectures, and tasks across immediate and longer-term objectives\n• Organising, prioritising and assisting a team to achieve goals and resolve challenges\n• Analysing requirements and identifying maintainability, reusability, and opportunities\n• Balancing standalone and pipelined tasks during active development while managing technical debt\n• Mentoring a Junior through Code Review, KPI and Knowledge share with measurable improvement"
+                }
+              ]
+            },
+            {
+              "controls": [
+                {
+                  "param": "sectionTitle",
+                  "label": "Architecture and Refactoring",
+                  "value": "Responsible for enterprise production and rapid-prototype development environments. Prioritises cleaning and organisation to create long-term stability and ease of use."
+                },
+                {
+                  "param": "sectionPoints",
+                  "label": "",
+                  "value": "• Decoupling requirements into projects to separate concerns and improve reusability\n• Organising complex environments to keep large projects easy to comprehend and maintain\n• Decoupling assisting code into helper libraries to improve reusability"
+                }
+              ]
+            },
+            {
+              "controls": [
+                {
+                  "param": "sectionTitle",
+                  "label": "Quality of Service",
+                  "value": "Across software development and IT management, a platform built for maintainability is the goal."
+                },
+                {
+                  "param": "sectionPoints",
+                  "label": "",
+                  "value": "• My SMS Load & Haul FMS attracted external licensing interest\n• IT environment was left documented, audited, and measurably improved\n• Mentored a Junior to deliver better quality product"
+                }
+              ]
+            }
+          ],
+          "controls": [
+            {
+              "type": "label",
+              "param": "sectionTitle"
+            },
+            {
+              "type": "label",
+              "param": "sectionPoints"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "tab",
+      "param": "tabExperience",
+      "label": "Experience",
+      "controls": [
+        {
+          "type": "label",
+          "param": "reposHeading",
+          "label": "Personal GitHub Repositories"
+        },
+        {
+          "type": "looper",
+          "param": "repositories",
+          "cellClassName": "sm-col-12 lg-col-6",
+          "value": [
+            {
+              "controls": [
+                {
+                  "param": "repoName",
+                  "label": "GPT..md",
+                  "value": "Task primer prompts"
+                },
+                {
+                  "param": "repoDescription",
+                  "label": "",
+                  "value": "A collection of prompts tailored by reviewing completed projects and refining expectation criteria."
+                },
+                {
+                  "param": "repoUrl",
+                  "label": "",
+                  "value": "https://github.com/eaglesruleder/gpt..md"
+                }
+              ]
+            },
+            {
+              "controls": [
+                {
+                  "param": "repoName",
+                  "label": "OddWire.Form",
+                  "value": "Data capture and export application — in development"
+                },
+                {
+                  "param": "repoDescription",
+                  "label": "",
+                  "value": "Webpage driven by JSON configuration for inputs and layout, with configurable API and PDF export."
+                },
+                {
+                  "param": "repoUrl",
+                  "label": "",
+                  "value": "https://github.com/eaglesruleder/OddWire.Form"
+                }
+              ]
+            }
+          ],
+          "controls": [
+            {
+              "type": "label",
+              "param": "repoName"
+            },
+            {
+              "type": "label",
+              "param": "repoDescription"
+            },
+            {
+              "type": "label",
+              "param": "repoUrl"
+            }
+          ]
+        },
+        {
+          "type": "label",
+          "param": "workHeading",
+          "label": "Workplace Experience"
+        },
+        {
+          "type": "looper",
+          "param": "workplaceExperience",
+          "value": [
+            {
+              "controls": [
+                {
+                  "param": "jobTitle",
+                  "label": "IT Coordinator",
+                  "value": "SMS Mining Services"
+                },
+                {
+                  "param": "jobDates",
+                  "label": "3 years 5 months",
+                  "value": "Jan 2023 — Present"
+                },
+                {
+                  "param": "jobSummary",
+                  "label": "",
+                  "value": "Beginning 2023, SMS’s owners went through Administration and I took over IT handover.\n\nI acted as HO support, planning and managing software migrations, providing technical insight to Management, and juggling the remaining mayhem that is Help Desk.\n\nI translated my Systems Architecture experience into vendor coordination, internal support, and infrastructure direction, becoming the primary in-office IT presence: owning queues, hosting weeklies, Executive and HO engagement and support, and actually getting things moving, documented, and improved."
+                },
+                {
+                  "param": "skillGroupA",
+                  "label": "Vendor Management",
+                  "value": "• MSP Weekly Meetings\n• Multiple MSP Transitions\n• Executive engagement\n• IT handover coordination"
+                },
+                {
+                  "param": "skillGroupB",
+                  "label": "Operations Improvement",
+                  "value": "• Ticket Queue Ownership\n• HO Technical Support\n• Environment documentation\n• Procedure writeups\n• Gap identification"
+                },
+                {
+                  "param": "skillGroupC",
+                  "label": "Executive Management",
+                  "value": "• On-call and priority assistance\n• Budget and procurements\n• Technical insight for leadership"
+                },
+                {
+                  "param": "skillGroupD",
+                  "label": "Help Desk Planned & Implemented",
+                  "value": "• 1st level Help Desk\n• AD/Entra user management\n• Device build and user setup\n• App documentation and CR procedures\n• User and hardware auditing\n• 60 workstation relocations — solo"
+                }
+              ]
+            },
+            {
+              "controls": [
+                {
+                  "param": "jobTitle",
+                  "label": "Senior Software Developer",
+                  "value": "SMS Mining Services"
+                },
+                {
+                  "param": "jobDates",
+                  "label": "3 years 7 months",
+                  "value": "Jun 2019 — Dec 2022"
+                },
+                {
+                  "param": "jobSummary",
+                  "label": "",
+                  "value": "SMS progressed my knowledge, expanded my skills, and gave me confidence to express myself as a senior developer.\n\nWith minimal oversight and a Junior to lead, I developed a business-ready application to client requirements.\n\nReplacing an internally made MS-Access system, I self-taught ASP.NET and ReactJS to make a production-ready Load & Haul platform with scalability in mind. The product attracted genuine interest and became a valued internal tool."
+                },
+                {
+                  "param": "skillGroupA",
+                  "label": "Develop Code",
+                  "value": "• Implement architectures\n• Design for stability, efficiency, and reusability\n• Third-party integrations"
+                },
+                {
+                  "param": "skillGroupB",
+                  "label": "Manage Junior Developer",
+                  "value": "• Plan tasks and coordinate\n• Mentor under KPI reviews\n• Review pull requests"
+                },
+                {
+                  "param": "skillGroupC",
+                  "label": "Manage Projects",
+                  "value": "• Determine requirements\n• Estimate effort\n• Write proposals\n• Report by email and Gantt"
+                },
+                {
+                  "param": "skillGroupD",
+                  "label": "Handle Support",
+                  "value": "• Provide technical support\n• Document technical guides, user manuals, and troubleshooting"
+                }
+              ]
+            },
+            {
+              "controls": [
+                {
+                  "param": "jobTitle",
+                  "label": "Software Developer",
+                  "value": "INX Software"
+                },
+                {
+                  "param": "jobDates",
+                  "label": "3 years 5 months",
+                  "value": "Jan 2016 — May 2019"
+                },
+                {
+                  "param": "jobSummary",
+                  "label": "",
+                  "value": "Software development role preceding SMS Mining Services."
+                },
+                {
+                  "param": "skillGroupA",
+                  "label": "Core experience",
+                  "value": "Commercial software development, maintenance, support, and team delivery."
+                }
+              ]
+            }
+          ],
+          "controls": [
+            {
+              "type": "label",
+              "param": "jobTitle"
+            },
+            {
+              "type": "label",
+              "param": "jobDates"
+            },
+            {
+              "type": "label",
+              "param": "jobSummary"
+            },
+            {
+              "type": "label",
+              "param": "skillGroupA",
+              "cellClassName": "sm-col-12 lg-col-6"
+            },
+            {
+              "type": "label",
+              "param": "skillGroupB",
+              "cellClassName": "sm-col-12 lg-col-6"
+            },
+            {
+              "type": "label",
+              "param": "skillGroupC",
+              "cellClassName": "sm-col-12 lg-col-6"
+            },
+            {
+              "type": "label",
+              "param": "skillGroupD",
+              "cellClassName": "sm-col-12 lg-col-6"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "tab",
+      "param": "tabReviews",
+      "label": "Reviews",
+      "controls": [
+        {
+          "type": "label",
+          "param": "referencesHeading",
+          "label": "References and Reviews",
+          "value": "Referees are provided upon request. May or may not include the person(s) listed."
+        },
+        {
+          "type": "looper",
+          "param": "reviews",
+          "value": [
+            {
+              "controls": [
+                {
+                  "param": "reviewerName",
+                  "label": "Tony Monoghan",
+                  "value": "CSO at SMS Mining"
+                },
+                {
+                  "param": "reviewMeta",
+                  "label": "Performance Appraisal Extract",
+                  "value": "June 2025"
+                },
+                {
+                  "param": "reviewQuote",
+                  "label": "",
+                  "value": "Dillon is a self starter and motivated employee. He has managed a number of role and focus changes over his time in SMS. He is always happy to reprioritise his workload according to the needs of the business.\n\nHe has brought order to a rather chaotic IT environment over the journey, managing both relationships and workload effectively and ensuring that the SMS IT environment was always functional to the customer while organising major surgery behind the scenes due to Corporate activity causing seismic vibrations to the IT landscape."
+                }
+              ]
+            },
+            {
+              "controls": [
+                {
+                  "param": "reviewerName",
+                  "label": "Josh Conelly",
+                  "value": "Mining Project Manager at SMS Mining"
+                },
+                {
+                  "param": "reviewMeta",
+                  "label": "Performance Appraisal Extract",
+                  "value": "Aug 2022"
+                },
+                {
+                  "param": "reviewQuote",
+                  "label": "",
+                  "value": "Dillon has been very proactive throughout the year with getting our system to industry standard level. The system is stable and functions great. The clients we have that see our system are very impressed.\n\nDillon has built and designed a system for our mining team that is of quality or higher quality than current products out there that are for sale. Dillon has also built systems in place that tell him where the defects are so they can be fixed quickly.\n\nDillon is always proactive in making sure he has a list of work priorities so he can move on to the next task."
+                }
+              ]
+            },
+            {
+              "controls": [
+                {
+                  "param": "reviewerName",
+                  "label": "Charles Wang",
+                  "value": "Junior Software Developer at SMS Mining"
+                },
+                {
+                  "param": "reviewMeta",
+                  "label": "By Request",
+                  "value": "Jan 2023"
+                },
+                {
+                  "param": "reviewQuote",
+                  "label": "",
+                  "value": "I worked with Dillon for two years at SMS. As my leader, he guided me through many tough moments. He is knowledgeable across architecture, design, and language-level detail, and explains both solutions and their underlying causes.\n\nHe taught me to turn tedious procedural logic into cohesive abstract patterns, understand API contracts, and break large tasks down by scope. He was responsive, energetic, friendly, and generous with support. I was lucky and honoured to have him as my leader in my career."
+                }
+              ]
+            }
+          ],
+          "controls": [
+            {
+              "type": "label",
+              "param": "reviewerName"
+            },
+            {
+              "type": "label",
+              "param": "reviewMeta"
+            },
+            {
+              "type": "label",
+              "param": "reviewQuote"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "tab",
+      "param": "tabEducation",
+      "label": "Education & Extras",
+      "controls": [
+        {
+          "type": "label",
+          "param": "educationHeading",
+          "label": "Education Experience"
+        },
+        {
+          "type": "looper",
+          "param": "education",
+          "value": [
+            {
+              "controls": [
+                {
+                  "param": "educationTitle",
+                  "label": "Diploma of Software Development",
+                  "value": "Central TAFE"
+                },
+                {
+                  "param": "educationDates",
+                  "label": "1 year",
+                  "value": "Feb 2015 — Nov 2015"
+                },
+                {
+                  "param": "educationSummary",
+                  "label": "",
+                  "value": "Gained entry via portfolio and was accepted directly into the Diploma, completing the certification within one year."
+                }
+              ]
+            },
+            {
+              "controls": [
+                {
+                  "param": "educationTitle",
+                  "label": "Gap of Experience",
+                  "value": "Osteosarcoma"
+                },
+                {
+                  "param": "educationDates",
+                  "label": "2 years",
+                  "value": "Dec 2012 — Feb 2015"
+                },
+                {
+                  "param": "educationSummary",
+                  "label": "",
+                  "value": "My second year at ECU was interrupted by osteosarcoma, chemotherapy, recovery, and amputation. During this time I began game-development projects using skills from ECU and Unity tutorials, strengthening my programming and self-learning."
+                }
+              ]
+            },
+            {
+              "controls": [
+                {
+                  "param": "educationTitle",
+                  "label": "Bachelor of Computer Science — Incomplete",
+                  "value": "Edith Cowan University"
+                },
+                {
+                  "param": "educationDates",
+                  "label": "2 years",
+                  "value": "Feb 2011 — Dec 2012"
+                },
+                {
+                  "param": "educationSummary",
+                  "label": "",
+                  "value": "Majored in Games Programming and Software Engineering. First-year scores averaged a Distinction."
+                }
+              ]
+            }
+          ],
+          "controls": [
+            {
+              "type": "label",
+              "param": "educationTitle"
+            },
+            {
+              "type": "label",
+              "param": "educationDates"
+            },
+            {
+              "type": "label",
+              "param": "educationSummary"
+            }
+          ]
+        },
+        {
+          "type": "label",
+          "param": "extrasHeading",
+          "label": "Extracurricular Hobbies"
+        },
+        {
+          "type": "looper",
+          "param": "extras",
+          "cellClassName": "sm-col-12 lg-col-4",
+          "value": [
+            {
+              "controls": [
+                {
+                  "param": "extraTitle",
+                  "label": "Game Modding",
+                  "value": "Vintage Story, Unity, Mount & Blade"
+                },
+                {
+                  "param": "extraStatus",
+                  "label": "Occasionally HyperCommitted",
+                  "value": "Always"
+                },
+                {
+                  "param": "extraDescription",
+                  "label": "",
+                  "value": "I’ve developed game ideas in the background since high school. Currently building a Vintage Story mod aimed at real-world concepts."
+                },
+                {
+                  "param": "extraUrl",
+                  "label": "",
+                  "value": "https://github.com/eaglesruleder/OddWire"
+                }
+              ]
+            },
+            {
+              "controls": [
+                {
+                  "param": "extraTitle",
+                  "label": "GPT..md Primers",
+                  "value": "ChatGPT and Claude"
+                },
+                {
+                  "param": "extraStatus",
+                  "label": "Passive Ongoing",
+                  "value": "4 months"
+                },
+                {
+                  "param": "extraDescription",
+                  "label": "",
+                  "value": "After manually building a code feature with GPT, I reviewed what worked and what did not, beginning the gpt..md series of refined task and style primers."
+                }
+              ]
+            },
+            {
+              "controls": [
+                {
+                  "param": "extraTitle",
+                  "label": "Satisfactory",
+                  "value": "2,930 hours"
+                },
+                {
+                  "param": "extraStatus",
+                  "label": "We’re taking a break",
+                  "value": "3 years"
+                },
+                {
+                  "param": "extraDescription",
+                  "label": "",
+                  "value": "Got obsessed with a single 2,500-hour maximum-potential playthrough."
+                }
+              ]
+            }
+          ],
+          "controls": [
+            {
+              "type": "label",
+              "param": "extraTitle"
+            },
+            {
+              "type": "label",
+              "param": "extraStatus"
+            },
+            {
+              "type": "label",
+              "param": "extraDescription"
+            },
+            {
+              "type": "label",
+              "param": "extraUrl"
+            },
+            {
+              "type": "image",
+              "param": "extraImage",
+              "label": "Image"
+            }
+          ]
+        },
+        {
+          "type": "label",
+          "param": "closingSource",
+          "label": "ChatGPT — OpenAI Model 5.4 Thinking",
+          "value": "“Roast me per our conversation history” — response extract"
+        },
+        {
+          "type": "label",
+          "param": "closingQuote",
+          "value": "You have the soul of a systems engineer trapped in the body of someone who wants to make art.\n\nSo every time creativity appears, your brain tackles it like an intruder:\n“Interesting idea. Shame if someone replaced it with infrastructure.”"
+        }
+      ]
+    }
+  ]
+}
