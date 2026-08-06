@@ -149,6 +149,7 @@ export function ControlImage(props: ControlImageProps)
                     src={src}
                     alt={props.label ?? props.param}
                     style={{ maxWidth: '100%', height: 'auto', display: 'block', cursor: captured ? 'zoom-in' : 'default' }}
+                    className="fill"
                     onClick={captured ? onZoom : undefined}
                 />
             :   <span className="text-muted">{props.placeholder ?? 'No image'}</span>

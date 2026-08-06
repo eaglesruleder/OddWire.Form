@@ -14,9 +14,9 @@
       "controls": [
         {
           "type": "image",
-          "param": "portrait",
-          "label": "Portrait",
-          "cellClassName": "sm-col-12 lg-col-3"
+          "param": "profile",
+          "cellClassName": "sm-col-12 lg-col-3",
+          "disabled":  true
         },
         {
           "type": "label",
@@ -402,11 +402,13 @@
           "controls": [
             {
               "type": "label",
-              "param": "jobTitle"
+              "param": "jobTitle",
+              "cellClassName": "sm-col-6 lg-col-8"
             },
             {
               "type": "label",
-              "param": "jobDates"
+              "param": "jobDates",
+              "cellClassName": "sm-col-6 lg-col-4"
             },
             {
               "type": "label",
@@ -460,7 +462,7 @@
                 },
                 {
                   "param": "reviewMeta",
-                  "label": "Performance Appraisal Extract",
+                  "label": "Performance Extract",
                   "value": "June 2025"
                 },
                 {
@@ -479,7 +481,7 @@
                 },
                 {
                   "param": "reviewMeta",
-                  "label": "Performance Appraisal Extract",
+                  "label": "Performance Extract",
                   "value": "Aug 2022"
                 },
                 {
@@ -512,11 +514,13 @@
           "controls": [
             {
               "type": "label",
-              "param": "reviewerName"
+              "param": "reviewerName",
+              "cellClassName": "sm-col-6 lg-col-8"
             },
             {
               "type": "label",
-              "param": "reviewMeta"
+              "param": "reviewMeta",
+              "cellClassName": "sm-col-6 lg-col-4"
             },
             {
               "type": "label",
@@ -601,11 +605,13 @@
           "controls": [
             {
               "type": "label",
-              "param": "educationTitle"
+              "param": "educationTitle",
+              "cellClassName": "sm-col-6 lg-col-8"
             },
             {
               "type": "label",
-              "param": "educationDates"
+              "param": "educationDates",
+              "cellClassName": "sm-col-6 lg-col-4"
             },
             {
               "type": "label",
@@ -632,8 +638,7 @@
                 },
                 {
                   "param": "extraStatus",
-                  "label": "Occasionally HyperCommitted",
-                  "value": "Always"
+                  "value": "Occasionally HyperCommitted - Always"
                 },
                 {
                   "param": "extraDescription",
@@ -652,12 +657,7 @@
                 {
                   "param": "extraTitle",
                   "label": "GPT..md Primers",
-                  "value": "ChatGPT and Claude"
-                },
-                {
-                  "param": "extraStatus",
-                  "label": "Passive Ongoing",
-                  "value": "4 months"
+                  "value": "ChatGPT and Claude\nPassive Ongoing\n4 months"
                 },
                 {
                   "param": "extraDescription",
@@ -671,12 +671,7 @@
                 {
                   "param": "extraTitle",
                   "label": "Satisfactory",
-                  "value": "2,930 hours"
-                },
-                {
-                  "param": "extraStatus",
-                  "label": "We’re taking a break",
-                  "value": "3 years"
+                  "value": "2,930 hours\nWe’re taking a break\n3 years"
                 },
                 {
                   "param": "extraDescription",
@@ -693,33 +688,41 @@
             },
             {
               "type": "label",
-              "param": "extraStatus"
-            },
-            {
-              "type": "label",
               "param": "extraDescription"
             },
             {
               "type": "label",
               "param": "extraUrl"
-            },
-            {
-              "type": "image",
-              "param": "extraImage",
-              "label": "Image"
             }
           ]
         },
         {
+          "type": "image",
+          "param": "powery",
+          "cellClassName": "sm-col-4",
+          "disabled": true
+        },
+        {
+          "type": "image",
+          "param": "factronics",
+          "cellClassName": "sm-col-8",
+          "disabled": true
+        },
+        {
           "type": "label",
           "param": "closingSource",
-          "label": "ChatGPT — OpenAI Model 5.4 Thinking",
-          "value": "“Roast me per our conversation history” — response extract"
+          "label": "“Roast me per our conversation history” — response extract",
+          "value": "ChatGPT — OpenAI Model 5.4 Thinking"
         },
         {
           "type": "label",
           "param": "closingQuote",
-          "value": "You have the soul of a systems engineer trapped in the body of someone who wants to make art.\n\nSo every time creativity appears, your brain tackles it like an intruder:\n“Interesting idea. Shame if someone replaced it with infrastructure.”"
+          "value": "You have the soul of a systems engineer trapped in the body of someone who wants to make art.\nSo every time creativity appears, your brain tackles it like an intruder:"
+        },
+        {
+          "type": "label",
+          "param": "closingPunchline",
+          "label": "“Interesting idea. Shame if someone replaced it with infrastructure.”"
         }
       ]
     }

@@ -5,6 +5,7 @@
 .fill { flex: 1 1 auto; min-width: 0; }
 
 .center { align-items: center; text-align: center; }
+.fill { width: 100%; height: auto; }
 
 /* 12-column grid — a child sets its span with col-N; sm-/lg- override from that breakpoint up */
 .grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px; }
