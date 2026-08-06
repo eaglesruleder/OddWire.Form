@@ -50,7 +50,7 @@ jobs:
 
       - name: Compile client
         working-directory: oddwire.form.client
-        run: npm run build -- --base=/OddWire.Form/
+        run: npm run build
 
       - name: Add GitHub Pages fallback
         if: github.event_name != 'pull_request'
