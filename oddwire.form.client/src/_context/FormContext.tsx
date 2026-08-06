@@ -10,7 +10,8 @@ import { pdfTemplateStore } from './PdfTemplateContext';
 import { installFormPackage } from './installFormPackage';
 import { upsert } from './storeUtils';
 import { loadFormPackage } from '../settings/FormManager/formPackages';
-import contactForm from './data/forms/contactform.json';
+import aboutPackageUrl from './data/forms/about.zip?url';
+import resumePackageUrl from './data/forms/resume.zip?url';
 import monsterCardPackageUrl from '../mods/5etools/forms/monster-card.zip?url';
 import ootaSession1PackageUrl from '../mods/5etools/forms/oota-session1.zip?url';
 
@@ -79,7 +80,8 @@ class FormStore implements FormContextValue
 
         if (this.index.length === 0)
         {
-            await this.saveForm(contactForm as unknown as FormDefinition);
+            await this.installDefaultPackage(resumePackageUrl);
+            await this.installDefaultPackage(aboutPackageUrl);
             await this.installDefaultPackage(monsterCardPackageUrl);
             await this.installDefaultPackage(ootaSession1PackageUrl);
         }
