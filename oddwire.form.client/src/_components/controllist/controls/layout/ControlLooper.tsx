@@ -12,6 +12,7 @@ type ControlLooperProps = {
     hidden?: boolean;
     controls: ControlDef[];
     addRows?: boolean;
+    cellClassName?: string;
     onChange?: InstanceChange;
     };
 
@@ -36,21 +37,23 @@ export function ControlLooper(props: ControlLooperProps)
 
     return (
         <div>
-            {rows.map((row, rowIndex) =>
-            {
-                const rowEntity = new InstanceEntity(row as FormInstance);
-                const onRowChange: InstanceChange = (value, key, subkey = 'value') =>
+            <div className="control-grid">
+                {rows.map((row, rowIndex) =>
                 {
-                    rowEntity.setValue(key, subkey, value);
-                    props.onChange?.(replaceRow(rows, rowIndex, rowEntity.instance), props.param);
-                };
+                    const rowEntity = new InstanceEntity(row as FormInstance);
+                    const onRowChange: InstanceChange = (value, key, subkey = 'value') =>
+                    {
+                        rowEntity.setValue(key, subkey, value);
+                        props.onChange?.(replaceRow(rows, rowIndex, rowEntity.instance), props.param);
+                    };
 
-                return (
-                    <div key={row.instanceId ?? rowIndex}>
-                        <ControlList controls={props.controls} instance={rowEntity} onChange={onRowChange} />
-                    </div>
-                    );
-            })}
+                    return (
+                        <div key={row.instanceId ?? rowIndex} className={props.cellClassName}>
+                            <ControlList controls={props.controls} instance={rowEntity} onChange={onRowChange} />
+                        </div>
+                        );
+                })}
+            </div>
             {addRows &&
             <ControlButton label="+ Add Row" size="sm" variant="outline-primary" onClick={addRow} />
             }

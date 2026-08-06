@@ -4,13 +4,13 @@ type ControlTextProps = CoreControlProps<string> & {
     className?: string;
     };
 
-export function ControlText({ label, value, hidden, className }: ControlTextProps)
+export function ControlText({ label, value, hidden, className, cellClassName }: ControlTextProps)
 {
     if (hidden)
         return null;
 
     const wrapClass =
-        ['mb-3', className]
+        ['mb-3', className, cellClassName]
         .filter(Boolean)
         .join(' ');
 
