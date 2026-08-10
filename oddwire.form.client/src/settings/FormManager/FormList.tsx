@@ -127,7 +127,9 @@ export function FormList()
                         {form.version ? <span className="text-muted"> v{form.version}</span> : null}
                         <span className="text-muted"> · {listInstances(form.formId).length} instances</span>
                     </span>
+                    {!form.readonly &&
                     <Link className="btn btn-sm btn-outline-primary" to={`/form/${form.formId}`}>New</Link>
+                    }
                     <Link className="btn btn-sm btn-outline-secondary" to={`/?FormID=${encodeURIComponent(form.formId)}`}>Open</Link>
                     <Button size="sm" variant="outline-danger" onClick={() => void deleteInstalledForm(form)}>Delete</Button>
                 </div>

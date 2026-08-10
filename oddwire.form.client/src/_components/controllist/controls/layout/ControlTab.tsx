@@ -43,6 +43,17 @@ export function ControlTab(props: ControlTabProps)
     const pageLayout = props.pageLayout ?? false;
     const childDepth = pageLayout ? 0 : depth + 1;
 
+    const selectSection = (param: string) =>
+    {
+        if (param === active.param)
+            return;
+
+        setActiveParam(param);
+
+        if (pageLayout)
+            window.scrollTo({ top: 0, left: 0 });
+    };
+
     const bar =
         <div
             className={pageLayout ? 'tab-bar tab-bar-root height-footer' : 'tab-bar tab-bar-inline'}
@@ -54,7 +65,7 @@ export function ControlTab(props: ControlTabProps)
                 type="button"
                 className={['tab', section.param === active.param ? 'active' : ''].filter(Boolean).join(' ')}
                 disabled={section.disabled}
-                onClick={() => setActiveParam(section.param)}
+                onClick={() => selectSection(section.param)}
             >{section.label}</button>
             )}
         </div>;

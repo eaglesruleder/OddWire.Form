@@ -1,4 +1,4 @@
-import { useContext, useReducer, useState } from 'react';
+import { useContext, useEffect, useReducer, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -17,14 +17,34 @@ export function LandingPage()
 {
     const { list: listForms } = useContext(FormContext);
     const { list: listInstances } = useContext(InstanceContext);
+    const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const forms = listForms();
 
     const [expandedFormId, setExpandedFormId] = useState<string | null>(() => initialExpandedFormId(forms, searchParams));
     const [, bumpRender] = useReducer(tick => tick + 1, 0);
 
-    const toggle = (formId: string) =>
-        setExpandedFormId(current => current === formId ? null : formId);
+    useEffect(() =>
+    {
+        const requested = requestedFormId(forms, searchParams);
+        if (!requested?.readonly)
+            return;
+
+        const instances = listInstances(requested.formId);
+        if (instances.length <= 1)
+            navigate(openReadonlyFormPath(requested, instances), { replace: true });
+    }, [forms, listInstances, navigate, searchParams]);
+
+    const openForm = (form: FormIndexEntry, instances: InstanceIndexEntry[]) =>
+    {
+        if (form.readonly && instances.length <= 1)
+        {
+            navigate(openReadonlyFormPath(form, instances));
+            return;
+        }
+
+        setExpandedFormId(current => current === form.formId ? null : form.formId);
+    };
 
     return (
         <StripLayout left="⚙" leftLink="/settings" title="OddWire Forms">
@@ -32,22 +52,30 @@ export function LandingPage()
 
             <div className="d-flex flex-column gap-2">
                 {forms.map(form =>
+                {
+                    const instances = listInstances(form.formId);
+
+                    return (
                     <div key={form.formId} className="d-flex flex-column gap-2">
                         <div className="d-flex gap-2">
-                            <Button className="fill d-flex justify-content-between align-items-center" variant="outline-primary" onClick={() => toggle(form.formId)}>
+                            <Button className="fill d-flex justify-content-between align-items-center" variant="outline-primary" onClick={() => openForm(form, instances)}>
                                 <span>
                                     {form.label ?? form.formId}
                                     {form.version ? <span className="text-muted"> v{form.version}</span> : null}
                                 </span>
-                                <span className="text-muted">{listInstances(form.formId).length}</span>
+                                <span className="text-muted">{instances.length}</span>
                             </Button>
+                            {!form.readonly &&
                             <Link className="btn btn-outline-secondary" to={`/form/${form.formId}`}>New</Link>
+                            }
                         </div>
 
                         {expandedFormId === form.formId
-                        ?   <InstanceList form={form} instances={listInstances(form.formId)} searchParams={searchParams} onDeleted={bumpRender} />
+                        ?   <InstanceList form={form} instances={instances} searchParams={searchParams} onDeleted={bumpRender} />
                         :   null}
                     </div>
+                    );
+                }
                     )}
 
                 {forms.length === 0
@@ -56,6 +84,12 @@ export function LandingPage()
             </div>
         </StripLayout>
         );
+}
+
+function openReadonlyFormPath(form: FormIndexEntry, instances: InstanceIndexEntry[]): string
+{
+    const instance = instances[0];
+    return instance ? `/form/${form.formId}/${instance.instanceId}` : `/form/${form.formId}`;
 }
 
 function requestedFormId(forms: FormIndexEntry[], searchParams: URLSearchParams): FormIndexEntry | undefined
@@ -151,7 +185,9 @@ function InstanceList({ form, instances, searchParams, onDeleted }: { form: Form
             ?   <span className="text-muted">No saved instances yet.</span>
             :   null}
 
+            {!form.readonly &&
             <Link to={`/form/${form.formId}`}>+ New instance</Link>
+            }
         </div>
         );
 }

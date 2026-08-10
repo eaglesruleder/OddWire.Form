@@ -12,6 +12,7 @@ export type FormDefinition = {
     formId: string;
     label?: string;
     version?: string;
+    readonly?: boolean;
     export?: FormExportDefinition;
     displayParam?: DisplayParam[];
     thumbnailParam?: string;          // param of an image/signature control whose thumbnail shows in the instance list
@@ -48,6 +49,7 @@ export type FormIndexEntry = {
     formId: string;
     label?: string;
     version?: string;
+    readonly?: boolean;
     displayParam?: DisplayParam[];
     thumbnailParam?: string;
     thumbnailDefault?: unknown;      // form's default value for thumbnailParam — one shared copy the landing falls back to

@@ -58,7 +58,7 @@ function getDevServerConfig() {
 }
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command }) => ({
+export default defineConfig(({ command, mode }) => ({
     base: env.VITE_BASE_PATH || '/',
     plugins: [plugin()],
     resolve: {
@@ -66,5 +66,17 @@ export default defineConfig(({ command }) => ({
             '@': fileURLToPath(new URL('./src', import.meta.url))
         }
     },
-    server: command === 'serve' ? getDevServerConfig() : undefined
+    server: command === 'serve' && mode !== 'test' ? getDevServerConfig() : undefined,
+    test: {
+        globals: true,
+        environment: 'jsdom',
+        setupFiles: ['./src/test/setup.ts'],
+        css: false,
+        coverage: {
+            provider: 'v8',
+            reporter: ['text', 'html'],
+            include: ['src/**/*.{ts,tsx}'],
+            exclude: ['src/**/*.d.ts', 'src/**/index.ts', 'src/main.tsx', 'src/**/*.test.{ts,tsx}']
+        }
+    }
 }))
