@@ -89,10 +89,10 @@ export class InstanceEntity
         this.schedulePersist();
     }
 
-    // Intent: key-lossy — a null/empty value drops the param entry entirely rather than storing an empty
+    // Intent: undefined stays sparse (fall back to the form/default); null/empty are explicit user clears.
     private applyValue(param: string, subkey: string, value: unknown): void
     {
-        if (subkey === 'value' && (value === null || value === undefined || value === ''))
+        if (subkey === 'value' && value === undefined)
         {
             this.instance = { ...this.instance, controls: this.instance.controls.filter(control => control.param !== param) };
             return;

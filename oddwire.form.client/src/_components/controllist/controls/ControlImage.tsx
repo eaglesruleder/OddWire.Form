@@ -123,11 +123,11 @@ export function ControlImage(props: ControlImageProps)
         if (captured)
             await deleteOwned(captured.id);
 
-        props.onChange?.('', props.param);   // key-lossy clear drops the instance entry
+        props.onChange?.('', props.param);   // explicit clear overrides any form-level default
     };
 
-    // Intent: only delete a blob this instance owns — a bundled form-default blob is shared across instances, so clearing/
-    // replacing here just drops the overlay (reverting to the default) rather than destroying the shared source
+    // Intent: only delete a blob this instance owns — a bundled form-default blob is shared across instances, so clearing
+    // overrides it for this instance without destroying the shared source.
     const deleteOwned = async (id: string) =>
     {
         const record = await images.getImage(id);
