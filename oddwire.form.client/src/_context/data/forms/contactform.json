@@ -1,7 +1,7 @@
 {
     "formId": "11111111-1111-4111-8111-111111111111",
     "label": "Contact Form",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "export": {
         "api": "/api/form/contact",
         "pdf": true
@@ -15,7 +15,8 @@
         {
             "type": "label",
             "param": "title",
-            "label": "Contact"
+            "label": "Contact",
+            "labelHeading": "h2"
         },
         {
             "type": "text",
@@ -281,7 +282,8 @@
                     "label": "Description",
                     "value": ""
                 }
-            ]
+            ],
+            "labelHeading": "h4"
         },
         {
             "type": "tab",

@@ -1,7 +1,7 @@
 {
   "formId": "44444444-4444-4444-8444-444444444444",
   "label": "Monster Reference Card",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "displayParam": [
     "name",
     "hp",
@@ -312,7 +312,8 @@
           "type": "label",
           "param": "traitSectionTitle",
           "label": "Traits",
-          "labelFor": "trait"
+          "labelFor": "trait",
+          "labelHeading": "h3"
         },
         {
           "type": "looper",
@@ -339,7 +340,8 @@
                   "param": "entries",
                   "label": "Entries"
                 }
-              ]
+              ],
+              "labelHeading": "h4"
             }
           ]
         },
@@ -853,7 +855,8 @@
               "type": "label",
               "param": "actionSectionTitle",
               "label": "Actions",
-              "labelFor": "action"
+              "labelFor": "action",
+              "labelHeading": "h3"
             },
             {
               "type": "looper",
@@ -896,7 +899,8 @@
                       "param": "entries",
                       "label": "Entries"
                     }
-                  ]
+                  ],
+                  "labelHeading": "h4"
                 }
               ]
             },
@@ -1138,7 +1142,8 @@
               "type": "label",
               "param": "bonusSectionTitle",
               "label": "Bonus Actions",
-              "labelFor": "bonus"
+              "labelFor": "bonus",
+              "labelHeading": "h3"
             },
             {
               "type": "looper",
@@ -1165,7 +1170,8 @@
                       "param": "entries",
                       "label": "Entries"
                     }
-                  ]
+                  ],
+                  "labelHeading": "h4"
                 }
               ]
             },
@@ -1173,7 +1179,8 @@
               "type": "label",
               "param": "reactionSectionTitle",
               "label": "Reactions",
-              "labelFor": "reaction"
+              "labelFor": "reaction",
+              "labelHeading": "h3"
             },
             {
               "type": "looper",
@@ -1200,7 +1207,8 @@
                       "param": "entries",
                       "label": "Entries"
                     }
-                  ]
+                  ],
+                  "labelHeading": "h4"
                 }
               ]
             },
@@ -1208,7 +1216,8 @@
               "type": "label",
               "param": "legendarySectionTitle",
               "label": "Legendary Actions",
-              "labelFor": "legendary"
+              "labelFor": "legendary",
+              "labelHeading": "h3"
             },
             {
               "type": "looper",
@@ -1235,7 +1244,8 @@
                       "param": "entries",
                       "label": "Entries"
                     }
-                  ]
+                  ],
+                  "labelHeading": "h4"
                 }
               ]
             },
@@ -1243,7 +1253,8 @@
               "type": "label",
               "param": "mythicSectionTitle",
               "label": "Mythic Actions",
-              "labelFor": "mythic"
+              "labelFor": "mythic",
+              "labelHeading": "h3"
             },
             {
               "type": "looper",
@@ -1270,7 +1281,8 @@
                       "param": "entries",
                       "label": "Entries"
                     }
-                  ]
+                  ],
+                  "labelHeading": "h4"
                 }
               ]
             },
@@ -1292,7 +1304,8 @@
               "type": "label",
               "param": "spellcastingSectionTitle",
               "label": "Spellcasting",
-              "labelFor": "spellcasting"
+              "labelFor": "spellcasting",
+              "labelHeading": "h3"
             },
             {
               "type": "looper",
@@ -1349,7 +1362,8 @@
                       "param": "spells",
                       "label": "Spell Slots"
                     }
-                  ]
+                  ],
+                  "labelHeading": "h4"
                 }
               ]
             }
@@ -1384,7 +1398,8 @@
             {
               "type": "label",
               "param": "slotSectionTitle",
-              "label": "Spell Slots"
+              "label": "Spell Slots",
+              "labelHeading": "h3"
             },
             {
               "type": "checkbox",
@@ -1588,7 +1603,8 @@
           "type": "label",
           "param": "variantSectionTitle",
           "label": "Variants",
-          "labelFor": "variant"
+          "labelFor": "variant",
+          "labelHeading": "h3"
         },
         {
           "type": "looper",
@@ -1636,7 +1652,8 @@
                   "param": "entries",
                   "label": "Entries"
                 }
-              ]
+              ],
+              "labelHeading": "h4"
             }
           ]
         },
