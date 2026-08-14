@@ -1,7 +1,7 @@
 {
   "formId": "7e5c0c59-8d27-4b70-9d42-6c4a4f2ec6aa",
   "label": "Dillon O'Dwyer Resume",
-  "version": "0.2.1",
+  "version": "0.2.8",
   "displayParam": [
     "fullName",
     "roleTitle"
@@ -29,15 +29,19 @@
         {
           "type": "label",
           "param": "email",
+          "labelHeading": "h3",
           "label": "Contact",
           "value": "ODwyer.Dillon@Outlook.com\n0432 990 251",
-          "stacked": true
+          "stacked": true,
+          "cellClassName": "lg-col-6"
         },
         {
           "type": "label",
           "param": "availability",
+          "labelHeading": "h3",
           "label": "Availability",
-          "value": "Actively Seeking Work\n3-5 Days per Week or Contract\n9:30AM–2PM from Office + 40% WFH"
+          "value": "Actively Seeking Work\n3-5 Days per Week or Contract\n9:30AM–2PM from Office + 40% WFH",
+          "cellClassName": "lg-col-6"
         },
         {
           "type": "label",
@@ -90,7 +94,8 @@
           "controls": [
             {
               "type": "label",
-              "param": "language"
+              "param": "language",
+              "labelHeading": "h3"
             }
           ]
         },
@@ -267,7 +272,8 @@
           "controls": [
             {
               "type": "label",
-              "param": "repoName"
+              "param": "repoName",
+              "labelHeading": "h3"
             },
             {
               "type": "label",
@@ -400,11 +406,13 @@
             {
               "type": "label",
               "param": "jobTitle",
+              "labelHeading": "h4",
               "cellClassName": "sm-col-6 lg-col-8"
             },
             {
               "type": "label",
               "param": "jobDates",
+              "labelHeading": "h4",
               "cellClassName": "sm-col-6 lg-col-4"
             },
             {
@@ -414,21 +422,25 @@
             {
               "type": "label",
               "param": "skillGroupA",
+              "labelHeading": "h3",
               "cellClassName": "sm-col-12 lg-col-6"
             },
             {
               "type": "label",
               "param": "skillGroupB",
+              "labelHeading": "h3",
               "cellClassName": "sm-col-12 lg-col-6"
             },
             {
               "type": "label",
               "param": "skillGroupC",
+              "labelHeading": "h3",
               "cellClassName": "sm-col-12 lg-col-6"
             },
             {
               "type": "label",
               "param": "skillGroupD",
+              "labelHeading": "h3",
               "cellClassName": "sm-col-12 lg-col-6"
             }
           ]
@@ -512,11 +524,13 @@
             {
               "type": "label",
               "param": "reviewerName",
+              "labelHeading": "h4",
               "cellClassName": "sm-col-6 lg-col-8"
             },
             {
               "type": "label",
               "param": "reviewMeta",
+              "labelHeading": "h4",
               "cellClassName": "sm-col-6 lg-col-4"
             },
             {
@@ -603,11 +617,13 @@
             {
               "type": "label",
               "param": "educationTitle",
+              "labelHeading": "h4",
               "cellClassName": "sm-col-6 lg-col-8"
             },
             {
               "type": "label",
               "param": "educationDates",
+              "labelHeading": "h4",
               "cellClassName": "sm-col-6 lg-col-4"
             },
             {
@@ -681,7 +697,8 @@
           "controls": [
             {
               "type": "label",
-              "param": "extraTitle"
+              "param": "extraTitle",
+              "labelHeading": "h4"
             },
             {
               "type": "label",
@@ -708,6 +725,7 @@
         {
           "type": "label",
           "param": "closingSource",
+          "labelHeading": "h3",
           "label": "“Roast me per our conversation history” — response extract",
           "value": "ChatGPT — OpenAI Model 5.4 Thinking"
         },
@@ -719,7 +737,9 @@
         {
           "type": "label",
           "param": "closingPunchline",
-          "label": "“Interesting idea. Shame if someone replaced it with infrastructure.”"
+          "labelHeading": "h3",
+          "className": "center",
+          "label": "“Interesting idea.\nShame if someone replaced it with infrastructure.”"
         }
       ]
     }

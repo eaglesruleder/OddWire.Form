@@ -52,7 +52,7 @@ describe('LandingPage read-only forms', () =>
         expect(screen.queryByRole('link', { name: '+ New instance' })).not.toBeInTheDocument();
     });
 
-    it('expands a requested read-only form with one instance without redirecting', () =>
+    it('leaves a requested read-only form collapsed when it direct-opens one instance', () =>
     {
         renderLanding({
             initialEntries: ['/?FormID=guide'],
@@ -61,7 +61,20 @@ describe('LandingPage read-only forms', () =>
         });
 
         expect(screen.getByTestId('location')).toHaveTextContent('/');
-        expect(screen.getByText('Title')).toBeInTheDocument();
+        expect(screen.queryByText('Title')).not.toBeInTheDocument();
+    });
+
+    it('expands a requested read-only form when it has multiple instances', () =>
+    {
+        renderLanding({
+            initialEntries: ['/?FormID=guide'],
+            forms: [{ formId: 'guide', label: 'Guide', readonly: true }],
+            instances: { guide: [instance('inst-1', 'One'), instance('inst-2', 'Two')] },
+        });
+
+        expect(screen.getByTestId('location')).toHaveTextContent('/');
+        expect(screen.getByText('One')).toBeInTheDocument();
+        expect(screen.getByText('Two')).toBeInTheDocument();
     });
 });
 

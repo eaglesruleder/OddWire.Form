@@ -23,7 +23,7 @@ export function LandingPage()
     const [searchParams] = useSearchParams();
     const forms = listForms();
 
-    const [expandedFormId, setExpandedFormId] = useState<string | null>(() => initialExpandedFormId(forms, searchParams));
+    const [expandedFormId, setExpandedFormId] = useState<string | null>(() => initialExpandedFormId(forms, searchParams, listInstances));
     const [deletePromptForm, setDeletePromptForm] = useState<FormIndexEntry | null>(null);
     const [instanceSelection, setInstanceSelection] = useState<{ formId: string; selectedIds: Set<string> } | null>(null);
     const [, bumpRender] = useReducer(tick => tick + 1, 0);
@@ -318,10 +318,14 @@ function requestedFormId(forms: FormIndexEntry[], searchParams: URLSearchParams)
     return forms.find(form => form.formId === requested || form.label === requested);
 }
 
-function initialExpandedFormId(forms: FormIndexEntry[], searchParams: URLSearchParams): string | null
+function initialExpandedFormId(forms: FormIndexEntry[], searchParams: URLSearchParams, listInstances: (formId: string) => InstanceIndexEntry[]): string | null
 {
-    return requestedFormId(forms, searchParams)?.formId
-        ?? (forms.length === 1 ? forms[0].formId : null);
+    const requested = requestedFormId(forms, searchParams);
+
+    if (requested)
+        return requested.readonly && listInstances(requested.formId).length <= 1 ? null : requested.formId;
+
+    return forms.length === 1 ? forms[0].formId : null;
 }
 
 function InstanceList({

@@ -10,14 +10,14 @@ import { ControlCollapsible } from './layout/ControlCollapsible';
 
 describe('control label headings', () =>
 {
-    it('renders label controls as h3 headings by default', () =>
+    it('renders label controls as h2 headings by default', () =>
     {
         render(<ControlText param="summary" label="Summary" value="Body" />);
 
-        const heading = screen.getByRole('heading', { level: 3, name: 'Summary' });
+        const heading = screen.getByRole('heading', { level: 2, name: 'Summary' });
 
-        expect(heading.tagName).toBe('H3');
-        expect(heading).toHaveClass('control-heading', 'h3', 'separator');
+        expect(heading.tagName).toBe('H2');
+        expect(heading).toHaveClass('control-heading', 'h2', 'separator');
     });
 
     it('lets label controls override their heading level', () =>

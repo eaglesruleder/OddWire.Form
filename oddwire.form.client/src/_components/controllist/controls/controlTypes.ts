@@ -94,6 +94,7 @@ export type ControlDefBase<TType extends string, TValue = unknown> = {
     hidden?: boolean;
     disabled?: boolean;
     placeholder?: string;
+    className?: string;
     stacked?: boolean;
     cellClassName?: string;
     rows?: number;

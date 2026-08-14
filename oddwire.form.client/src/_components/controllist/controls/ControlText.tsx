@@ -18,7 +18,7 @@ export function ControlText({ label, labelHeading, value, hidden, className, cel
     return (
         <div className={wrapClass}>
             {label &&
-            <ControlHeadingLabel label={label} labelHeading={labelHeading} defaultHeading="h3" className="separator" />
+            <ControlHeadingLabel label={label} labelHeading={labelHeading} defaultHeading="h2" className="separator" />
             }
             {value &&
             <div className="control-static">{value}</div>
