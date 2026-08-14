@@ -66,7 +66,7 @@ export function ControlTab(props: ControlTabProps)
                 className={['tab', section.param === active.param ? 'active' : ''].filter(Boolean).join(' ')}
                 disabled={section.disabled}
                 onClick={() => selectSection(section.param)}
-            >{section.label}</button>
+            ><span className="tab-label">{section.label}</span></button>
             )}
         </div>;
 

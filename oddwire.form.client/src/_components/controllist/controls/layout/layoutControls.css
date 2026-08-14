@@ -101,14 +101,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 0;
   padding: 0 8px;
   border: 0;
   border-right: 1px solid var(--border);
   border-radius: 0;
   background: var(--bg-header);
   color: #fff;
-  white-space: nowrap;
   overflow: hidden;
+}
+.tab-bar-root .tab-label {
+  display: -webkit-box;
+  max-height: 2.3em;
+  overflow: hidden;
+  line-height: 1.15;
+  text-align: center;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 .tab-bar-root .tab:last-child { border-right: 0; }
 .tab-bar-root .tab.active {
