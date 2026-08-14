@@ -1,4 +1,4 @@
-import { useContext, useEffect, useReducer, useState } from 'react';
+import { useContext, useReducer, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -7,7 +7,7 @@ import 'react-swipeable-list/dist/styles.css';
 
 import type { DisplayParam, FormIndexEntry, InstanceIndexEntry, ParamList } from '../_context';
 
-import { FormContext, InstanceContext, FormImageContext } from '../_context';
+import { FormContext, InstanceContext, FormImageContext, PdfTemplateContext } from '../_context';
 import { StripLayout } from '../_components/layout';
 import { ControlDropdown } from '../_components/controllist/controls';
 import { isCapturedImage, imageValueText } from '../_components/controllist';
@@ -15,28 +15,24 @@ import './landing.css';
 
 export function LandingPage()
 {
-    const { list: listForms } = useContext(FormContext);
-    const { list: listInstances } = useContext(InstanceContext);
+    const { list: listForms, deleteForm } = useContext(FormContext);
+    const { list: listInstances, deleteInstance, deleteFormInstances } = useContext(InstanceContext);
+    const { deleteTemplate } = useContext(PdfTemplateContext);
+    const images = useContext(FormImageContext);
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const forms = listForms();
 
     const [expandedFormId, setExpandedFormId] = useState<string | null>(() => initialExpandedFormId(forms, searchParams));
+    const [deletePromptForm, setDeletePromptForm] = useState<FormIndexEntry | null>(null);
+    const [instanceSelection, setInstanceSelection] = useState<{ formId: string; selectedIds: Set<string> } | null>(null);
     const [, bumpRender] = useReducer(tick => tick + 1, 0);
-
-    useEffect(() =>
-    {
-        const requested = requestedFormId(forms, searchParams);
-        if (!requested?.readonly)
-            return;
-
-        const instances = listInstances(requested.formId);
-        if (instances.length <= 1)
-            navigate(openReadonlyFormPath(requested, instances), { replace: true });
-    }, [forms, listInstances, navigate, searchParams]);
 
     const openForm = (form: FormIndexEntry, instances: InstanceIndexEntry[]) =>
     {
+        if (instanceSelection?.formId === form.formId)
+            return;
+
         if (form.readonly && instances.length <= 1)
         {
             navigate(openReadonlyFormPath(form, instances));
@@ -44,6 +40,99 @@ export function LandingPage()
         }
 
         setExpandedFormId(current => current === form.formId ? null : form.formId);
+    };
+
+    const openReadonlyForm = (form: FormIndexEntry, instances: InstanceIndexEntry[]) =>
+    {
+        if (instances.length <= 1)
+        {
+            navigate(openReadonlyFormPath(form, instances));
+            return;
+        }
+
+        setExpandedFormId(form.formId);
+    };
+
+    const openDeletePrompt = (form: FormIndexEntry) =>
+    {
+        setDeletePromptForm(form);
+    };
+
+    const startInstanceSelection = (form: FormIndexEntry) =>
+    {
+        setDeletePromptForm(null);
+        setExpandedFormId(form.formId);
+        setInstanceSelection({ formId: form.formId, selectedIds: new Set() });
+    };
+
+    const toggleSelectedInstance = (instanceId: string, checked: boolean) =>
+        setInstanceSelection(selection =>
+        {
+            if (!selection)
+                return selection;
+
+            const selectedIds = new Set(selection.selectedIds);
+            if (checked)
+                selectedIds.add(instanceId);
+            else
+                selectedIds.delete(instanceId);
+
+            return { ...selection, selectedIds };
+        });
+
+    const cancelInstanceSelection = () =>
+    {
+        setInstanceSelection(null);
+    };
+
+    const deleteSelectedInstances = async (form: FormIndexEntry, instances: InstanceIndexEntry[]) =>
+    {
+        if (!instanceSelection || instanceSelection.selectedIds.size === 0)
+            return;
+
+        const selected = instances.filter(instance => instanceSelection.selectedIds.has(instance.instanceId));
+        await deleteInstances(form, selected);
+        setInstanceSelection(null);
+    };
+
+    const deleteAllSavedInstances = async (form: FormIndexEntry) =>
+    {
+        const instances = listInstances(form.formId);
+        await deleteInstanceImages(form, instances);
+        await deleteFormInstances(form.formId);
+        setDeletePromptForm(null);
+        setInstanceSelection(null);
+        bumpRender();
+    };
+
+    const deleteInstalledForm = async (form: FormIndexEntry) =>
+    {
+        const ownedImages = await images.imagesFor({ formId: form.formId });
+
+        await Promise.all(ownedImages.map(record => images.deleteImage(record.id)));
+        await deleteTemplate(form.formId);
+        await deleteForm(form.formId);
+
+        setDeletePromptForm(null);
+        setExpandedFormId(current => current === form.formId ? null : current);
+        setInstanceSelection(null);
+        bumpRender();
+    };
+
+    const deleteInstances = async (form: FormIndexEntry, instances: InstanceIndexEntry[]) =>
+    {
+        await deleteInstanceImages(form, instances);
+        await Promise.all(instances.map(instance => deleteInstance(instance.instanceId)));
+        bumpRender();
+    };
+
+    const deleteInstanceImages = async (form: FormIndexEntry, instances: InstanceIndexEntry[]) =>
+    {
+        const imageGroups = await Promise.all(
+            instances.map(instance => images.imagesFor({ formId: form.formId, instanceId: instance.instanceId }))
+        );
+
+        await Promise.all(imageGroups.flat().map(record => images.deleteImage(record.id)));
     };
 
     return (
@@ -54,24 +143,54 @@ export function LandingPage()
                 {forms.map(form =>
                 {
                     const instances = listInstances(form.formId);
+                    const expanded = expandedFormId === form.formId;
+                    const selection = instanceSelection?.formId === form.formId ? instanceSelection : undefined;
+                    const formLabel = form.label ?? form.formId;
+                    const formButtonLabel = form.readonly && instances.length <= 1
+                    ?   `Open ${formLabel}`
+                    :   `${expanded ? 'Collapse' : 'Open'} ${formLabel}`;
 
                     return (
                     <div key={form.formId} className="d-flex flex-column gap-2">
                         <div className="d-flex gap-2">
-                            <Button className="fill d-flex justify-content-between align-items-center" variant="outline-primary" onClick={() => openForm(form, instances)}>
+                            <Button
+                                className="fill d-flex justify-content-between align-items-center"
+                                variant="outline-primary"
+                                aria-label={formButtonLabel}
+                                onClick={() => openForm(form, instances)}
+                            >
                                 <span>
-                                    {form.label ?? form.formId}
+                                    {formLabel}
                                     {form.version ? <span className="text-muted"> v{form.version}</span> : null}
                                 </span>
+                                {instances.length > 0 &&
                                 <span className="text-muted">{instances.length}</span>
+                                }
                             </Button>
-                            {!form.readonly &&
+                            <FormRowAction
+                                form={form}
+                                expanded={expanded}
+                                instances={instances}
+                                selection={selection}
+                                onCancelSelection={cancelInstanceSelection}
+                                onDeletePrompt={openDeletePrompt}
+                                onDeleteSelected={deleteSelectedInstances}
+                                onOpenReadonly={openReadonlyForm}
+                            />
+                            {!expanded && !selection && !form.readonly &&
                             <Link className="btn btn-outline-secondary" to={`/form/${form.formId}`}>New</Link>
                             }
                         </div>
 
-                        {expandedFormId === form.formId
-                        ?   <InstanceList form={form} instances={instances} searchParams={searchParams} onDeleted={bumpRender} />
+                        {expanded
+                        ?   <InstanceList
+                                form={form}
+                                instances={instances}
+                                searchParams={searchParams}
+                                selection={selection}
+                                onDeleted={bumpRender}
+                                onToggleSelected={toggleSelectedInstance}
+                            />
                         :   null}
                     </div>
                     );
@@ -82,7 +201,104 @@ export function LandingPage()
                 ?   <span className="text-muted">No forms available.</span>
                 :   null}
             </div>
+
+            {deletePromptForm &&
+            <DeleteFormDialog
+                form={deletePromptForm}
+                instanceCount={listInstances(deletePromptForm.formId).length}
+                onCancel={() => setDeletePromptForm(null)}
+                onDeleteAllInstances={deleteAllSavedInstances}
+                onDeleteForm={deleteInstalledForm}
+                onSelectInstances={startInstanceSelection}
+            />
+            }
         </StripLayout>
+        );
+}
+
+function FormRowAction({
+    form,
+    expanded,
+    instances,
+    selection,
+    onCancelSelection,
+    onDeletePrompt,
+    onDeleteSelected,
+    onOpenReadonly,
+}: {
+    form: FormIndexEntry;
+    expanded: boolean;
+    instances: InstanceIndexEntry[];
+    selection?: { selectedIds: Set<string> };
+    onCancelSelection: () => void;
+    onDeletePrompt: (form: FormIndexEntry) => void;
+    onDeleteSelected: (form: FormIndexEntry, instances: InstanceIndexEntry[]) => Promise<void>;
+    onOpenReadonly: (form: FormIndexEntry, instances: InstanceIndexEntry[]) => void;
+})
+{
+    if (selection)
+    {
+        const hasSelection = selection.selectedIds.size > 0;
+        return (
+            <Button
+                variant={hasSelection ? 'outline-danger' : 'outline-secondary'}
+                aria-label={hasSelection ? 'Delete selected instances' : 'Cancel instance selection'}
+                onClick={() => hasSelection ? void onDeleteSelected(form, instances) : onCancelSelection()}
+            >
+                {hasSelection ? 'Delete' : 'Cancel'}
+            </Button>
+            );
+    }
+
+    if (form.readonly)
+        return (
+            <Button variant="outline-secondary" aria-label={`Open readonly form ${form.label ?? form.formId}`} onClick={() => onOpenReadonly(form, instances)}>
+                Open
+            </Button>
+            );
+
+    if (!expanded && !form.readonly)
+        return null;
+
+    return (
+        <Button variant="outline-danger" aria-label={`Delete ${form.label ?? form.formId}`} onClick={() => onDeletePrompt(form)}>
+            Delete
+        </Button>
+        );
+}
+
+function DeleteFormDialog({
+    form,
+    instanceCount,
+    onCancel,
+    onDeleteAllInstances,
+    onDeleteForm,
+    onSelectInstances,
+}: {
+    form: FormIndexEntry;
+    instanceCount: number;
+    onCancel: () => void;
+    onDeleteAllInstances: (form: FormIndexEntry) => Promise<void>;
+    onDeleteForm: (form: FormIndexEntry) => Promise<void>;
+    onSelectInstances: (form: FormIndexEntry) => void;
+})
+{
+    const label = form.label ?? form.formId;
+
+    return (
+        <Modal show onHide={onCancel} centered dialogClassName="delete-form-dialog">
+            <Modal.Header closeButton>
+                <Modal.Title>Delete {label}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <div className="d-flex flex-column gap-2">
+                    <Button variant="outline-danger" onClick={() => void onDeleteForm(form)}>Delete form</Button>
+                    <Button variant="outline-danger" disabled={instanceCount === 0} onClick={() => void onDeleteAllInstances(form)}>Delete all instances</Button>
+                    <Button variant="outline-secondary" disabled={instanceCount === 0} onClick={() => onSelectInstances(form)}>Delete instances</Button>
+                    <Button variant="outline-secondary" onClick={onCancel}>Cancel</Button>
+                </div>
+            </Modal.Body>
+        </Modal>
         );
 }
 
@@ -108,7 +324,21 @@ function initialExpandedFormId(forms: FormIndexEntry[], searchParams: URLSearchP
         ?? (forms.length === 1 ? forms[0].formId : null);
 }
 
-function InstanceList({ form, instances, searchParams, onDeleted }: { form: FormIndexEntry; instances: InstanceIndexEntry[]; searchParams: URLSearchParams; onDeleted: () => void })
+function InstanceList({
+    form,
+    instances,
+    searchParams,
+    selection,
+    onDeleted,
+    onToggleSelected,
+}: {
+    form: FormIndexEntry;
+    instances: InstanceIndexEntry[];
+    searchParams: URLSearchParams;
+    selection?: { selectedIds: Set<string> };
+    onDeleted: () => void;
+    onToggleSelected: (instanceId: string, checked: boolean) => void;
+})
 {
     const filterParams = form.filterParam ?? [];
     const orderParams = paramList(form.orderParam);
@@ -119,7 +349,7 @@ function InstanceList({ form, instances, searchParams, onDeleted }: { form: Form
     const [orderStep, setOrderStep] = useState(0);
     const [groupOpen, setGroupOpen] = useState<Record<string, boolean>>({});
 
-    const filtered = instances.filter(instance =>
+    const filtered = selection ? instances : instances.filter(instance =>
         filterParams.every(param => !filters[param] || valueText(instance.filter?.[param]) === filters[param]));
     const ordered = orderInstances(filtered, orderParams, orderStep);
     const groups = groupInstances(ordered, groupParams);
@@ -132,7 +362,7 @@ function InstanceList({ form, instances, searchParams, onDeleted }: { form: Form
 
     return (
         <div className="d-flex flex-column gap-2 ms-3 mb-3">
-            {(filterParams.length > 0 || orderParams.length > 0) &&
+            {!selection && (filterParams.length > 0 || orderParams.length > 0) &&
             <div className="d-flex justify-content-end flex-wrap gap-2">
                 {filterParams.map(param =>
                     <ControlDropdown
@@ -170,11 +400,11 @@ function InstanceList({ form, instances, searchParams, onDeleted }: { form: Form
                             <span className="text-muted">{group.instances.length}</span>
                         </Button>
 
-                        {(isGroupOpen(group.label, groupOpen, routeGroupFilters)) &&
-                        <InstanceLinks form={form} instances={group.instances} onDeleted={onDeleted} />
+                        {(selection || isGroupOpen(group.label, groupOpen, routeGroupFilters)) &&
+                        <InstanceLinks form={form} instances={group.instances} selection={selection} onDeleted={onDeleted} onToggleSelected={onToggleSelected} />
                         }
                     </div>
-                :   <InstanceLinks key={group.label} form={form} instances={group.instances} onDeleted={onDeleted} />
+                :   <InstanceLinks key={group.label} form={form} instances={group.instances} selection={selection} onDeleted={onDeleted} onToggleSelected={onToggleSelected} />
                 )}
 
             {ordered.length === 0 && instances.length > 0
@@ -185,7 +415,7 @@ function InstanceList({ form, instances, searchParams, onDeleted }: { form: Form
             ?   <span className="text-muted">No saved instances yet.</span>
             :   null}
 
-            {!form.readonly &&
+            {!selection && !form.readonly &&
             <Link to={`/form/${form.formId}`}>+ New instance</Link>
             }
         </div>
@@ -216,7 +446,19 @@ function isGroupOpen(label: string, groupOpen: Record<string, boolean>, routeGro
     return routeLabel !== '' && normaliseRouteValue(label) === normaliseRouteValue(routeLabel);
 }
 
-function InstanceLinks({ form, instances, onDeleted }: { form: FormIndexEntry; instances: InstanceIndexEntry[]; onDeleted: () => void })
+function InstanceLinks({
+    form,
+    instances,
+    selection,
+    onDeleted,
+    onToggleSelected,
+}: {
+    form: FormIndexEntry;
+    instances: InstanceIndexEntry[];
+    selection?: { selectedIds: Set<string> };
+    onDeleted: () => void;
+    onToggleSelected: (instanceId: string, checked: boolean) => void;
+})
 {
     const { deleteInstance } = useContext(InstanceContext);
     const images = useContext(FormImageContext);
@@ -271,27 +513,40 @@ function InstanceLinks({ form, instances, onDeleted }: { form: FormIndexEntry; i
                                 </span>
                             )}
                     </span>;
+                const body = thumb
+                ?   <span className="instance-row-thumbwrap">
+                        <span className="instance-row-content">{main}{details}</span>
+                        <img
+                            className="instance-row-thumb"
+                            src={thumb}
+                            alt=""
+                            onClick={selection ? undefined : e => { e.preventDefault(); e.stopPropagation(); void openZoom(thumbValue); }}
+                        />
+                    </span>
+                :   <span className="instance-row-content">{main}{details}</span>;
+                const selected = selection?.selectedIds.has(instance.instanceId) ?? false;
+                const toggleSelected = () =>
+                    onToggleSelected(instance.instanceId, !selected);
 
                 return (
                     <SwipeableListItem
                         key={instance.instanceId}
                         className="instance-row-wrap"
-                        onClick={() => navigate(`/form/${form.formId}/${instance.instanceId}`)}
-                        trailingActions={deleteActions(() => deleteSavedInstance(instance))}
+                        onClick={() => selection ? toggleSelected() : navigate(`/form/${form.formId}/${instance.instanceId}`)}
+                        trailingActions={selection ? undefined : deleteActions(() => deleteSavedInstance(instance))}
                     >
-                        <div className="instance-row">
-                            {thumb
-                            ?   <span className="instance-row-thumbwrap">
-                                    <span className="instance-row-content">{main}{details}</span>
-                                    <img
-                                        className="instance-row-thumb"
-                                        src={thumb}
-                                        alt=""
-                                        onClick={e => { e.preventDefault(); e.stopPropagation(); void openZoom(thumbValue); }}
-                                    />
-                                </span>
-                            :   <>{main}{details}</>
+                        <div className={['instance-row', selection ? 'instance-row-selecting' : ''].filter(Boolean).join(' ')}>
+                            {selection &&
+                            <input
+                                type="checkbox"
+                                className="instance-row-checkbox"
+                                checked={selected}
+                                aria-label={`Select ${displayTitle(instance, form.displayParam)}`}
+                                onClick={e => e.stopPropagation()}
+                                onChange={e => onToggleSelected(instance.instanceId, e.target.checked)}
+                            />
                             }
+                            {body}
                         </div>
                     </SwipeableListItem>
                     );

@@ -3,9 +3,8 @@ import Button from 'react-bootstrap/Button';
 import type { ButtonProps } from 'react-bootstrap/Button';
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
-import { Link } from 'react-router-dom';
 
-import type { FormDefinition, FormIndexEntry } from '../../_context';
+import type { FormDefinition } from '../../_context';
 import { FormContext, InstanceContext, PdfTemplateContext, FormImageContext } from '../../_context';
 import { installFormPackage } from '../../_context/installFormPackage';
 
@@ -31,9 +30,9 @@ type FormAction = { label: string; variant: ButtonProps['variant'] };
 
 export function FormList()
 {
-    const { list, saveForm, deleteForm } = useContext(FormContext);
-    const { list: listInstances, save: saveInstance } = useContext(InstanceContext);
-    const { saveTemplate, deleteTemplate } = useContext(PdfTemplateContext);
+    const { list, saveForm } = useContext(FormContext);
+    const { save: saveInstance } = useContext(InstanceContext);
+    const { saveTemplate } = useContext(PdfTemplateContext);
     const images = useContext(FormImageContext);
     const [packages, setPackages] = useState<BundledFormPackage[]>(bundledForms);
     const [toastMessage, setToastMessage] = useState<string>();
@@ -64,9 +63,7 @@ export function FormList()
         return () => { active = false; };
     }, []);
 
-    const installedForms = [...list()]
-        .sort((a, b) => (a.label ?? a.formId).localeCompare(b.label ?? b.formId));
-    const installedVersions = new Map(installedForms.map(entry => [entry.formId, entry.version]));
+    const installedVersions = new Map(list().map(entry => [entry.formId, entry.version]));
 
     const install = async (pkg: BundledFormPackage) =>
     {
@@ -79,30 +76,6 @@ export function FormList()
         catch (error)
         {
             setToastMessage(error instanceof Error ? `Install failed: ${error.message}` : 'Install failed');
-        }
-    };
-
-    const deleteInstalledForm = async (form: FormIndexEntry) =>
-    {
-        const label = form.label ?? form.formId;
-        const count = listInstances(form.formId).length;
-        const suffix = count === 1 ? '1 saved instance' : `${count} saved instances`;
-
-        if (!window.confirm(`Delete "${label}" and ${suffix}?`))
-            return;
-
-        try
-        {
-            const ownedImages = await images.imagesFor({ formId: form.formId });
-
-            await Promise.all(ownedImages.map(record => images.deleteImage(record.id)));
-            await deleteTemplate(form.formId);
-            await deleteForm(form.formId);
-            bumpRender();
-        }
-        catch (error)
-        {
-            setToastMessage(error instanceof Error ? `Delete failed: ${error.message}` : 'Delete failed');
         }
     };
 
@@ -119,27 +92,6 @@ export function FormList()
 
     return (
         <div className="flex column gap">
-            <div className="form-manager-section-title">Installed</div>
-            {installedForms.map(form =>
-                <div key={form.formId} className="form-manager-row">
-                    <span className="fill">
-                        {form.label ?? form.formId}
-                        {form.version ? <span className="text-muted"> v{form.version}</span> : null}
-                        <span className="text-muted"> · {listInstances(form.formId).length} instances</span>
-                    </span>
-                    {!form.readonly &&
-                    <Link className="btn btn-sm btn-outline-primary" to={`/form/${form.formId}`}>New</Link>
-                    }
-                    <Link className="btn btn-sm btn-outline-secondary" to={`/?FormID=${encodeURIComponent(form.formId)}`}>Open</Link>
-                    <Button size="sm" variant="outline-danger" onClick={() => void deleteInstalledForm(form)}>Delete</Button>
-                </div>
-                )}
-
-            {installedForms.length === 0
-            ?   <span className="text-muted">No installed forms.</span>
-            :   null}
-
-            <div className="form-manager-section-title mt-2">Bundled</div>
             {packages.map(pkg =>
             {
                 const form = pkg.form;

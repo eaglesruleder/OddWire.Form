@@ -7,7 +7,7 @@ import ToastContainer from 'react-bootstrap/ToastContainer';
 
 import type { DisplayParam, FormDefinition, InstanceChange, ParamList } from '../_context';
 
-import { FormContext, InstanceContext, LookupContext, InstanceEntity, FormActionsContext } from '../_context';
+import { FormContext, InstanceContext, LookupContext, InstanceEntity, FormActionsContext, FormImageContext, PdfTemplateContext } from '../_context';
 import { StripLayout } from '../_components/layout';
 import { ControlList, ControlTab, ControlError, ControlButton, DbContext, buildRootTabSections } from '../_components/controllist';
 import { flattenInstance } from '../export';
@@ -15,9 +15,11 @@ import { downloadBlob } from '../export/pdf/downloadBlob';
 
 export function FormPage()
 {
-    const { getForm } = useContext(FormContext);
+    const { getForm, deleteForm } = useContext(FormContext);
     const { getInstance, save } = useContext(InstanceContext);
     const { get: getDb } = useContext(LookupContext);
+    const images = useContext(FormImageContext);
+    const { deleteTemplate } = useContext(PdfTemplateContext);
     const navigate = useNavigate();
 
     const { formId = '', instanceId } = useParams();
@@ -127,6 +129,30 @@ export function FormPage()
         void onSave();
     };
 
+    const onDeleteReadonlyForm = async () =>
+    {
+        if (!form)
+            return;
+
+        const label = form.label ?? form.formId;
+        if (!window.confirm(`Delete "${label}"?`))
+            return;
+
+        try
+        {
+            const ownedImages = await images.imagesFor({ formId });
+
+            await Promise.all(ownedImages.map(record => images.deleteImage(record.id)));
+            await deleteTemplate(formId);
+            await deleteForm(formId);
+            navigate('/', { replace: true });
+        }
+        catch (error)
+        {
+            setToastMessage(error instanceof Error ? `Delete failed: ${error.message}` : 'Delete failed');
+        }
+    };
+
     const onExportApi = async () =>
     {
         if (!form || !instance)
@@ -232,7 +258,15 @@ export function FormPage()
     const hasPdfExport = exportPdfEnabled(form);
     const hasExport = !!form.export;
 
-    const actionsIcon =
+    const actionsIcon = form.readonly
+    ?   <button
+            type="button"
+            className="strip-btn"
+            onClick={() => void onDeleteReadonlyForm()}
+            title="Delete"
+            aria-label="Delete form"
+        >🗑</button>
+    :
         <button
             type="button"
             className="strip-btn"
