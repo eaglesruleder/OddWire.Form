@@ -1,6 +1,6 @@
 export { ControlList } from './ControlList';
 export { buildRootTabSections } from './buildRootTabSections';
-export { flattenControl } from './ControlItem';
+export { flattenControl } from './flattenControl';
 export { ControlError, ControlButton } from './controls';
 export { ControlTab } from './controls/layout';
 export type { TabSection } from './controls/layout';

@@ -12,18 +12,13 @@ type ControlDropdownProps = CoreControlProps<string> & {
 
 export function ControlDropdown(props: ControlDropdownProps)
 {
-    const options = props.controls ?? [];
+    const options = useMemo(() => props.controls ?? [], [props.controls]);
     const selected = options.find(option => option.value === props.value);
     const [open, setOpen] = useState(false);
     const [query, setQuery] = useState(selected?.label ?? '');
     const [highlight, setHighlight] = useState(0);
     const root = useRef<HTMLDivElement>(null);
-
-    useEffect(() =>
-    {
-        if (!open)
-            setQuery(selected?.label ?? '');
-    }, [open, selected?.label]);
+    const displayValue = open ? query : selected?.label ?? '';
 
     useEffect(() =>
     {
@@ -50,6 +45,14 @@ export function ControlDropdown(props: ControlDropdownProps)
         setQuery(option.label);
         setOpen(false);
         props.onChange?.(option.value, props.param);
+    };
+
+    const openMenu = () =>
+    {
+        if (!open)
+            setQuery(selected?.label ?? '');
+
+        setOpen(true);
     };
 
     const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) =>
@@ -90,11 +93,11 @@ export function ControlDropdown(props: ControlDropdownProps)
                     aria-controls={`${props.param}-options`}
                     aria-autocomplete="list"
                     placeholder={props.placeholder ?? 'Select...'}
-                    value={query}
+                    value={displayValue}
                     disabled={props.disabled}
                     autoComplete="off"
-                    onFocus={() => setOpen(true)}
-                    onClick={() => setOpen(true)}
+                    onFocus={openMenu}
+                    onClick={openMenu}
                     onChange={event =>
                     {
                         setQuery(event.target.value);
