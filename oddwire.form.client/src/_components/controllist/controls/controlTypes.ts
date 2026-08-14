@@ -3,6 +3,7 @@ import type { HTMLAttributes, ReactNode } from 'react';
 export type CoreControlProps<TValue> = {
     param: string;
     label?: string;
+    labelHeading?: LabelHeading;
     value?: TValue;
     hidden?: boolean;
     stacked?: boolean;
@@ -68,6 +69,8 @@ export type TextValueType = 'text' | 'int' | 'decimal' | 'email' | 'phone';
 
 export type KeyboardType = HTMLAttributes<HTMLElement>['inputMode'];
 
+export type LabelHeading = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+
 export type ControlPdfBox = {
     x: number;
     y: number;
@@ -86,6 +89,7 @@ export type ControlDefBase<TType extends string, TValue = unknown> = {
     type: TType;
     param: string;
     label?: string;
+    labelHeading?: LabelHeading;
     value?: TValue;
     hidden?: boolean;
     disabled?: boolean;

@@ -9,9 +9,21 @@
   word-break: break-word;
 }
 
+.control-heading {
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.control-heading.h1 { font-size: 2.5rem; }
+.control-heading.h2 { font-size: 2rem; }
+.control-heading.h3 { font-size: 1.75rem; }
+.control-heading.h4 { font-size: 1.5rem; }
+.control-heading.h5 { font-size: 1.25rem; }
+.control-heading.h6 { font-size: 1rem; }
+
 .separator {
   color: var(--text-accent);
-  font-size: 20px;
   font-weight: 500;
   margin: 0 0 8px;
   padding-bottom: 6px;

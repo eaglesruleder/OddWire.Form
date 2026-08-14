@@ -1,6 +1,7 @@
 import Form from 'react-bootstrap/Form';
 
 import type { CoreControlProps } from './controlTypes';
+import { ControlHeadingLabel } from './ControlHeadingLabel';
 
 export function ControlCheckbox(props: CoreControlProps<boolean>)
 {
@@ -15,7 +16,7 @@ export function ControlCheckbox(props: CoreControlProps<boolean>)
     return (
         <div className={wrapClass}>
             {props.label &&
-            <label className="fill" htmlFor={props.param}>{props.label}</label>
+            <ControlHeadingLabel label={props.label} labelHeading={props.labelHeading} defaultHeading="h5" htmlFor={props.param} className="fill" />
             }
             <Form.Check
                 id={props.param}

@@ -1,10 +1,11 @@
 import type { CoreControlProps } from './controlTypes';
+import { ControlHeadingLabel } from './ControlHeadingLabel';
 
 type ControlTextProps = CoreControlProps<string> & {
     className?: string;
     };
 
-export function ControlText({ label, value, hidden, className, cellClassName }: ControlTextProps)
+export function ControlText({ label, labelHeading, value, hidden, className, cellClassName }: ControlTextProps)
 {
     if (hidden)
         return null;
@@ -17,7 +18,7 @@ export function ControlText({ label, value, hidden, className, cellClassName }: 
     return (
         <div className={wrapClass}>
             {label &&
-            <div className="separator">{label}</div>
+            <ControlHeadingLabel label={label} labelHeading={labelHeading} defaultHeading="h3" className="separator" />
             }
             {value &&
             <div className="control-static">{value}</div>
