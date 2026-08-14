@@ -158,6 +158,7 @@ class FormStore implements FormContextValue
             {formId: form.formId
             ,label: form.label
             ,version: form.version
+            ,readonly: form.readonly
             ,displayParam: form.displayParam
             ,thumbnailParam: form.thumbnailParam
             ,thumbnailDefault: form.thumbnailParam ? controlDefault(form.controls, form.thumbnailParam) : undefined

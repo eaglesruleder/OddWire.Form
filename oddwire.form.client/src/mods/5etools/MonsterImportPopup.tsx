@@ -5,7 +5,7 @@ import { MonsterSetCatalog } from './MonsterSetCatalog';
 export const MonsterImportPopup = () =>
     <ControlPopup
         param="importMonsters"
-        label="Import from 5etools"
+        label="5etools"
         triggerVariant="outline-primary"
         triggerSize="sm"
         content={<MonsterSetCatalog />}

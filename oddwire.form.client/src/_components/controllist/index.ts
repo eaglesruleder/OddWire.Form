@@ -1,10 +1,10 @@
 export { ControlList } from './ControlList';
 export { buildRootTabSections } from './buildRootTabSections';
-export { flattenControl } from './ControlItem';
+export { flattenControl } from './flattenControl';
 export { ControlError, ControlButton } from './controls';
 export { ControlTab } from './controls/layout';
 export type { TabSection } from './controls/layout';
 export { DbContext } from './lookup';
 export { resolveLabel } from './resolveLabel';
-export type { ControlDef, ControlOption, ControlPdfBox, ControlPdfDef, FlattenCtx, FlattenResult, CapturedImage } from './controls/controlTypes';
+export type { ControlDef, ControlOption, ControlPdfBox, ControlPdfDef, FlattenCtx, FlattenResult, CapturedImage, LabelHeading } from './controls/controlTypes';
 export { isCapturedImage, imageValueText } from './controls/controlTypes';

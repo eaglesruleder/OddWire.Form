@@ -3,6 +3,7 @@ import type { HTMLAttributes, ReactNode } from 'react';
 export type CoreControlProps<TValue> = {
     param: string;
     label?: string;
+    labelHeading?: LabelHeading;
     value?: TValue;
     hidden?: boolean;
     stacked?: boolean;
@@ -68,6 +69,8 @@ export type TextValueType = 'text' | 'int' | 'decimal' | 'email' | 'phone';
 
 export type KeyboardType = HTMLAttributes<HTMLElement>['inputMode'];
 
+export type LabelHeading = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+
 export type ControlPdfBox = {
     x: number;
     y: number;
@@ -86,10 +89,12 @@ export type ControlDefBase<TType extends string, TValue = unknown> = {
     type: TType;
     param: string;
     label?: string;
+    labelHeading?: LabelHeading;
     value?: TValue;
     hidden?: boolean;
     disabled?: boolean;
     placeholder?: string;
+    className?: string;
     stacked?: boolean;
     cellClassName?: string;
     rows?: number;
@@ -121,10 +126,12 @@ export type DrawConfig = boolean | {
 
 export type ImageControlDef = ControlDefBase<'image', string | CapturedImage> & {   // string = external URL/data-URI; object = captured (full-res in blob store)
     draw?: DrawConfig;
+    thumbfull?: boolean;   // display the stored full image after it loads, with the thumbnail as the fallback
     };
 // Intent: authoring alias — a signature is an image control preset to draw-only with a wide-short canvas (ControlItem maps it)
 export type SignatureControlDef = ControlDefBase<'signature', string | CapturedImage> & {
     draw?: DrawConfig;
+    thumbfull?: boolean;
     };
 export type RadioControlDef = ControlDefBase<'radio', string> & {
     controls?: ControlOption[];

@@ -1,16 +1,18 @@
 import { useState } from 'react';
 
-import type { ControlDef } from '../controlTypes';
+import type { ControlDef, LabelHeading } from '../controlTypes';
 import type { InstanceEntity, InstanceChange } from '../../../../_context';
 import type { ResolvedIcon } from '../../resolveIcon';
 
 import { ControlList } from '../../ControlList';
+import { labelHeadingClass } from '../labelHeading';
 import { stickyTop } from './stickyTop';
 import './layoutControls.css';
 
 type ControlCollapsibleProps = {
     param: string;
     label?: string;
+    labelHeading?: LabelHeading;
     subtitle?: string;
     icon?: ResolvedIcon;
     hidden?: boolean;
@@ -39,7 +41,7 @@ export function ControlCollapsible(props: ControlCollapsibleProps)
             >
                 <span className="collapsible-chevron">{expanded ? '▾' : '▸'}</span>
                 <span className="collapsible-title fill">
-                    <span>{props.label ?? props.param}</span>
+                    <span className={labelHeadingClass(props.labelHeading, 'h5')}>{props.label ?? props.param}</span>
                 </span>
                 {props.subtitle && <span className="collapsible-subtitle">{props.subtitle}</span>}
                 {props.icon && ('src' in props.icon

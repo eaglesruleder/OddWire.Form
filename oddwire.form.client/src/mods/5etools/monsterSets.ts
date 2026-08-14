@@ -194,14 +194,25 @@ async function expandCopies(monsters: RawMonster[]): Promise<RawMonster[]>
             return monster;
 
         const expanded = applyMods(clone(await resolve(base, seen)), copy._mod);
-        const {_copy, _mod, ...overrides} = monster;
-        const merged = applyMods({ ...expanded, ...overrides }, _mod);
+        const { overrides, mod } = splitCopyOverrides(monster);
+        const merged = applyMods({ ...expanded, ...overrides }, mod);
 
         resolved.set(monster, merged);
         return merged;
     };
 
     return Promise.all(monsters.map(monster => resolve(monster)));
+}
+
+function splitCopyOverrides(monster: RawMonster): { overrides: RawMonster; mod: MonsterModMap | undefined }
+{
+    const overrides = { ...monster };
+    const mod = overrides._mod;
+
+    delete overrides._copy;
+    delete overrides._mod;
+
+    return { overrides, mod };
 }
 
 async function lookupBaseMonster(

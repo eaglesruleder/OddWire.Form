@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
 import { FormImageContext, FormActionsContext } from '../../../_context';
@@ -15,6 +15,7 @@ type ControlImageProps = CoreControlProps<string | CapturedImage> & {
     formId: string;
     instanceId: string;
     draw?: DrawConfig;
+    thumbfull?: boolean;
     };
 
 type DrawSettings = { w: number; h: number; penColor?: string; background?: string; allowUpload: boolean };
@@ -26,16 +27,37 @@ export function ControlImage(props: ControlImageProps)
 
     const inputRef = useRef<HTMLInputElement>(null);
     const [zoomUrl, setZoomUrl] = useState<string>();
+    const [displayFull, setDisplayFull] = useState<{ id: string; url?: string }>();
     const [drawing, setDrawing] = useState(false);
     const [baseUrl, setBaseUrl] = useState<string>();
     const [busy, setBusy] = useState(false);
 
     const value = props.value;
     const captured = isCapturedImage(value) ? value : undefined;
-    const src = captured ? captured.thumbnail : typeof value === 'string' ? value : undefined;
+    const capturedId = captured?.id;
+    const displayFullUrl = props.thumbfull && displayFull?.id === capturedId ? displayFull?.url : undefined;
+    const src = captured ? displayFullUrl ?? captured.thumbnail : typeof value === 'string' ? value : undefined;
+    const zoomable = !!captured;
 
     const draw = normaliseDraw(props.draw);
     const showUpload = !draw || draw.allowUpload;
+
+    useEffect(() =>
+    {
+        let active = true;
+
+        if (!props.thumbfull || !capturedId)
+            return () => { active = false; };
+
+        void images.getObjectUrl(capturedId)
+            .then(url =>
+            {
+                if (active)
+                    setDisplayFull({ id: capturedId, url });
+            });
+
+        return () => { active = false; };
+    }, [capturedId, images, props.thumbfull]);
 
     // Intent: capture writes a blob stamped with instanceId — force a save first so the instance is never orphaned pre-save
     const ensureSaved = async (): Promise<boolean> =>
@@ -123,11 +145,11 @@ export function ControlImage(props: ControlImageProps)
         if (captured)
             await deleteOwned(captured.id);
 
-        props.onChange?.('', props.param);   // key-lossy clear drops the instance entry
+        props.onChange?.('', props.param);   // explicit clear overrides any form-level default
     };
 
-    // Intent: only delete a blob this instance owns — a bundled form-default blob is shared across instances, so clearing/
-    // replacing here just drops the overlay (reverting to the default) rather than destroying the shared source
+    // Intent: only delete a blob this instance owns — a bundled form-default blob is shared across instances, so clearing
+    // overrides it for this instance without destroying the shared source.
     const deleteOwned = async (id: string) =>
     {
         const record = await images.getImage(id);
@@ -138,6 +160,12 @@ export function ControlImage(props: ControlImageProps)
 
     const onZoom = async () =>
     {
+        if (displayFullUrl)
+        {
+            setZoomUrl(displayFullUrl);
+            return;
+        }
+
         if (captured)
             setZoomUrl(await images.getObjectUrl(captured.id));
     };
@@ -145,13 +173,16 @@ export function ControlImage(props: ControlImageProps)
     return (
         <ControlBase {...props} stacked>
             {src
-            ?   <img
-                    src={src}
-                    alt={props.label ?? props.param}
-                    style={{ maxWidth: '100%', height: 'auto', display: 'block', cursor: captured ? 'zoom-in' : 'default' }}
-                    className="fill"
-                    onClick={captured ? onZoom : undefined}
-                />
+            ?   zoomable
+                ?   <span className="image-display image-display-zoom">
+                        <img src={src} alt={props.label ?? props.param} className="image-display-img" onClick={() => void onZoom()} />
+                        <button type="button" className="image-zoom-badge" onClick={() => void onZoom()} aria-label={`Open full image ${props.label ?? props.param}`}>
+                            <ZoomInIcon />
+                        </button>
+                    </span>
+                :   <span className="image-display">
+                        <img src={src} alt={props.label ?? props.param} className="image-display-img" />
+                    </span>
             :   <span className="text-muted">{props.placeholder ?? 'No image'}</span>
             }
 
@@ -213,4 +244,16 @@ function normaliseDraw(draw: DrawConfig | undefined): DrawSettings | undefined
         background: config.background,
         allowUpload: config.allowUpload ?? false,
         };
+}
+
+function ZoomInIcon()
+{
+    return (
+        <svg className="image-zoom-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="10.5" cy="10.5" r="6.5" />
+            <path d="M15.5 15.5 21 21" />
+            <path d="M10.5 7.5v6" />
+            <path d="M7.5 10.5h6" />
+        </svg>
+        );
 }

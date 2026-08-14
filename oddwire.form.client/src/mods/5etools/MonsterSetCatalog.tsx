@@ -90,7 +90,10 @@ export function MonsterSetCatalog()
         setSelected(values =>
         {
             const next = new Set(values);
-            checked ? next.add(name) : next.delete(name);
+            if (checked)
+                next.add(name);
+            else
+                next.delete(name);
             return next;
         });
 
@@ -99,7 +102,12 @@ export function MonsterSetCatalog()
         {
             const next = new Set(values);
             for (const monster of visibleMonsters)
-                checked ? next.add(monster.name) : next.delete(monster.name);
+            {
+                if (checked)
+                    next.add(monster.name);
+                else
+                    next.delete(monster.name);
+            }
             return next;
         });
 
