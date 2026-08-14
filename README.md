@@ -72,3 +72,11 @@ npm run build
 ```
 
 The Vite dev server runs HTTPS on port `59392` using the ASP.NET development certificate. Run `dotnet dev-certs https --trust` once if the browser rejects the local certificate.
+
+---
+
+## License
+
+The intent of this licensing is to keep OddWire.Form publicly visible and available for noncommercial use, modification, and redistribution, while not granting commercial use by default.
+
+The legal reference is the standard, unmodified [PolyForm Noncommercial License 1.0.0](LICENSE). Commercial use requires separate permission or licensing from the copyright holder.
