@@ -1,7 +1,7 @@
 {
   "formId": "7e5c0c59-8d27-4b70-9d42-6c4a4f2ec6aa",
   "label": "Dillon O'Dwyer Resume",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "displayParam": [
     "fullName",
     "roleTitle"
@@ -714,12 +714,14 @@
           "type": "image",
           "param": "powery",
           "cellClassName": "sm-col-4",
+          "thumbfull": true,
           "disabled": true
         },
         {
           "type": "image",
           "param": "factronics",
           "cellClassName": "sm-col-8",
+          "thumbfull": true,
           "disabled": true
         },
         {

@@ -126,10 +126,12 @@ export type DrawConfig = boolean | {
 
 export type ImageControlDef = ControlDefBase<'image', string | CapturedImage> & {   // string = external URL/data-URI; object = captured (full-res in blob store)
     draw?: DrawConfig;
+    thumbfull?: boolean;   // display the stored full image after it loads, with the thumbnail as the fallback
     };
 // Intent: authoring alias — a signature is an image control preset to draw-only with a wide-short canvas (ControlItem maps it)
 export type SignatureControlDef = ControlDefBase<'signature', string | CapturedImage> & {
     draw?: DrawConfig;
+    thumbfull?: boolean;
     };
 export type RadioControlDef = ControlDefBase<'radio', string> & {
     controls?: ControlOption[];
