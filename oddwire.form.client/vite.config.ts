@@ -67,10 +67,30 @@ export default defineConfig(({ command, mode }) => ({
         }
     },
     server: command === 'serve' && mode !== 'test' ? getDevServerConfig() : undefined,
+    build: mode === 'library'
+    ?   {
+            outDir: 'dist-package',
+            emptyOutDir: true,
+            lib: {
+                entry: {
+                    index: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
+                    styles: fileURLToPath(new URL('./src/styles.ts', import.meta.url))
+                },
+                formats: ['es'],
+                fileName: (_format, entryName) => `${entryName}.js`,
+                cssFileName: 'styles'
+            },
+            rollupOptions: {
+                // Intent: the host owns one React runtime; package code must share it.
+                external: ['react', 'react-dom', 'react/jsx-runtime', 'react-dom/client']
+            }
+        }
+    :   undefined,
     test: {
         globals: true,
         environment: 'jsdom',
         setupFiles: ['./src/test/setup.ts'],
+        exclude: ['**/node_modules/**', 'consumer-proof/**'],
         css: false,
         coverage: {
             provider: 'v8',

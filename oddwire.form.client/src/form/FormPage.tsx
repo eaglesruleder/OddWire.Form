@@ -13,16 +13,20 @@ import { ControlList, ControlTab, ControlError, ControlButton, DbContext, buildR
 import { flattenInstance } from '../export';
 import { downloadBlob } from '../export/pdf/downloadBlob';
 
-export function FormPage()
+export type FormSurfaceProps = {
+    formId: string;
+    instanceId?: string;
+    // Intent: the runtime reports navigation; its host decides whether that is a router transition, a tab change, or nothing.
+    onNavigate?: (path: string) => void;
+    };
+
+export function FormSurface({ formId, instanceId, onNavigate }: FormSurfaceProps)
 {
     const { getForm, deleteForm } = useContext(FormContext);
     const { getInstance, save } = useContext(InstanceContext);
     const { get: getDb } = useContext(LookupContext);
     const images = useContext(FormImageContext);
     const { deleteTemplate } = useContext(PdfTemplateContext);
-    const navigate = useNavigate();
-
-    const { formId = '', instanceId } = useParams();
 
     const [loading, setLoading] = useState(true);
     const [form, setForm] = useState<FormDefinition | null>(null);
@@ -107,7 +111,7 @@ export function FormPage()
         setAutosaving(true);
 
         if (!instanceId)
-            navigate(`/form/${formId}/${id}`, { replace: true });
+            onNavigate?.(`/form/${formId}/${id}`);
 
         return id;
     };
@@ -145,7 +149,7 @@ export function FormPage()
             await Promise.all(ownedImages.map(record => images.deleteImage(record.id)));
             await deleteTemplate(formId);
             await deleteForm(formId);
-            navigate('/', { replace: true });
+            onNavigate?.('/');
         }
         catch (error)
         {
@@ -220,7 +224,7 @@ export function FormPage()
             const id = await save(instance.instance);
             setAutosaving(true);
             setActionsOpen(false);
-            navigate(`/export-pdf/${formId}/${id}`);
+            onNavigate?.(`/export-pdf/${formId}/${id}`);
         }
         catch (error)
         {
@@ -233,7 +237,7 @@ export function FormPage()
     };
 
     const errorPage = (message: string) =>
-        <StripLayout left="←" leftLink="/" title="OddWire Forms">
+        <StripLayout left="←" leftAction={() => onNavigate?.('/')} title="OddWire Forms">
             <Form>
                 <ControlError>{message}</ControlError>
             </Form>
@@ -277,7 +281,7 @@ export function FormPage()
     const isRootTab = form.controls[0]?.type === 'tab';
 
     return (
-        <StripLayout left="←" leftLink={backLink} right={actionsIcon} title={form.label ?? 'OddWire Forms'}>
+        <StripLayout left="←" leftAction={() => onNavigate?.(backLink)} right={actionsIcon} title={form.label ?? 'OddWire Forms'}>
             <DbContext.Provider value={getDb(formId)}>
                 <FormActionsContext.Provider value={{ requestSave: onSave, isSaved: autosaving }}>
                 <Form>
@@ -317,6 +321,15 @@ export function FormPage()
             </DbContext.Provider>
         </StripLayout>
         );
+}
+
+// Intent: standalone routing remains a thin adapter. The persisted runtime and renderer live in FormSurface.
+export function FormPage()
+{
+    const navigate = useNavigate();
+    const { formId = '', instanceId } = useParams();
+
+    return <FormSurface formId={formId} instanceId={instanceId} onNavigate={path => navigate(path)} />;
 }
 
 function exportApiUrl(form: FormDefinition): string | undefined
