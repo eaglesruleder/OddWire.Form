@@ -1,0 +1,7 @@
+/* Public stylesheet entry for both the standalone application and embedded hosts. */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import '../public/style/theme.css';
+@import '../public/style/layout.css';
+@import '../public/style/text.css';
+@import '../public/style/alignment.css';
+@import '../public/style/controls.css';

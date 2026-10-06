@@ -38,3 +38,81 @@ npm run lint
 ```
 
 `npm run build` runs `tsc -b` and then `vite build`.
+
+## Embedded runtime package
+
+`npm run build:package` creates the installable library in `dist-package/`; `npm pack` runs that
+build automatically and produces the artifact a host installs. React and ReactDOM are peer
+dependencies, so an embedding application keeps ownership of its one React tree.
+
+An embedded host imports the public stylesheet and composes the persisted provider with the
+route-free surface. The provider uses the same browser-local `localforage` stores and installs the
+same default bundled forms (including monster-card) as the standalone app.
+
+```tsx
+import { ContextsProvider, FormSurface } from 'oddwire.form.client';
+import 'oddwire.form.client/styles.css';
+
+export function CharacterForm()
+{
+    return (
+        <ContextsProvider>
+            <FormSurface
+                formId="monster-card"
+                instanceId="optional-saved-instance-id"
+                onNavigate={path => console.log('Form requested navigation', path)}
+            />
+        </ContextsProvider>
+        );
+}
+```
+
+`FormSurface` does not mount a React root and does not read router state. Its host supplies the
+form identity and optional instance identity. `onNavigate` receives Form's existing route-shaped
+intent (for example a freshly saved instance or PDF export); a host may translate it to its own
+router, tab/state transition, or ignore it. The standalone `FormPage` is the corresponding React
+Router adapter.
+
+The public package surface is intentionally limited to `ContextsProvider`, `FormSurface`, and the
+form/control types required to host it. Do not deep-import runtime internals. Styling is explicit:
+import `oddwire.form.client/styles.css` once in the host application. It includes Bootstrap and the
+previously HTML-loaded Form styles; component-local styles remain packaged with the runtime.
+
+## Embedded runtime package
+
+`npm run build:package` creates the installable library in `dist-package/`; `npm pack` runs that
+build automatically and produces the artifact a host installs. React and ReactDOM are peer
+dependencies, so an embedding application keeps ownership of its one React tree.
+
+An embedded host imports the public stylesheet and composes the persisted provider with the
+route-free surface. The provider uses the same browser-local `localforage` stores and installs the
+same default bundled forms (including monster-card) as the standalone app.
+
+```tsx
+import { ContextsProvider, FormSurface } from 'oddwire.form.client';
+import 'oddwire.form.client/styles.css';
+
+export function CharacterForm()
+{
+    return (
+        <ContextsProvider>
+            <FormSurface
+                formId="monster-card"
+                instanceId="optional-saved-instance-id"
+                onNavigate={path => console.log('Form requested navigation', path)}
+            />
+        </ContextsProvider>
+        );
+}
+```
+
+`FormSurface` does not mount a React root and does not read router state. Its host supplies the
+form identity and optional instance identity. `onNavigate` receives Form's existing route-shaped
+intent (for example a freshly saved instance or PDF export); a host may translate it to its own
+router, tab/state transition, or ignore it. The standalone `FormPage` is the corresponding React
+Router adapter.
+
+The public package surface is intentionally limited to `ContextsProvider`, `FormSurface`, and the
+form/control types required to host it. Do not deep-import runtime internals. Styling is explicit:
+import `oddwire.form.client/styles.css` once in the host application. It includes Bootstrap and the
+previously HTML-loaded Form styles; component-local styles remain packaged with the runtime.
