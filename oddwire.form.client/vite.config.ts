@@ -90,6 +90,7 @@ export default defineConfig(({ command, mode }) => ({
         globals: true,
         environment: 'jsdom',
         setupFiles: ['./src/test/setup.ts'],
+        exclude: ['**/node_modules/**', 'consumer-proof/**'],
         css: false,
         coverage: {
             provider: 'v8',

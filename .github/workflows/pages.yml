@@ -48,9 +48,13 @@ jobs:
           --configuration Release
           -p:BuildProjectReferences=false
 
-      - name: Compile client
+      - name: Validate standalone client
         working-directory: oddwire.form.client
-        run: npm run build
+        run: npm run lint && npm run test && npm run build
+
+      - name: Verify packed embedded runtime
+        working-directory: oddwire.form.client
+        run: npm run verify:package
 
       - name: Add GitHub Pages fallback
         if: github.event_name != 'pull_request'

@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:package": "vite build --mode library && tsc -p tsconfig.lib.json",
+    "verify:package": "node tools/verify-package.mjs",
     "prepack": "npm run build:package",
     "lint": "eslint .",
     "test": "vitest run",
