@@ -1,5 +1,7 @@
 import { render, screen } from '@testing-library/react';
-import { ContextsProvider, FormSurface } from 'oddwire.form.client';
+import { expect, it } from 'vitest';
+
+const { ContextsProvider, FormSurface } = await import('oddwire.form.client');
 
 import 'oddwire.form.client/styles.css';
 
