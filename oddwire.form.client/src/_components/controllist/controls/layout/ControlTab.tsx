@@ -26,6 +26,7 @@ type ControlTabProps = {
     instance?: InstanceEntity;
     onChange?: InstanceChange;
     depth?: number;
+    readonly?: boolean;
     };
 
 export function ControlTab(props: ControlTabProps)
@@ -76,7 +77,7 @@ export function ControlTab(props: ControlTabProps)
             <ControlError>{active.notice}</ControlError>
             }
             {active.content ?? (props.instance && props.onChange &&
-            <ControlList controls={active.controls ?? []} instance={props.instance} onChange={props.onChange} depth={childDepth} />
+            <ControlList controls={active.controls ?? []} instance={props.instance} onChange={props.onChange} depth={childDepth} readonly={props.readonly} />
             )}
         </div>;
 

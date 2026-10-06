@@ -12,9 +12,10 @@ type ControlListProps = {
     instance: InstanceEntity;
     onChange: InstanceChange;
     depth?: number;
+    readonly?: boolean;
     };
 
-export function ControlList({ controls, instance, onChange, depth = 0 }: ControlListProps)
+export function ControlList({ controls, instance, onChange, depth = 0, readonly = false }: ControlListProps)
 {
     const items: ReactNode[] = [];
 
@@ -25,7 +26,7 @@ export function ControlList({ controls, instance, onChange, depth = 0 }: Control
 
         if (control.type !== 'tab')
         {
-            items.push(<ControlItem key={control.param} control={control} instance={instance} onChange={onChange} depth={depth} />);
+            items.push(<ControlItem key={control.param} control={control} instance={instance} onChange={onChange} depth={depth} readonly={readonly} />);
             i++;
             continue;
         }
@@ -39,7 +40,7 @@ export function ControlList({ controls, instance, onChange, depth = 0 }: Control
             i++;
         }
         if (sections.length > 0)
-            items.push(<ControlTab key={`tabset-${sections[0].param}`} sections={sections} instance={instance} onChange={onChange} depth={depth} />);
+            items.push(<ControlTab key={`tabset-${sections[0].param}`} sections={sections} instance={instance} onChange={onChange} depth={depth} readonly={readonly} />);
     }
 
     // Intent: a 12-col grid — items are full-width by default; a control's `cellClassName` (col-N) opts into columns

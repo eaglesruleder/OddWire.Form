@@ -171,7 +171,7 @@ export function ControlImage(props: ControlImageProps)
     };
 
     return (
-        <ControlBase {...props} stacked>
+        <ControlBase {...props} readonly={undefined} stacked>
             {src
             ?   zoomable
                 ?   <span className="image-display image-display-zoom">
@@ -186,7 +186,7 @@ export function ControlImage(props: ControlImageProps)
             :   <span className="text-muted">{props.placeholder ?? 'No image'}</span>
             }
 
-            {!props.disabled &&
+            {!props.disabled && !props.readonly &&
             <div className="flex gap mt-2">
                 {showUpload &&
                 <button type="button" className="btn btn-outline-primary btn-sm" disabled={busy} onClick={onOpenClick}>{busy ? 'Working…' : 'Open'}</button>
@@ -201,7 +201,7 @@ export function ControlImage(props: ControlImageProps)
             </div>
             }
 
-            {draw &&
+            {draw && !props.readonly &&
             <Modal show={drawing} onHide={() => setDrawing(false)} centered size="lg">
                 <Modal.Body className="center">
                     <SignaturePad

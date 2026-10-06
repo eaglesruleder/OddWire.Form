@@ -1,11 +1,11 @@
-import { useCallback, useContext, useEffect, useReducer, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 
-import type { DisplayParam, FormDefinition, InstanceChange, ParamList } from '../_context';
+import type { DisplayParam, FormDefinition, FormInstance, InstanceChange, ParamList } from '../_context';
 
 import { FormContext, InstanceContext, LookupContext, InstanceEntity, FormActionsContext, FormImageContext, PdfTemplateContext } from '../_context';
 import { StripLayout } from '../_components/layout';
@@ -18,6 +18,12 @@ export type FormSurfaceProps = {
     instanceId?: string;
     // Intent: the runtime reports navigation; its host decides whether that is a router transition, a tab change, or nothing.
     onNavigate?: (path: string) => void;
+    };
+
+export type HostedFormSurfaceProps = {
+    formId: string;
+    // Intent: identity is host-owned only; hosted mode never interprets this as a local store key.
+    instance: FormInstance;
     };
 
 export function FormSurface({ formId, instanceId, onNavigate }: FormSurfaceProps)
@@ -278,17 +284,12 @@ export function FormSurface({ formId, instanceId, onNavigate }: FormSurfaceProps
             title={hasExport ? 'Export' : autosaving ? 'Autosaving' : 'Save'}
         >{hasExport ? '...' : '💾'}</button>;
 
-    const isRootTab = form.controls[0]?.type === 'tab';
-
     return (
         <StripLayout left="←" leftAction={() => onNavigate?.(backLink)} right={actionsIcon} title={form.label ?? 'OddWire Forms'}>
             <DbContext.Provider value={getDb(formId)}>
                 <FormActionsContext.Provider value={{ requestSave: onSave, isSaved: autosaving }}>
                 <Form>
-                    {isRootTab
-                    ?   <ControlTab pageLayout sections={buildRootTabSections(form.controls, instance)} instance={instance} onChange={onChange} />
-                    :   <ControlList controls={form.controls} instance={instance} onChange={onChange} />
-                    }
+                    <FormRenderer form={form} instance={instance} onChange={onChange} />
                 </Form>
                 {hasExport &&
                     <Modal show={actionsOpen} onHide={() => setActionsOpen(false)} centered dialogClassName="popup-dialog" contentClassName="popup-content">
@@ -322,6 +323,85 @@ export function FormSurface({ formId, instanceId, onNavigate }: FormSurfaceProps
         </StripLayout>
         );
 }
+
+// Host-owned snapshots deliberately bypass InstanceContext. The entity is a defensive clone used
+// only for the renderer's param overlay lookup; read-only controls cannot mutate or persist it.
+export function HostedFormSurface({ formId, instance }: HostedFormSurfaceProps)
+{
+    const { getForm } = useContext(FormContext);
+    const { get: getDb } = useContext(LookupContext);
+    const [loading, setLoading] = useState(true);
+    const [form, setForm] = useState<FormDefinition | null>(null);
+
+    const hosted = useMemo(() =>
+        InstanceEntity.from(
+            { ...instance
+            ,formId: instance.formId ?? formId
+            ,controls: instance.controls.map(control => ({ ...control }))
+            }),
+        [formId, instance]);
+
+    useEffect(() =>
+    {
+        let active = true;
+
+        void getForm(formId).then(loaded =>
+        {
+            if (active)
+            {
+                setForm(loaded ?? null);
+                setLoading(false);
+            }
+        });
+
+        return () => { active = false; };
+    }, [getForm, formId]);
+
+    if (loading)
+        return (
+            <StripLayout title="OddWire Forms">
+                <div className="center">Loading…</div>
+            </StripLayout>
+            );
+
+    if (!form)
+        return (
+            <StripLayout title="OddWire Forms">
+                <Form><ControlError>Form Not Found</ControlError></Form>
+            </StripLayout>
+            );
+
+    return (
+        <StripLayout title={form.label ?? 'OddWire Forms'}>
+            <DbContext.Provider value={getDb(formId)}>
+                <FormActionsContext.Provider value={hostedActions}>
+                    <Form>
+                        <FormRenderer form={form} instance={hosted} onChange={ignoreHostedChange} readonly />
+                    </Form>
+                </FormActionsContext.Provider>
+            </DbContext.Provider>
+        </StripLayout>
+        );
+}
+
+type FormRendererProps = {
+    form: FormDefinition;
+    instance: InstanceEntity;
+    onChange: InstanceChange;
+    readonly?: boolean;
+    };
+
+function FormRenderer({ form, instance, onChange, readonly = false }: FormRendererProps)
+{
+    const isRootTab = form.controls[0]?.type === 'tab';
+
+    return isRootTab
+    ?   <ControlTab pageLayout sections={buildRootTabSections(form.controls, instance)} instance={instance} onChange={onChange} readonly={readonly} />
+    :   <ControlList controls={form.controls} instance={instance} onChange={onChange} readonly={readonly} />;
+}
+
+const hostedActions = { requestSave: async () => undefined, isSaved: false };
+const ignoreHostedChange: InstanceChange = () => undefined;
 
 // Intent: standalone routing remains a thin adapter. The persisted runtime and renderer live in FormSurface.
 export function FormPage()

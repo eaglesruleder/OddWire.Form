@@ -73,7 +73,36 @@ intent (for example a freshly saved instance or PDF export); a host may translat
 router, tab/state transition, or ignore it. The standalone `FormPage` is the corresponding React
 Router adapter.
 
-The public package surface is intentionally limited to `ContextsProvider`, `FormSurface`, and the
-form/control types required to host it. Do not deep-import runtime internals. Styling is explicit:
-import `oddwire.form.client/styles.css` once in the host application. It includes Bootstrap and the
-previously HTML-loaded Form styles; component-local styles remain packaged with the runtime.
+`FormSurface` is intentionally the persisted/browser-owned workflow. A projection-driven host that
+remains authoritative over its data instead uses `HostedFormSurface`. It accepts a snapshot and
+renders the same form schema without loading, saving, autosaving, deleting, or mutating a Form
+instance in browser storage. Hosted controls are read-only; tabs and other layout navigation remain
+available.
+
+```tsx
+import { ContextsProvider, HostedFormSurface, type FormInstance } from 'oddwire.form.client';
+
+const character: FormInstance = {
+    formId: '44444444-4444-4444-8444-444444444444',
+    instanceId: 'host-owned-identity',
+    controls: [{ param: 'name', value: 'Villager' }],
+    };
+
+export function CharacterForm()
+{
+    return (
+        <ContextsProvider>
+            <HostedFormSurface formId={character.formId!} instance={character} />
+        </ContextsProvider>
+        );
+}
+```
+
+`instanceId` in hosted mode is host identity only, never a localforage key. Replacing the `instance`
+prop replaces the visible snapshot; OddWire.Form never keeps an editable local copy.
+
+The public package surface is intentionally limited to `ContextsProvider`, `FormSurface`,
+`HostedFormSurface`, and the form/control types required to host them. Do not deep-import runtime
+internals. Styling is explicit: import `oddwire.form.client/styles.css` once in the host
+application. It includes Bootstrap and the previously HTML-loaded Form styles; component-local
+styles remain packaged with the runtime.

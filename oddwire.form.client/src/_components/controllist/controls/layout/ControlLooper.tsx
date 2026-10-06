@@ -13,6 +13,7 @@ type ControlLooperProps = {
     controls: ControlDef[];
     addRows?: boolean;
     cellClassName?: string;
+    readonly?: boolean;
     onChange?: InstanceChange;
     };
 
@@ -41,12 +42,12 @@ export function ControlLooper(props: ControlLooperProps)
 
                     return (
                         <div key={row.instanceId ?? rowIndex} className={props.cellClassName}>
-                            <ControlList controls={props.controls} instance={rowEntity} onChange={onRowChange} />
+                            <ControlList controls={props.controls} instance={rowEntity} onChange={onRowChange} readonly={props.readonly} />
                         </div>
                         );
                 })}
             </div>
-            {addRows &&
+            {addRows && !props.readonly &&
             <ControlButton label="+ Add Row" size="sm" variant="outline-primary" onClick={addRow} />
             }
         </div>

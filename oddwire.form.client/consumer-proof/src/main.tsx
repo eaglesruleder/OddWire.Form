@@ -1,9 +1,15 @@
 import { createRoot } from 'react-dom/client';
-import { ContextsProvider, FormSurface } from 'oddwire.form.client';
+import { ContextsProvider, HostedFormSurface, type FormInstance } from 'oddwire.form.client';
 import 'oddwire.form.client/styles.css';
+
+const instance: FormInstance = {
+    formId: '44444444-4444-4444-8444-444444444444',
+    instanceId: 'consumer-proof:hosted-monster',
+    controls: [{ param: 'name', value: 'Villager' }]
+    };
 
 createRoot(document.getElementById('root')!).render(
     <ContextsProvider>
-        <FormSurface formId="44444444-4444-4444-8444-444444444444" onNavigate={() => undefined} />
+        <HostedFormSurface formId={instance.formId!} instance={instance} />
     </ContextsProvider>
     );

@@ -1,2 +1,2 @@
-export { FormPage, FormSurface } from './FormPage';
-export type { FormSurfaceProps } from './FormPage';
+export { FormPage, FormSurface, HostedFormSurface } from './FormPage';
+export type { FormSurfaceProps, HostedFormSurfaceProps } from './FormPage';

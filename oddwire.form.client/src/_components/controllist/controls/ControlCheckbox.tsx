@@ -8,6 +8,16 @@ export function ControlCheckbox(props: CoreControlProps<boolean>)
     if (props.hidden)
         return null;
 
+    if (props.readonly)
+        return (
+            <div className="flex items-center gap mb-3">
+                {props.label &&
+                <ControlHeadingLabel label={props.label} labelHeading={props.labelHeading} defaultHeading="h5" htmlFor={props.param} className="fill" />
+                }
+                <span className="control-static">{props.value ? 'Yes' : 'No'}</span>
+            </div>
+            );
+
     const wrapClass =
         ['flex', 'items-center', 'gap', 'mb-3', props.cellClassName]
         .filter(Boolean)

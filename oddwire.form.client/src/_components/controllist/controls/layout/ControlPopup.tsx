@@ -21,6 +21,7 @@ type ControlPopupProps = {
     controls?: ControlDef[];
     instance?: InstanceEntity;
     onChange?: InstanceChange;
+    readonly?: boolean;
     triggerVariant?: ButtonProps['variant'];
     triggerSize?: ButtonProps['size'];
     };
@@ -35,7 +36,7 @@ export function ControlPopup(props: ControlPopupProps)
     const title = props.label ?? props.param;
 
     const body = props.content ?? (props.instance && props.onChange &&
-        <ControlList controls={props.controls ?? []} instance={props.instance} onChange={props.onChange} />);
+        <ControlList controls={props.controls ?? []} instance={props.instance} onChange={props.onChange} readonly={props.readonly} />);
 
     return (
         <div className="mb-3">

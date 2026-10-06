@@ -1,7 +1,7 @@
 // Public runtime boundary. This module never mounts a React root or installs a router.
 export { ContextsProvider } from './_context';
-export { FormSurface } from './form';
-export type { FormSurfaceProps } from './form';
+export { FormSurface, HostedFormSurface } from './form';
+export type { FormSurfaceProps, HostedFormSurfaceProps } from './form';
 export type
     {FormDefinition
     ,FormInstance

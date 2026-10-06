@@ -98,6 +98,7 @@ export type ControlDefBase<TType extends string, TValue = unknown> = {
     stacked?: boolean;
     cellClassName?: string;
     rows?: number;
+    readonly?: boolean;
     pdf?: ControlPdfDef;
     };
 

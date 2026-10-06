@@ -20,6 +20,7 @@ type ControlCollapsibleProps = {
     instance: InstanceEntity;
     onChange: InstanceChange;
     depth?: number;
+    readonly?: boolean;
     };
 
 export function ControlCollapsible(props: ControlCollapsibleProps)
@@ -51,7 +52,7 @@ export function ControlCollapsible(props: ControlCollapsibleProps)
             </button>
             {expanded &&
             <div className="collapsible-body">
-                <ControlList controls={props.controls} instance={props.instance} onChange={props.onChange} depth={depth + 1} />
+                <ControlList controls={props.controls} instance={props.instance} onChange={props.onChange} depth={depth + 1} readonly={props.readonly} />
             </div>
             }
         </div>
