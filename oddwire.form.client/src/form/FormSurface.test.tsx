@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import type { FormContextValue, FormImageContextValue, InstanceContextValue, LookupContextValue, PdfTemplateContextValue } from '../_context';
 import { FormContext, FormImageContext, InstanceContext, LookupContext, PdfTemplateContext } from '../_context';
@@ -58,6 +58,17 @@ const hostedInstanceContext: InstanceContextValue = {
     save: async () => { throw new Error('Hosted rendering must not save InstanceContext'); }
     };
 
+const hostedRootTabContext: FormContextValue = {
+    ...formContext,
+    getForm: async formId =>
+        formId === 'hosted-tabs'
+        ?   { formId, label: 'Hosted Tabs', controls: [
+                { type: 'tab', param: 'core', label: 'Core', controls: [{ type: 'text', param: 'name', label: 'Name' }] },
+                { type: 'tab', param: 'lore', label: 'Lore', controls: [] }
+                ] }
+        :   undefined
+    };
+
 function hostedSurface(instance: { formId?: string; instanceId?: string; controls: { param: string; value: string }[] })
 {
     return (
@@ -108,4 +119,35 @@ it('renders a replacement hosted snapshot without store ownership or editable co
     expect(await screen.findByText('Second Villager')).toBeInTheDocument();
     expect(screen.queryByText('First Villager')).not.toBeInTheDocument();
     expect(first.controls[0].value).toBe('First Villager');
+});
+
+it('prepends host root tabs without resetting the user choice on a hosted snapshot refresh', async () =>
+{
+    const first = { formId: 'hosted-tabs', instanceId: 'host:a', controls: [{ param: 'name', value: 'First Villager' }] };
+    const second = { formId: 'hosted-tabs', instanceId: 'host:b', controls: [{ param: 'name', value: 'Second Villager' }] };
+    const game = { param: 'game', label: 'Game', content: <div>Live Game</div> };
+    const surface = (instance: typeof first) =>
+        <FormContext.Provider value={hostedRootTabContext}>
+            <InstanceContext.Provider value={hostedInstanceContext}>
+                <LookupContext.Provider value={lookupContext}>
+                    <PdfTemplateContext.Provider value={templateContext}>
+                        <FormImageContext.Provider value={imageContext}>
+                            <HostedFormSurface formId="hosted-tabs" instance={instance} prependRootTabs={[game]} defaultRootTab="game" />
+                        </FormImageContext.Provider>
+                    </PdfTemplateContext.Provider>
+                </LookupContext.Provider>
+            </InstanceContext.Provider>
+        </FormContext.Provider>;
+    const view = render(surface(first));
+
+    expect(await screen.findByText('Live Game')).toBeInTheDocument();
+    expect(screen.getAllByRole('button').map(button => button.textContent)).toEqual(['Game', 'Core', 'Lore']);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Core' }));
+    expect(await screen.findByText('First Villager')).toBeInTheDocument();
+
+    view.rerender(surface(second));
+
+    expect(await screen.findByText('Second Villager')).toBeInTheDocument();
+    expect(screen.queryByText('Live Game')).not.toBeInTheDocument();
 });

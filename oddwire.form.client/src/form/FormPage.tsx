@@ -1,4 +1,5 @@
 import { useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import type { ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
@@ -24,6 +25,15 @@ export type HostedFormSurfaceProps = {
     formId: string;
     // Intent: identity is host-owned only; hosted mode never interprets this as a local store key.
     instance: FormInstance;
+    prependRootTabs?: HostedRootTab[];
+    defaultRootTab?: string;
+    };
+
+export type HostedRootTab = {
+    param: string;
+    label: string;
+    content: ReactNode;
+    disabled?: boolean;
     };
 
 export function FormSurface({ formId, instanceId, onNavigate }: FormSurfaceProps)
@@ -326,7 +336,7 @@ export function FormSurface({ formId, instanceId, onNavigate }: FormSurfaceProps
 
 // Host-owned snapshots deliberately bypass InstanceContext. The entity is a defensive clone used
 // only for the renderer's param overlay lookup; read-only controls cannot mutate or persist it.
-export function HostedFormSurface({ formId, instance }: HostedFormSurfaceProps)
+export function HostedFormSurface({ formId, instance, prependRootTabs = [], defaultRootTab }: HostedFormSurfaceProps)
 {
     const { getForm } = useContext(FormContext);
     const { get: getDb } = useContext(LookupContext);
@@ -376,7 +386,7 @@ export function HostedFormSurface({ formId, instance }: HostedFormSurfaceProps)
             <DbContext.Provider value={getDb(formId)}>
                 <FormActionsContext.Provider value={hostedActions}>
                     <Form>
-                        <FormRenderer form={form} instance={hosted} onChange={ignoreHostedChange} readonly />
+                        <FormRenderer form={form} instance={hosted} onChange={ignoreHostedChange} readonly prependRootTabs={prependRootTabs} defaultRootTab={defaultRootTab} />
                     </Form>
                 </FormActionsContext.Provider>
             </DbContext.Provider>
@@ -389,14 +399,16 @@ type FormRendererProps = {
     instance: InstanceEntity;
     onChange: InstanceChange;
     readonly?: boolean;
+    prependRootTabs?: HostedRootTab[];
+    defaultRootTab?: string;
     };
 
-function FormRenderer({ form, instance, onChange, readonly = false }: FormRendererProps)
+function FormRenderer({ form, instance, onChange, readonly = false, prependRootTabs = [], defaultRootTab }: FormRendererProps)
 {
     const isRootTab = form.controls[0]?.type === 'tab';
 
     return isRootTab
-    ?   <ControlTab pageLayout sections={buildRootTabSections(form.controls, instance)} instance={instance} onChange={onChange} readonly={readonly} />
+    ?   <ControlTab pageLayout sections={[...prependRootTabs, ...buildRootTabSections(form.controls, instance)]} defaultParam={defaultRootTab} instance={instance} onChange={onChange} readonly={readonly} />
     :   <ControlList controls={form.controls} instance={instance} onChange={onChange} readonly={readonly} />;
 }
 
